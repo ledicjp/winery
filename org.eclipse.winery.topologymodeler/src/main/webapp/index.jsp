@@ -453,6 +453,8 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 
 		<button class="btn btn-default" onclick="winery.events.fire(winery.events.name.command.SPLIT);" id="splitBtn" data-loading-text="Splitting...">Split</button>
 
+		<button class="btn btn-default" onclick="winery.events.fire(winery.events.name.command.PATTERN_DETECTION);" id="patterndetectionBtn" data-loading-text="Detecting...">Pattern Detection</button>
+
 		<button class="btn btn-default topbutton" onclick="winery.events.fire(winery.events.name.command.IMPORT_TOPOLOGY);" id="importBtn">Import Topology</button>
 
 		<div class="btn-group">
@@ -656,6 +658,7 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 		winery.events.register(winery.events.name.command.IMPORT_TOPOLOGY, wt.openChooseTopologyToImportDiag);
 		winery.events.register(winery.events.name.command.SAVE, wt.save);
 		winery.events.register(winery.events.name.command.SPLIT, wt.split);
+		winery.events.register(winery.events.name.command.PATTERN_DETECTION, wt.detectPattern);
 		wt.setTopologyTemplateURL("<%=topologyTemplateURL%>");
 	});
 </script>

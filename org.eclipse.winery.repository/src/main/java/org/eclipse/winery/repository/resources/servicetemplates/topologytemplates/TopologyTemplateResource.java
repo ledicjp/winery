@@ -47,6 +47,7 @@ import org.eclipse.winery.repository.Utils;
 import org.eclipse.winery.repository.backend.BackendUtils;
 import org.eclipse.winery.repository.client.IWineryRepositoryClient;
 import org.eclipse.winery.repository.client.WineryRepositoryClientFactory;
+import org.eclipse.winery.repository.patterndetection.Detection;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplateResource;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplatesResource;
 import org.eclipse.winery.repository.splitting.Splitting;
@@ -364,6 +365,12 @@ public class TopologyTemplateResource {
 		}
 		URI url = uriInfo.getBaseUri().resolve(Utils.getAbsoluteURL(splitServiceTemplateId));
 		return Response.created(url).build();
+	}
+
+	@POST
+	public Response detectPattern(@Context UriInfo uriInfo) {
+		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
+		return Response.ok().build();
 	}
 
 }

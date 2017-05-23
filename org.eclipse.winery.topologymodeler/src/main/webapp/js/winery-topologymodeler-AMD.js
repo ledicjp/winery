@@ -29,6 +29,7 @@ define(
 			importTopology: importTopology,
 			save: save,
 			split: split,
+			detectPattern: detectPattern,
 			setTopologyTemplateURL: function (url) {
 				topologyTemplateURL = url;
 			},
@@ -126,6 +127,28 @@ define(
 				error: function(jqXHR, textStatus, errorThrown) {
 					$("#splitBtn").button("reset");
 					vShowAJAXError("Could not split", jqXHR, errorThrown);
+				}
+			});
+		}
+
+
+		/**
+		 * "detectPattern"
+		 */
+		function detectPattern() {
+			$("#patterndetectionBtn").button("loading");
+
+			$.ajax({
+				url: topologyTemplateURL,
+				type: "POST",
+				success: function(data, textStatus, jqXHR) {
+					$("#patterndetectionBtn").button("reset");
+					//var location = jqXHR.getResponseHeader("Location");
+					vShowSuccess("Successfully detected Patterns.");
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					$("#patterndetectionBtn").button("reset");
+					vShowAJAXError("Could not detect Pattern");
 				}
 			});
 		}
