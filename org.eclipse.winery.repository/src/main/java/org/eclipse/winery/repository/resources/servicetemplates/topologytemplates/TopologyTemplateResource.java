@@ -353,11 +353,13 @@ public class TopologyTemplateResource {
 		return Utils.getXML(TTopologyTemplate.class, this.topologyTemplate);
 	}
 
+	/*
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response split(@Context UriInfo uriInfo) {
 		Splitting splitting = new Splitting();
 		ServiceTemplateId splitServiceTemplateId;
+		System.out.println("###################### Splitting ");
 		try {
 			splitServiceTemplateId = splitting.splitTopologyOfServiceTemplate((ServiceTemplateId) this.serviceTemplateRes.getId());
 		} catch (Exception e) {
@@ -366,9 +368,12 @@ public class TopologyTemplateResource {
 		URI url = uriInfo.getBaseUri().resolve(Utils.getAbsoluteURL(splitServiceTemplateId));
 		return Response.created(url).build();
 	}
+	 */
+
 
 	@POST
 	public Response detectPattern(@Context UriInfo uriInfo) {
+		System.out.println("###################### Detecting ");
 		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
 		return Response.ok().build();
 	}

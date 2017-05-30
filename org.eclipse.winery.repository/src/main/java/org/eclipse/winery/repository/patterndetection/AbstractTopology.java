@@ -1,39 +1,64 @@
 package org.eclipse.winery.repository.patterndetection;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
-
-import javax.management.relation.Relation;
 
 import org.eclipse.winery.common.ModelUtilities;
 import org.eclipse.winery.model.tosca.TNodeTemplate;
 import org.eclipse.winery.model.tosca.TRelationshipTemplate;
 import org.eclipse.winery.model.tosca.TTopologyTemplate;
 
-import com.sun.org.apache.regexp.internal.RE;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.graph.Subgraph;
+import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  * Created by marvin on 14.05.2017.
  */
 public class AbstractTopology {
 
-	private static final String labelVirtualHardware = "virtual_hardware";
-	private static final String labelServer = "Server";
-	private static final String labelService = "Service";
-	private static final String labelOS = "OperatingSystem";
+	private static final String propertiesFilename = "patterndetection.properties";
 
-	private DirectedMultigraph<TNodeTemplateExtended, RelationshipEdge> abstractTopology;
+	private String labelVirtualHardware;
+	private String labelServer;
+	private String labelService;
+	private String labelOS;
+
+	private String relationDeployedOn;
+
+	private DirectedGraph<TNodeTemplateExtended, RelationshipEdge> abstractTopology;
 	private List<TNodeTemplateExtended> allNodes;
+	private List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> subgraphList;
+	private List<TNodeTemplateExtended > visitedNodes;
+
+	private Properties properties;
 
 	public AbstractTopology(TTopologyTemplate tTopologyTemplate, List<TNodeTemplateExtended> labeled) {
-		abstractTopology = new DirectedMultigraph<>(new ClassBasedEdgeFactory<>(RelationshipEdge.class));
+		properties = new Properties();
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFilename);
+		try {
+			properties.load(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		labelVirtualHardware = properties.getProperty("labelVirtualHardware");
+		labelServer = properties.getProperty("labelServer");
+		labelService = properties.getProperty("labelService");
+		labelOS = properties.getProperty("labelOS");
+		relationDeployedOn = properties.getProperty("relationDeployedOn");
+
+		abstractTopology = new DefaultDirectedGraph<>((RelationshipEdge.class));
+		subgraphList = new ArrayList<>();
 		allNodes = new ArrayList<>();
+		visitedNodes = new ArrayList<>();
 
 		List<TNodeTemplate> tNodeTemplateList = ModelUtilities.getAllNodeTemplates(tTopologyTemplate);
 		List<TRelationshipTemplate> tRelationshipTemplateList = ModelUtilities.getAllRelationshipTemplates(tTopologyTemplate);
@@ -44,14 +69,16 @@ public class AbstractTopology {
 					if (tNodeTemplateExtended.getNodeTemplate().getId().equals(tNodeTemplate.getId())) {
 						abstractTopology.addVertex(tNodeTemplateExtended);
 						allNodes.add(tNodeTemplateExtended);
+						break;
 					} else {
-						TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "");
+						TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "", "");
 						abstractTopology.addVertex(temp);
 						allNodes.add(temp);
+						break;
 					}
 				}
 			} else {
-				TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "");
+				TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "", "");
 				abstractTopology.addVertex(temp);
 				allNodes.add(temp);
 			}
@@ -80,44 +107,123 @@ public class AbstractTopology {
 	public void map(TNodeTemplateExtended baseNode) {
 		Set<RelationshipEdge> edges = abstractTopology.edgesOf(baseNode);
 		String label = baseNode.getLabel();
-		switch (label) {
-			case labelVirtualHardware:
-				Iterator iterator = edges.iterator();
-				while (iterator.hasNext()) {
-					RelationshipEdge edge = (RelationshipEdge) iterator.next();
-					TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
-					String edgeLabel = edge.toString();
-					if (source.getLabel().isEmpty()) {
-						switch (edgeLabel) {
-							case "DeployedOn":
-								source.setLabel(labelOS);
-								map(source);
-							default:
-
-						}
+		if (label == labelVirtualHardware) {
+			Iterator iterator = edges.iterator();
+			while (iterator.hasNext()) {
+				RelationshipEdge edge = (RelationshipEdge) iterator.next();
+				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
+				String edgeLabel = edge.toString();
+				if (source.getLabel().isEmpty()) {
+					if (edgeLabel == relationDeployedOn) {
+						source.setLabel(labelOS);
+						map(source);
 					}
 				}
-			case labelOS:
-				edges = abstractTopology.edgesOf(baseNode);
-				Iterator iterator2 = edges.iterator();
-				while (iterator2.hasNext()) {
-					RelationshipEdge edge = (RelationshipEdge) iterator2.next();
-					TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
-					String edgeLabel = edge.toString();
-					if (source.getLabel().isEmpty()) {
-						switch (edgeLabel) {
-							case "DeployedOn":
-								source.setLabel(labelService);
-							default:
-
-						}
+			}
+		} else if (label == labelOS) {
+			edges = abstractTopology.edgesOf(baseNode);
+			Iterator iterator2 = edges.iterator();
+			while (iterator2.hasNext()) {
+				RelationshipEdge edge = (RelationshipEdge) iterator2.next();
+				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
+				String edgeLabel = edge.toString();
+				if (source.getLabel().isEmpty()) {
+					if (edgeLabel == relationDeployedOn) {
+						source.setLabel(labelService);
 					}
 				}
-			case labelService:
-				//TODO implement
+			}
+		} else if (label == labelService) {
+			// TODO implement
+		} else if (label == labelServer) {
+			// TODO implement
+		}
+	}
+
+	public List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> createSubgraphs(DirectedGraph<TNodeTemplateExtended, RelationshipEdge> baseGraph, TNodeTemplateExtended baseNode) {
+		for (TNodeTemplateExtended node: baseGraph.vertexSet()) {
+			DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
+			tempGraph.addVertex(node);
+			DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet());
+			subgraphList.add(subgraph);
+		}
+		DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
+		tempGraph.addVertex(baseNode);
+		DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
+		DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraphOriginal = new DirectedSubgraph<>(baseGraph);
+		subgraphList.add(subgraphOriginal);
+		getAllPossibleSubgraphs(baseNode, baseGraph, subgraph);
+		return subgraphList;
+	}
+
+	private void getAllPossibleSubgraphs(TNodeTemplateExtended base, DirectedGraph<TNodeTemplateExtended, RelationshipEdge> baseGraph, DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> lastSubgraph) {
+		if (visitedNodes.contains(base)) {
+			return;
+		}
+		HashMap<TNodeTemplateExtended, RelationshipEdge> localList = new HashMap<>();
+		for (RelationshipEdge edge: baseGraph.edgesOf(base)) {
+			if (baseGraph.edgesOf(base).isEmpty()) {
+				visitedNodes.add(base);
+				return;
+			}
+			if (edge.getV2() != base) {
+				if (visitedNodes.contains(edge.getV2())) {
+					visitedNodes.add(base);
+				} else {
+					TNodeTemplateExtended target = (TNodeTemplateExtended) edge.getV2();
+					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
+					tempGraph.addVertex(base);
+					tempGraph.addVertex(target);
+					tempGraph.addEdge(base, target, edge);
+					DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
+					lastSubgraph.addVertex(target);
+					lastSubgraph.addEdge(base, target, edge);
+					subgraphList.add(subgraph);
+					visitedNodes.add(base);
+					localList.put(target, edge);
+					getAllPossibleSubgraphs((TNodeTemplateExtended) edge.getV2(), baseGraph, lastSubgraph);
+				}
+			} else if (edge.getV1() != base) {
+				if (visitedNodes.contains(edge.getV1())) {
+					visitedNodes.add(base);
+
+				} else {
+					TNodeTemplateExtended target = (TNodeTemplateExtended) edge.getV1();
+					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
+					tempGraph.addVertex(base);
+					tempGraph.addVertex(target);
+					tempGraph.addEdge(target, base, edge);
+					DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
+					lastSubgraph.addVertex(target);
+					lastSubgraph.addEdge(target, base, edge);
+					subgraphList.add(subgraph);
+					visitedNodes.add(base);
+					localList.put(target, edge);
+					getAllPossibleSubgraphs((TNodeTemplateExtended) edge.getV1(), baseGraph, lastSubgraph);
+				}
+			}
+		}
+		if (localList.size() > 1) {
+			DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
+			tempGraph.addVertex(base);
+			for (TNodeTemplateExtended tNodeTemplateExtended: localList.keySet()) {
+				TNodeTemplateExtended node = tNodeTemplateExtended;
+				RelationshipEdge edge = localList.get(tNodeTemplateExtended);
+				tempGraph.addVertex(node);
+				if (edge.getV1().equals(node)) {
+					tempGraph.addEdge(node, base, edge);
+				} else {
+					tempGraph.addEdge(base, node, edge);
+				}
+			}
+			DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
+			subgraphList.add(subgraph);
 		}
 
+	}
 
+	public DirectedGraph<TNodeTemplateExtended, RelationshipEdge> getGraph() {
+		return abstractTopology;
 	}
 
 	public static class RelationshipEdge<V> extends DefaultEdge {
@@ -142,9 +248,5 @@ public class AbstractTopology {
 		public String toString() {
 			return label;
 		}
-	}
-
-	public DirectedMultigraph<TNodeTemplateExtended, RelationshipEdge> getGraph() {
-		return abstractTopology;
 	}
 }

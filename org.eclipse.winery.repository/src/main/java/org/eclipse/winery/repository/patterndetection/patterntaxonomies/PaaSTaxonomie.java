@@ -1,5 +1,9 @@
 package org.eclipse.winery.repository.patterndetection.patterntaxonomies;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
@@ -8,14 +12,33 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
  */
 public class PaaSTaxonomie {
 
+	private static final String propertiesFilename = "patterndetection.properties";
+
+	private String paaS;
+	private String elasticPlatform;
+	private String nodeBasedAvailability;
+	private String environmentBasedAvailability;
+	private String elasticLoadBalancer;
+
+	private Properties properties;
+
 	private SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> paasTaxonomie;
-	private String paaS = "Platform-as-a-Service";
-	private String elasticPlatform = "Elastic Platform";
-	private String environmentBasedAvailability = "Environment-based Availability";
-	private String nodeBasedAvailability = "Node-based Availability";
-	private String elasticLoadBalancer = "elasticLoadBalancer";
 
 	public PaaSTaxonomie() {
+		properties = new Properties();
+		try {
+			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFilename);
+			properties.load(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		paaS = properties.getProperty("nodePaaS");
+		elasticPlatform = properties.getProperty("nodeElasticPlatform");
+		nodeBasedAvailability = properties.getProperty("nodeNodeBasedAv");
+		environmentBasedAvailability = properties.getProperty("nodeEnvBasedAv");
+		elasticLoadBalancer = properties.getProperty("nodeElasticLoadBalancer");
+
 		paasTaxonomie = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
 		paasTaxonomie.addVertex(paaS);

@@ -1,12 +1,13 @@
 package org.eclipse.winery.repository.patterndetection.pattern;
 
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
 
 /**
  * Created by marvin on 15.05.2017.
  */
-public class ExecutionEnvironmentPattern {
+public class ExecutionEnvironmentPattern extends Pattern {
 
 	private static final String infrastructure = "Infrastructure";
 	private static final String os = "OperatingSystem";
@@ -14,12 +15,10 @@ public class ExecutionEnvironmentPattern {
 	private static final String server = "Server";
 	private static final String hostedOn = "HostedOn";
 
-
-	private DirectedMultigraph<PatternComponent, RelationshipEdge> pattern;
+	private DirectedGraph<PatternComponent, RelationshipEdge> pattern;
 
 	public ExecutionEnvironmentPattern() {
-		pattern = new DirectedMultigraph<>(RelationshipEdge.class);
-
+		pattern = new DefaultDirectedGraph<>(RelationshipEdge.class);
 
 		PatternComponent infrastructureComponent = new PatternComponent(infrastructure, 1, 1);
 		PatternComponent operatingSystem = new PatternComponent(os, 1, 1);
@@ -27,14 +26,18 @@ public class ExecutionEnvironmentPattern {
 		PatternComponent serverComponent = new PatternComponent(server, 1, Integer.MAX_VALUE);
 
 		pattern.addVertex(operatingSystem);
-		pattern.addVertex(infrastructureComponent);
+		//pattern.addVertex(infrastructureComponent);
 		pattern.addVertex(serverComponent);
 		pattern.addVertex(serviceComponent);
 
-		pattern.addEdge(operatingSystem, infrastructureComponent, new RelationshipEdge(operatingSystem, infrastructureComponent, hostedOn));
+		//pattern.addEdge(operatingSystem, infrastructureComponent, new RelationshipEdge(operatingSystem, infrastructureComponent, hostedOn));
 		pattern.addEdge(serverComponent, operatingSystem, new RelationshipEdge(serverComponent, operatingSystem, hostedOn));
 		pattern.addEdge(serviceComponent, operatingSystem, new RelationshipEdge(serviceComponent, operatingSystem, hostedOn));
 
+	}
+
+	public DirectedGraph<PatternComponent, RelationshipEdge> getPatternGraph() {
+		return pattern;
 	}
 
 	public static class RelationshipEdge<V> extends DefaultEdge {
