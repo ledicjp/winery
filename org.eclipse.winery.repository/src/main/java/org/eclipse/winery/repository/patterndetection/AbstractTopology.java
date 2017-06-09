@@ -16,7 +16,6 @@ import org.eclipse.winery.model.tosca.TTopologyTemplate;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedSubgraph;
 
 /**
@@ -30,8 +29,11 @@ public class AbstractTopology {
 	private String labelServer;
 	private String labelService;
 	private String labelOS;
+	private String labelApp;
 
 	private String relationDeployedOn;
+	private String relationHostedOn;
+	private String relationDependsOn;
 
 	private DirectedGraph<TNodeTemplateExtended, RelationshipEdge> abstractTopology;
 	private List<TNodeTemplateExtended> allNodes;
@@ -53,7 +55,10 @@ public class AbstractTopology {
 		labelServer = properties.getProperty("labelServer");
 		labelService = properties.getProperty("labelService");
 		labelOS = properties.getProperty("labelOS");
+		labelApp = properties.getProperty("labelApp");
 		relationDeployedOn = properties.getProperty("relationDeployedOn");
+		relationHostedOn = properties.getProperty("relationHostedOn");
+		relationDependsOn = properties.getProperty("relationDependsOn");
 
 		abstractTopology = new DefaultDirectedGraph<>((RelationshipEdge.class));
 		subgraphList = new ArrayList<>();
@@ -107,36 +112,66 @@ public class AbstractTopology {
 	public void map(TNodeTemplateExtended baseNode) {
 		Set<RelationshipEdge> edges = abstractTopology.edgesOf(baseNode);
 		String label = baseNode.getLabel();
-		if (label == labelVirtualHardware) {
+		if (label.equals(labelVirtualHardware)) {
 			Iterator iterator = edges.iterator();
 			while (iterator.hasNext()) {
 				RelationshipEdge edge = (RelationshipEdge) iterator.next();
 				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
 				String edgeLabel = edge.toString();
 				if (source.getLabel().isEmpty()) {
-					if (edgeLabel == relationDeployedOn) {
+					if (edgeLabel.equals(relationDeployedOn)) {
 						source.setLabel(labelOS);
 						map(source);
 					}
 				}
 			}
-		} else if (label == labelOS) {
+		} else if (label.equals(labelOS)) {
 			edges = abstractTopology.edgesOf(baseNode);
-			Iterator iterator2 = edges.iterator();
-			while (iterator2.hasNext()) {
-				RelationshipEdge edge = (RelationshipEdge) iterator2.next();
+			Iterator iterator = edges.iterator();
+			while (iterator.hasNext()) {
+				RelationshipEdge edge = (RelationshipEdge) iterator.next();
 				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
 				String edgeLabel = edge.toString();
 				if (source.getLabel().isEmpty()) {
-					if (edgeLabel == relationDeployedOn) {
+					if (edgeLabel.equals(relationDeployedOn)) {
 						source.setLabel(labelService);
+						map(source);
 					}
 				}
 			}
-		} else if (label == labelService) {
-			// TODO implement
-		} else if (label == labelServer) {
-			// TODO implement
+		} else if (label.equals(labelService)) {
+			edges = abstractTopology.edgesOf(baseNode);
+			Iterator iterator = edges.iterator();
+			while (iterator.hasNext()) {
+				RelationshipEdge edge = (RelationshipEdge) iterator.next();
+				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
+				String edgeLabel = edge.toString();
+				if (source.getLabel().isEmpty()) {
+					if (edgeLabel.equals(relationDependsOn)) {
+						//probability that the unlabeled node is an application is very high, because server would be detected + labeled during keyword search
+						source.setLabel(labelApp);
+						map(source);
+					}
+				}
+			}
+		} else if (label.equals(labelServer)) {
+			//TODO define depth of topology, e.g. just one server layer on a virtual machine
+			edges = abstractTopology.edgesOf(baseNode);
+			Iterator iterator = edges.iterator();
+			while (iterator.hasNext()) {
+				RelationshipEdge edge = (RelationshipEdge) iterator.next();
+				TNodeTemplateExtended source = (TNodeTemplateExtended) edge.getV1();
+				String edgeLabel = edge.toString();
+				if (source.getLabel().isEmpty()) {
+					if (edgeLabel.equals(relationHostedOn)) {
+						source.setLabel(labelService);
+						map(source);
+					} else if (edgeLabel.equals(relationDeployedOn)) {
+						source.setLabel(labelApp);
+						map(source);
+					}
+				}
+			}
 		}
 	}
 
@@ -226,27 +261,4 @@ public class AbstractTopology {
 		return abstractTopology;
 	}
 
-	public static class RelationshipEdge<V> extends DefaultEdge {
-		private V v1;
-		private V v2;
-		private String label;
-
-		public RelationshipEdge(V v1, V v2, String label) {
-			this.v1 = v1;
-			this.v2 = v2;
-			this.label = label;
-		}
-
-		public V getV1() {
-			return v1;
-		}
-
-		public V getV2() {
-			return v2;
-		}
-
-		public String toString() {
-			return label;
-		}
-	}
 }

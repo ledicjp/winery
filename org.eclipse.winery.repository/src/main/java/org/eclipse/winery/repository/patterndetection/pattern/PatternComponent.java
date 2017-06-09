@@ -6,6 +6,7 @@ package org.eclipse.winery.repository.patterndetection.pattern;
 public class PatternComponent {
 
 	private String name;
+
 	private int min;
 	private int max;
 
@@ -23,4 +24,11 @@ public class PatternComponent {
 		this.name = name;
 	}
 
+	public int getMin() {
+		return min;
+	}
+
+	public int getMax() {
+		return max;
+	}
 }

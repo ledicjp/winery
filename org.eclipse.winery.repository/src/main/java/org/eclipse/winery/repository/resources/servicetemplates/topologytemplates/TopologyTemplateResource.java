@@ -50,7 +50,6 @@ import org.eclipse.winery.repository.client.WineryRepositoryClientFactory;
 import org.eclipse.winery.repository.patterndetection.Detection;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplateResource;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplatesResource;
-import org.eclipse.winery.repository.splitting.Splitting;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource.Builder;
@@ -370,12 +369,16 @@ public class TopologyTemplateResource {
 	}
 	 */
 
-
 	@POST
 	public Response detectPattern(@Context UriInfo uriInfo) {
 		System.out.println("###################### Detecting ");
 		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
-		return Response.ok().build();
+		List<String> pattern = detection.detectPattern();
+		StringBuilder builder = new StringBuilder();
+		for (String string: pattern) {
+			builder.append(string + ", ");
+		}
+		return Response.status(Response.Status.OK).entity("Detected the following patterns: " + builder.toString()).build();
 	}
 
 }

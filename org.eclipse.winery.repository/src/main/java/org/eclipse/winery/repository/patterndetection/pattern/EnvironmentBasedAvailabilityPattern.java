@@ -10,10 +10,10 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 
 /**
- * Created by marvin on 15.05.2017.
+ * Created by marvin on 08.06.2017.
+ * just one virtual machine
  */
-public class ExecutionEnvironmentPattern {
-
+public class EnvironmentBasedAvailabilityPattern {
 	private static final String propertiesFilename = "patterndetection.properties";
 
 	private Properties properties;
@@ -26,7 +26,7 @@ public class ExecutionEnvironmentPattern {
 
 	private DirectedGraph<PatternComponent, RelationshipEdge> pattern;
 
-	public ExecutionEnvironmentPattern() {
+	public EnvironmentBasedAvailabilityPattern() {
 		properties = new Properties();
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFilename);
 		try {
@@ -42,19 +42,19 @@ public class ExecutionEnvironmentPattern {
 
 		pattern = new DefaultDirectedGraph<>(RelationshipEdge.class);
 
-		//PatternComponent infrastructureComponent = new PatternComponent(virtualHardware, 1, 1);
-		PatternComponent operatingSystem = new PatternComponent(os, 1, 1);
+		PatternComponent virtualHardwareComponent = new PatternComponent(virtualHardware, 0, 1);
+		PatternComponent operatingSystem = new PatternComponent(os, 0, 1);
 		PatternComponent serviceComponent = new PatternComponent(service, 1, Integer.MAX_VALUE);
 		PatternComponent serverComponent = new PatternComponent(server, 1, Integer.MAX_VALUE);
 
 		pattern.addVertex(operatingSystem);
-		//pattern.addVertex(infrastructureComponent);
+		pattern.addVertex(virtualHardwareComponent);
 		pattern.addVertex(serverComponent);
-		//pattern.addVertex(serviceComponent);
+		pattern.addVertex(serviceComponent);
 
-		//pattern.addEdge(operatingSystem, infrastructureComponent, new RelationshipEdge(operatingSystem, infrastructureComponent, hostedOn));
+		pattern.addEdge(operatingSystem, virtualHardwareComponent, new RelationshipEdge(operatingSystem, virtualHardwareComponent, hostedOn));
 		pattern.addEdge(serverComponent, operatingSystem, new RelationshipEdge(serverComponent, operatingSystem, hostedOn));
-		//pattern.addEdge(serviceComponent, operatingSystem, new RelationshipEdge(serviceComponent, operatingSystem, hostedOn));
+		pattern.addEdge(serviceComponent, serverComponent, new RelationshipEdge(serviceComponent, operatingSystem, hostedOn));
 
 	}
 
