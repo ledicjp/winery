@@ -1,4 +1,4 @@
-package org.eclipse.winery.repository.patterndetection.pattern;
+package org.eclipse.winery.repository.patterndetection.model;
 
 /**
  * Created by marvin on 15.05.2017.

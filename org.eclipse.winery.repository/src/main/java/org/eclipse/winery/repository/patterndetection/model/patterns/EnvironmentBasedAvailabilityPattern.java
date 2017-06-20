@@ -1,10 +1,11 @@
-package org.eclipse.winery.repository.patterndetection.pattern;
+package org.eclipse.winery.repository.patterndetection.model.patterns;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.eclipse.winery.repository.patterndetection.RelationshipEdge;
+import org.eclipse.winery.repository.patterndetection.model.RelationshipEdge;
+import org.eclipse.winery.repository.patterndetection.model.PatternComponent;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;

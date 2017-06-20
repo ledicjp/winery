@@ -1,4 +1,4 @@
-package org.eclipse.winery.repository.patterndetection;
+package org.eclipse.winery.repository.patterndetection.model;
 
 import org.eclipse.winery.model.tosca.TNodeTemplate;
 

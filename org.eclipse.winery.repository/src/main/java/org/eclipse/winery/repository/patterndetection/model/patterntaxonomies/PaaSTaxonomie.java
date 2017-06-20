@@ -1,4 +1,4 @@
-package org.eclipse.winery.repository.patterndetection.patterntaxonomies;
+package org.eclipse.winery.repository.patterndetection.model.patterntaxonomies;
 
 import java.io.IOException;
 import java.io.InputStream;

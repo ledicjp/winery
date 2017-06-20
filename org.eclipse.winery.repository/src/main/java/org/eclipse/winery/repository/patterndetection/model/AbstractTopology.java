@@ -1,4 +1,4 @@
-package org.eclipse.winery.repository.patterndetection;
+package org.eclipse.winery.repository.patterndetection.model;
 
 import java.io.IOException;
 import java.io.InputStream;
