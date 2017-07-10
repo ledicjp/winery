@@ -1,7 +1,7 @@
 package org.eclipse.winery.repository.patterndetection.model;
 
 /**
- * Created by marvin on 15.05.2017.
+ * Created by marvin.wohlfarth on 15.05.2017.
  */
 public class PatternComponent {
 

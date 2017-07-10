@@ -279,6 +279,7 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>winery.properties</include>
+					<include>patterndetection.properties</include>
 					<include>logback.xml</include>
 					<include>logback-test.xml</include>
 				</includes>

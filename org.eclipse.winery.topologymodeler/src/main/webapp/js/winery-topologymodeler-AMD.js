@@ -144,7 +144,8 @@ define(
 				success: function(data, textStatus, jqXHR) {
 					$("#patterndetectionBtn").button("reset");
 					//var location = jqXHR.getResponseHeader("Location");
-					vShowSuccess("Successfully detected Patterns.");
+					console.log(data);
+					vShowSuccess("Algorithm was successful.\n" + data);
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					$("#patterndetectionBtn").button("reset");

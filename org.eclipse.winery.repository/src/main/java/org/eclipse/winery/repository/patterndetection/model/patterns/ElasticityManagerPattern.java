@@ -4,27 +4,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.eclipse.winery.repository.patterndetection.model.RelationshipEdge;
 import org.eclipse.winery.repository.patterndetection.model.PatternComponent;
+import org.eclipse.winery.repository.patterndetection.model.RelationshipEdge;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 
 /**
- * Created by marvin.wohlfarth on 08.06.2017.
+ * Created by marvin on 03.07.2017.
  */
-public class EnvironmentBasedAvailabilityPattern {
+public class ElasticityManagerPattern {
+
 	private static final String propertiesFilename = "patterndetection.properties";
 
 	private Properties properties;
 
 	private String virtualHardware;
-	private String os;
-	private String hostedOn;
+	private String service;
+
+	private String connectsTo;
 
 	private DirectedGraph<PatternComponent, RelationshipEdge> pattern;
 
-	public EnvironmentBasedAvailabilityPattern() {
+	public ElasticityManagerPattern() {
 		properties = new Properties();
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFilename);
 		try {
@@ -32,19 +34,21 @@ public class EnvironmentBasedAvailabilityPattern {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		os = properties.getProperty("labelOS");
 		virtualHardware = properties.getProperty("labelVirtualHardware");
-		hostedOn = properties.getProperty("relationHostedOn");
+		service = properties.getProperty("labelService");
+
+		connectsTo = properties.getProperty("relationConnectsTo");
 
 		pattern = new DefaultDirectedGraph<>(RelationshipEdge.class);
 
 		PatternComponent virtualHardwareComponent = new PatternComponent(virtualHardware, 1, 1);
-		PatternComponent operatingSystem = new PatternComponent(os, 1, 1);
+		PatternComponent serviceComponent = new PatternComponent(service, 1, 1);
 
-		pattern.addVertex(operatingSystem);
 		pattern.addVertex(virtualHardwareComponent);
+		pattern.addVertex(serviceComponent);
 
-		pattern.addEdge(operatingSystem, virtualHardwareComponent, new RelationshipEdge(operatingSystem, virtualHardwareComponent, hostedOn));
+		pattern.addEdge(serviceComponent, virtualHardwareComponent, new RelationshipEdge(service, virtualHardwareComponent, connectsTo));
+
 	}
 
 	public DirectedGraph<PatternComponent, RelationshipEdge> getPatternGraph() {

@@ -17,9 +17,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -366,19 +368,76 @@ public class TopologyTemplateResource {
 		}
 		URI url = uriInfo.getBaseUri().resolve(Utils.getAbsoluteURL(splitServiceTemplateId));
 		return Response.created(url).build();
-	}
-	 */
+	}*/
 
 	@POST
 	public Response detectPattern(@Context UriInfo uriInfo) {
-		System.out.println("###################### Detecting ");
 		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
-		List<String> pattern = detection.detectPattern();
+		List<List<String>> listList = detection.detectPattern();
 		StringBuilder builder = new StringBuilder();
-		for (String string: pattern) {
-			builder.append(string + ", ");
+		List<String> detectedPatterns = listList.get(0);
+		List<String> alreadySetPatterns = new ArrayList<>();
+		int count = 0;
+		for (List<String> list: listList) {
+			Set setItems = new LinkedHashSet<>(list);
+			list.clear();
+			list.addAll(setItems);
+			switch (count) {
+				case 0:
+					builder.append("\n <b>Detected Patterns:</b> \n");
+					for (String string: list) {
+						alreadySetPatterns.add(string);
+						builder.append(string + ", ");
+					}
+					count++;
+					continue;
+				case 1:
+					builder.append("\n\n <b>High Probability Patterns:</b> \n");
+					for (String string: list) {
+						if (!detectedPatterns.contains(string) && !alreadySetPatterns.contains(string)) {
+							alreadySetPatterns.add(string);
+							builder.append(string + ", ");
+						}
+					}
+					count++;
+					continue;
+				case 2:
+					builder.append("\n\n <b>Medium Probability Patterns:</b> \n");
+					for (String string: list) {
+						if (!detectedPatterns.contains(string) && !alreadySetPatterns.contains(string)) {
+							alreadySetPatterns.add(string);
+							builder.append(string + ", ");
+						}
+					}
+					count++;
+					continue;
+				case 3:
+					builder.append("\n\n <b>Low Probability Patterns:</b> \n");
+					for (String string: list) {
+						if (!detectedPatterns.contains(string) && !alreadySetPatterns.contains(string)) {
+							alreadySetPatterns.add(string);
+							builder.append(string + ", ");
+						}
+					}
+					count++;
+					continue;
+				case 4:
+					builder.append("\n\n <b>Impossible Patterns:</b> \n");
+					for (String string: list) {
+						if (!detectedPatterns.contains(string) && !alreadySetPatterns.contains(string)) {
+							alreadySetPatterns.add(string);
+							builder.append(string + ", ");
+						}
+					}
+					count++;
+					continue;
+				default:
+					continue;
+			}
 		}
-		return Response.status(Response.Status.OK).entity("Detected the following patterns: " + builder.toString()).build();
+
+		String result = builder.toString();
+		return Response.status(Response.Status.OK).entity(result).build();
 	}
 
 }

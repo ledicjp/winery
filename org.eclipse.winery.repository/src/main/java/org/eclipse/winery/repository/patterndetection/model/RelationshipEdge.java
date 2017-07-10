@@ -3,7 +3,7 @@ package org.eclipse.winery.repository.patterndetection.model;
 import org.jgrapht.graph.DefaultEdge;
 
 /**
- * Created by marvin on 09.06.2017.
+ * Created by marvin.wohlfarth on 09.06.2017.
  */
 public class RelationshipEdge<V> extends DefaultEdge {
 	private V v1;

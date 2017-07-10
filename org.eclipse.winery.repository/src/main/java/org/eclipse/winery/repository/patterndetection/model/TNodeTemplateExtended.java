@@ -3,7 +3,7 @@ package org.eclipse.winery.repository.patterndetection.model;
 import org.eclipse.winery.model.tosca.TNodeTemplate;
 
 /**
- * Created by marvin on 13.05.2017.
+ * Created by marvin.wohlfarth on 13.05.2017.
  */
 public class TNodeTemplateExtended {
 

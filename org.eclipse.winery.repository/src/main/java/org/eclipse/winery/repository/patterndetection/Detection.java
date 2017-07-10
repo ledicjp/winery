@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -14,29 +15,37 @@ import org.eclipse.winery.common.ids.definitions.ServiceTemplateId;
 import org.eclipse.winery.model.tosca.TNodeTemplate;
 import org.eclipse.winery.model.tosca.TRelationshipTemplate;
 import org.eclipse.winery.model.tosca.TTopologyTemplate;
+import org.eclipse.winery.repository.patterndetection.keywords.Messaging;
 import org.eclipse.winery.repository.patterndetection.keywords.OperatingSystem;
 import org.eclipse.winery.repository.patterndetection.keywords.Server;
 import org.eclipse.winery.repository.patterndetection.keywords.Service;
+import org.eclipse.winery.repository.patterndetection.keywords.Storage;
 import org.eclipse.winery.repository.patterndetection.keywords.VirtualHardware;
 import org.eclipse.winery.repository.patterndetection.model.AbstractTopology;
+import org.eclipse.winery.repository.patterndetection.model.PatternComponent;
 import org.eclipse.winery.repository.patterndetection.model.RelationshipEdge;
 import org.eclipse.winery.repository.patterndetection.model.TNodeTemplateExtended;
+import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticLoadBalancerPattern;
+import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticQueuePattern;
+import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticityManagerPattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.EnvironmentBasedAvailabilityPattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.ExecutionEnvironmentPattern;
-import org.eclipse.winery.repository.patterndetection.model.PatternComponent;
-import org.eclipse.winery.repository.patterndetection.model.patterntaxonomies.IaaSTaxonomie;
-import org.eclipse.winery.repository.patterndetection.model.patterntaxonomies.PaaSTaxonomie;
+import org.eclipse.winery.repository.patterndetection.model.patterns.MessageOrientedMiddlewarePattern;
+import org.eclipse.winery.repository.patterndetection.model.patterns.NodeBasedAvailabilityPattern;
+import org.eclipse.winery.repository.patterndetection.model.patterns.RelationalDatabasePattern;
+import org.eclipse.winery.repository.patterndetection.model.patterntaxonomies.IaaSTaxonomy;
+import org.eclipse.winery.repository.patterndetection.model.patterntaxonomies.PaaSTaxonomy;
 import org.eclipse.winery.repository.resources.AbstractComponentsResource;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplateResource;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.isomorphism.IsomorphicGraphMapping;
 import org.jgrapht.alg.isomorphism.VF2SubgraphIsomorphismInspector;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedSubgraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 /**
- * Created by marvin on 12.05.2017.
+ * Created by marvin.wohlfarth on 12.05.2017.
  */
 public class Detection {
 
@@ -48,6 +57,8 @@ public class Detection {
 	private String labelService;
 	private String labelOS;
 	private String labelVirtualHardware;
+	private String labelMessaging;
+	private String labelStorage;
 
 	private String keywordBeanstalk;
 	private String keywordOpenstack;
@@ -56,15 +67,26 @@ public class Detection {
 	private String keywordPython;
 	private String keywordApache;
 	private String keywordTomcat;
+	private String keywordMosquitto;
+	private String keywordMongoDB;
+	private String keywordMySQL;
 
 	private String patternEnvBasedAvail;
-	private String patternPaaS;
 	private String patternElasticLoadBalancer;
-	private String patternElasticInfrastructure;
 	private String patternExecEnv;
+	private String patternElasticityManager;
+	private String patternElasticQueue;
+	private String patternMessageMiddleware;
+	private String patternNodeBasedAvail;
+	private String patternRelationalDatabase;
+	private String patternElasticInfrastructure;
+	private String patternElasticPlatform;
+	private String patternPaaS;
+	private String patternIaaS;
+	private String patternPublicCloud;
 
-	//private boolean isPaaS = false;
-	//private boolean isIaaS = false;
+	private boolean isPaaS;
+	private boolean isIaaS;
 
 	private List<String> detectedPattern = new ArrayList<>();
 	private List<String> impossiblePattern = new ArrayList<>();
@@ -74,14 +96,12 @@ public class Detection {
 	private List<String> patternProbabilityMedium = new ArrayList<>();
 	private List<String> patternProbabilityLow = new ArrayList<>();
 	private List<TNodeTemplateExtended> labeledNodeTemplates = new ArrayList<>();
-	private PaaSTaxonomie paas = new PaaSTaxonomie();
-	private IaaSTaxonomie iaas = new IaaSTaxonomie();
+	private PaaSTaxonomy paas = new PaaSTaxonomy();
+	private IaaSTaxonomy iaas = new IaaSTaxonomy();
 	private SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> paasGraph;
 	private SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> iaasGraph;
 	private AbstractTopology abstractTopology;
 	private TNodeTemplate basisNodeTemplate;
-
-	private List<DirectedGraph<PatternComponent, RelationshipEdge>> patternList;
 
 	private ServiceTemplateId serviceTemplateId;
 
@@ -94,10 +114,17 @@ public class Detection {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		isPaaS = false;
+		isIaaS = false;
+
 		labelServer = properties.getProperty("labelServer");
 		labelService = properties.getProperty("labelService");
 		labelOS = properties.getProperty("labelOS");
 		labelVirtualHardware = properties.getProperty("labelVirtualHardware");
+		labelMessaging = properties.getProperty("labelMessaging");
+		labelStorage = properties.getProperty("labelStorage");
+
 		keywordBeanstalk = properties.getProperty("keywordBeanstalk");
 		keywordEC2 = properties.getProperty("keywordEC2");
 		keywordOpenstack = properties.getProperty("keywordOpenstack");
@@ -105,26 +132,41 @@ public class Detection {
 		keywordPython = properties.getProperty("keywordPython");
 		keywordApache = properties.getProperty("keywordApache");
 		keywordTomcat = properties.getProperty("keywordTomcat");
+		keywordMongoDB = properties.getProperty("keywordMongoDB");
+		keywordMySQL = properties.getProperty("keywordMySQL");
+		keywordMosquitto = properties.getProperty("keywordMosquitto");
+
 		patternElasticLoadBalancer = properties.getProperty("nodeElasticLoadBalancer");
 		patternEnvBasedAvail = properties.getProperty("nodeEnvBasedAv");
-		patternPaaS = properties.getProperty("nodePaaS");
-		patternElasticInfrastructure = properties.getProperty("nodeElasticInfrastructure");
 		patternExecEnv = properties.getProperty("nodeExecEnv");
-
-		patternList = new ArrayList<>();
+		patternElasticityManager = properties.getProperty("nodeElasticityManager");
+		patternElasticQueue = properties.getProperty("nodeElasticQueue");
+		patternNodeBasedAvail = properties.getProperty("nodeNodeBasedAv");
+		patternRelationalDatabase = properties.getProperty("nodeRelationalDatabase");
+		patternMessageMiddleware = properties.getProperty("nodeMessaging");
+		patternElasticPlatform = properties.getProperty("nodeElasticPlatform");
+		patternElasticInfrastructure = properties.getProperty("nodeElasticInfrastructure");
+		patternIaaS = properties.getProperty("nodeIaaS");
+		patternPaaS = properties.getProperty("nodePaaS");
+		patternPublicCloud = properties.getProperty("nodePublicCloud");
 	}
 
-	public List<String> detectPattern() {
+	public List<List<String>> detectPattern() {
 		ServiceTemplateResource serviceTempateResource = (ServiceTemplateResource) AbstractComponentsResource.getComponentInstaceResource(serviceTemplateId);
 		TTopologyTemplate tTopologyTemplate = serviceTempateResource.getServiceTemplate().getTopologyTemplate();
 		searchForKeywords(tTopologyTemplate);
-		detectPatternLayerOne(tTopologyTemplate);
-		//detectPatternLayerTwo(tTopologyTemplate);
-		return detectedPattern;
+		detectPattern(tTopologyTemplate);
+		List<List<String>> listLists = new ArrayList<>();
+		listLists.add(detectedPattern);
+		listLists.add(patternProbabilityHigh);
+		listLists.add(patternProbabilityMedium);
+		listLists.add(patternProbabilityLow);
+		listLists.add(impossiblePattern);
+		return listLists;
 	}
 
 	/**
-	 * search for keywords
+	 * search for keywords using predefined keywords in enums
 	 */
 	private void searchForKeywords(TTopologyTemplate tTopologyTemplate) {
 		List<TNodeTemplate> tNodeTemplateList = ModelUtilities.getAllNodeTemplates(tTopologyTemplate);
@@ -132,6 +174,8 @@ public class Detection {
 		List<Service> serviceList = new ArrayList<>(EnumSet.allOf(Service.class));
 		List<VirtualHardware> virtualHardwareList = new ArrayList<>(EnumSet.allOf(VirtualHardware.class));
 		List<OperatingSystem> operatingSystemList = new ArrayList<>(EnumSet.allOf(OperatingSystem.class));
+		List<Messaging> messagingList = new ArrayList<>(EnumSet.allOf(Messaging.class));
+		List<Storage> storageList = new ArrayList<>(EnumSet.allOf(Storage.class));
 
 		for (TNodeTemplate tNodeTemplate : tNodeTemplateList) {
 			for (Server server : serverList) {
@@ -139,6 +183,7 @@ public class Detection {
 					matchedKeywords.add(server.toString());
 					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelServer, server.toString());
 					labeledNodeTemplates.add(temp);
+					isPaaS = true;
 				}
 			}
 			for (Service service : serviceList) {
@@ -146,6 +191,7 @@ public class Detection {
 					matchedKeywords.add(service.toString());
 					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelService, service.toString());
 					labeledNodeTemplates.add(temp);
+					isPaaS = true;
 				}
 			}
 			for (VirtualHardware virtualHardware : virtualHardwareList) {
@@ -153,6 +199,7 @@ public class Detection {
 					matchedKeywords.add(virtualHardware.toString());
 					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelVirtualHardware, virtualHardware.toString());
 					labeledNodeTemplates.add(temp);
+					isIaaS = true;
 				}
 			}
 			for (OperatingSystem operatingSystem : operatingSystemList) {
@@ -160,6 +207,23 @@ public class Detection {
 					matchedKeywords.add(operatingSystem.toString());
 					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelOS, operatingSystem.toString());
 					labeledNodeTemplates.add(temp);
+					isPaaS = true;
+				}
+			}
+			for (Messaging messaging : messagingList) {
+				if (tNodeTemplate.getName().toLowerCase().contains(messaging.toString().toLowerCase())) {
+					matchedKeywords.add(messaging.toString());
+					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelMessaging, messaging.toString());
+					labeledNodeTemplates.add(temp);
+					isPaaS = true;
+				}
+			}
+			for (Storage storage : storageList) {
+				if (tNodeTemplate.getName().toLowerCase().contains(storage.toString().toLowerCase())) {
+					matchedKeywords.add(storage.toString());
+					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelStorage, storage.toString());
+					labeledNodeTemplates.add(temp);
+					isPaaS = true;
 				}
 			}
 		}
@@ -173,71 +237,89 @@ public class Detection {
 			for (String keyword : matchedKeywords) {
 				DefaultWeightedEdge tempEdge;
 				if (keyword.equals(keywordBeanstalk)) {
-					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getEnvironmentBasedAvailability());
-					// set 100% probability of the pattern this edge is pointing to
-					paasGraph.setEdgeWeight(tempEdge, 0.75);
-					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getElasticLoadBalancer());
-					paasGraph.setEdgeWeight(tempEdge, 0.75);
-					detectedPattern.add(patternEnvBasedAvail);
 					detectedPattern.add(patternPaaS);
-					detectedPattern.add(patternElasticLoadBalancer);
-					impossiblePattern.add(patternElasticInfrastructure);
-					// TODO bottom-up-search & set probabilities for patterns depending on
+					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getEnvBasedAv());
+					// set 100% probability of the pattern this edge is pointing to
+					paasGraph.setEdgeWeight(tempEdge, 0.99);
+					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getElasticLoadBalancer());
+					paasGraph.setEdgeWeight(tempEdge, 0.99);
+					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getElasticityManager());
+					paasGraph.setEdgeWeight(tempEdge, 0.99);
 				} else if (keyword.equals(keywordOpenstack) || keyword.equals(keywordEC2)) {
 					tempEdge = iaasGraph.getEdge(iaas.getIaas(), iaas.getElasticInfrastructure());
-					iaasGraph.setEdgeWeight(tempEdge, 0.99);
-					detectedPattern.add(patternElasticInfrastructure);
-				} else if (keyword.equals(keywordJava) || keyword.equals(keywordPython)) {
-					tempEdge = paasGraph.getEdge(paas.getElasticPlatform(), paas.getEnvironmentBasedAvailability());
+					iaasGraph.setEdgeWeight(tempEdge, 0.75);
+				} else if (keyword.equals(keywordMongoDB) || keyword.equals(keywordMySQL)) {
+					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getRelationalDatabase());
+					paasGraph.setEdgeWeight(tempEdge, 0.99);
+				} else if (keyword.equals(keywordJava) || keyword.equals(keywordPython) || keyword.equals(keywordTomcat) || keyword.equals(keywordApache)) {
+					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getExecEnvironment());
 					paasGraph.setEdgeWeight(tempEdge, 0.75);
-				} else if (keyword.equals(keywordApache) || keyword.equals(keywordTomcat)) {
 				}
 			}
 
-			Set<DefaultWeightedEdge> edgeSet;
-			edgeSet = paasGraph.edgeSet();
-			Iterator iterator = edgeSet.iterator();
-			while (iterator.hasNext()) {
-				DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator.next();
-				double weight = paasGraph.getEdgeWeight(edge);
-				if (weight == 0.75) {
-					patternProbabilityHigh.add(paasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.5) {
-					patternProbabilityMedium.add(paasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.25) {
-					patternProbabilityLow.add(paasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.99) {
-					detectedPattern.add(paasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.0) {
-					impossiblePattern.add(paasGraph.getEdgeTarget(edge));
+			if (isIaaS && !isPaaS) {
+				detectedPattern.add(patternIaaS);
+				impossiblePattern.add(patternPaaS);
+				impossiblePattern.add(patternElasticPlatform);
+				Set<DefaultWeightedEdge> edgeSet;
+				edgeSet = iaasGraph.edgeSet();
+				Iterator iterator2 = edgeSet.iterator();
+				while (iterator2.hasNext()) {
+					DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator2.next();
+					double weight = iaasGraph.getEdgeWeight(edge);
+					if (weight == 0.75) {
+						patternProbabilityHigh.add(iaasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.5) {
+						patternProbabilityMedium.add(iaasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.25) {
+						patternProbabilityLow.add(iaasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.99) {
+						detectedPattern.add(iaasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.0) {
+						impossiblePattern.add(iaasGraph.getEdgeTarget(edge));
+					} else if (weight == 1.0) {
+						//for all other patterns add low probability
+						patternProbabilityLow.add(iaasGraph.getEdgeTarget(edge));
+					}
 				}
-			}
-			edgeSet = iaasGraph.edgeSet();
-			Iterator iterator2 = edgeSet.iterator();
-			while (iterator2.hasNext()) {
-				DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator2.next();
-				double weight = iaasGraph.getEdgeWeight(edge);
-				if (weight == 0.75) {
-					patternProbabilityHigh.add(iaasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.5) {
-					patternProbabilityMedium.add(iaasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.25) {
-					patternProbabilityLow.add(iaasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.99) {
-					detectedPattern.add(iaasGraph.getEdgeTarget(edge));
-				} else if (weight == 0.0) {
-					impossiblePattern.add(iaasGraph.getEdgeTarget(edge));
+			} else {
+				detectedPattern.add(patternPaaS);
+				impossiblePattern.add(patternIaaS);
+				impossiblePattern.add(patternElasticInfrastructure);
+				Set<DefaultWeightedEdge> edgeSet;
+				edgeSet = paasGraph.edgeSet();
+				Iterator iterator = edgeSet.iterator();
+				while (iterator.hasNext()) {
+					DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator.next();
+					double weight = paasGraph.getEdgeWeight(edge);
+					if (weight == 0.75) {
+						patternProbabilityHigh.add(paasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.5) {
+						patternProbabilityMedium.add(paasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.25) {
+						patternProbabilityLow.add(paasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.99) {
+						detectedPattern.add(paasGraph.getEdgeTarget(edge));
+					} else if (weight == 0.0) {
+						impossiblePattern.add(paasGraph.getEdgeTarget(edge));
+					} else if (weight == 1.0) {
+						//for all other patterns add low probability
+						patternProbabilityLow.add(paasGraph.getEdgeTarget(edge));
+					}
 				}
 			}
 		}
 	}
 
-	private void detectPatternLayerOne(TTopologyTemplate tTopologyTemplate) {
+	/**
+	 * Create all subgraphs of the topology graph and test for isomorphism with pattern graphs
+	 * @param tTopologyTemplate the TOSCA topology will be labeled
+	 */
+	private void detectPattern(TTopologyTemplate tTopologyTemplate) {
 		abstractTopology = new AbstractTopology(tTopologyTemplate, labeledNodeTemplates);
 
 		List<TNodeTemplate> tNodeTemplateList = ModelUtilities.getAllNodeTemplates(tTopologyTemplate);
 		List<TRelationshipTemplate> tRelationshipTemplateList = ModelUtilities.getAllRelationshipTemplates(tTopologyTemplate);
-		//TODO multiple baseNodes
 		getLowestNode(tNodeTemplateList.get(0), tRelationshipTemplateList);
 
 		Set<TNodeTemplateExtended> allNodes = abstractTopology.getGraph().vertexSet();
@@ -247,56 +329,78 @@ public class Detection {
 			TNodeTemplateExtended temp = (TNodeTemplateExtended) iterator.next();
 			if (temp.getNodeTemplate().getId().equals(basisNodeTemplate.getId())) {
 				baseNodeExtended = temp;
+				break;
 			}
 		}
 		abstractTopology.map(baseNodeExtended);
-		List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> subgraphList = abstractTopology.createSubgraphs(abstractTopology.getGraph(), baseNodeExtended);
+		//List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> subgraphList = abstractTopology.createSubgraphs(abstractTopology.getGraph(), baseNodeExtended);
 		List<DirectedGraph<PatternComponent, RelationshipEdge>> patternList = new ArrayList<>();
-		List<String> patternNameList = new ArrayList<>();
+		HashMap<Integer, String> patternNames = new HashMap<>();
 
 		ExecutionEnvironmentPattern executionEnvironmentPattern = new ExecutionEnvironmentPattern();
-		patternList.add(executionEnvironmentPattern.getPatternGraph());
-		patternNameList.add(patternExecEnv);
-
+		NodeBasedAvailabilityPattern nodeBasedAvailabilityPattern = new NodeBasedAvailabilityPattern();
+		ElasticityManagerPattern elasticityManagerPattern = new ElasticityManagerPattern();
+		ElasticLoadBalancerPattern elasticLoadBalancerPattern = new ElasticLoadBalancerPattern();
+		ElasticQueuePattern elasticQueuePattern = new ElasticQueuePattern();
 		EnvironmentBasedAvailabilityPattern environmentBasedAvailabilityPattern = new EnvironmentBasedAvailabilityPattern();
+		MessageOrientedMiddlewarePattern messageOrientedMiddlewarePattern = new MessageOrientedMiddlewarePattern();
+		RelationalDatabasePattern relationalDatabasePattern = new RelationalDatabasePattern();
+
+		patternNames.put(0, patternExecEnv);
+		patternNames.put(1, patternNodeBasedAvail);
+		patternNames.put(2, patternElasticityManager);
+		patternNames.put(3, patternElasticLoadBalancer);
+		patternNames.put(4, patternElasticQueue);
+		patternNames.put(5, patternEnvBasedAvail);
+		patternNames.put(6, patternMessageMiddleware);
+		patternNames.put(7, patternRelationalDatabase);
+
+		patternList.add(executionEnvironmentPattern.getPatternGraph());
+		patternList.add(nodeBasedAvailabilityPattern.getPatternGraph());
+		patternList.add(elasticityManagerPattern.getPatternGraph());
+		patternList.add(elasticLoadBalancerPattern.getPatternGraph());
+		patternList.add(elasticQueuePattern.getPatternGraph());
 		patternList.add(environmentBasedAvailabilityPattern.getPatternGraph());
-		patternNameList.add(patternEnvBasedAvail);
+		patternList.add(messageOrientedMiddlewarePattern.getPatternGraph());
+		patternList.add(relationalDatabasePattern.getPatternGraph());
 
-		for (DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph : subgraphList) {
-			int count = 0;
-			for (DirectedGraph<PatternComponent, RelationshipEdge> pattern : patternList) {
-				VF2SubgraphIsomorphismInspector<TNodeTemplateExtended, RelationshipEdge> inspector = new VF2SubgraphIsomorphismInspector(subgraph, pattern);
-				if (inspector.isomorphismExists()) {
-					if (!detectedPattern.contains(patternNameList.get(count))) {
-						detectedPattern.add(patternNameList.get(count));
+		int countIndex = 0;
+
+		for (DirectedGraph<PatternComponent, RelationshipEdge> pattern : patternList) {
+			VF2SubgraphIsomorphismInspector<TNodeTemplateExtended, RelationshipEdge> inspector = new VF2SubgraphIsomorphismInspector(abstractTopology.getGraph(), pattern);
+			if (inspector.isomorphismExists()) {
+				Iterator it = inspector.getMappings();
+				while (it.hasNext()) {
+					IsomorphicGraphMapping mapping = (IsomorphicGraphMapping) it.next();
+					Set<PatternComponent> vertexSet = pattern.vertexSet();
+					List<Boolean> matched = new ArrayList<>();
+					for (PatternComponent p : vertexSet) {
+						//check if matched subgraph and topology have the same components
+						TNodeTemplateExtended v = (TNodeTemplateExtended) mapping.getVertexCorrespondence(p, false);
+						if (p.getName().equals(v.getLabel())) {
+							matched.add(true);
+						} else {
+							matched.add(false);
+						}
 					}
-					//TODO speichere subgraph
+					if (!matched.contains(false)) {
+						detectedPattern.add(patternNames.get(countIndex));
+						if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {
+							patternProbabilityHigh.add(patternPublicCloud);
+						} else if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {
+							impossiblePattern.add(patternNodeBasedAvail);
+						} else if (patternNames.get(countIndex).equals(patternNodeBasedAvail)) {
+							impossiblePattern.add(patternEnvBasedAvail);
+						}
+					}
 				}
-				count++;
 			}
-		}
-		for (String string : detectedPattern) {
-			System.out.println("Pattern: " + string);
-		}
-		for (String string : patternProbabilityHigh) {
-			System.out.println("Probabililty High: " + string);
-		}
-
-		for (String string : patternProbabilityLow) {
-			System.out.println("Probabililty Low: " + string);
-		}
-
-		for (String string : patternProbabilityMedium) {
-			System.out.println("Probabililty Medium: " + string);
-		}
-
-		for (String string : impossiblePattern) {
-			System.out.println("Impossible: " + string);
+			countIndex++;
 		}
 	}
 
 	/**
-	 * Get node with no outgoing relation
+	 * Get the lowest node in a topology, this is the only node with any outgoing relation
 	 */
 	private void getLowestNode(TNodeTemplate baseNodeTemplate, List<TRelationshipTemplate> tRelationshipTemplateList) {
 		List<TRelationshipTemplate> outgoing = new ArrayList<>();
@@ -313,13 +417,5 @@ public class Detection {
 		if (outgoing.isEmpty()) {
 			basisNodeTemplate = baseNodeTemplate;
 		}
-	}
-
-	/**
-	 *
-	 * @param tTopologyTemplate
-	 */
-	private void detectPatternLayerTwo(TTopologyTemplate tTopologyTemplate) {
-
 	}
 }
