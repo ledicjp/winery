@@ -25,9 +25,12 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.winery.common.RepositoryFileReference;
 import org.eclipse.winery.common.ids.GenericId;
 import org.eclipse.winery.common.ids.Namespace;
+import org.eclipse.winery.common.ids.definitions.ServiceTemplateId;
 import org.eclipse.winery.common.ids.definitions.TOSCAComponentId;
 import org.eclipse.winery.common.ids.elements.TOSCAElementId;
 import org.eclipse.winery.common.interfaces.IWineryRepositoryCommon;
+import org.eclipse.winery.model.tosca.TServiceTemplate;
+import org.eclipse.winery.model.tosca.TTopologyTemplate;
 
 /**
  * Enables access to the winery repository via Ids defined in package
@@ -189,4 +192,43 @@ interface IGenericRepository extends IWineryRepositoryCommon {
 	 * @param clazz the TOSCA component class which namespaces' should be returned.
 	 */
 	Collection<Namespace> getComponentsNamespaces(Class<? extends TOSCAComponentId> clazz);
+	
+	TServiceTemplate get(ServiceTemplateId id);
+	void set(TServiceTemplate serviceTemplate);
+
+	// TopologyTemplateId neu machen - ansonsten für alle andren, die von GenericId erben (außer DummyParentForGeneratedXSDRef)
+	TTopologyTemplate get(TTopologyTemplate id);
+	void set(TTopologyTemplate topologyTemplate, TopologyTemplateId id);
+
+	/**
+	 * 
+	 * Source: org.eclipse.winery.repository.resources.AbstractComponentInstanceResource#load() -- found from org.eclipse.winery.repository.resources.AbstractComponentInstanceResource#AbstractComponentInstanceResource(org.eclipse.winery.common.ids.definitions.TOSCAComponentId)
+	 * 
+	 * 		try {
+	 InputStream is = Repository.INSTANCE.newInputStream(this.ref);
+	 Unmarshaller u = JAXBSupport.createUnmarshaller();
+	 this.definitions = (Definitions) u.unmarshal(is);
+	 } catch (Exception e) {
+	 AbstractComponentInstanceResource.LOGGER.error("Could not read content from file " + this.ref, e);
+	 throw new IllegalStateException(e);
+	 }
+	 try {
+	 this.element = this.definitions.getServiceTemplateOrNodeTypeOrNodeTypeImplementation().get(0);
+	 } catch (IndexOutOfBoundsException e) {
+	 if (this instanceof GenericImportResource) {
+	 //noinspection StatementWithEmptyBody
+	 // everything allright:
+	 // ImportResource is a quick hack using 99% of the functionality offered here
+	 // As only 1% has to be "quick hacked", we do that instead of a clean design
+	 // Clean design: Introduce a class between this and AbstractComponentInstanceResource, where this class and ImportResource inhertis from
+	 // A clean design introducing a super class AbstractDefinitionsBackedResource does not work, as we currently also support PropertiesBackedResources and such a super class would required multi-inheritance
+	 } else {
+	 throw new IllegalStateException("Wrong storage format: No ServiceTemplateOrNodeTypeOrNodeTypeImplementation found.");
+	 }
+	 }
+
+	 */
+	
+	
+
 }
