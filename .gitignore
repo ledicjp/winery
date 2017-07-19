@@ -11,3 +11,10 @@ release.properties
 **/rebel.xml
 target/
 node_modules/
+Würde ParseException.java löschen
+Würde Reader.java löschen
+Würde ReaderConstants.java löschen
+Würde ReaderTokenManager.java löschen
+Würde SimpleCharStream.java löschen
+Würde Token.java löschen
+Würde TokenMgrError.java löschen

@@ -14,14 +14,17 @@
  *    Tobias Binz - Adds support for building fatJars (including all dependencies) and profile for fatJars
  *******************************************************************************/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.winery</groupId>
 	<artifactId>winery</artifactId>
 	<version>0.1.37-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Winery</name>
-	<description>Winery is a Web-based environment to graphically model TOSCA topologies and plans managing these topologies.</description>
+	<description>Winery is a Web-based environment to graphically model TOSCA topologies and plans managing these
+		topologies.
+	</description>
 	<url>http://www.eclipse.org/winery</url>
 	<organization>
 		<name>Eclipse.org - Winery Project</name>
@@ -56,9 +59,9 @@
 		<developerConnection>scm:git:https://github.com/eclipse/winery.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-    <prerequisites>
-        <maven>3.0.3</maven>
-    </prerequisites>
+	<prerequisites>
+		<maven>3.0.3</maven>
+	</prerequisites>
 	<modules>
 		<module>org.eclipse.winery.bpmn4tosca.converter.tobpel</module>
 		<module>org.eclipse.winery.common</module>
@@ -71,6 +74,8 @@
 		<module>org.eclipse.winery.model.csar.toscametafile</module>
 		<module>org.eclipse.winery.model.selfservice</module>
 		<module>org.eclipse.winery.model.tosca</module>
+		<module>org.eclipse.winery.model.tosca.yaml</module>
+		<module>org.eclipse.winery.yaml.common</module>
 	</modules>
 	<build>
 		<plugins>

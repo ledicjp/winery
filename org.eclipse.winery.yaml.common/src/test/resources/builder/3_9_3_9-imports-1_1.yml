@@ -1,0 +1,15 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+
+repositories:
+  github_kleinech:
+    description: development repository for TAR arhcives and Bash scripts
+    url: http://github.com/kleinech/winery/
+
+imports:
+  - some_definitions: relative_imports/type_def_1.yaml
+  - other_imports:
+      file: /type_def_1.yaml
+      repository: github_kleinech
+      namespace_uri: http://github.com/kleinech/winery/ns/tosca/yaml/1.1
+      namespace_prefix: chtypes
+    
