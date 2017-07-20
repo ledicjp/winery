@@ -41,7 +41,7 @@ public class TGroupType extends TNodeOrGroupType {
 	}
 
 	public TGroupType(Builder builder) {
-		init(this, builder);
+		super(builder);
 		this.setMembers(builder.members);
 		this.setRequirements(builder.requirements);
 		this.setCapabilities(builder.capabilities);

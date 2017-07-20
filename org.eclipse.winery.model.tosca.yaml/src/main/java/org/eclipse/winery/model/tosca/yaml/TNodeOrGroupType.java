@@ -26,6 +26,13 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 })
 @XmlSeeAlso({TNodeType.class, TGroupType.class})
 public class TNodeOrGroupType extends TEntityType {
+	public TNodeOrGroupType() {
+	}
+
+	public TNodeOrGroupType(Builder builder) {
+		super(builder);
+	}
+
 	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
 		return super.accept(visitor, parameter);
 	}

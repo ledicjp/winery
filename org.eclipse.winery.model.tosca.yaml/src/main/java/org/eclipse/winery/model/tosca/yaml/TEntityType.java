@@ -52,15 +52,6 @@ public class TEntityType {
 		this.setMetadata(builder.metadata);
 	}
 
-	public static void init(TEntityType base, Builder builder) {
-		base.setDescription(builder.description);
-		base.setVersion(builder.version);
-		base.setDerived_from(builder.derived_from);
-		base.setProperties(builder.properties);
-		base.setAttributes(builder.attributes);
-		base.setMetadata(builder.metadata);
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -73,13 +64,13 @@ public class TEntityType {
 		return version;
 	}
 
-	public void setVersion(TVersion version) {
-		this.version = version;
-	}
-
 	public void setVersion(String version) {
 		TVersion tmp = new TVersion(version);
 		setVersion(tmp);
+	}
+
+	public void setVersion(TVersion version) {
+		this.version = version;
 	}
 
 	public String getDerived_from() {

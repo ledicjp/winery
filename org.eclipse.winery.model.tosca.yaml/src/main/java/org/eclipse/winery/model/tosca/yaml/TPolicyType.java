@@ -36,7 +36,7 @@ public class TPolicyType extends TEntityType {
 	}
 
 	public TPolicyType(Builder builder) {
-		TEntityType.init(this, builder);
+		super(builder);
 		this.setTargets(builder.targets);
 		this.setTriggers(builder.triggers);
 	}

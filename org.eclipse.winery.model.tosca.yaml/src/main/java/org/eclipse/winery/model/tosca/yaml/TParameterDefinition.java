@@ -32,7 +32,7 @@ public class TParameterDefinition extends TPropertyDefinition {
 	}
 
 	public TParameterDefinition(Builder builder) {
-		TPropertyDefinition.init(this, builder);
+		super(builder);
 		this.setValue(builder.value);
 	}
 

@@ -36,7 +36,7 @@ public class TRelationshipType extends TEntityType {
 	}
 
 	public TRelationshipType(Builder builder) {
-		init(this, builder);
+		super(builder);
 		this.setValid_target_types(builder.valid_target_types);
 		this.setInterfaces(builder.interfaces);
 	}

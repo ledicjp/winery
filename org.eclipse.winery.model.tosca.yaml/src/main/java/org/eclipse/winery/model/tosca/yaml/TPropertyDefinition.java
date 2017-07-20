@@ -60,16 +60,6 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.setEntry_schema(builder.entry_schema);
 	}
 
-	public static void init(TPropertyDefinition base, TPropertyDefinition.Builder builder) {
-		base.setType(builder.type);
-		base.setDescription(builder.description);
-		base.setRequired(builder.required);
-		base.setDefault(builder._default);
-		base.setStatus(builder.status);
-		base.setConstraints(builder.constraints);
-		base.setEntry_schema(builder.entry_schema);
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -98,17 +88,21 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		return _default;
 	}
 
-	public void setDefault(ObjectValue _default) {
-		this._default = _default;
-	}
-
 	public void setDefault(String _default) {
 		ObjectValue tmp = new ObjectValue(_default);
 		setDefault(tmp);
 	}
 
+	public void setDefault(ObjectValue _default) {
+		this._default = _default;
+	}
+
 	public TStatusValue getStatus() {
 		return status;
+	}
+
+	public void setStatus(TStatusValue status) {
+		this.status = status;
 	}
 
 	public void setStatus(String status) {
@@ -128,10 +122,6 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 			default:
 				setStatus(TStatusValue.invalidStatusValue);
 		}
-	}
-
-	public void setStatus(TStatusValue status) {
-		this.status = status;
 	}
 
 	public List<TConstraintClause> getConstraints() {

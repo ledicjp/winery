@@ -44,7 +44,7 @@ public class TNodeType extends TNodeOrGroupType {
 	}
 
 	public TNodeType(Builder builder) {
-		init(this, builder);
+		super(builder);
 		this.setAttributes(builder.attributes);
 		this.setRequirements(builder.requirements);
 		this.setCapabilities(builder.capabilities);

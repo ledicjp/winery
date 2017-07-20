@@ -37,8 +37,7 @@ public class TArtifactType extends TEntityType {
 	}
 
 	public TArtifactType(Builder builder) {
-		TEntityType.init(this, builder);
-
+		super(builder);
 		this.setMime_type(builder.mime_type);
 		this.setFile_ext(builder.file_ext);
 	}

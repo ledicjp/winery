@@ -33,7 +33,7 @@ public class TDataType extends TEntityType {
 	}
 
 	public TDataType(Builder builder) {
-		TEntityType.init(this, builder);
+		super(builder);
 		this.setConstraints(builder.constraints);
 	}
 

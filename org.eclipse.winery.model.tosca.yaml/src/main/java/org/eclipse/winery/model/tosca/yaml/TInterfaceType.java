@@ -35,7 +35,7 @@ public class TInterfaceType extends TEntityType {
 	}
 
 	public TInterfaceType(Builder builder) {
-		TEntityType.init(this, builder);
+		super(builder);
 		this.setOperations(builder.operations);
 		this.setInputs(builder.inputs);
 	}

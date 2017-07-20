@@ -33,7 +33,7 @@ public class TCapabilityType extends TEntityType {
 	}
 
 	public TCapabilityType(Builder builder) {
-		TEntityType.init(this, builder);
+		super(builder);
 		this.setValid_source_types(builder.valid_source_types);
 	}
 
