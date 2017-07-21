@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -21,9 +22,9 @@ import javax.xml.namespace.QName;
 
 /**
  * <p>Java class for tDeploymentArtifact complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tDeploymentArtifact">
  *   &lt;complexContent>
@@ -36,92 +37,98 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tDeploymentArtifact")
-public class TDeploymentArtifact
-    extends TExtensibleElements
-{
+public class TDeploymentArtifact extends TExtensibleElements {
+	@XmlAttribute(name = "name", required = true)
+	protected String name;
+	@XmlAttribute(name = "artifactType", required = true)
+	protected QName artifactType;
+	@XmlAttribute(name = "artifactRef")
+	protected QName artifactRef;
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "artifactType", required = true)
-    protected QName artifactType;
-    @XmlAttribute(name = "artifactRef")
-    protected QName artifactRef;
+	public TDeploymentArtifact() {
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	public TDeploymentArtifact(Builder builder) {
+		super(builder);
+		this.name = builder.name;
+		this.artifactType = builder.artifactType;
+		this.artifactRef = builder.artifactRef;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Gets the value of the name property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Gets the value of the artifactType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getArtifactType() {
-        return artifactType;
-    }
+	/**
+	 * Sets the value of the name property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Sets the value of the artifactType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setArtifactType(QName value) {
-        this.artifactType = value;
-    }
+	/**
+	 * Gets the value of the artifactType property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getArtifactType() {
+		return artifactType;
+	}
 
-    /**
-     * Gets the value of the artifactRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getArtifactRef() {
-        return artifactRef;
-    }
+	/**
+	 * Sets the value of the artifactType property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setArtifactType(QName value) {
+		this.artifactType = value;
+	}
 
-    /**
-     * Sets the value of the artifactRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setArtifactRef(QName value) {
-        this.artifactRef = value;
-    }
+	/**
+	 * Gets the value of the artifactRef property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getArtifactRef() {
+		return artifactRef;
+	}
 
+	/**
+	 * Sets the value of the artifactRef property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setArtifactRef(QName value) {
+		this.artifactRef = value;
+	}
+
+	public static class Builder extends TExtensibleElements.Builder {
+		private final String name;
+		private final QName artifactType;
+		private QName artifactRef;
+
+		public Builder(String name, QName artifactType) {
+			this.name = name;
+			this.artifactType = artifactType;
+		}
+
+		public Builder setArtifactRef(QName artifactRef) {
+			this.artifactRef = artifactRef;
+			return this;
+		}
+
+		public TDeploymentArtifact build() {
+			return new TDeploymentArtifact(this);
+		}
+	}
 }

@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -60,6 +61,13 @@ public abstract class TEntityTemplate extends HasId {
 
 	public TEntityTemplate(String id) {
 		super(id);
+	}
+
+	public TEntityTemplate(Builder builder) {
+		super(builder);
+		this.properties = builder.properties;
+		this.propertyConstraints = builder.propertyConstraints;
+		this.type = builder.type;
 	}
 
 	/**
@@ -116,7 +124,6 @@ public abstract class TEntityTemplate extends HasId {
 		this.type = value;
 	}
 
-
 	/**
 	 * <p>Java class for anonymous complex type.
 	 *
@@ -161,7 +168,6 @@ public abstract class TEntityTemplate extends HasId {
 			this.any = value;
 		}
 	}
-
 
 	/**
 	 * <p>Java class for anonymous complex type.
@@ -215,6 +221,69 @@ public abstract class TEntityTemplate extends HasId {
 				propertyConstraint = new ArrayList<TPropertyConstraint>();
 			}
 			return this.propertyConstraint;
+		}
+	}
+
+	public static class Builder extends HasId.Builder {
+		private final QName type;
+		private TEntityTemplate.Properties properties;
+		private TEntityTemplate.PropertyConstraints propertyConstraints;
+
+		public Builder(String id, QName type) {
+			super(id);
+			this.type = type;
+		}
+
+		public Builder(TEntityTemplate entityTemplate) {
+			super(entityTemplate);
+			this.type = entityTemplate.getType();
+			this.properties = entityTemplate.getProperties();
+			this.propertyConstraints = entityTemplate.getPropertyConstraints();
+		}
+
+		public Builder RMsetProperties(TEntityTemplate.Properties properties) {
+			this.properties = properties;
+			return this;
+		}
+
+		public Builder RMsetPropertyConstraints(TEntityTemplate.PropertyConstraints propertyConstraints) {
+			this.propertyConstraints = propertyConstraints;
+			return this;
+		}
+
+		public Builder addProperties(Properties properties) {
+			if (properties == null) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = new TEntityTemplate.Properties();
+			}
+			this.properties.setAny(properties.getAny());
+			return this;
+		}
+
+		public Builder addPropertyConstraints(TEntityTemplate.PropertyConstraints propertyConstraints) {
+			if (propertyConstraints == null) {
+				return this;
+			}
+
+			if (this.propertyConstraints == null) {
+				this.propertyConstraints = propertyConstraints;
+			} else {
+				this.propertyConstraints.getPropertyConstraint().addAll(propertyConstraints.getPropertyConstraint());
+			}
+			return this;
+		}
+
+		public Builder addPropertyConstraints(List<TPropertyConstraint> propertyConstraints) {
+			if (propertyConstraints == null) {
+				return this;
+			}
+
+			TEntityTemplate.PropertyConstraints tmp = new TEntityTemplate.PropertyConstraints();
+			tmp.getPropertyConstraint().addAll(propertyConstraints);
+			return addPropertyConstraints(tmp);
 		}
 	}
 }

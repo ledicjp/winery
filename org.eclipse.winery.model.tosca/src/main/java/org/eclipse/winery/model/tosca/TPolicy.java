@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -21,9 +22,9 @@ import javax.xml.namespace.QName;
 
 /**
  * <p>Java class for tPolicy complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tPolicy">
  *   &lt;complexContent>
@@ -36,92 +37,102 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicy")
-public class TPolicy
-    extends TExtensibleElements
-{
+public class TPolicy extends TExtensibleElements {
+	@XmlAttribute(name = "name")
+	protected String name;
+	@XmlAttribute(name = "policyType", required = true)
+	protected QName policyType;
+	@XmlAttribute(name = "policyRef")
+	protected QName policyRef;
 
-    @XmlAttribute(name = "name")
-    protected String name;
-    @XmlAttribute(name = "policyType", required = true)
-    protected QName policyType;
-    @XmlAttribute(name = "policyRef")
-    protected QName policyRef;
+	public TPolicy() {
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	public TPolicy(Builder builder) {
+		super(builder);
+		this.name = builder.name;
+		this.policyType = builder.policyType;
+		this.policyRef = builder.policyRef;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Gets the value of the name property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Gets the value of the policyType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getPolicyType() {
-        return policyType;
-    }
+	/**
+	 * Sets the value of the name property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Sets the value of the policyType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setPolicyType(QName value) {
-        this.policyType = value;
-    }
+	/**
+	 * Gets the value of the policyType property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getPolicyType() {
+		return policyType;
+	}
 
-    /**
-     * Gets the value of the policyRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getPolicyRef() {
-        return policyRef;
-    }
+	/**
+	 * Sets the value of the policyType property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setPolicyType(QName value) {
+		this.policyType = value;
+	}
 
-    /**
-     * Sets the value of the policyRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setPolicyRef(QName value) {
-        this.policyRef = value;
-    }
+	/**
+	 * Gets the value of the policyRef property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getPolicyRef() {
+		return policyRef;
+	}
 
+	/**
+	 * Sets the value of the policyRef property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setPolicyRef(QName value) {
+		this.policyRef = value;
+	}
+
+	public static class Builder extends TExtensibleElements.Builder {
+		private final QName policyType;
+		private String name;
+		private QName policyRef;
+
+		public Builder(QName policyType) {
+			this.policyType = policyType;
+		}
+
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder setPolicyRef(QName policyRef) {
+			this.policyRef = policyRef;
+			return this;
+		}
+
+		public TPolicy build() {
+			return new TPolicy(this);
+		}
+	}
 }

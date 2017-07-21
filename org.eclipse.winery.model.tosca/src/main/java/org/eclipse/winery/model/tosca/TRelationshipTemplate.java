@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -23,6 +24,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,19 +37,15 @@ import org.w3c.dom.Element;
 		"relationshipConstraints"
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TRelationshipTemplate
-		extends TEntityTemplate {
+public class TRelationshipTemplate extends TEntityTemplate {
 
 	@XmlElement(name = "SourceElement", required = true)
 	// AD: We need to combine source or target due to multi-inheritance
 	protected TRelationshipTemplate.SourceOrTargetElement sourceElement;
-
 	@XmlElement(name = "TargetElement", required = true)
 	protected TRelationshipTemplate.SourceOrTargetElement targetElement;
-
 	@XmlElement(name = "RelationshipConstraints")
 	protected TRelationshipTemplate.RelationshipConstraints relationshipConstraints;
-
 	@XmlAttribute(name = "name")
 	protected String name;
 
@@ -59,18 +57,26 @@ public class TRelationshipTemplate
 		super(id);
 	}
 
+	public TRelationshipTemplate(Builder builder) {
+		super(builder);
+		this.sourceElement = builder.sourceElement;
+		this.targetElement = builder.targetElement;
+		this.relationshipConstraints = builder.relationshipConstraints;
+		this.name = builder.name;
+	}
+
 	public TRelationshipTemplate.SourceOrTargetElement getSourceElement() {
 		return sourceElement;
+	}
+
+	public void setSourceElement(TRelationshipTemplate.SourceOrTargetElement value) {
+		this.sourceElement = value;
 	}
 
 	public void setSourceNodeTemplate(TNodeTemplate value) {
 		SourceOrTargetElement sourceElement = new SourceOrTargetElement();
 		sourceElement.setRef(value);
 		this.sourceElement = sourceElement;
-	}
-
-	public void setSourceElement(TRelationshipTemplate.SourceOrTargetElement value) {
-		this.sourceElement = value;
 	}
 
 	public void setTargetNodeTemplate(TNodeTemplate value) {
@@ -278,4 +284,30 @@ public class TRelationshipTemplate
 		}
 	}
 
+	public static class Builder extends TEntityTemplate.Builder {
+		private final TRelationshipTemplate.SourceOrTargetElement sourceElement;
+		private final TRelationshipTemplate.SourceOrTargetElement targetElement;
+		private TRelationshipTemplate.RelationshipConstraints relationshipConstraints;
+		private String name;
+
+		public Builder(String id, QName type, TRelationshipTemplate.SourceOrTargetElement sourceElement, TRelationshipTemplate.SourceOrTargetElement targetElement) {
+			super(id, type);
+			this.sourceElement = sourceElement;
+			this.targetElement = targetElement;
+		}
+
+		public Builder setRelationshipConstraints(RelationshipConstraints relationshipConstraints) {
+			this.relationshipConstraints = relationshipConstraints;
+			return this;
+		}
+
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public TRelationshipTemplate build() {
+			return new TRelationshipTemplate(this);
+		}
+	}
 }

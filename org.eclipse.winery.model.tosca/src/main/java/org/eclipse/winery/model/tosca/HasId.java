@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code contribution
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 package org.eclipse.winery.model.tosca;
 
@@ -32,6 +33,11 @@ public abstract class HasId extends TExtensibleElements {
 		this.setId(id);
 	}
 
+	public HasId(Builder builder) {
+		super(builder);
+		this.id = builder.id;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -40,4 +46,16 @@ public abstract class HasId extends TExtensibleElements {
 		this.id = value;
 	}
 
+	public static class Builder extends TExtensibleElements.Builder {
+		private final String id;
+
+		public Builder(String id) {
+			this.id = id;
+		}
+
+		public Builder(HasId hasId) {
+			super(hasId);
+			this.id = hasId.id;
+		}
+	}
 }

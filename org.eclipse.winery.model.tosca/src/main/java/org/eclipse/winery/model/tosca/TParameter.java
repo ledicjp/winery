@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -20,9 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for tParameter complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tParameter">
  *   &lt;complexContent>
@@ -34,94 +35,101 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tParameter")
 public class TParameter {
+	@XmlAttribute(name = "name", required = true)
+	protected String name;
+	@XmlAttribute(name = "type", required = true)
+	protected String type;
+	@XmlAttribute(name = "required")
+	protected TBoolean required;
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "type", required = true)
-    protected String type;
-    @XmlAttribute(name = "required")
-    protected TBoolean required;
+	public TParameter() {
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	public TParameter(Builder builder) {
+		this.name = builder.name;
+		this.type = builder.type;
+		this.required = builder.required;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Gets the value of the name property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * Sets the value of the name property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
+	/**
+	 * Gets the value of the type property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /**
-     * Gets the value of the required property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getRequired() {
-        if (required == null) {
-            return TBoolean.YES;
-        } else {
-            return required;
-        }
-    }
+	/**
+	 * Sets the value of the type property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setType(String value) {
+		this.type = value;
+	}
 
-    /**
-     * Sets the value of the required property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setRequired(TBoolean value) {
-        this.required = value;
-    }
+	/**
+	 * Gets the value of the required property.
+	 *
+	 * @return possible object is {@link TBoolean }
+	 */
+	public TBoolean getRequired() {
+		if (required == null) {
+			return TBoolean.YES;
+		} else {
+			return required;
+		}
+	}
 
+	/**
+	 * Sets the value of the required property.
+	 *
+	 * @param value allowed object is {@link TBoolean }
+	 */
+	public void setRequired(TBoolean value) {
+		this.required = value;
+	}
+
+	public static class Builder {
+		private final String name;
+		private final String type;
+		private final TBoolean required;
+
+		public Builder(String name, String type, TBoolean required) {
+			this.name = name;
+			this.type = type;
+			this.required = required;
+		}
+
+		public Builder(String name, String type, Boolean required) {
+			this(name, type, required == null ? TBoolean.YES : required ? TBoolean.YES : TBoolean.NO);
+		}
+
+		public TParameter build() {
+			return new TParameter(this);
+		}
+	}
 }

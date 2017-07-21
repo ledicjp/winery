@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -25,9 +26,9 @@ import javax.xml.namespace.QName;
 
 /**
  * <p>Java class for tRelationshipTypeImplementation complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tRelationshipTypeImplementation">
  *   &lt;complexContent>
@@ -38,13 +39,16 @@ import javax.xml.namespace.QName;
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;attribute name="relationshipTypeImplementationRef" use="required" type="{http://www.w3.org/2001/XMLSchema}QName" />
+ *                 &lt;attribute name="relationshipTypeImplementationRef" use="required"
+ * type="{http://www.w3.org/2001/XMLSchema}QName" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="RequiredContainerFeatures" type="{http://docs.oasis-open.org/tosca/ns/2011/12}tRequiredContainerFeatures" minOccurs="0"/>
- *         &lt;element name="ImplementationArtifacts" type="{http://docs.oasis-open.org/tosca/ns/2011/12}tImplementationArtifacts" minOccurs="0"/>
+ *         &lt;element name="RequiredContainerFeatures" type="{http://docs.oasis-open.org/tosca/ns/2011/12}tRequiredContainerFeatures"
+ * minOccurs="0"/>
+ *         &lt;element name="ImplementationArtifacts" type="{http://docs.oasis-open.org/tosca/ns/2011/12}tImplementationArtifacts"
+ * minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
  *       &lt;attribute name="targetNamespace" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
@@ -56,315 +60,325 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipTypeImplementation", propOrder = {
-    "tags",
-    "derivedFrom",
-    "requiredContainerFeatures",
-    "implementationArtifacts"
+		"tags",
+		"derivedFrom",
+		"requiredContainerFeatures",
+		"implementationArtifacts"
 })
-public class TRelationshipTypeImplementation
-    extends TExtensibleElements
-{
+public class TRelationshipTypeImplementation extends TExtensibleElements {
+	@XmlElement(name = "Tags")
+	protected TTags tags;
+	@XmlElement(name = "DerivedFrom")
+	protected TRelationshipTypeImplementation.DerivedFrom derivedFrom;
+	@XmlElement(name = "RequiredContainerFeatures")
+	protected TRequiredContainerFeatures requiredContainerFeatures;
+	@XmlElement(name = "ImplementationArtifacts")
+	protected TImplementationArtifacts implementationArtifacts;
+	@XmlAttribute(name = "name", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String name;
+	@XmlAttribute(name = "targetNamespace")
+	@XmlSchemaType(name = "anyURI")
+	protected String targetNamespace;
+	@XmlAttribute(name = "relationshipType", required = true)
+	protected QName relationshipType;
+	@XmlAttribute(name = "abstract")
+	protected TBoolean _abstract;
+	@XmlAttribute(name = "final")
+	protected TBoolean _final;
 
-    @XmlElement(name = "Tags")
-    protected TTags tags;
-    @XmlElement(name = "DerivedFrom")
-    protected TRelationshipTypeImplementation.DerivedFrom derivedFrom;
-    @XmlElement(name = "RequiredContainerFeatures")
-    protected TRequiredContainerFeatures requiredContainerFeatures;
-    @XmlElement(name = "ImplementationArtifacts")
-    protected TImplementationArtifacts implementationArtifacts;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String name;
-    @XmlAttribute(name = "targetNamespace")
-    @XmlSchemaType(name = "anyURI")
-    protected String targetNamespace;
-    @XmlAttribute(name = "relationshipType", required = true)
-    protected QName relationshipType;
-    @XmlAttribute(name = "abstract")
-    protected TBoolean _abstract;
-    @XmlAttribute(name = "final")
-    protected TBoolean _final;
+	public TRelationshipTypeImplementation() {
 
-    /**
-     * Gets the value of the tags property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TTags }
-     *     
-     */
-    public TTags getTags() {
-        return tags;
-    }
+	}
 
-    /**
-     * Sets the value of the tags property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TTags }
-     *     
-     */
-    public void setTags(TTags value) {
-        this.tags = value;
-    }
+	public TRelationshipTypeImplementation(Builder builder) {
+		super(builder);
+		this.tags = builder.tags;
+		this.derivedFrom = builder.derivedFrom;
+		this.requiredContainerFeatures = builder.requiredContainerFeatures;
+		this.implementationArtifacts = builder.implementationArtifacts;
+		this.name = builder.name;
+		this.targetNamespace = builder.targetNamespace;
+		this.relationshipType = builder.relationshipType;
+		this._abstract = builder._abstract;
+		this._final = builder._final;
+	}
 
-    /**
-     * Gets the value of the derivedFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TRelationshipTypeImplementation.DerivedFrom }
-     *     
-     */
-    public TRelationshipTypeImplementation.DerivedFrom getDerivedFrom() {
-        return derivedFrom;
-    }
+	/**
+	 * Gets the value of the tags property.
+	 *
+	 * @return possible object is {@link TTags }
+	 */
+	public TTags getTags() {
+		return tags;
+	}
 
-    /**
-     * Sets the value of the derivedFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TRelationshipTypeImplementation.DerivedFrom }
-     *     
-     */
-    public void setDerivedFrom(TRelationshipTypeImplementation.DerivedFrom value) {
-        this.derivedFrom = value;
-    }
+	/**
+	 * Sets the value of the tags property.
+	 *
+	 * @param value allowed object is {@link TTags }
+	 */
+	public void setTags(TTags value) {
+		this.tags = value;
+	}
 
-    /**
-     * Gets the value of the requiredContainerFeatures property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TRequiredContainerFeatures }
-     *     
-     */
-    public TRequiredContainerFeatures getRequiredContainerFeatures() {
-        return requiredContainerFeatures;
-    }
+	/**
+	 * Gets the value of the derivedFrom property.
+	 *
+	 * @return possible object is {@link TRelationshipTypeImplementation.DerivedFrom }
+	 */
+	public TRelationshipTypeImplementation.DerivedFrom getDerivedFrom() {
+		return derivedFrom;
+	}
 
-    /**
-     * Sets the value of the requiredContainerFeatures property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TRequiredContainerFeatures }
-     *     
-     */
-    public void setRequiredContainerFeatures(TRequiredContainerFeatures value) {
-        this.requiredContainerFeatures = value;
-    }
+	/**
+	 * Sets the value of the derivedFrom property.
+	 *
+	 * @param value allowed object is {@link TRelationshipTypeImplementation.DerivedFrom }
+	 */
+	public void setDerivedFrom(TRelationshipTypeImplementation.DerivedFrom value) {
+		this.derivedFrom = value;
+	}
 
-    /**
-     * Gets the value of the implementationArtifacts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TImplementationArtifacts }
-     *     
-     */
-    public TImplementationArtifacts getImplementationArtifacts() {
-        return implementationArtifacts;
-    }
+	/**
+	 * Gets the value of the requiredContainerFeatures property.
+	 *
+	 * @return possible object is {@link TRequiredContainerFeatures }
+	 */
+	public TRequiredContainerFeatures getRequiredContainerFeatures() {
+		return requiredContainerFeatures;
+	}
 
-    /**
-     * Sets the value of the implementationArtifacts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TImplementationArtifacts }
-     *     
-     */
-    public void setImplementationArtifacts(TImplementationArtifacts value) {
-        this.implementationArtifacts = value;
-    }
+	/**
+	 * Sets the value of the requiredContainerFeatures property.
+	 *
+	 * @param value allowed object is {@link TRequiredContainerFeatures }
+	 */
+	public void setRequiredContainerFeatures(TRequiredContainerFeatures value) {
+		this.requiredContainerFeatures = value;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the implementationArtifacts property.
+	 *
+	 * @return possible object is {@link TImplementationArtifacts }
+	 */
+	public TImplementationArtifacts getImplementationArtifacts() {
+		return implementationArtifacts;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the implementationArtifacts property.
+	 *
+	 * @param value allowed object is {@link TImplementationArtifacts }
+	 */
+	public void setImplementationArtifacts(TImplementationArtifacts value) {
+		this.implementationArtifacts = value;
+	}
 
-    /**
-     * Gets the value of the targetNamespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTargetNamespace() {
-        return targetNamespace;
-    }
+	/**
+	 * Gets the value of the name property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the targetNamespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTargetNamespace(String value) {
-        this.targetNamespace = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the relationshipType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getRelationshipType() {
-        return relationshipType;
-    }
+	/**
+	 * Gets the value of the targetNamespace property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getTargetNamespace() {
+		return targetNamespace;
+	}
 
-    /**
-     * Sets the value of the relationshipType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setRelationshipType(QName value) {
-        this.relationshipType = value;
-    }
+	/**
+	 * Sets the value of the targetNamespace property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setTargetNamespace(String value) {
+		this.targetNamespace = value;
+	}
 
-    /**
-     * Gets the value of the abstract property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getAbstract() {
-        if (_abstract == null) {
-            return TBoolean.NO;
-        } else {
-            return _abstract;
-        }
-    }
+	/**
+	 * Gets the value of the relationshipType property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getRelationshipType() {
+		return relationshipType;
+	}
 
-    /**
-     * Sets the value of the abstract property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setAbstract(TBoolean value) {
-        this._abstract = value;
-    }
+	/**
+	 * Sets the value of the relationshipType property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setRelationshipType(QName value) {
+		this.relationshipType = value;
+	}
 
-    /**
-     * Gets the value of the final property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getFinal() {
-        if (_final == null) {
-            return TBoolean.NO;
-        } else {
-            return _final;
-        }
-    }
+	/**
+	 * Gets the value of the abstract property.
+	 *
+	 * @return possible object is {@link TBoolean }
+	 */
+	public TBoolean getAbstract() {
+		if (_abstract == null) {
+			return TBoolean.NO;
+		} else {
+			return _abstract;
+		}
+	}
 
-    /**
-     * Sets the value of the final property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setFinal(TBoolean value) {
-        this._final = value;
-    }
+	/**
+	 * Sets the value of the abstract property.
+	 *
+	 * @param value allowed object is {@link TBoolean }
+	 */
+	public void setAbstract(TBoolean value) {
+		this._abstract = value;
+	}
+
+	/**
+	 * Gets the value of the final property.
+	 *
+	 * @return possible object is {@link TBoolean }
+	 */
+	public TBoolean getFinal() {
+		if (_final == null) {
+			return TBoolean.NO;
+		} else {
+			return _final;
+		}
+	}
+
+	/**
+	 * Sets the value of the final property.
+	 *
+	 * @param value allowed object is {@link TBoolean }
+	 */
+	public void setFinal(TBoolean value) {
+		this._final = value;
+	}
 
 
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="relationshipTypeImplementationRef" use="required" type="{http://www.w3.org/2001/XMLSchema}QName" />
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "")
-    public static class DerivedFrom {
+	/**
+	 * <p>Java class for anonymous complex type.
+	 *
+	 * <p>The following schema fragment specifies the expected content contained within this class.
+	 *
+	 * <pre>
+	 * &lt;complexType>
+	 *   &lt;complexContent>
+	 *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+	 *       &lt;attribute name="relationshipTypeImplementationRef" use="required" type="{http://www.w3.org/2001/XMLSchema}QName"
+	 * />
+	 *     &lt;/restriction>
+	 *   &lt;/complexContent>
+	 * &lt;/complexType>
+	 * </pre>
+	 */
+	@XmlAccessorType(XmlAccessType.FIELD)
+	@XmlType(name = "")
+	public static class DerivedFrom {
 
-        @XmlAttribute(name = "relationshipTypeImplementationRef", required = true)
-        protected QName relationshipTypeImplementationRef;
+		@XmlAttribute(name = "relationshipTypeImplementationRef", required = true)
+		protected QName relationshipTypeImplementationRef;
 
-        /**
-         * Gets the value of the relationshipTypeImplementationRef property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link QName }
-         *     
-         */
-        public QName getRelationshipTypeImplementationRef() {
-            return relationshipTypeImplementationRef;
-        }
+		/**
+		 * Gets the value of the relationshipTypeImplementationRef property.
+		 *
+		 * @return possible object is {@link QName }
+		 */
+		public QName getRelationshipTypeImplementationRef() {
+			return relationshipTypeImplementationRef;
+		}
 
-        /**
-         * Sets the value of the relationshipTypeImplementationRef property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link QName }
-         *     
-         */
-        public void setRelationshipTypeImplementationRef(QName value) {
-            this.relationshipTypeImplementationRef = value;
-        }
+		/**
+		 * Sets the value of the relationshipTypeImplementationRef property.
+		 *
+		 * @param value allowed object is {@link QName }
+		 */
+		public void setRelationshipTypeImplementationRef(QName value) {
+			this.relationshipTypeImplementationRef = value;
+		}
+	}
 
-    }
+	public static class Builder extends TExtensibleElements.Builder {
+		private TTags tags;
+		private TRelationshipTypeImplementation.DerivedFrom derivedFrom;
+		private TRequiredContainerFeatures requiredContainerFeatures;
+		private TImplementationArtifacts implementationArtifacts;
+		private String name;
+		private String targetNamespace;
+		private QName relationshipType;
+		private TBoolean _abstract;
+		private TBoolean _final;
 
+		public Builder() {
+
+		}
+
+		public Builder setTags(TTags tags) {
+			this.tags = tags;
+			return this;
+		}
+
+		public Builder setDerivedFrom(DerivedFrom derivedFrom) {
+			this.derivedFrom = derivedFrom;
+			return this;
+		}
+
+		public Builder setRequiredContainerFeatures(TRequiredContainerFeatures requiredContainerFeatures) {
+			this.requiredContainerFeatures = requiredContainerFeatures;
+			return this;
+		}
+
+		public Builder setImplementationArtifacts(TImplementationArtifacts implementationArtifacts) {
+			this.implementationArtifacts = implementationArtifacts;
+			return this;
+		}
+
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder setTargetNamespace(String targetNamespace) {
+			this.targetNamespace = targetNamespace;
+			return this;
+		}
+
+		public Builder setRelationshipType(QName relationshipType) {
+			this.relationshipType = relationshipType;
+			return this;
+		}
+
+		public Builder set_abstract(TBoolean _abstract) {
+			this._abstract = _abstract;
+			return this;
+		}
+
+		public Builder set_final(TBoolean _final) {
+			this._final = _final;
+			return this;
+		}
+	}
 }

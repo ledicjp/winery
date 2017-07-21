@@ -8,8 +8,11 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code contribution
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 package org.eclipse.winery.model.tosca;
+
+import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,7 +41,20 @@ public abstract class RelationshipSourceOrTarget extends TEntityTemplate {
 		super(id);
 	}
 
+	public RelationshipSourceOrTarget(Builder builder) {
+		super(builder);
+	}
+
 	@JsonIgnore
 	public abstract String getFakeJacksonType();
 
+	public static class Builder extends TEntityTemplate.Builder {
+		public Builder(String id, QName type) {
+			super(id, type);
+		}
+
+		public Builder(TEntityTemplate entityTemplate) {
+			super(entityTemplate);
+		}
+	}
 }

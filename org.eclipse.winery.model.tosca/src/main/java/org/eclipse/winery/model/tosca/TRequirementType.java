@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -21,9 +22,9 @@ import javax.xml.namespace.QName;
 
 /**
  * <p>Java class for tRequirementType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tRequirementType">
  *   &lt;complexContent>
@@ -34,40 +35,57 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementType")
-public class TRequirementType
-    extends TEntityType
-{
+public class TRequirementType extends TEntityType {
+	@XmlAttribute(name = "requiredCapabilityType")
+	protected QName requiredCapabilityType;
 
-    @XmlAttribute(name = "requiredCapabilityType")
-    protected QName requiredCapabilityType;
+	public TRequirementType() {
+	}
 
-    /**
-     * Gets the value of the requiredCapabilityType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getRequiredCapabilityType() {
-        return requiredCapabilityType;
-    }
+	public TRequirementType(Builder builder) {
+		super(builder);
+		this.requiredCapabilityType = builder.requiredCapabilityType;
+	}
 
-    /**
-     * Sets the value of the requiredCapabilityType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setRequiredCapabilityType(QName value) {
-        this.requiredCapabilityType = value;
-    }
+	/**
+	 * Gets the value of the requiredCapabilityType property.
+	 *
+	 * @return possible object is {@link QName }
+	 */
+	public QName getRequiredCapabilityType() {
+		return requiredCapabilityType;
+	}
 
+	/**
+	 * Sets the value of the requiredCapabilityType property.
+	 *
+	 * @param value allowed object is {@link QName }
+	 */
+	public void setRequiredCapabilityType(QName value) {
+		this.requiredCapabilityType = value;
+	}
+
+	public static class Builder extends TEntityType.Builder {
+		private QName requiredCapabilityType;
+
+		public Builder(String name) {
+			super(name);
+		}
+
+		public Builder(TEntityType entityType) {
+			super(entityType);
+		}
+
+		public Builder setRequiredCapabilityType(QName requiredCapabilityType) {
+			this.requiredCapabilityType = requiredCapabilityType;
+			return this;
+		}
+
+		public TRequirementType build() {
+			return new TRequirementType(this);
+		}
+	}
 }

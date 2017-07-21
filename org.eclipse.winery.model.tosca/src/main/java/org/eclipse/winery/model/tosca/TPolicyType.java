@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -22,9 +23,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for tPolicyType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="tPolicyType">
  *   &lt;complexContent>
@@ -38,69 +39,88 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicyType", propOrder = {
-    "appliesTo"
+		"appliesTo"
 })
-public class TPolicyType
-    extends TEntityType
-{
+public class TPolicyType extends TEntityType {
+	@XmlElement(name = "AppliesTo")
+	protected TAppliesTo appliesTo;
+	@XmlAttribute(name = "policyLanguage")
+	@XmlSchemaType(name = "anyURI")
+	protected String policyLanguage;
 
-    @XmlElement(name = "AppliesTo")
-    protected TAppliesTo appliesTo;
-    @XmlAttribute(name = "policyLanguage")
-    @XmlSchemaType(name = "anyURI")
-    protected String policyLanguage;
+	public TPolicyType() {
 
-    /**
-     * Gets the value of the appliesTo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TAppliesTo }
-     *     
-     */
-    public TAppliesTo getAppliesTo() {
-        return appliesTo;
-    }
+	}
 
-    /**
-     * Sets the value of the appliesTo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TAppliesTo }
-     *     
-     */
-    public void setAppliesTo(TAppliesTo value) {
-        this.appliesTo = value;
-    }
+	public TPolicyType(Builder builder) {
+		super(builder);
+		this.appliesTo = builder.appliesTo;
+		this.policyLanguage = builder.policyLanguage;
+	}
 
-    /**
-     * Gets the value of the policyLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPolicyLanguage() {
-        return policyLanguage;
-    }
+	/**
+	 * Gets the value of the appliesTo property.
+	 *
+	 * @return possible object is {@link TAppliesTo }
+	 */
+	public TAppliesTo getAppliesTo() {
+		return appliesTo;
+	}
 
-    /**
-     * Sets the value of the policyLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPolicyLanguage(String value) {
-        this.policyLanguage = value;
-    }
+	/**
+	 * Sets the value of the appliesTo property.
+	 *
+	 * @param value allowed object is {@link TAppliesTo }
+	 */
+	public void setAppliesTo(TAppliesTo value) {
+		this.appliesTo = value;
+	}
 
+	/**
+	 * Gets the value of the policyLanguage property.
+	 *
+	 * @return possible object is {@link String }
+	 */
+	public String getPolicyLanguage() {
+		return policyLanguage;
+	}
+
+	/**
+	 * Sets the value of the policyLanguage property.
+	 *
+	 * @param value allowed object is {@link String }
+	 */
+	public void setPolicyLanguage(String value) {
+		this.policyLanguage = value;
+	}
+
+	public static class Builder extends TEntityType.Builder {
+		private TAppliesTo appliesTo;
+		private String policyLanguage;
+
+		public Builder(String name) {
+			super(name);
+		}
+
+		public Builder(TEntityType entityType) {
+			super(entityType);
+		}
+
+		public Builder setAppliesTo(TAppliesTo appliesTo) {
+			this.appliesTo = appliesTo;
+			return this;
+		}
+
+		public Builder setPolicyLanguage(String policyLanguage) {
+			this.policyLanguage = policyLanguage;
+			return this;
+		}
+
+		public TPolicyType build() {
+			return new TPolicyType(this);
+		}
+	}
 }

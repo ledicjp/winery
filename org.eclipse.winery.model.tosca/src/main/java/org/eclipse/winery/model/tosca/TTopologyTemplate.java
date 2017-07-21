@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
+ *    Christoph Kleine - Builder implementation
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -15,6 +16,7 @@ package org.eclipse.winery.model.tosca;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,54 +48,55 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTopologyTemplate", propOrder = {
-    "nodeTemplateOrRelationshipTemplate"
+		"nodeTemplateOrRelationshipTemplate"
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TTopologyTemplate
-    extends TExtensibleElements
-{
+public class TTopologyTemplate extends TExtensibleElements {
+	@XmlElements({
+			@XmlElement(name = "RelationshipTemplate", type = TRelationshipTemplate.class),
+			@XmlElement(name = "NodeTemplate", type = TNodeTemplate.class)
+	})
+	protected List<TEntityTemplate> nodeTemplateOrRelationshipTemplate;
 
-    @XmlElements({
-        @XmlElement(name = "RelationshipTemplate", type = TRelationshipTemplate.class),
-        @XmlElement(name = "NodeTemplate", type = TNodeTemplate.class)
-    })
-    protected List<TEntityTemplate> nodeTemplateOrRelationshipTemplate;
+	public TTopologyTemplate() {
+	}
 
-    /**
-     * Gets the value of the nodeTemplateOrRelationshipTemplate property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the nodeTemplateOrRelationshipTemplate property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getNodeTemplateOrRelationshipTemplate().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TRelationshipTemplate }
-     * {@link TNodeTemplate }
-     *
-     *
-     */
+	public TTopologyTemplate(Builder builder) {
+		super(builder);
+		this.nodeTemplateOrRelationshipTemplate = builder.getNodeTemplateOrRelationshipTemplate();
+	}
+
+	/**
+	 * Gets the value of the nodeTemplateOrRelationshipTemplate property.
+	 *
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the nodeTemplateOrRelationshipTemplate property.
+	 *
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * <pre>
+	 *    getNodeTemplateOrRelationshipTemplate().add(newItem);
+	 * </pre>
+	 *
+	 *
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link TRelationshipTemplate }
+	 * {@link TNodeTemplate }
+	 */
 	@JsonIgnore
-    public List<TEntityTemplate> getNodeTemplateOrRelationshipTemplate() {
-        if (nodeTemplateOrRelationshipTemplate == null) {
-            nodeTemplateOrRelationshipTemplate = new ArrayList<TEntityTemplate>();
-        }
-        return this.nodeTemplateOrRelationshipTemplate;
-    }
+	public List<TEntityTemplate> getNodeTemplateOrRelationshipTemplate() {
+		if (nodeTemplateOrRelationshipTemplate == null) {
+			nodeTemplateOrRelationshipTemplate = new ArrayList<TEntityTemplate>();
+		}
+		return this.nodeTemplateOrRelationshipTemplate;
+	}
 
 	/**
 	 * @return all nodes templates of the topologyTemplate
@@ -103,6 +106,13 @@ public class TTopologyTemplate
 				.stream()
 				.filter(x -> x instanceof TNodeTemplate)
 				.map(TNodeTemplate.class::cast)
+				.collect(Collectors.toList());
+	}
+
+	public void setNodeTemplates(List<TNodeTemplate> nodeTemplates) {
+		this.nodeTemplateOrRelationshipTemplate = Stream.concat(
+				nodeTemplates.stream().map(TEntityTemplate.class::cast),
+				this.getRelationshipTemplates().stream().map(TEntityTemplate.class::cast))
 				.collect(Collectors.toList());
 	}
 
@@ -117,13 +127,6 @@ public class TTopologyTemplate
 				.orElse(null);
 	}
 
-	public void setNodeTemplates(List<TNodeTemplate> nodeTemplates) {
-		this.nodeTemplateOrRelationshipTemplate = Stream.concat(
-				nodeTemplates.stream().map(TEntityTemplate.class::cast),
-				this.getRelationshipTemplates().stream().map(TEntityTemplate.class::cast))
-				.collect(Collectors.toList());
-	}
-
 	/**
 	 * @return all relationship templates of the topologyTemplate
 	 */
@@ -132,6 +135,13 @@ public class TTopologyTemplate
 				.stream()
 				.filter(x -> x instanceof TRelationshipTemplate)
 				.map(TRelationshipTemplate.class::cast)
+				.collect(Collectors.toList());
+	}
+
+	public void setRelationshipTemplates(List<TRelationshipTemplate> relationshipTemplates) {
+		this.nodeTemplateOrRelationshipTemplate = Stream.concat(
+				this.getNodeTemplates().stream().map(TEntityTemplate.class::cast),
+				relationshipTemplates.stream().map(TEntityTemplate.class::cast))
 				.collect(Collectors.toList());
 	}
 
@@ -146,13 +156,6 @@ public class TTopologyTemplate
 				.orElse(null);
 	}
 
-	public void setRelationshipTemplates(List<TRelationshipTemplate> relationshipTemplates) {
-		this.nodeTemplateOrRelationshipTemplate = Stream.concat(
-				this.getNodeTemplates().stream().map(TEntityTemplate.class::cast),
-				relationshipTemplates.stream().map(TEntityTemplate.class::cast))
-				.collect(Collectors.toList());
-	}
-
 	public void addNodeTemplate(TNodeTemplate nt) {
 		this.getNodeTemplateOrRelationshipTemplate().add(nt);
 	}
@@ -161,4 +164,33 @@ public class TTopologyTemplate
 		this.getNodeTemplateOrRelationshipTemplate().add(rt);
 	}
 
+	public static class Builder extends TExtensibleElements.Builder {
+		private List<TNodeTemplate> nodeTemplates;
+		private List<TRelationshipTemplate> relationshipTemplates;
+
+		public Builder() {
+
+		}
+
+		public Builder setNodeTemplates(List<TNodeTemplate> nodeTemplates) {
+			this.nodeTemplates = nodeTemplates;
+			return this;
+		}
+
+		public Builder setRelationshipTemplates(List<TRelationshipTemplate> relationshipTemplates) {
+			this.relationshipTemplates = relationshipTemplates;
+			return this;
+		}
+
+		public List<TEntityTemplate> getNodeTemplateOrRelationshipTemplate() {
+			List<TEntityTemplate> tmp = new ArrayList<>();
+			Optional.ofNullable(nodeTemplates).ifPresent(tmp::addAll);
+			Optional.ofNullable(relationshipTemplates).ifPresent(tmp::addAll);
+			return tmp;
+		}
+
+		public TTopologyTemplate build() {
+			return new TTopologyTemplate(this);
+		}
+	}
 }
