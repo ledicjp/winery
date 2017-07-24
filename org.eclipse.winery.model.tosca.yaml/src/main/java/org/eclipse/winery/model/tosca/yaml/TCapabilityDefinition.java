@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -83,6 +86,7 @@ public class TCapabilityDefinition {
 		this.valid_source_types = valid_source_types;
 	}
 
+	@NonNull
 	public String getType() {
 		return type;
 	}
@@ -91,7 +95,12 @@ public class TCapabilityDefinition {
 		this.type = type;
 	}
 
+	@NonNull
 	public Map<String, TPropertyDefinition> getProperties() {
+		if (this.properties == null) {
+			this.properties = new LinkedHashMap<>();
+		}
+
 		return properties;
 	}
 
@@ -99,12 +108,33 @@ public class TCapabilityDefinition {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public Map<String, TAttributeDefinition> getAttributes() {
+		if (this.attributes == null) {
+			this.attributes = new LinkedHashMap<>();
+		}
+
 		return attributes;
 	}
 
 	public void setAttributes(Map<String, TAttributeDefinition> attributes) {
 		this.attributes = attributes;
+	}
+
+	public String getUpperBound() {
+		if (occurrences == null || occurrences.size() <= 1) {
+			return "1";
+		} else {
+			return occurrences.get(1);
+		}
+	}
+
+	public Integer getLowerBound() {
+		if (occurrences == null || occurrences.isEmpty()) {
+			return 1;
+		} else {
+			return Integer.valueOf(occurrences.get(0));
+		}
 	}
 
 	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {

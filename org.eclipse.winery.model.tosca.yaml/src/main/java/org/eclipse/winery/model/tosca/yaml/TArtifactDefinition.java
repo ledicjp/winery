@@ -21,6 +21,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"type",
@@ -49,6 +51,7 @@ public class TArtifactDefinition {
 		this.setDeploy_path(builder.deploy_path);
 	}
 
+	@NonNull
 	public String getType() {
 		return type;
 	}
@@ -57,6 +60,7 @@ public class TArtifactDefinition {
 		this.type = type;
 	}
 
+	@NonNull
 	public String getFile() {
 		return file;
 	}

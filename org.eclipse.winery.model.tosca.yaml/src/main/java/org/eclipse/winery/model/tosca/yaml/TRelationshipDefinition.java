@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -21,6 +22,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -51,7 +54,12 @@ public class TRelationshipDefinition {
 		this.type = type;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceDefinition> getInterfaces() {
+		if (this.interfaces == null) {
+			this.interfaces = new LinkedHashMap<>();
+		}
+
 		return interfaces;
 	}
 

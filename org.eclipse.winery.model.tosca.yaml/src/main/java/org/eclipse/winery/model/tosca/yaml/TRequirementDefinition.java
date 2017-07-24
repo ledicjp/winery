@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,6 +24,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -52,7 +56,22 @@ public class TRequirementDefinition {
 		this.setDescription(builder.description);
 	}
 
+	@NonNull
 	public List<String> getOccurrences() {
+		if (this.occurrences == null) {
+			this.occurrences = new ArrayList<>(Arrays.asList("1", "1"));
+		}
+
+		// set default lower bound
+		if (this.occurrences.size() < 1) {
+			this.occurrences.add("1");
+		}
+
+		// set default upper bound
+		if (this.occurrences.size() < 2) {
+			this.occurrences.add("1");
+		}
+
 		return occurrences;
 	}
 
@@ -60,6 +79,7 @@ public class TRequirementDefinition {
 		this.occurrences = occurrences;
 	}
 
+	@NonNull
 	public String getCapability() {
 		return capability;
 	}
@@ -90,6 +110,16 @@ public class TRequirementDefinition {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@NonNull
+	public String getUpperBound() {
+		return this.getOccurrences().get(1);
+	}
+
+	@NonNull
+	public Integer getLowerBound() {
+		return Integer.valueOf(this.getOccurrences().get(0));
 	}
 
 	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {

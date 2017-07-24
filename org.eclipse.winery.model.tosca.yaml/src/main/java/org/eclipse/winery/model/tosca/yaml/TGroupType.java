@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tGroupType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -48,7 +52,12 @@ public class TGroupType extends TNodeOrGroupType {
 		this.setInterfaces(builder.interfaces);
 	}
 
+	@NonNull
 	public List<String> getMembers() {
+		if (this.members == null) {
+			this.members = new ArrayList<>();
+		}
+
 		return members;
 	}
 
@@ -56,7 +65,12 @@ public class TGroupType extends TNodeOrGroupType {
 		this.members = members;
 	}
 
+	@NonNull
 	public List<TMapRequirementDefinition> getRequirements() {
+		if (this.requirements == null) {
+			this.requirements = new ArrayList<>();
+		}
+
 		return requirements;
 	}
 
@@ -64,7 +78,12 @@ public class TGroupType extends TNodeOrGroupType {
 		this.requirements = requirements;
 	}
 
+	@NonNull
 	public Map<String, TCapabilityDefinition> getCapabilities() {
+		if (this.capabilities == null) {
+			this.capabilities = new LinkedHashMap<>();
+		}
+
 		return capabilities;
 	}
 
@@ -72,7 +91,12 @@ public class TGroupType extends TNodeOrGroupType {
 		this.capabilities = capabilities;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceDefinition> getInterfaces() {
+		if (this.interfaces == null) {
+			this.interfaces = new LinkedHashMap<>();
+		}
+
 		return interfaces;
 	}
 

@@ -24,6 +24,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"mime_type",
@@ -50,7 +52,12 @@ public class TArtifactType extends TEntityType {
 		this.mime_type = mime_type;
 	}
 
+	@NonNull
 	public List<String> getFile_ext() {
+		if (this.file_ext == null) {
+			this.file_ext = new ArrayList<>();
+		}
+
 		return file_ext;
 	}
 

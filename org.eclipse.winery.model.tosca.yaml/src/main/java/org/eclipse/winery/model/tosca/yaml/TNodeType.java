@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tNodeType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -60,10 +63,12 @@ public class TNodeType extends TNodeOrGroupType {
 		this.attributes = attributes;
 	}
 
+	@NonNull
 	public List<TMapRequirementDefinition> getRequirements() {
 		if (requirements == null) {
 			requirements = new ArrayList<>();
 		}
+
 		return requirements;
 	}
 
@@ -71,7 +76,12 @@ public class TNodeType extends TNodeOrGroupType {
 		this.requirements = requirements;
 	}
 
+	@NonNull
 	public Map<String, TCapabilityDefinition> getCapabilities() {
+		if (this.capabilities == null) {
+			this.capabilities = new LinkedHashMap<>();
+		}
+
 		return capabilities;
 	}
 
@@ -79,7 +89,12 @@ public class TNodeType extends TNodeOrGroupType {
 		this.capabilities = capabilities;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceDefinition> getInterfaces() {
+		if (this.interfaces == null) {
+			this.interfaces = new LinkedHashMap<>();
+		}
+
 		return interfaces;
 	}
 
@@ -87,7 +102,12 @@ public class TNodeType extends TNodeOrGroupType {
 		this.interfaces = interfaces;
 	}
 
+	@NonNull
 	public Map<String, TArtifactDefinition> getArtifacts() {
+		if (this.artifacts == null) {
+			this.artifacts = new LinkedHashMap<>();
+		}
+
 		return artifacts;
 	}
 

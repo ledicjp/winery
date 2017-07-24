@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -21,6 +22,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTopologyTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -66,7 +69,12 @@ public class TTopologyTemplateDefinition {
 		this.description = description;
 	}
 
+	@NonNull
 	public Map<String, TParameterDefinition> getInputs() {
+		if (this.inputs == null) {
+			this.inputs = new LinkedHashMap<>();
+		}
+
 		return inputs;
 	}
 
@@ -74,7 +82,12 @@ public class TTopologyTemplateDefinition {
 		this.inputs = inputs;
 	}
 
+	@NonNull
 	public Map<String, TNodeTemplate> getNode_templates() {
+		if (this.node_templates == null) {
+			this.node_templates = new LinkedHashMap<>();
+		}
+
 		return node_templates;
 	}
 
@@ -82,7 +95,12 @@ public class TTopologyTemplateDefinition {
 		this.node_templates = node_templates;
 	}
 
+	@NonNull
 	public Map<String, TRelationshipTemplate> getRelationship_templates() {
+		if (this.relationship_templates == null) {
+			this.relationship_templates = new LinkedHashMap<>();
+		}
+
 		return relationship_templates;
 	}
 
@@ -90,7 +108,12 @@ public class TTopologyTemplateDefinition {
 		this.relationship_templates = relationship_templates;
 	}
 
+	@NonNull
 	public Map<String, TGroupDefinition> getGroups() {
+		if (this.groups == null) {
+			this.groups = new LinkedHashMap<>();
+		}
+
 		return groups;
 	}
 
@@ -98,7 +121,12 @@ public class TTopologyTemplateDefinition {
 		this.groups = groups;
 	}
 
+	@NonNull
 	public Map<String, TPolicyDefinition> getPolicies() {
+		if (this.policies == null) {
+			this.policies = new LinkedHashMap<>();
+		}
+
 		return policies;
 	}
 
@@ -106,7 +134,12 @@ public class TTopologyTemplateDefinition {
 		this.policies = policies;
 	}
 
+	@NonNull
 	public Map<String, TParameterDefinition> getOutputs() {
+		if (this.outputs == null) {
+			this.outputs = new LinkedHashMap<>();
+		}
+
 		return outputs;
 	}
 

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -23,6 +24,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tNodeFilter", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -41,7 +44,12 @@ public class TNodeFilterDefinition {
 		this.setCapabilities(builder.capabilities);
 	}
 
+	@NonNull
 	public List<TMapPropertyFilterDefinition> getProperties() {
+		if (this.properties == null) {
+			this.properties = new ArrayList<>();
+		}
+
 		return properties;
 	}
 
@@ -49,7 +57,12 @@ public class TNodeFilterDefinition {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public List<TMapObjectValue> getCapabilities() {
+		if (this.capabilities == null) {
+			this.capabilities = new ArrayList<>();
+		}
+
 		return capabilities;
 	}
 

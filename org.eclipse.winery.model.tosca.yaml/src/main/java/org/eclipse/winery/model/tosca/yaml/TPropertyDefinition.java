@@ -25,6 +25,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"type",
@@ -60,6 +62,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.setEntry_schema(builder.entry_schema);
 	}
 
+	@NonNull
 	public String getType() {
 		return type;
 	}

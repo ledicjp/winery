@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicyDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -76,7 +80,12 @@ public class TPolicyDefinition {
 		this.metadata = metadata;
 	}
 
+	@NonNull
 	public Map<String, TPropertyAssignment> getProperties() {
+		if (this.properties == null) {
+			this.properties = new LinkedHashMap<>();
+		}
+
 		return properties;
 	}
 
@@ -84,7 +93,12 @@ public class TPolicyDefinition {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public List<String> getTargets() {
+		if (this.targets == null) {
+			this.targets = new ArrayList<>();
+		}
+
 		return targets;
 	}
 

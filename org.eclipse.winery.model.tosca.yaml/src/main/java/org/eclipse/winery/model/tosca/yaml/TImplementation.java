@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,6 +23,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tImplementation", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -46,6 +49,7 @@ public class TImplementation {
 		this.setDependencies(builder.dependencies);
 	}
 
+	@NonNull
 	public String getPrimary() {
 		return primary;
 	}
@@ -54,7 +58,12 @@ public class TImplementation {
 		this.primary = primary;
 	}
 
+	@NonNull
 	public List<String> getDependencies() {
+		if (this.dependencies == null) {
+			this.dependencies = new ArrayList<>();
+		}
+
 		return dependencies;
 	}
 

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,6 +23,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEntityType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -64,13 +67,13 @@ public class TEntityType {
 		return version;
 	}
 
+	public void setVersion(TVersion version) {
+		this.version = version;
+	}
+
 	public void setVersion(String version) {
 		TVersion tmp = new TVersion(version);
 		setVersion(tmp);
-	}
-
-	public void setVersion(TVersion version) {
-		this.version = version;
 	}
 
 	public String getDerived_from() {
@@ -81,7 +84,12 @@ public class TEntityType {
 		this.derived_from = derived_from;
 	}
 
+	@NonNull
 	public Map<String, TPropertyDefinition> getProperties() {
+		if (this.properties == null) {
+			this.properties = new LinkedHashMap<>();
+		}
+
 		return properties;
 	}
 
@@ -89,13 +97,19 @@ public class TEntityType {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public Map<String, TAttributeDefinition> getAttributes() {
+		if (this.attributes == null) {
+			this.attributes = new LinkedHashMap<>();
+		}
+
 		return attributes;
 	}
 
 	public void setAttributes(Map<String, TAttributeDefinition> attributes) {
 		this.attributes = attributes;
 	}
+
 
 	public Metadata getMetadata() {
 		return metadata;

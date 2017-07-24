@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tNodeTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -74,6 +78,7 @@ public class TNodeTemplate {
 		this.setCopy(builder.copy);
 	}
 
+	@NonNull
 	public String getType() {
 		return type;
 	}
@@ -98,7 +103,12 @@ public class TNodeTemplate {
 		this.metadata = metadata;
 	}
 
+	@NonNull
 	public List<String> getDirectives() {
+		if (this.directives == null) {
+			this.directives = new ArrayList<>();
+		}
+
 		return directives;
 	}
 
@@ -106,7 +116,12 @@ public class TNodeTemplate {
 		this.directives = directives;
 	}
 
+	@NonNull
 	public Map<String, TPropertyAssignment> getProperties() {
+		if (this.properties == null) {
+			this.properties = new LinkedHashMap<>();
+		}
+
 		return properties;
 	}
 
@@ -114,7 +129,13 @@ public class TNodeTemplate {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public Map<String, TAttributeAssignment> getAttributes() {
+
+		if (this.attributes == null) {
+			this.attributes = new LinkedHashMap<>();
+		}
+
 		return attributes;
 	}
 
@@ -122,7 +143,12 @@ public class TNodeTemplate {
 		this.attributes = attributes;
 	}
 
+	@NonNull
 	public List<TMapRequirementAssignment> getRequirements() {
+		if (this.requirements == null) {
+			this.requirements = new ArrayList<>();
+		}
+
 		return requirements;
 	}
 
@@ -130,7 +156,12 @@ public class TNodeTemplate {
 		this.requirements = requirements;
 	}
 
+	@NonNull
 	public Map<String, TCapabilityAssignment> getCapabilities() {
+		if (this.capabilities == null) {
+			this.capabilities = new LinkedHashMap<>();
+		}
+
 		return capabilities;
 	}
 
@@ -138,7 +169,12 @@ public class TNodeTemplate {
 		this.capabilities = capabilities;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceDefinition> getInterfaces() {
+		if (this.interfaces == null) {
+			this.interfaces = new LinkedHashMap<>();
+		}
+
 		return interfaces;
 	}
 
@@ -146,7 +182,12 @@ public class TNodeTemplate {
 		this.interfaces = interfaces;
 	}
 
+	@NonNull
 	public Map<String, TArtifactDefinition> getArtifacts() {
+		if (this.artifacts == null) {
+			this.artifacts = new LinkedHashMap<>();
+		}
+
 		return artifacts;
 	}
 

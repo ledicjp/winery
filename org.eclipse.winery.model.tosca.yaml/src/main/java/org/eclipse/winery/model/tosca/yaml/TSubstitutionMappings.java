@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,6 +23,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tSubstitutionMapping", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -51,7 +54,12 @@ public class TSubstitutionMappings {
 		this.node_type = node_type;
 	}
 
+	@NonNull
 	public Map<String, StringList> getCapabilities() {
+		if (this.capabilities == null) {
+			this.capabilities = new LinkedHashMap<>();
+		}
+
 		return capabilities;
 	}
 
@@ -59,7 +67,12 @@ public class TSubstitutionMappings {
 		this.capabilities = capabilities;
 	}
 
+	@NonNull
 	public Map<String, StringList> getRequirements() {
+		if (this.requirements == null) {
+			this.requirements = new LinkedHashMap<>();
+		}
+
 		return requirements;
 	}
 

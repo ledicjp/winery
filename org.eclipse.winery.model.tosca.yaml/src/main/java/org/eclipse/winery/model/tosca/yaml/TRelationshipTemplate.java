@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -23,6 +24,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -81,7 +84,12 @@ public class TRelationshipTemplate {
 		this.metadata = metadata;
 	}
 
+	@NonNull
 	public Map<String, TPropertyAssignment> getProperties() {
+		if (this.properties == null) {
+			this.properties = new LinkedHashMap<>();
+		}
+
 		return properties;
 	}
 
@@ -89,7 +97,12 @@ public class TRelationshipTemplate {
 		this.properties = properties;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceDefinition> getInterfaces() {
+		if (this.interfaces == null) {
+			this.interfaces = new LinkedHashMap<>();
+		}
+
 		return interfaces;
 	}
 
@@ -105,7 +118,12 @@ public class TRelationshipTemplate {
 		this.copy = copy;
 	}
 
+	@NonNull
 	public Map<String, TAttributeAssignment> getAttributes() {
+		if (this.attributes == null) {
+			this.attributes = new LinkedHashMap<>();
+		}
+
 		return attributes;
 	}
 

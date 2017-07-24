@@ -23,6 +23,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tAttributeDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"description",
@@ -59,6 +61,7 @@ public class TAttributeDefinition {
 		this.description = description;
 	}
 
+	@NonNull
 	public String getType() {
 		return type;
 	}

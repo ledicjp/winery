@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -21,6 +22,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -37,7 +40,12 @@ public class TCapabilityType extends TEntityType {
 		this.setValid_source_types(builder.valid_source_types);
 	}
 
+	@NonNull
 	public List<String> getValid_source_types() {
+		if (this.valid_source_types == null) {
+			this.valid_source_types = new ArrayList<>();
+		}
+
 		return valid_source_types;
 	}
 

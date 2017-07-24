@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -88,6 +91,7 @@ public class TServiceTemplate {
 		this.setTopology_template(builder.topology_template);
 	}
 
+	@NonNull
 	public String getTosca_definitions_version() {
 		return tosca_definitions_version;
 	}
@@ -104,7 +108,12 @@ public class TServiceTemplate {
 		this.metadata = metadata;
 	}
 
+	@NonNull
 	public Map<String, ObjectValue> getDsl_definitions() {
+		if (this.dsl_definitions == null) {
+			this.dsl_definitions = new LinkedHashMap<>();
+		}
+
 		return dsl_definitions;
 	}
 
@@ -120,7 +129,12 @@ public class TServiceTemplate {
 		this.description = description;
 	}
 
+	@NonNull
 	public Map<String, TRepositoryDefinition> getRepositories() {
+		if (this.repositories == null) {
+			this.repositories = new LinkedHashMap<>();
+		}
+
 		return repositories;
 	}
 
@@ -128,7 +142,12 @@ public class TServiceTemplate {
 		this.repositories = repositories;
 	}
 
+	@NonNull
 	public List<TMapImportDefinition> getImports() {
+		if (this.imports == null) {
+			this.imports = new ArrayList<>();
+		}
+
 		return imports;
 	}
 
@@ -136,7 +155,12 @@ public class TServiceTemplate {
 		this.imports = imports;
 	}
 
+	@NonNull
 	public Map<String, TArtifactType> getArtifact_types() {
+		if (this.artifact_types == null) {
+			this.artifact_types = new LinkedHashMap<>();
+		}
+
 		return artifact_types;
 	}
 
@@ -144,7 +168,12 @@ public class TServiceTemplate {
 		this.artifact_types = artifact_types;
 	}
 
+	@NonNull
 	public Map<String, TDataType> getData_types() {
+		if (this.data_types == null) {
+			this.data_types = new LinkedHashMap<>();
+		}
+
 		return data_types;
 	}
 
@@ -152,7 +181,12 @@ public class TServiceTemplate {
 		this.data_types = data_types;
 	}
 
+	@NonNull
 	public Map<String, TCapabilityType> getCapability_types() {
+		if (this.capability_types == null) {
+			this.capability_types = new LinkedHashMap<>();
+		}
+
 		return capability_types;
 	}
 
@@ -160,7 +194,12 @@ public class TServiceTemplate {
 		this.capability_types = capability_types;
 	}
 
+	@NonNull
 	public Map<String, TInterfaceType> getInterface_types() {
+		if (this.interface_types == null) {
+			this.interface_types = new LinkedHashMap<>();
+		}
+
 		return interface_types;
 	}
 
@@ -168,7 +207,12 @@ public class TServiceTemplate {
 		this.interface_types = interface_types;
 	}
 
+	@NonNull
 	public Map<String, TRelationshipType> getRelationship_types() {
+		if (this.relationship_types == null) {
+			this.relationship_types = new LinkedHashMap<>();
+		}
+
 		return relationship_types;
 	}
 
@@ -176,7 +220,12 @@ public class TServiceTemplate {
 		this.relationship_types = relationship_types;
 	}
 
+	@NonNull
 	public Map<String, TNodeType> getNode_types() {
+		if (this.node_types == null) {
+			this.node_types = new LinkedHashMap<>();
+		}
+
 		return node_types;
 	}
 
@@ -184,7 +233,12 @@ public class TServiceTemplate {
 		this.node_types = node_types;
 	}
 
+	@NonNull
 	public Map<String, TGroupType> getGroup_types() {
+		if (this.group_types == null) {
+			this.group_types = new LinkedHashMap<>();
+		}
+
 		return group_types;
 	}
 
@@ -192,7 +246,12 @@ public class TServiceTemplate {
 		this.group_types = group_types;
 	}
 
+	@NonNull
 	public Map<String, TPolicyType> getPolicy_types() {
+		if (this.policy_types == null) {
+			this.policy_types = new LinkedHashMap<>();
+		}
+
 		return policy_types;
 	}
 
