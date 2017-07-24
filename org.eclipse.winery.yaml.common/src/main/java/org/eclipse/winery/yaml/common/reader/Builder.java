@@ -603,7 +603,7 @@ public class Builder {
 		Map<String, TOperationDefinition> operations = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (!INTERFACE_KEYS.contains(entry.getKey())) {
-				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue()));
+				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue(), "TInterfaceType"));
 			}
 		}
 		if (operations.size() > 0) {
@@ -613,7 +613,7 @@ public class Builder {
 		return builder.build();
 	}
 
-	public TOperationDefinition buildOperationDefinition(Object object) {
+	public TOperationDefinition buildOperationDefinition(Object object, String context) {
 		if (object == null) {
 			return null;
 		}
@@ -621,20 +621,24 @@ public class Builder {
 
 		TOperationDefinition.Builder builder = new TOperationDefinition.Builder();
 		builder.setDescription(buildDescription(map.get("description")));
-		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs")));
+		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs"), context));
 		builder.setImplementation(buildImplementation(map.get("implementation")));
 
 		return builder.build();
 	}
 
-	public Map<String, TPropertyAssignmentOrDefinition> buildPropertyAssignmentOrDefinition(Object object) {
+	public Map<String, TPropertyAssignmentOrDefinition> buildPropertyAssignmentOrDefinition(Object object, String context) {
 		if (object == null) {
 			return null;
 		}
 		Map<String, Object> map = (Map<String, Object>) object;
 		Map<String, TPropertyAssignmentOrDefinition> result = new LinkedHashMap<>();
 
-		if (map.containsKey("type")) {
+		if (context.equals("TNodeType") ||
+				context.equals("TRelationshipType") ||
+				context.equals("TGroupType") ||
+				context.equals("TInterfaceType")
+				) {
 			Map<String, TPropertyDefinition> propertyDefinitionMap = buildProperties(object);
 			for (Map.Entry<String, TPropertyDefinition> entry : propertyDefinitionMap.entrySet()) {
 				result.put(entry.getKey(), entry.getValue());
@@ -714,12 +718,12 @@ public class Builder {
 		TRelationshipType.Builder builder = new TRelationshipType.Builder(buildEntityType(object));
 		builder.setValid_target_types(buildListString(map.get("valid_target_types")));
 		builder.setAttributes(buildAttributes(map.get("attributes")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TRelationshipType"));
 
 		return builder.build();
 	}
 
-	public Map<String, TInterfaceDefinition> buildMapInterfaceDefinition(Object object) {
+	public Map<String, TInterfaceDefinition> buildMapInterfaceDefinition(Object object, String context) {
 		if (object == null) {
 			return null;
 		}
@@ -727,13 +731,13 @@ public class Builder {
 
 		Map<String, TInterfaceDefinition> result = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			result.put(entry.getKey(), buildInterfaceDefinition(entry.getValue()));
+			result.put(entry.getKey(), buildInterfaceDefinition(entry.getValue(), context));
 		}
 
 		return result;
 	}
 
-	public TInterfaceDefinition buildInterfaceDefinition(Object object) {
+	public TInterfaceDefinition buildInterfaceDefinition(Object object, String context) {
 		if (object == null) {
 			return null;
 		}
@@ -741,14 +745,14 @@ public class Builder {
 
 		TInterfaceDefinition.Builder builder = new TInterfaceDefinition.Builder();
 		builder.setType((String) map.get("type"));
-		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs")));
+		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs"), context));
 
 		List<String> INTERFACE_DEFINITION_KEYS = new ArrayList<>(Arrays.asList("inputs", "type"));
 
 		Map<String, TOperationDefinition> operations = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (!INTERFACE_DEFINITION_KEYS.contains(entry.getKey())) {
-				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue()));
+				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue(), context));
 			}
 		}
 		if (operations.size() > 0) {
@@ -782,7 +786,7 @@ public class Builder {
 		builder.setAttributes(buildAttributes(map.get("attributes")));
 		builder.setRequirements(buildListMapRequirementDefinition(map.get("requirements")));
 		builder.setCapabilities(buildMapCapabilityDefinition(map.get("capabilities")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TNodeType"));
 		builder.setArtifacts(buildMapArtifactDefinition(map.get("artifacts")));
 
 		return builder.build();
@@ -849,7 +853,7 @@ public class Builder {
 
 		String type = (String) map.get("type");
 		TRelationshipDefinition.Builder builder = new TRelationshipDefinition.Builder(type);
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TRelationshipDefinition"));
 
 		return builder.build();
 	}
@@ -952,7 +956,7 @@ public class Builder {
 		builder.setMembers(buildListString(map.get("members")));
 		builder.setRequirements(buildListMapRequirementDefinition(map.get("requirements")));
 		builder.setCapabilities(buildMapCapabilityDefinition(map.get("capabilities")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TGroupType"));
 
 		return builder.build();
 	}
@@ -1039,7 +1043,7 @@ public class Builder {
 		builder.setAttributes(buildMapAttributeAssignment(map.get("attributes")));
 		builder.setRequirements(buildListMapRequirementAssignment(map.get("requirements")));
 		builder.setCapabilities(buildMapCapabilityAssignment(map.get("capabilities")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TNodeTemplate"));
 		builder.setArtifacts(buildMapArtifactDefinition(map.get("artifacts")));
 		builder.setNode_filter(buildNodeFilterDefinition(map.get("node_filter")));
 		builder.setCopy((String) map.get("copy"));
@@ -1159,14 +1163,14 @@ public class Builder {
 
 		TInterfaceAssignment.Builder builder = new TInterfaceAssignment.Builder();
 		builder.setType((String) map.get("type"));
-		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs")));
+		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs"), "TInterfaceAssignment"));
 
 		List<String> INTERFACE_ASSIGNMENT_KEYS = new ArrayList<>(Arrays.asList("type", "inputs"));
 
 		Map<String, TOperationDefinition> operations = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (!INTERFACE_ASSIGNMENT_KEYS.contains(entry.getKey())) {
-				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue()));
+				operations.put(entry.getKey(), buildOperationDefinition(entry.getValue(), "TInterfaceAssignment"));
 			}
 		}
 		if (operations.size() > 0) {
@@ -1310,7 +1314,7 @@ public class Builder {
 		builder.setMetadata(buildMetadata(map.get("metadata")));
 		builder.setProperties(buildMapPropertyAssignment(map.get("properties")));
 		builder.setAttributes(buildMapAttributeAssignment(map.get("attributes")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TRelationshipTemplate"));
 		builder.setCopy((String) map.get("copy"));
 
 		return builder.build();
@@ -1342,7 +1346,7 @@ public class Builder {
 		builder.setMetadata(buildMetadata(map.get("metadata")));
 		builder.setProperties(buildMapPropertyAssignment(map.get("properties")));
 		builder.setMembers(buildListString(map.get("members")));
-		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces")));
+		builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TGroupDefinition"));
 
 		return builder.build();
 	}

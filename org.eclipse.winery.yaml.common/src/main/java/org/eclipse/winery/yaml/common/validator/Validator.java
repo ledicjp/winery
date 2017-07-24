@@ -47,7 +47,7 @@ import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.reader.Reader;
 
 public class Validator {
-	public static final String normativeTypesLocation = "src/main/resources/tosca_simple_yaml_1_1.yml";
+	public static final String TOSCA_NORMATIVE_TYPES = "tosca_simple_yaml_1_1.yml";
 	public static final List<String> YAML_TYPES = new ArrayList<>(Arrays.asList("string", "integer", "float", "boolean", "timestamp", "null"));
 	public static final List<String> TOSCA_TYPES = new ArrayList<>(Arrays.asList("list", "map"));
 
@@ -156,7 +156,7 @@ public class Validator {
 		Map<String, TServiceTemplate> sts = new LinkedHashMap<>();
 		sts.putAll(imports);
 		sts.put("_local", serviceTemplate);
-		sts.put("tosca", Reader.INSTANCE.parseSkipTest(normativeTypesLocation));
+		sts.put("tosca", Reader.INSTANCE.parseSkipTest(this.getClass().getClassLoader().getResource(TOSCA_NORMATIVE_TYPES).getFile()));
 
 		validateTypeRefs(serviceTemplate.getTopology_template(), sts);
 

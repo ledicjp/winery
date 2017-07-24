@@ -37,7 +37,7 @@ import org.yaml.snakeyaml.constructor.ConstructorException;
 public class Reader {
 
 	public static Reader INSTANCE = new Reader();
-	private final String TOSCA_NORMATIVE_TYPES = "src/main/resources/tosca_simple_yaml_1_1.yml";
+	private final String TOSCA_NORMATIVE_TYPES = "tosca_simple_yaml_1_1.yml";
 	private Yaml yaml;
 
 	public Reader() {
@@ -181,7 +181,7 @@ public class Reader {
 				importMap.put(prefix, impSt);
 			}
 		}
-		importMap.put("tosca", readServiceTemplateSkipTest(TOSCA_NORMATIVE_TYPES));
+		importMap.put("tosca", readServiceTemplateSkipTest(this.getClass().getClassLoader().getResource(TOSCA_NORMATIVE_TYPES).getFile()));
 
 		try {
 			TypeValidator typeValidator = new TypeValidator(importMap);
