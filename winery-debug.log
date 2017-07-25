@@ -1,0 +1,2 @@
+09:09:29.074 [main] DEBUG org.eclipse.winery.repository.Prefs:137 doRepositoryInitialization - Repository location: null
+09:09:29.094 [main] DEBUG o.e.w.r.b.f.FilebasedRepository:110 <init> - Repository root: C:\winery-repository
