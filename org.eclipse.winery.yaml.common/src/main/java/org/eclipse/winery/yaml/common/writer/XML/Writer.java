@@ -19,7 +19,7 @@ import javax.xml.bind.Marshaller;
 
 import org.eclipse.winery.model.tosca.TDefinitions;
 
-import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 public class Writer {
 	public void writeXML(TDefinitions definitions, String fileName) throws JAXBException {
@@ -27,7 +27,7 @@ public class Writer {
 
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.setProperty("com.sun.xml.internal.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
+		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
 			@Override
 			public String getPreferredPrefix(String s, String s1, boolean b) {
 				return "tosca";
