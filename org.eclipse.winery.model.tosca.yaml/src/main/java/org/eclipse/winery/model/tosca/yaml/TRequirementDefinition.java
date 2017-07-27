@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -26,6 +27,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -36,8 +38,8 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TRequirementDefinition {
 	@XmlAttribute(name = "capability", required = true)
-	private String capability;
-	private String node;
+	private QName capability;
+	private QName node;
 	private TRelationshipDefinition relationship;
 	private List<String> occurrences;
 
@@ -80,22 +82,24 @@ public class TRequirementDefinition {
 	}
 
 	@NonNull
-	public String getCapability() {
+	public QName getCapability() {
 		return capability;
 	}
 
-	public void setCapability(String capability) {
+	public void setCapability(QName capability) {
 		this.capability = capability;
 	}
 
-	public String getNode() {
+	@Nullable
+	public QName getNode() {
 		return node;
 	}
 
-	public void setNode(String node) {
+	public void setNode(QName node) {
 		this.node = node;
 	}
 
+	@Nullable
 	public TRelationshipDefinition getRelationship() {
 		return relationship;
 	}
@@ -104,6 +108,7 @@ public class TRequirementDefinition {
 		this.relationship = relationship;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -127,13 +132,13 @@ public class TRequirementDefinition {
 	}
 
 	public static class Builder {
-		private final String capability;
+		private final QName capability;
 		private String description;
 		private List<String> occurrences;
-		private String node;
+		private QName node;
 		private TRelationshipDefinition relationship;
 
-		public Builder(String capability) {
+		public Builder(QName capability) {
 			this.capability = capability;
 		}
 
@@ -147,7 +152,7 @@ public class TRequirementDefinition {
 			return this;
 		}
 
-		public Builder setNode(String node) {
+		public Builder setNode(QName node) {
 			this.node = node;
 			return this;
 		}

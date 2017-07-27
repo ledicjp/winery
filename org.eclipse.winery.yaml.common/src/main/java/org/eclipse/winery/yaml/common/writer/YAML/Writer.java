@@ -9,14 +9,7 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml;
+package org.eclipse.winery.yaml.common.writer.YAML;
 
-import javax.xml.bind.annotation.XmlEnum;
-
-@XmlEnum(String.class)
-public enum TStatusValue {
-	supported,
-	unsupported,
-	experimental,
-	deprecated
+public class Writer {
 }

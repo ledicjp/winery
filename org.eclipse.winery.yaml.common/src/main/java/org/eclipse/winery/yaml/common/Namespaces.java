@@ -9,14 +9,9 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml;
+package org.eclipse.winery.yaml.common;
 
-import javax.xml.bind.annotation.XmlEnum;
-
-@XmlEnum(String.class)
-public enum TStatusValue {
-	supported,
-	unsupported,
-	experimental,
-	deprecated
+public class Namespaces {
+	public static final String TOSCA_NS = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.1";
+	public static final String DEFAULT_NS = "http://www.eclipse.org/winery/ns/simple/yaml/1.1/default";
 }

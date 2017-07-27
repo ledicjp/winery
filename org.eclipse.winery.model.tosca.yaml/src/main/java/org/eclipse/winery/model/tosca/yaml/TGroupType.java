@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -36,7 +37,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"interfaces"
 })
 public class TGroupType extends TNodeOrGroupType {
-	private List<String> members;
+	private List<QName> members;
 	private List<TMapRequirementDefinition> requirements;
 	private Map<String, TCapabilityDefinition> capabilities;
 	private Map<String, TInterfaceDefinition> interfaces;
@@ -53,7 +54,7 @@ public class TGroupType extends TNodeOrGroupType {
 	}
 
 	@NonNull
-	public List<String> getMembers() {
+	public List<QName> getMembers() {
 		if (this.members == null) {
 			this.members = new ArrayList<>();
 		}
@@ -61,7 +62,7 @@ public class TGroupType extends TNodeOrGroupType {
 		return members;
 	}
 
-	public void setMembers(List<String> members) {
+	public void setMembers(List<QName> members) {
 		this.members = members;
 	}
 
@@ -115,7 +116,7 @@ public class TGroupType extends TNodeOrGroupType {
 	}
 
 	public static class Builder extends TEntityType.Builder {
-		private List<String> members;
+		private List<QName> members;
 		private List<TMapRequirementDefinition> requirements;
 		private Map<String, TCapabilityDefinition> capabilities;
 		private Map<String, TInterfaceDefinition> interfaces;
@@ -128,7 +129,7 @@ public class TGroupType extends TNodeOrGroupType {
 			super(entityType);
 		}
 
-		public Builder setMembers(List<String> members) {
+		public Builder setMembers(List<QName> members) {
 			this.members = members;
 			return this;
 		}

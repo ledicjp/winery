@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -26,6 +27,9 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+/**
+ * Part of Operation Definition
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tImplementation", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"primary",
@@ -33,14 +37,14 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TImplementation {
 	@XmlAttribute(name = "primary", required = true)
-	private String primary;
-	private List<String> dependencies;
+	private QName primary;
+	private List<QName> dependencies;
 
 	public TImplementation() {
 
 	}
 
-	public TImplementation(String primary) {
+	public TImplementation(QName primary) {
 		this.primary = primary;
 	}
 
@@ -50,16 +54,16 @@ public class TImplementation {
 	}
 
 	@NonNull
-	public String getPrimary() {
+	public QName getPrimary() {
 		return primary;
 	}
 
-	public void setPrimary(String primary) {
+	public void setPrimary(QName primary) {
 		this.primary = primary;
 	}
 
 	@NonNull
-	public List<String> getDependencies() {
+	public List<QName> getDependencies() {
 		if (this.dependencies == null) {
 			this.dependencies = new ArrayList<>();
 		}
@@ -67,7 +71,7 @@ public class TImplementation {
 		return dependencies;
 	}
 
-	public void setDependencies(List<String> dependencies) {
+	public void setDependencies(List<QName> dependencies) {
 		this.dependencies = dependencies;
 	}
 
@@ -76,14 +80,14 @@ public class TImplementation {
 	}
 
 	public static class Builder {
-		private final String primary;
-		private List<String> dependencies;
+		private final QName primary;
+		private List<QName> dependencies;
 
-		public Builder(String primary) {
+		public Builder(QName primary) {
 			this.primary = primary;
 		}
 
-		public Builder setDependencies(List<String> dependencies) {
+		public Builder setDependencies(List<QName> dependencies) {
 			this.dependencies = dependencies;
 			return this;
 		}

@@ -17,13 +17,16 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
+import org.eclipse.winery.model.tosca.yaml.support.Annotations;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tOperationDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -34,13 +37,15 @@ import org.eclipse.jdt.annotation.NonNull;
 public class TOperationDefinition {
 	private String description;
 	private Map<String, TPropertyAssignmentOrDefinition> inputs;
+	@Annotations.StandardExtension
+	private Map<String, TPropertyAssignmentOrDefinition> outputs;
 	private TImplementation implementation;
 
 	public TOperationDefinition() {
 
 	}
 
-	public TOperationDefinition(String implementation) {
+	public TOperationDefinition(QName implementation) {
 		this.implementation = new TImplementation(implementation);
 	}
 
@@ -50,6 +55,7 @@ public class TOperationDefinition {
 		this.setImplementation(builder.implementation);
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -71,6 +77,22 @@ public class TOperationDefinition {
 		this.inputs = inputs;
 	}
 
+	@Annotations.StandardExtension
+	@NonNull
+	public Map<String, TPropertyAssignmentOrDefinition> getOutputs() {
+		if (this.outputs == null) {
+			this.outputs = new LinkedHashMap<>();
+		}
+		return outputs;
+	}
+
+	@Annotations.StandardExtension
+	public TOperationDefinition setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+		this.outputs = outputs;
+		return this;
+	}
+
+	@Nullable
 	public TImplementation getImplementation() {
 		return implementation;
 	}
@@ -86,6 +108,8 @@ public class TOperationDefinition {
 	public static class Builder {
 		private String description;
 		private Map<String, TPropertyAssignmentOrDefinition> inputs;
+		@Annotations.StandardExtension
+		private Map<String, TPropertyAssignmentOrDefinition> outputs;
 		private TImplementation implementation;
 
 		public Builder() {
@@ -99,6 +123,12 @@ public class TOperationDefinition {
 
 		public Builder setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
 			this.inputs = inputs;
+			return this;
+		}
+
+		@Annotations.StandardExtension
+		public Builder setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+			this.outputs = outputs;
 			return this;
 		}
 

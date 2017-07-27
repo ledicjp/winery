@@ -15,11 +15,15 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tImportDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -31,7 +35,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 public class TImportDefinition {
 	@XmlAttribute(name = "file", required = true)
 	private String file;
-	private String repository;
+	private QName repository;
 	private String namespace_uri;
 	private String namespace_prefix;
 
@@ -50,6 +54,7 @@ public class TImportDefinition {
 		this.setNamespace_prefix(builder.namespace_prefix);
 	}
 
+	@NonNull
 	public String getFile() {
 		return file;
 	}
@@ -58,14 +63,16 @@ public class TImportDefinition {
 		this.file = file;
 	}
 
-	public String getRepository() {
+	@Nullable
+	public QName getRepository() {
 		return repository;
 	}
 
-	public void setRepository(String repository) {
+	public void setRepository(QName repository) {
 		this.repository = repository;
 	}
 
+	@Nullable
 	public String getNamespace_uri() {
 		return namespace_uri;
 	}
@@ -74,6 +81,7 @@ public class TImportDefinition {
 		this.namespace_uri = namespace_uri;
 	}
 
+	@Nullable
 	public String getNamespace_prefix() {
 		return namespace_prefix;
 	}
@@ -88,7 +96,7 @@ public class TImportDefinition {
 
 	public static class Builder {
 		private final String file;
-		private String repository;
+		private QName repository;
 		private String namespace_uri;
 		private String namespace_prefix;
 
@@ -96,7 +104,7 @@ public class TImportDefinition {
 			this.file = file;
 		}
 
-		public Builder setRepository(String repository) {
+		public Builder setRepository(QName repository) {
 			this.repository = repository;
 			return this;
 		}

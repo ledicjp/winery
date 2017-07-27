@@ -17,6 +17,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -30,7 +31,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"valid_source_types"
 })
 public class TCapabilityType extends TEntityType {
-	private List<String> valid_source_types;
+	private List<QName> valid_source_types;
 
 	public TCapabilityType() {
 	}
@@ -41,7 +42,7 @@ public class TCapabilityType extends TEntityType {
 	}
 
 	@NonNull
-	public List<String> getValid_source_types() {
+	public List<QName> getValid_source_types() {
 		if (this.valid_source_types == null) {
 			this.valid_source_types = new ArrayList<>();
 		}
@@ -49,7 +50,7 @@ public class TCapabilityType extends TEntityType {
 		return valid_source_types;
 	}
 
-	public void setValid_source_types(List<String> valid_source_types) {
+	public void setValid_source_types(List<QName> valid_source_types) {
 		this.valid_source_types = valid_source_types;
 	}
 
@@ -64,7 +65,7 @@ public class TCapabilityType extends TEntityType {
 	}
 
 	public static class Builder extends TEntityType.Builder {
-		private List<String> valid_source_types;
+		private List<QName> valid_source_types;
 
 		public Builder() {
 
@@ -74,7 +75,7 @@ public class TCapabilityType extends TEntityType {
 			super(entityType);
 		}
 
-		public Builder setValid_source_types(List<String> valid_source_types) {
+		public Builder setValid_source_types(List<QName> valid_source_types) {
 			this.valid_source_types = valid_source_types;
 			return this;
 		}

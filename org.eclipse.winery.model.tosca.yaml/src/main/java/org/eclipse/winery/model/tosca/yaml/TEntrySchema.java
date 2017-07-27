@@ -17,6 +17,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -24,6 +25,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEntrySchema", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -32,7 +34,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"constraints"
 })
 public class TEntrySchema {
-	private String type;
+	private QName type;
 	private String description;
 	private List<TConstraintClause> constraints;
 
@@ -45,14 +47,16 @@ public class TEntrySchema {
 		this.setConstraints(builder.constraints);
 	}
 
-	public String getType() {
+	@Nullable
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -79,14 +83,14 @@ public class TEntrySchema {
 	}
 
 	public static class Builder {
-		private String type;
+		private QName type;
 		private String description;
 		private List<TConstraintClause> constraints;
 
 		public Builder() {
 		}
 
-		public Builder setType(String type) {
+		public Builder setType(QName type) {
 			this.type = type;
 			return this;
 		}

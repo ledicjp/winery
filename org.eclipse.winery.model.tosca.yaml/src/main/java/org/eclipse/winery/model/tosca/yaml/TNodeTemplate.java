@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
@@ -29,6 +30,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tNodeTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -47,7 +49,7 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TNodeTemplate {
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	private String description;
 	private Metadata metadata;
 	private List<String> directives;
@@ -58,7 +60,7 @@ public class TNodeTemplate {
 	private Map<String, TInterfaceDefinition> interfaces;
 	private Map<String, TArtifactDefinition> artifacts;
 	private TNodeFilterDefinition node_filter;
-	private String copy;
+	private QName copy;
 
 	public TNodeTemplate() {
 	}
@@ -79,14 +81,15 @@ public class TNodeTemplate {
 	}
 
 	@NonNull
-	public String getType() {
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -95,6 +98,7 @@ public class TNodeTemplate {
 		this.description = description;
 	}
 
+	@Nullable
 	public Metadata getMetadata() {
 		return metadata;
 	}
@@ -195,6 +199,7 @@ public class TNodeTemplate {
 		this.artifacts = artifacts;
 	}
 
+	@Nullable
 	public TNodeFilterDefinition getNode_filter() {
 		return node_filter;
 	}
@@ -203,11 +208,12 @@ public class TNodeTemplate {
 		this.node_filter = node_filter;
 	}
 
-	public String getCopy() {
+	@Nullable
+	public QName getCopy() {
 		return copy;
 	}
 
-	public void setCopy(String copy) {
+	public void setCopy(QName copy) {
 		this.copy = copy;
 	}
 
@@ -216,7 +222,7 @@ public class TNodeTemplate {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private String description;
 		private Metadata metadata;
 		private List<String> directives;
@@ -227,9 +233,9 @@ public class TNodeTemplate {
 		private Map<String, TInterfaceDefinition> interfaces;
 		private Map<String, TArtifactDefinition> artifacts;
 		private TNodeFilterDefinition node_filter;
-		private String copy;
+		private QName copy;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 
@@ -283,7 +289,7 @@ public class TNodeTemplate {
 			return this;
 		}
 
-		public Builder setCopy(String copy) {
+		public Builder setCopy(QName copy) {
 			this.copy = copy;
 			return this;
 		}

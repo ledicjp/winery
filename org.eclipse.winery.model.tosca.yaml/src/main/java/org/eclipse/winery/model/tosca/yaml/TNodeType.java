@@ -55,7 +55,11 @@ public class TNodeType extends TNodeOrGroupType {
 		this.setArtifacts(builder.artifacts);
 	}
 
+	@NonNull
 	public Map<String, TAttributeDefinition> getAttributes() {
+		if (attributes == null) {
+			attributes = new LinkedHashMap<>();
+		}
 		return attributes;
 	}
 

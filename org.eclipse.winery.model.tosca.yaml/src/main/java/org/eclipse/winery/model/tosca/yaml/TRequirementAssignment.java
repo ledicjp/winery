@@ -17,6 +17,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -24,6 +25,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -34,9 +36,9 @@ import org.eclipse.jdt.annotation.NonNull;
 		"occurrences"
 })
 public class TRequirementAssignment {
-	private String node;
+	private QName node;
 	private TRelationshipAssignment relationship;
-	private String capability;
+	private QName capability;
 
 	private TNodeFilterDefinition node_filter;
 	private List<String> occurrences;
@@ -45,7 +47,7 @@ public class TRequirementAssignment {
 
 	}
 
-	public TRequirementAssignment(String node) {
+	public TRequirementAssignment(QName node) {
 		this.node = node;
 	}
 
@@ -57,22 +59,25 @@ public class TRequirementAssignment {
 		this.setOccurrences(builder.occurrences);
 	}
 
-	public String getCapability() {
+	@Nullable
+	public QName getCapability() {
 		return capability;
 	}
 
-	public void setCapability(String capability) {
+	public void setCapability(QName capability) {
 		this.capability = capability;
 	}
 
-	public String getNode() {
+	@Nullable
+	public QName getNode() {
 		return node;
 	}
 
-	public void setNode(String node) {
+	public void setNode(QName node) {
 		this.node = node;
 	}
 
+	@Nullable
 	public TRelationshipAssignment getRelationship() {
 		return relationship;
 	}
@@ -81,6 +86,7 @@ public class TRequirementAssignment {
 		this.relationship = relationship;
 	}
 
+	@Nullable
 	public TNodeFilterDefinition getNode_filter() {
 		return node_filter;
 	}
@@ -107,8 +113,8 @@ public class TRequirementAssignment {
 	}
 
 	public static class Builder {
-		private String capability;
-		private String node;
+		private QName capability;
+		private QName node;
 		private TRelationshipAssignment relationship;
 		private TNodeFilterDefinition node_filter;
 		private List<String> occurrences;
@@ -117,12 +123,12 @@ public class TRequirementAssignment {
 
 		}
 
-		public Builder setCapability(String capability) {
+		public Builder setCapability(QName capability) {
 			this.capability = capability;
 			return this;
 		}
 
-		public Builder setNode(String node) {
+		public Builder setNode(QName node) {
 			this.node = node;
 			return this;
 		}

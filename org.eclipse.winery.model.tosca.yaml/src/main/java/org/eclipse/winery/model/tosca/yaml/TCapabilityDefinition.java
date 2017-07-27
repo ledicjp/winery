@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -26,6 +28,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -39,9 +42,9 @@ import org.eclipse.jdt.annotation.NonNull;
 public class TCapabilityDefinition {
 	private String description;
 	private List<String> occurrences;
-	private List<String> valid_source_types;
+	private List<QName> valid_source_types;
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	private Map<String, TPropertyDefinition> properties;
 	private Map<String, TAttributeDefinition> attributes;
 
@@ -49,7 +52,7 @@ public class TCapabilityDefinition {
 
 	}
 
-	public TCapabilityDefinition(String type) {
+	public TCapabilityDefinition(QName type) {
 		this.type = type;
 	}
 
@@ -62,6 +65,7 @@ public class TCapabilityDefinition {
 		this.setAttributes(builder.attributes);
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -70,7 +74,18 @@ public class TCapabilityDefinition {
 		this.description = description;
 	}
 
+	@NonNull
 	public List<String> getOccurrences() {
+		if (occurrences == null) {
+			occurrences = new ArrayList<>();
+		}
+		if (occurrences.size() < 1) {
+			occurrences.add("1");
+		}
+		if (occurrences.size() < 2) {
+			occurrences.add("UNBOUNDED");
+		}
+
 		return occurrences;
 	}
 
@@ -78,20 +93,20 @@ public class TCapabilityDefinition {
 		this.occurrences = occurrences;
 	}
 
-	public List<String> getValid_source_types() {
+	public List<QName> getValid_source_types() {
 		return valid_source_types;
 	}
 
-	public void setValid_source_types(List<String> valid_source_types) {
+	public void setValid_source_types(List<QName> valid_source_types) {
 		this.valid_source_types = valid_source_types;
 	}
 
 	@NonNull
-	public String getType() {
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
@@ -121,6 +136,7 @@ public class TCapabilityDefinition {
 		this.attributes = attributes;
 	}
 
+	@NonNull
 	public String getUpperBound() {
 		if (occurrences == null || occurrences.size() <= 1) {
 			return "1";
@@ -129,6 +145,7 @@ public class TCapabilityDefinition {
 		}
 	}
 
+	@NonNull
 	public Integer getLowerBound() {
 		if (occurrences == null || occurrences.isEmpty()) {
 			return 1;
@@ -142,14 +159,14 @@ public class TCapabilityDefinition {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private String description;
 		private List<String> occurrences;
-		private List<String> valid_source_types;
+		private List<QName> valid_source_types;
 		private Map<String, TPropertyDefinition> properties;
 		private Map<String, TAttributeDefinition> attributes;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 
@@ -163,7 +180,7 @@ public class TCapabilityDefinition {
 			return this;
 		}
 
-		public Builder setValid_source_types(List<String> valid_source_types) {
+		public Builder setValid_source_types(List<QName> valid_source_types) {
 			this.valid_source_types = valid_source_types;
 			return this;
 		}

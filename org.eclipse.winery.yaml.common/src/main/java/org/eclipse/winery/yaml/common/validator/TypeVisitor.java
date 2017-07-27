@@ -12,7 +12,11 @@
 package org.eclipse.winery.yaml.common.validator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.winery.model.tosca.yaml.TArtifactType;
 import org.eclipse.winery.model.tosca.yaml.TCapabilityType;
@@ -22,185 +26,218 @@ import org.eclipse.winery.model.tosca.yaml.TInterfaceType;
 import org.eclipse.winery.model.tosca.yaml.TNodeType;
 import org.eclipse.winery.model.tosca.yaml.TPolicyType;
 import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
-import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
+import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
+import org.eclipse.winery.yaml.common.Namespaces;
 
-public class TypeVisitor extends AbstractVisitor {
-	private List<String> artifactTypes;
-	private List<String> dataTypes;
-	private List<String> capabilityTypes;
-	private List<String> interfaceTypes;
-	private List<String> relationshipTypes;
-	private List<String> nodeTypes;
-	private List<String> groupTypes;
-	private List<String> policyTypes;
+public class TypeVisitor extends ImportVisitor {
+	private Map<String, List<String>> artifactTypes;
+	private Map<String, List<String>> dataTypes;
+	private Map<String, List<String>> capabilityTypes;
+	private Map<String, List<String>> interfaceTypes;
+	private Map<String, List<String>> relationshipTypes;
+	private Map<String, List<String>> nodeTypes;
+	private Map<String, List<String>> groupTypes;
+	private Map<String, List<String>> policyTypes;
 
-	private String NS_PREFIX;
-
-	public TypeVisitor() {
-		this.artifactTypes = new ArrayList<>();
-		this.dataTypes = new ArrayList<>();
-		this.capabilityTypes = new ArrayList<>();
-		this.interfaceTypes = new ArrayList<>();
-		this.relationshipTypes = new ArrayList<>();
-		this.nodeTypes = new ArrayList<>();
-		this.groupTypes = new ArrayList<>();
-		this.policyTypes = new ArrayList<>();
-		this.NS_PREFIX = "";
+	public TypeVisitor(String namespace, String path) {
+		super(namespace, path);
+		this.artifactTypes = new LinkedHashMap<>();
+		this.dataTypes = new LinkedHashMap<>();
+		this.capabilityTypes = new LinkedHashMap<>();
+		this.interfaceTypes = new LinkedHashMap<>();
+		this.relationshipTypes = new LinkedHashMap<>();
+		this.nodeTypes = new LinkedHashMap<>();
+		this.groupTypes = new LinkedHashMap<>();
+		this.policyTypes = new LinkedHashMap<>();
 	}
 
 	@Override
 	public IResult visit(TArtifactType node, IParameter parameter) throws IException {
-		this.artifactTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.artifactTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.artifactTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setArtifactTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), artifactTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TDataType node, IParameter parameter) throws IException {
-		this.dataTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.dataTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.dataTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setDataTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), dataTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TCapabilityType node, IParameter parameter) throws IException {
-		this.capabilityTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.capabilityTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.capabilityTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setCapabilityTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), capabilityTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TInterfaceType node, IParameter parameter) throws IException {
-		this.interfaceTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.interfaceTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.interfaceTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setInterfaceTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), interfaceTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TRelationshipType node, IParameter parameter) throws IException {
-		this.relationshipTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.relationshipTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.relationshipTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setRelationshipTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), relationshipTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TNodeType node, IParameter parameter) throws IException {
-		this.nodeTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.nodeTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.nodeTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setNodeTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), nodeTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TGroupType node, IParameter parameter) throws IException {
-		this.groupTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.groupTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.groupTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setGroupTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), groupTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
 	@Override
 	public IResult visit(TPolicyType node, IParameter parameter) throws IException {
-		this.policyTypes.add(NS_PREFIX + parameter.getKey());
-		if (NS_PREFIX.equals("tosca:") && node.getMetadata() != null) {
-			if (node.getMetadata().get("shorthand_name") != null) {
-				this.policyTypes.add(NS_PREFIX + node.getMetadata().get("shorthand_name"));
-				this.policyTypes.add(node.getMetadata().get("shorthand_name"));
-			}
-		}
+		this.setPolicyTypes(namespace, parameter.getKey());
+		setNormativeTypes(parameter.getKey(), node.getMetadata(), policyTypes);
 		super.visit(node, parameter);
 		return null;
 	}
 
-	public List<String> getArtifactTypes() {
-		return artifactTypes;
-	}
+	public void setNormativeTypes(String name, Metadata metadata, Map<String, List<String>> map) {
+		if (namespace.equals(Namespaces.TOSCA_NS) && metadata != null) {
+			String shorthand_name = metadata.get("shorthand_name");
+			String type_uri = metadata.get("type_uri");
 
-	public List<String> getDataTypes() {
-		return dataTypes;
-	}
-
-	public void setDataTypes(List<String> dataTypes) {
-		for (String entry : dataTypes) {
-			if (!this.dataTypes.contains(entry)) {
-				this.dataTypes.add(entry);
+			if (shorthand_name != null && !shorthand_name.equals(name)) {
+				if (map.containsKey(namespace)) {
+					map.get(namespace).add(shorthand_name);
+				} else {
+					map.put(namespace, new ArrayList<>(Arrays.asList(shorthand_name)));
+				}
+			} else if (type_uri != null && !type_uri.equals(name)) {
+				if (map.containsKey(namespace)) {
+					map.get(namespace).add(type_uri);
+				} else {
+					map.put(namespace, new ArrayList<>(Arrays.asList(type_uri)));
+				}
 			}
 		}
 	}
 
-	public List<String> getCapabilityTypes() {
+	private void setArtifactTypes(String namespace, String name) {
+		if (artifactTypes.containsKey(namespace)) {
+			artifactTypes.get(namespace).add(name);
+		} else {
+			artifactTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setDataTypes(String namespace, String name) {
+		if (dataTypes.containsKey(namespace)) {
+			dataTypes.get(namespace).add(name);
+		} else {
+			dataTypes.put(namespace, new ArrayList<>(Collections.singletonList(name)));
+		}
+	}
+
+	private void setCapabilityTypes(String namespace, String name) {
+		if (capabilityTypes.containsKey(namespace)) {
+			capabilityTypes.get(namespace).add(name);
+		} else {
+			capabilityTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setInterfaceTypes(String namespace, String name) {
+		if (interfaceTypes.containsKey(namespace)) {
+			interfaceTypes.get(namespace).add(name);
+		} else {
+			interfaceTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setRelationshipTypes(String namespace, String name) {
+		if (relationshipTypes.containsKey(namespace)) {
+			relationshipTypes.get(namespace).add(name);
+		} else {
+			relationshipTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setNodeTypes(String namespace, String name) {
+		if (nodeTypes.containsKey(namespace)) {
+			nodeTypes.get(namespace).add(name);
+		} else {
+			nodeTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setGroupTypes(String namespace, String name) {
+		if (groupTypes.containsKey(namespace)) {
+			groupTypes.get(namespace).add(name);
+		} else {
+			groupTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	private void setPolicyTypes(String namespace, String name) {
+		if (policyTypes.containsKey(namespace)) {
+			policyTypes.get(namespace).add(name);
+		} else {
+			policyTypes.put(namespace, new ArrayList<>(Arrays.asList(name)));
+		}
+	}
+
+	public void addDataTypes(List<String> types, String namespace) {
+		for (String entry : types) {
+			setDataTypes(namespace, entry);
+		}
+	}
+
+	public Map<String, List<String>> getArtifactTypes() {
+		return artifactTypes;
+	}
+
+	public Map<String, List<String>> getDataTypes() {
+		return dataTypes;
+	}
+
+	public Map<String, List<String>> getCapabilityTypes() {
 		return capabilityTypes;
 	}
 
-	public List<String> getInterfaceTypes() {
+	public Map<String, List<String>> getInterfaceTypes() {
 		return interfaceTypes;
 	}
 
-	public List<String> getRelationshipTypes() {
+	public Map<String, List<String>> getRelationshipTypes() {
 		return relationshipTypes;
 	}
 
-	public List<String> getNodeTypes() {
+	public Map<String, List<String>> getNodeTypes() {
 		return nodeTypes;
 	}
 
-	public List<String> getGroupTypes() {
+	public Map<String, List<String>> getGroupTypes() {
 		return groupTypes;
 	}
 
-	public List<String> getPolicyTypes() {
+	public Map<String, List<String>> getPolicyTypes() {
 		return policyTypes;
-	}
-
-	public TypeVisitor setNS(String prefix) {
-		if (prefix.equals("")) {
-			this.NS_PREFIX = prefix;
-		} else {
-			this.NS_PREFIX = prefix + ":";
-		}
-		return this;
 	}
 }

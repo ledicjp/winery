@@ -9,14 +9,19 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml;
+package org.eclipse.winery.model.tosca.yaml.support;
 
-import javax.xml.bind.annotation.XmlEnum;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@XmlEnum(String.class)
-public enum TStatusValue {
-	supported,
-	unsupported,
-	experimental,
-	deprecated
+public @interface Annotations {
+	@Documented
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.PACKAGE, ElementType.PARAMETER, ElementType.TYPE})
+	public @interface StandardExtension {
+
+	}
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -25,6 +26,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEntityType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -38,7 +40,7 @@ import org.eclipse.jdt.annotation.NonNull;
 public class TEntityType {
 	private String description;
 	private TVersion version;
-	private String derived_from;
+	private QName derived_from;
 	private Map<String, TPropertyDefinition> properties;
 	private Map<String, TAttributeDefinition> attributes;
 	private Metadata metadata;
@@ -55,6 +57,7 @@ public class TEntityType {
 		this.setMetadata(builder.metadata);
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -63,12 +66,9 @@ public class TEntityType {
 		this.description = description;
 	}
 
+	@NonNull
 	public TVersion getVersion() {
 		return version;
-	}
-
-	public void setVersion(TVersion version) {
-		this.version = version;
 	}
 
 	public void setVersion(String version) {
@@ -76,11 +76,16 @@ public class TEntityType {
 		setVersion(tmp);
 	}
 
-	public String getDerived_from() {
+	public void setVersion(TVersion version) {
+		this.version = version;
+	}
+
+	@Nullable
+	public QName getDerived_from() {
 		return derived_from;
 	}
 
-	public void setDerived_from(String derived_from) {
+	public void setDerived_from(QName derived_from) {
 		this.derived_from = derived_from;
 	}
 
@@ -110,7 +115,7 @@ public class TEntityType {
 		this.attributes = attributes;
 	}
 
-
+	@Nullable
 	public Metadata getMetadata() {
 		return metadata;
 	}
@@ -126,7 +131,7 @@ public class TEntityType {
 	public static class Builder {
 		private String description;
 		private TVersion version;
-		private String derived_from;
+		private QName derived_from;
 		private Map<String, TPropertyDefinition> properties;
 		private Map<String, TAttributeDefinition> attributes;
 		private Metadata metadata;
@@ -154,7 +159,7 @@ public class TEntityType {
 			return this;
 		}
 
-		public Builder setDerived_from(String derived_from) {
+		public Builder setDerived_from(QName derived_from) {
 			this.derived_from = derived_from;
 			return this;
 		}

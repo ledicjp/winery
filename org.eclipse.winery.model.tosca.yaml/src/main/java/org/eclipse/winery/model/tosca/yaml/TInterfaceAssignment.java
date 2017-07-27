@@ -28,7 +28,7 @@ public class TInterfaceAssignment extends TInterfaceDefinition {
 	}
 
 	public TInterfaceAssignment(Builder builder) {
-		TInterfaceDefinition.init(this, builder);
+		super(builder);
 	}
 
 	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {

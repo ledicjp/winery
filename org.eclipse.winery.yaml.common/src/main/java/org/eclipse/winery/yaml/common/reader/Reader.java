@@ -15,29 +15,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.eclipse.winery.model.tosca.yaml.TImportDefinition;
-import org.eclipse.winery.model.tosca.yaml.TRepositoryDefinition;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.yaml.common.Exception.MissingFile;
 import org.eclipse.winery.yaml.common.Exception.MissingImportFile;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
+import org.eclipse.winery.yaml.common.Namespaces;
 import org.eclipse.winery.yaml.common.validator.ExceptionInterpreter;
 import org.eclipse.winery.yaml.common.validator.ObjectValidator;
-import org.eclipse.winery.yaml.common.validator.TypeValidator;
 import org.eclipse.winery.yaml.common.validator.Validator;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.ConstructorException;
+import org.yaml.snakeyaml.scanner.ScannerException;
 
 public class Reader {
-
-	public static Reader INSTANCE = new Reader();
-	private final String TOSCA_NORMATIVE_TYPES = "tosca_simple_yaml_1_1.yml";
 	private Yaml yaml;
 
 	public Reader() {
@@ -45,41 +39,57 @@ public class Reader {
 	}
 
 	public TServiceTemplate parse(String file) throws YAMLParserException {
-		return this.readServiceTemplate(file);
+		return this.parse(file, Namespaces.DEFAULT_NS);
+	}
+
+	public TServiceTemplate parse(String file, String namespace) throws YAMLParserException {
+		return this.readServiceTemplate(file, namespace);
+	}
+
+	public TServiceTemplate parse(TImportDefinition definition, String context) throws YAMLParserException {
+		return this.parse(definition, context, Namespaces.DEFAULT_NS);
+	}
+
+	public TServiceTemplate parse(TImportDefinition definition, String context, String namespace) throws YAMLParserException {
+		return this.readImportDefinition(definition, context, namespace);
 	}
 
 	public TServiceTemplate parseSkipTest(String file) throws YAMLParserException {
-		return this.readServiceTemplateSkipTest(file);
+		return this.parseSkipTest(file, Namespaces.DEFAULT_NS);
 	}
 
-	private TServiceTemplate readServiceTemplateSkipTest(String uri) throws YAMLParserException {
+	public TServiceTemplate parseSkipTest(String file, String namespace) throws YAMLParserException {
+		return this.readServiceTemplateSkipTest(file, namespace);
+	}
+
+	private TServiceTemplate readServiceTemplateSkipTest(String uri, String namespace) throws YAMLParserException {
 		Object object = readObject(uri);
-		return buildServiceTemplate(object);
+		return buildServiceTemplate(object, namespace);
 	}
 
-	private TServiceTemplate buildServiceTemplate(Object object) throws YAMLParserException {
-		Builder builder = new Builder();
+	private TServiceTemplate buildServiceTemplate(Object object, String namespace) throws YAMLParserException {
+		Builder builder = new Builder(namespace);
 		return builder.buildServiceTemplate(object);
 	}
 
 	/**
 	 * Uses snakeyaml to convert a file into an Object
 	 *
-	 * @param file name
+	 * @param fileName name
 	 * @return Object (Lists, Maps, Strings, Integers, Dates)
 	 * @throws MissingFile if the file could not be found.
 	 */
-	private Object readObject(String file) throws MissingFile {
+	private Object readObject(String fileName) throws MissingFile {
 		InputStream inputStream;
 		try {
-			inputStream = new FileInputStream(new File(file));
+			File file = new File(fileName);
+			inputStream = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			MissingFile ex = new MissingFile("The file \"" + file + "\" could not be found!");
-			ex.setFile_context(file);
+			MissingFile ex = new MissingFile("The file \"" + fileName + "\" could not be found!");
+			ex.setFile_context(fileName);
 			throw ex;
 		}
-		Object object = this.yaml.load(inputStream);
-		return object;
+		return this.yaml.load(inputStream);
 	}
 
 	/**
@@ -89,119 +99,54 @@ public class Reader {
 	 * @return ServiceTemplate
 	 * @throws YAMLParserException the ServiceTemplate or the file is invalid.
 	 */
-	private TServiceTemplate readServiceTemplate(String uri) throws YAMLParserException {
+	private TServiceTemplate readServiceTemplate(String uri, String namespace) throws YAMLParserException {
 		// pre parse checking
-		ObjectValidator objectValidator = new ObjectValidator();
-		objectValidator.validateObject(readObject(uri));
-
-		// parse checking
-		TServiceTemplate result = null;
 		try {
-			result = buildServiceTemplate(readObject(uri));
+			ObjectValidator objectValidator = new ObjectValidator();
+			objectValidator.validateObject(readObject(uri));
 		} catch (ConstructorException e) {
+			ExceptionInterpreter interpreter = new ExceptionInterpreter();
+			throw interpreter.interpret(e);
+		} catch (ScannerException e) {
 			ExceptionInterpreter interpreter = new ExceptionInterpreter();
 			throw interpreter.interpret(e);
 		}
 
-		Validator validator = new Validator();
-
-		// read imports
-		Map<String, TServiceTemplate> importMap = new LinkedHashMap<>();
-		if (result.getImports() != null) {
-			for (TMapImportDefinition map : result.getImports()) {
-				Map.Entry<String, TImportDefinition> importDefinition = map.entrySet().iterator().next();
-				validator.validate(importDefinition.getValue(), importDefinition.getKey());
-
-				String prefix = importDefinition.getValue().getNamespace_prefix() == null ? "_remote" : importDefinition.getValue().getNamespace_prefix();
-				TServiceTemplate impSt = null;
-				if (importDefinition.getValue().getRepository() == null) {
-					impSt = readURI(importDefinition.getValue().getFile(), uri);
-				} else {
-					// TODO setContext for repository (Credentials)
-					validator.validate(result.getRepositories(), importDefinition.getValue().getRepository());
-					TRepositoryDefinition repositoryDefinition = result.getRepositories().get(importDefinition.getValue().getRepository());
-					String context = repositoryDefinition.getUrl();
-
-					impSt = readURI(importDefinition.getValue().getFile(), context);
-				}
-
-				if (prefix == "tosca" && importMap.containsKey(prefix)) {
-					TServiceTemplate tosca = importMap.get(prefix);
-					// TODO handle collision for concatenations
-
-					// Concat TArtifactsTypes
-					if (tosca.getArtifact_types() != null && impSt.getArtifact_types() != null) {
-						tosca.getArtifact_types().putAll(impSt.getArtifact_types());
-					} else if (tosca.getArtifact_types() == null) {
-						tosca.setArtifact_types(impSt.getArtifact_types());
-					}
-
-					// Concat TDataTypes
-					if (tosca.getData_types() != null && impSt.getData_types() != null) {
-						tosca.getData_types().putAll(impSt.getData_types());
-					} else if (tosca.getData_types() == null) {
-						tosca.setData_types(impSt.getData_types());
-					}
-
-					// Concat TCapabilityTypes
-					if (tosca.getCapability_types() != null && impSt.getCapability_types() != null) {
-						tosca.getCapability_types().putAll(impSt.getCapability_types());
-					} else if (tosca.getCapability_types() == null) {
-						tosca.setCapability_types(impSt.getCapability_types());
-					}
-
-					// Concat TInterfaceTypes
-					if (tosca.getInterface_types() != null && impSt.getInterface_types() != null) {
-						tosca.getInterface_types().putAll(impSt.getInterface_types());
-					} else if (tosca.getInterface_types() == null) {
-						tosca.setInterface_types(impSt.getInterface_types());
-					}
-
-					// Concat TRelationshipTypes
-					if (tosca.getRelationship_types() != null && impSt.getRelationship_types() != null) {
-						tosca.getRelationship_types().putAll(impSt.getRelationship_types());
-					} else if (tosca.getRelationship_types() == null) {
-						tosca.setRelationship_types(impSt.getRelationship_types());
-					}
-
-					// Concat TNodeTypes
-					if (tosca.getNode_types() != null && impSt.getNode_types() != null) {
-						tosca.getNode_types().putAll(impSt.getNode_types());
-					} else if (tosca.getNode_types() == null) {
-						tosca.setNode_types(impSt.getNode_types());
-					}
-
-					// Concat TGroupTypes
-					if (tosca.getPolicy_types() != null && impSt.getPolicy_types() != null) {
-						tosca.getPolicy_types().putAll(impSt.getPolicy_types());
-					} else if (tosca.getPolicy_types() == null) {
-						tosca.setPolicy_types(impSt.getPolicy_types());
-					}
-				}
-				importMap.put(prefix, impSt);
-			}
-		}
-		importMap.put("tosca", readServiceTemplateSkipTest(this.getClass().getClassLoader().getResource(TOSCA_NORMATIVE_TYPES).getFile()));
-
+		// parse checking
+		TServiceTemplate result;
 		try {
-			TypeValidator typeValidator = new TypeValidator(importMap);
-			typeValidator.validate(result);
-			validator.validateTypeRefs(result, importMap);
+			result = buildServiceTemplate(readObject(uri), namespace);
 		} catch (YAMLParserException e) {
 			e.setFile_context(uri);
 			throw e;
-		} catch (IException e) {
-			assert (false);
 		}
 
 		// post parse checking
+		Validator validator = new Validator(new File(uri).getParentFile().getPath());
 		try {
 			validator.validate(result);
 		} catch (YAMLParserException e) {
 			e.setFile_context(uri);
 			throw e;
+		} catch (IException e) {
+			assert false;
 		}
+
 		return result;
+	}
+
+	public TServiceTemplate readImportDefinition(TImportDefinition definition, String context, String namespace) throws YAMLParserException {
+		if (definition == null) {
+			return null;
+		}
+
+		String importNamespace = definition.getNamespace_uri() == null ? namespace : definition.getNamespace_uri();
+		if (definition.getRepository() == null) {
+			return readURI(definition.getFile(), context, importNamespace);
+		} else {
+			// TODO Support Repositories
+			return null;
+		}
 	}
 
 	/**
@@ -211,28 +156,18 @@ public class Reader {
 	 * @param context Either the path of the ServiceTemplate file or RepositoryDefinition context
 	 * @return ServiceTemplate
 	 */
-	private TServiceTemplate readURI(String uri, String context) throws YAMLParserException {
+	private TServiceTemplate readURI(String uri, String context, String namespace) throws YAMLParserException {
 		File file = new File(uri);
 		// Check if file uri is absolute path
 		if (!file.exists() || file.isDirectory()) {
-			File ctx = new File(context);
-			String importFilePrefix = ctx.getPath().substring(0, ctx.getPath().lastIndexOf("/") + 1);
-			file = new File(importFilePrefix + uri);
+			file = new File(context + "/" + uri);
 		}
 		// Check if file uri is relative to context
 		if (!file.exists() || file.isDirectory()) {
 			String msg = "(The keyname file (Context: \"" + context + "\", \"" + uri + "\") could not be found. \nONLY absolute or relative file PATHS supported";
-			MissingImportFile ex = new MissingImportFile(msg);
-			throw ex;
+			throw new MissingImportFile(msg);
 		}
 
-		TServiceTemplate impSt = null;
-		try {
-			impSt = readServiceTemplate(file.getPath());
-		} catch (MissingFile e) {
-			assert (false);
-		}
-
-		return impSt;
+		return readServiceTemplate(file.getPath(), namespace);
 	}
 }

@@ -24,6 +24,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRepositoryDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -52,6 +53,7 @@ public class TRepositoryDefinition {
 		this.url = url;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -69,6 +71,7 @@ public class TRepositoryDefinition {
 		this.url = url;
 	}
 
+	@Nullable
 	public Credential getCredential() {
 		return credential;
 	}

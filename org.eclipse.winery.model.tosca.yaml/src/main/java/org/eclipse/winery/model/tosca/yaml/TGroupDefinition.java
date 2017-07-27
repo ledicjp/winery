@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -28,6 +29,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tGroupDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -40,11 +42,11 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TGroupDefinition {
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	private String description;
 	private Metadata metadata;
 	private Map<String, TPropertyAssignment> properties;
-	private List<String> members;
+	private List<QName> members;
 	private Map<String, TInterfaceDefinition> interfaces;
 
 	public TGroupDefinition() {
@@ -59,14 +61,16 @@ public class TGroupDefinition {
 		this.setInterfaces(builder.interfaces);
 	}
 
-	public String getType() {
+	@NonNull
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -75,6 +79,7 @@ public class TGroupDefinition {
 		this.description = description;
 	}
 
+	@Nullable
 	public Metadata getMetadata() {
 		return metadata;
 	}
@@ -97,7 +102,7 @@ public class TGroupDefinition {
 	}
 
 	@NonNull
-	public List<String> getMembers() {
+	public List<QName> getMembers() {
 		if (this.members == null) {
 			this.members = new ArrayList<>();
 		}
@@ -105,7 +110,7 @@ public class TGroupDefinition {
 		return members;
 	}
 
-	public void setMembers(List<String> members) {
+	public void setMembers(List<QName> members) {
 		this.members = members;
 	}
 
@@ -127,14 +132,14 @@ public class TGroupDefinition {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private String description;
 		private Metadata metadata;
 		private Map<String, TPropertyAssignment> properties;
-		private List<String> members;
+		private List<QName> members;
 		private Map<String, TInterfaceDefinition> interfaces;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 
@@ -153,7 +158,7 @@ public class TGroupDefinition {
 			return this;
 		}
 
-		public Builder setMembers(List<String> members) {
+		public Builder setMembers(List<QName> members) {
 			this.members = members;
 			return this;
 		}

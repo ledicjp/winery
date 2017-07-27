@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.StringList;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -25,7 +26,11 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+/**
+ * Used in Topology Template Definition
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tSubstitutionMapping", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"node_type",
@@ -33,7 +38,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"requirements"
 })
 public class TSubstitutionMappings {
-	private String node_type;
+	private QName node_type;
 	private Map<String, StringList> capabilities;
 	private Map<String, StringList> requirements;
 
@@ -46,11 +51,12 @@ public class TSubstitutionMappings {
 		this.setRequirements(builder.requirements);
 	}
 
-	public String getNode_type() {
+	@Nullable
+	public QName getNode_type() {
 		return node_type;
 	}
 
-	public void setNode_type(String node_type) {
+	public void setNode_type(QName node_type) {
 		this.node_type = node_type;
 	}
 
@@ -85,7 +91,7 @@ public class TSubstitutionMappings {
 	}
 
 	public static class Builder {
-		private String node_type;
+		private QName node_type;
 		private Map<String, StringList> capabilities;
 		private Map<String, StringList> requirements;
 
@@ -93,7 +99,7 @@ public class TSubstitutionMappings {
 
 		}
 
-		public Builder setNode_type(String node_type) {
+		public Builder setNode_type(QName node_type) {
 			this.node_type = node_type;
 			return this;
 		}

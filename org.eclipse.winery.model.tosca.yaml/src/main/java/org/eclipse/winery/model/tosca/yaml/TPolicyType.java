@@ -17,6 +17,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -32,7 +33,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"triggers"
 })
 public class TPolicyType extends TEntityType {
-	private List<String> targets;
+	private List<QName> targets;
 	private ObjectValue triggers;
 
 	public TPolicyType() {
@@ -45,7 +46,7 @@ public class TPolicyType extends TEntityType {
 	}
 
 	@NonNull
-	public List<String> getTargets() {
+	public List<QName> getTargets() {
 		if (this.targets == null) {
 			this.targets = new ArrayList<>();
 		}
@@ -53,7 +54,7 @@ public class TPolicyType extends TEntityType {
 		return targets;
 	}
 
-	public void setTargets(List<String> targets) {
+	public void setTargets(List<QName> targets) {
 		this.targets = targets;
 	}
 
@@ -76,7 +77,7 @@ public class TPolicyType extends TEntityType {
 	}
 
 	public static class Builder extends TEntityType.Builder {
-		private List<String> targets;
+		private List<QName> targets;
 		private ObjectValue triggers;
 
 		public Builder() {
@@ -87,7 +88,7 @@ public class TPolicyType extends TEntityType {
 			super(entityType);
 		}
 
-		public Builder setTargets(List<String> targets) {
+		public Builder setTargets(List<QName> targets) {
 			this.targets = targets;
 			return this;
 		}

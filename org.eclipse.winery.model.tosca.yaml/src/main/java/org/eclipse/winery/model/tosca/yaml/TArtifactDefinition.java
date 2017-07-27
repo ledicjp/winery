@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -22,6 +23,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -33,7 +35,7 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TArtifactDefinition {
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	@XmlAttribute(name = "file", required = true)
 	private String file;
 	private String repository;
@@ -52,11 +54,11 @@ public class TArtifactDefinition {
 	}
 
 	@NonNull
-	public String getType() {
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
@@ -69,6 +71,7 @@ public class TArtifactDefinition {
 		this.file = file;
 	}
 
+	@Nullable
 	public String getRepository() {
 		return repository;
 	}
@@ -77,6 +80,7 @@ public class TArtifactDefinition {
 		this.repository = repository;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -85,6 +89,7 @@ public class TArtifactDefinition {
 		this.description = description;
 	}
 
+	@Nullable
 	public String getDeploy_path() {
 		return deploy_path;
 	}
@@ -98,14 +103,14 @@ public class TArtifactDefinition {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private final String file;
 
 		private String repository;
 		private String description;
 		private String deploy_path;
 
-		public Builder(String type, String file) {
+		public Builder(QName type, String file) {
 			this.type = type;
 			this.file = file;
 		}

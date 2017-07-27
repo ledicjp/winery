@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -18,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -26,6 +28,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -39,7 +42,7 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	private String description;
 	private Boolean required;
 	@XmlElement(name = "default")
@@ -63,14 +66,15 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 	}
 
 	@NonNull
-	public String getType() {
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -79,7 +83,11 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.description = description;
 	}
 
+	@NonNull
 	public Boolean getRequired() {
+		if (required == null) {
+			required = true;
+		}
 		return required;
 	}
 
@@ -87,6 +95,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.required = required;
 	}
 
+	@Nullable
 	public ObjectValue getDefault() {
 		return _default;
 	}
@@ -100,7 +109,11 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this._default = _default;
 	}
 
+	@NonNull
 	public TStatusValue getStatus() {
+		if (status == null) {
+			status = TStatusValue.supported;
+		}
 		return status;
 	}
 
@@ -123,11 +136,14 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 				setStatus(TStatusValue.deprecated);
 				break;
 			default:
-				setStatus(TStatusValue.invalidStatusValue);
 		}
 	}
 
+	@NonNull
 	public List<TConstraintClause> getConstraints() {
+		if (constraints == null) {
+			constraints = new ArrayList<>();
+		}
 		return constraints;
 	}
 
@@ -135,6 +151,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.constraints = constraints;
 	}
 
+	@Nullable
 	public TEntrySchema getEntry_schema() {
 		return entry_schema;
 	}
@@ -148,7 +165,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private String description;
 		private Boolean required;
 		private ObjectValue _default;
@@ -156,7 +173,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		private List<TConstraintClause> constraints;
 		private TEntrySchema entry_schema;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 

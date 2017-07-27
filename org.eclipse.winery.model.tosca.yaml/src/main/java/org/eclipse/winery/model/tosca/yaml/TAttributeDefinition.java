@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -24,6 +25,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tAttributeDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -36,7 +38,7 @@ import org.eclipse.jdt.annotation.NonNull;
 public class TAttributeDefinition {
 	private String description;
 	@XmlAttribute(name = "type", required = true)
-	private String type;
+	private QName type;
 	@XmlElement(name = "default")
 	private ObjectValue _default;
 	private TStatusValue status;
@@ -53,6 +55,7 @@ public class TAttributeDefinition {
 		this.setEntry_schema(builder.entry_schema);
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -62,14 +65,15 @@ public class TAttributeDefinition {
 	}
 
 	@NonNull
-	public String getType() {
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
+	@Nullable
 	public ObjectValue getDefault() {
 		return _default;
 	}
@@ -78,6 +82,7 @@ public class TAttributeDefinition {
 		this._default = _default;
 	}
 
+	@Nullable
 	public TStatusValue getStatus() {
 		return status;
 	}
@@ -86,6 +91,7 @@ public class TAttributeDefinition {
 		this.status = status;
 	}
 
+	@Nullable
 	public TEntrySchema getEntry_schema() {
 		return entry_schema;
 	}
@@ -99,13 +105,13 @@ public class TAttributeDefinition {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private String description;
 		private ObjectValue _default;
 		private TStatusValue status;
 		private TEntrySchema entry_schema;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 

@@ -14,12 +14,15 @@ package org.eclipse.winery.model.tosca.yaml;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tParameterDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -36,6 +39,7 @@ public class TParameterDefinition extends TPropertyDefinition {
 		this.setValue(builder.value);
 	}
 
+	@Nullable
 	public ObjectValue getValue() {
 		return value;
 	}
@@ -57,7 +61,7 @@ public class TParameterDefinition extends TPropertyDefinition {
 	public static class Builder extends TPropertyDefinition.Builder {
 		private ObjectValue value;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			super(type);
 		}
 

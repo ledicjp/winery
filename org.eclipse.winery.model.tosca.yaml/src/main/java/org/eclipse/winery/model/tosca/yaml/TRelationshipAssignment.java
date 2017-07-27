@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -24,7 +25,11 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+/**
+ * Used in Requirement Assignments
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"type",
@@ -32,14 +37,14 @@ import org.eclipse.jdt.annotation.NonNull;
 		"interfaces"
 })
 public class TRelationshipAssignment {
-	private String type;
+	private QName type;
 	private Map<String, TPropertyAssignment> properties;
 	private Map<String, TInterfaceAssignment> interfaces;
 
 	public TRelationshipAssignment() {
 	}
 
-	public TRelationshipAssignment(String type) {
+	public TRelationshipAssignment(QName type) {
 		this.type = type;
 	}
 
@@ -49,11 +54,12 @@ public class TRelationshipAssignment {
 		this.setInterfaces(builder.interfaces);
 	}
 
-	public String getType() {
+	@Nullable
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
@@ -88,11 +94,11 @@ public class TRelationshipAssignment {
 	}
 
 	public static class Builder {
-		private final String type;
+		private final QName type;
 		private Map<String, TPropertyAssignment> properties;
 		private Map<String, TInterfaceAssignment> interfaces;
 
-		public Builder(String type) {
+		public Builder(QName type) {
 			this.type = type;
 		}
 

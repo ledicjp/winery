@@ -25,6 +25,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -44,6 +45,7 @@ public class TArtifactType extends TEntityType {
 		this.setFile_ext(builder.file_ext);
 	}
 
+	@Nullable
 	public String getMime_type() {
 		return mime_type;
 	}

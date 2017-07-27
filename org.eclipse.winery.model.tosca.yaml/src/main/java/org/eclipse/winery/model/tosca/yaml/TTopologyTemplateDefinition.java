@@ -24,6 +24,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTopologyTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -61,6 +62,7 @@ public class TTopologyTemplateDefinition {
 		this.setSubstitution_mappings(builder.substitution_mappings);
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -147,6 +149,7 @@ public class TTopologyTemplateDefinition {
 		this.outputs = outputs;
 	}
 
+	@Nullable
 	public TSubstitutionMappings getSubstitution_mappings() {
 		return substitution_mappings;
 	}

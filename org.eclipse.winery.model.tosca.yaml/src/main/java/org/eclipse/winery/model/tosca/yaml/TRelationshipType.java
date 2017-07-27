@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -33,7 +34,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"interfaces"
 })
 public class TRelationshipType extends TEntityType {
-	private List<String> valid_target_types;
+	private List<QName> valid_target_types;
 	private Map<String, TInterfaceDefinition> interfaces;
 
 	public TRelationshipType() {
@@ -46,7 +47,7 @@ public class TRelationshipType extends TEntityType {
 	}
 
 	@NonNull
-	public List<String> getValid_target_types() {
+	public List<QName> getValid_target_types() {
 		if (this.valid_target_types == null) {
 			this.valid_target_types = new ArrayList<>();
 		}
@@ -54,7 +55,7 @@ public class TRelationshipType extends TEntityType {
 		return valid_target_types;
 	}
 
-	public void setValid_target_types(List<String> valid_target_types) {
+	public void setValid_target_types(List<QName> valid_target_types) {
 		this.valid_target_types = valid_target_types;
 	}
 
@@ -82,7 +83,7 @@ public class TRelationshipType extends TEntityType {
 	}
 
 	public static class Builder extends TEntityType.Builder {
-		private List<String> valid_target_types;
+		private List<QName> valid_target_types;
 		private Map<String, TInterfaceDefinition> interfaces;
 
 		public Builder() {
@@ -93,7 +94,7 @@ public class TRelationshipType extends TEntityType {
 			super(entityType);
 		}
 
-		public Builder setValid_target_types(List<String> valid_target_types) {
+		public Builder setValid_target_types(List<QName> valid_target_types) {
 			this.valid_target_types = valid_target_types;
 			return this;
 		}

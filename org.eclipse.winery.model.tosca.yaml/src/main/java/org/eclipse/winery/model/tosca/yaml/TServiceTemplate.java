@@ -31,6 +31,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -100,6 +101,7 @@ public class TServiceTemplate {
 		this.tosca_definitions_version = tosca_definitions_version;
 	}
 
+	@Nullable
 	public Metadata getMetadata() {
 		return metadata;
 	}
@@ -121,6 +123,7 @@ public class TServiceTemplate {
 		this.dsl_definitions = dsl_definitions;
 	}
 
+	@Nullable
 	public String getDescription() {
 		return description;
 	}
@@ -259,6 +262,7 @@ public class TServiceTemplate {
 		this.policy_types = policy_types;
 	}
 
+	@Nullable
 	public TTopologyTemplateDefinition getTopology_template() {
 		return topology_template;
 	}

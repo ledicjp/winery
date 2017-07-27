@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
@@ -24,6 +25,7 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tInterfaceDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
@@ -32,7 +34,7 @@ import org.eclipse.jdt.annotation.NonNull;
 		"operations"
 })
 public class TInterfaceDefinition {
-	private String type;
+	private QName type;
 	private Map<String, TPropertyAssignmentOrDefinition> inputs;
 	private Map<String, TOperationDefinition> operations;
 
@@ -45,17 +47,12 @@ public class TInterfaceDefinition {
 		this.setOperations(builder.operations);
 	}
 
-	public static void init(TInterfaceDefinition base, Builder builder) {
-		base.setType(builder.type);
-		base.setInputs(builder.inputs);
-		base.setOperations(builder.operations);
-	}
-
-	public String getType() {
+	@Nullable
+	public QName getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(QName type) {
 		this.type = type;
 	}
 
@@ -90,7 +87,7 @@ public class TInterfaceDefinition {
 	}
 
 	public static class Builder {
-		private String type;
+		private QName type;
 		private Map<String, TPropertyAssignmentOrDefinition> inputs;
 		private Map<String, TOperationDefinition> operations;
 
@@ -98,7 +95,7 @@ public class TInterfaceDefinition {
 
 		}
 
-		public Builder setType(String type) {
+		public Builder setType(QName type) {
 			this.type = type;
 			return this;
 		}

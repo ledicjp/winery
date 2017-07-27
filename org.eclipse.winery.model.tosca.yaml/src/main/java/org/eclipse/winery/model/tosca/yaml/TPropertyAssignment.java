@@ -21,6 +21,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"value"
@@ -39,6 +41,7 @@ public class TPropertyAssignment extends TPropertyAssignmentOrDefinition {
 		this.setValue(builder.value);
 	}
 
+	@Nullable
 	public Object getValue() {
 		return this.value;
 	}
@@ -47,6 +50,7 @@ public class TPropertyAssignment extends TPropertyAssignmentOrDefinition {
 		this.value = value;
 	}
 
+	@Nullable
 	public ObjectValue getGet_input() {
 		return this.value;
 	}
@@ -55,6 +59,7 @@ public class TPropertyAssignment extends TPropertyAssignmentOrDefinition {
 		this.value = get_input;
 	}
 
+	@Nullable
 	public ObjectValue getGet_property() {
 		return this.value;
 	}
