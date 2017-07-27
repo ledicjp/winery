@@ -336,7 +336,7 @@ capability_types:
         required: false
         status: experimental
 
-  tosca.capabilities.Enpoint.Admin:
+  tosca.capabilities.Endpoint.Admin:
     metadata:
       shorthand_name: Endpoint.Admin
       type_qualified_name: tosca:Endpoint.Admin
