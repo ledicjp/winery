@@ -56,16 +56,16 @@ public class ExecutionEnvironmentPattern {
 
 		pattern.addVertex(operatingSystem);
 		pattern.addVertex(serverComponent);
-		pattern.addVertex(serviceComponent);
+		//pattern.addVertex(serviceComponent);
 		pattern.addVertex(appComponent1);
 		pattern.addVertex(appComponent2);
 
 		pattern.addEdge(serverComponent, operatingSystem, new RelationshipEdge(serverComponent, operatingSystem, hostedOn));
-		pattern.addEdge(serviceComponent, operatingSystem, new RelationshipEdge(serviceComponent, operatingSystem, hostedOn));
+		//pattern.addEdge(serviceComponent, operatingSystem, new RelationshipEdge(serviceComponent, operatingSystem, hostedOn));
 		pattern.addEdge(appComponent1, serverComponent, new RelationshipEdge(appComponent1, serverComponent, deployedOn));
 		pattern.addEdge(appComponent2, serverComponent, new RelationshipEdge(appComponent2, serverComponent, deployedOn));
-		pattern.addEdge(appComponent1, serviceComponent, new RelationshipEdge(appComponent1, serviceComponent, dependsOn));
-		pattern.addEdge(appComponent2, serviceComponent, new RelationshipEdge(appComponent2, serviceComponent, dependsOn));
+		//pattern.addEdge(appComponent1, serviceComponent, new RelationshipEdge(appComponent1, serviceComponent, dependsOn));
+		//pattern.addEdge(appComponent2, serviceComponent, new RelationshipEdge(appComponent2, serviceComponent, dependsOn));
 	}
 
 	public DirectedGraph<PatternComponent, RelationshipEdge> getPatternGraph() {

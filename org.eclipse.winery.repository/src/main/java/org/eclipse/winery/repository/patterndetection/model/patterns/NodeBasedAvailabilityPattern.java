@@ -73,7 +73,7 @@ public class NodeBasedAvailabilityPattern {
 		pattern.addEdge(appComponent1, serverComponent1, new RelationshipEdge(appComponent1, operatingSystem1, deployedOn));
 		pattern.addEdge(appComponent2, serverComponent2, new RelationshipEdge(appComponent2, operatingSystem2, deployedOn));
 
-		pattern.addEdge(appComponent1, appComponent2, new RelationshipEdge(appComponent1, appComponent2, connectsTo));
+		//pattern.addEdge(appComponent1, appComponent2, new RelationshipEdge(appComponent1, appComponent2, connectsTo));
 
 	}
 
