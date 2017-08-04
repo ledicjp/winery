@@ -1,0 +1,117 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+imports:
+  - interface_types:
+      file: /interface_types.yml
+      namespace_uri: http://www.example.com/MyTinyToDo/InterfaceTypes
+      namespace_prefix: itype
+  - artifact_types:
+      file: /artifact_types.yml
+      namespace_uri: http://www.example.com/MiTinyToDo/ArtifactTypes
+      namespace_prefix: atype
+
+node_types:
+  DockerEngine:
+    properties:
+      DockerEngineURL:
+        type: string
+      DockerEngineCertificate:
+        type: string
+    artifacts:
+      DockerEngine_InterfaceDockerEngine_IA:
+        type: atype:WAR
+        file: 
+          - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_InterfaceDockerEngine_IA/files/org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEngine.war
+          - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_InterfaceDockerEngine_IA/files/org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEngine.zip
+        properties:
+          ServiceEndpoint: /services/org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEnginePort
+          PortType: "{http://opentosca.org/nodetypes}org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEngine"
+          InvocationType: SOAP/HTTP
+      DockerEngine_Install_IA:
+        type: atype:ScriptArtifact
+        file:
+          - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fartifacttemplates/DockerEngine_Install_IA_AT/files/install.sh
+      DockerEngine_http___www.example.com_interfaces_lifecycle_IA:
+        type: atype:WAR
+        file: 
+          - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_http___www.example.com_interfaces_lifecycle_IA/files/org_opentosca_NodeTypes_DockerEngine__com_example_www_interfaces_lifecycle.war
+          - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_http___www.example.com_interfaces_lifecycle_IA/files/org_opentosca_NodeTypes_DockerEngine__com_example_www_interfaces_lifecycle.zip
+    interfaces:
+      InterfaceDockerEngine:
+        type: itype:InterfaceDockerEngine
+        startContainer:
+          inputs:
+            DockerEngineURL:
+              type: string
+              required: true
+            DockerEngineCertificate:
+              type: string
+              required: true
+            ContainerImage:
+              type: string
+              required: true
+            ContainerPorts:
+              type: string
+              required: false
+            ContainerEnv:
+              type: string
+              required: false
+          outputs:
+            ContainerPorts: 
+              type: string
+              required: false
+            ContainerID:
+              type: string
+              required: false
+            ContainerIP:
+              type: string
+              required: false
+            SSHPort:
+              type: string
+              required: false
+        removeContainer:
+          inputs:
+            DockerEngineURL:
+              type: string
+              required: true
+            DockerEngineCertificate:
+              type: string
+              required: true
+            ContainerID:
+              type: string
+              required: true
+          outputs:
+            Result:
+              type: string
+              required: true
+      http://www.example.com/interfaces/lifecycle:
+        install:
+          implementation:
+            primary: DockerEngine_Install_IA
+        configure:
+          inputs:
+            VMIP:
+              type: string
+              required: true
+          outputs:
+            DockerEngineURL:
+              type: string
+              required: true
+          implementation:
+            primary: DockerEngine_http___www.example.com_interfaces_lifecycle_IA
+  MyTinyToDoDockerContainer:
+    properties:
+      ContainerPort:
+        type: string
+        required: false
+      Port:
+        type: string
+        required: false
+      SSHPort:
+        type: string
+        required: false
+      ContainerID:
+        type: string
+        required: false
+      ContainerIP:
+        type: string
+        required: false

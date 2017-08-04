@@ -11,19 +11,5 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.converter;
 
-import org.eclipse.winery.model.tosca.Definitions;
-import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-
-public class Converter {
-	private Y2XConverter y2XConverter;
-	private X2YConverter x2YConverter;
-
-	public Converter() {
-		this.y2XConverter = new Y2XConverter();
-		this.x2YConverter = new X2YConverter();
-	}
-
-	public Definitions convertY2X(TServiceTemplate serviceTemplate, String name, String namespace, String path) {
-		return this.y2XConverter.convert(serviceTemplate, name, namespace, path);
-	}
+public class X2YConverter {
 }

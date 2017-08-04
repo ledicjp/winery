@@ -1,0 +1,8 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+
+relationship_types:
+  HostedOn:
+    version: 1.0.0alpha-0
+    metadata:
+      color: #f7b0a6
+    

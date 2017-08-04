@@ -1,0 +1,27 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+
+artifact_types: 
+  DockerContainerArtifact:
+    description:  Docker container artifact type 
+    metadata:
+      targetNamespace: http://opentosca.org/artefacttypes
+    version: 1.0.0alpha-0
+
+  ScriptArtifact:
+    description: Unknown
+    metadata:
+      targetNamespace: http://docs.oasis-open.org/tosca/ns/2011/12/ToscaBaseTypes
+    version: 1.0.0alpha-0
+
+  WAR:
+    description: WAR artifact type
+    properties:
+      ServiceEndpoint:
+        type: string
+      PortType:
+        type: string
+      InvocationType:
+        type: string
+    metadata:
+      targetNamespace: http://www.example.com/ToscaTypes
+    version: 1.0.0alpha-0

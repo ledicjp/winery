@@ -1,0 +1,39 @@
+tosca_definitions_version: tosca_simple_yaml_1_1
+
+imports:
+  - node_types:
+      file: /node_types.yml
+  - relationship_types:
+      file: /relationship_types.yml
+      namespace_uri: http://www.example.com/MiTinyToDo/RelationshipTypes
+      namespace_prefix: rtype
+  - artifact_types:
+      file: /artifact_types.yml
+      namespace_uri: http://www.example.com/MiTinyToDo/ArtifactTypes
+      namespace_prefix: atype
+
+topology_template:
+  node_templates:
+    MyTinyToDoDockerContainer:
+      type: MyTinyToDoDockerContainer
+      properties:
+        ContainerPort: 80
+        SSHPort:
+        ContainerID:
+        ContainerIP:
+      artifacts:
+        MyTinyToDo_DA:
+          type: DockerContainerArtifact
+          file:
+            - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fartifacttemplates/MyTinyToDo_DA/files/tinytodo.zip            
+    DockerEngine:
+      type: DockerEngine
+      properties:
+        DockerEngineURL: { get_input: DockerEngineURL }
+        DockerEngineVertificate:
+  
+  relationship_templates:
+    con_17:
+      type: rtype:HostedOn
+      source: MyTinyToDoDockerContainer
+      target: DockerEngine
