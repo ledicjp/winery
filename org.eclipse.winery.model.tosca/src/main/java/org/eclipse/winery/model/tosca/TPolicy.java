@@ -8,16 +8,21 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -58,11 +63,28 @@ public class TPolicy extends TExtensibleElements {
 		this.policyRef = builder.policyRef;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TPolicy)) return false;
+		if (!super.equals(o)) return false;
+		TPolicy tPolicy = (TPolicy) o;
+		return Objects.equals(name, tPolicy.name) &&
+				Objects.equals(policyType, tPolicy.policyType) &&
+				Objects.equals(policyRef, tPolicy.policyRef);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), name, policyType, policyRef);
+	}
+
 	/**
 	 * Gets the value of the name property.
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -81,6 +103,7 @@ public class TPolicy extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getPolicyType() {
 		return policyType;
 	}
@@ -99,6 +122,7 @@ public class TPolicy extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@Nullable
 	public QName getPolicyRef() {
 		return policyRef;
 	}

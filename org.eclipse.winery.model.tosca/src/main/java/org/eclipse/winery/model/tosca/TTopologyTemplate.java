@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -69,6 +71,20 @@ public class TTopologyTemplate extends TExtensibleElements {
 		this.nodeTemplateOrRelationshipTemplate = builder.getNodeTemplateOrRelationshipTemplate();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TTopologyTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TTopologyTemplate that = (TTopologyTemplate) o;
+		return Objects.equals(nodeTemplateOrRelationshipTemplate, that.nodeTemplateOrRelationshipTemplate);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), nodeTemplateOrRelationshipTemplate);
+	}
+
 	/**
 	 * Gets the value of the nodeTemplateOrRelationshipTemplate property.
 	 *
@@ -91,6 +107,7 @@ public class TTopologyTemplate extends TExtensibleElements {
 	 * {@link TNodeTemplate }
 	 */
 	@JsonIgnore
+	@NonNull
 	public List<TEntityTemplate> getNodeTemplateOrRelationshipTemplate() {
 		if (nodeTemplateOrRelationshipTemplate == null) {
 			nodeTemplateOrRelationshipTemplate = new ArrayList<TEntityTemplate>();
@@ -101,6 +118,7 @@ public class TTopologyTemplate extends TExtensibleElements {
 	/**
 	 * @return all nodes templates of the topologyTemplate
 	 */
+	@NonNull
 	public List<TNodeTemplate> getNodeTemplates() {
 		return this.getNodeTemplateOrRelationshipTemplate()
 				.stream()
@@ -119,6 +137,7 @@ public class TTopologyTemplate extends TExtensibleElements {
 	/**
 	 * @return node template having the given id. null if not found
 	 */
+	@Nullable
 	public TNodeTemplate getNodeTemplate(String id) {
 		Objects.requireNonNull(id);
 		return this.getNodeTemplates().stream()
@@ -130,6 +149,7 @@ public class TTopologyTemplate extends TExtensibleElements {
 	/**
 	 * @return all relationship templates of the topologyTemplate
 	 */
+	@NonNull
 	public List<TRelationshipTemplate> getRelationshipTemplates() {
 		return this.getNodeTemplateOrRelationshipTemplate()
 				.stream()
@@ -148,6 +168,7 @@ public class TTopologyTemplate extends TExtensibleElements {
 	/**
 	 * @return relationship template having the given id. null if not found
 	 */
+	@Nullable
 	public TRelationshipTemplate getRelationshipTemplate(String id) {
 		Objects.requireNonNull(id);
 		return this.getRelationshipTemplates().stream()
@@ -180,6 +201,52 @@ public class TTopologyTemplate extends TExtensibleElements {
 		public Builder setRelationshipTemplates(List<TRelationshipTemplate> relationshipTemplates) {
 			this.relationshipTemplates = relationshipTemplates;
 			return this;
+		}
+
+		public Builder addNodeTemplates(List<TNodeTemplate> nodeTemplates) {
+			if (nodeTemplates == null || nodeTemplates.isEmpty()) {
+				return this;
+			}
+
+			if (this.nodeTemplates == null) {
+				this.nodeTemplates = nodeTemplates;
+			} else {
+				this.nodeTemplates.addAll(nodeTemplates);
+			}
+			return this;
+		}
+
+		public Builder addNodeTemplates(TNodeTemplate nodeTemplates) {
+			if (nodeTemplates == null) {
+				return this;
+			}
+
+			List<TNodeTemplate> tmp = new ArrayList<>();
+			tmp.add(nodeTemplates);
+			return addNodeTemplates(tmp);
+		}
+
+		public Builder addRelationshipTemplate(List<TRelationshipTemplate> relationshipTemplates) {
+			if (relationshipTemplates == null || relationshipTemplates.isEmpty()) {
+				return this;
+			}
+
+			if (this.relationshipTemplates == null) {
+				this.relationshipTemplates = relationshipTemplates;
+			} else {
+				this.relationshipTemplates.addAll(relationshipTemplates);
+			}
+			return this;
+		}
+
+		public Builder addRelationshipTemplate(TRelationshipTemplate relationshipTemplates) {
+			if (this.relationshipTemplates == null) {
+				return this;
+			}
+
+			List<TRelationshipTemplate> tmp = new ArrayList<>();
+			tmp.add(relationshipTemplates);
+			return addRelationshipTemplate(tmp);
 		}
 
 		public List<TEntityTemplate> getNodeTemplateOrRelationshipTemplate() {

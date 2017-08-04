@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,6 +26,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
 
@@ -70,11 +73,28 @@ public abstract class TEntityTemplate extends HasId {
 		this.type = builder.type;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TEntityTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TEntityTemplate that = (TEntityTemplate) o;
+		return Objects.equals(properties, that.properties) &&
+				Objects.equals(propertyConstraints, that.propertyConstraints) &&
+				Objects.equals(type, that.type);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), properties, propertyConstraints, type);
+	}
+
 	/**
 	 * Gets the value of the properties property.
 	 *
 	 * @return possible object is {@link TEntityTemplate.Properties }
 	 */
+	/*@Nullable*/
 	public TEntityTemplate.Properties getProperties() {
 		return properties;
 	}
@@ -93,6 +113,7 @@ public abstract class TEntityTemplate extends HasId {
 	 *
 	 * @return possible object is {@link TEntityTemplate.PropertyConstraints }
 	 */
+	/*@Nullable*/
 	public TEntityTemplate.PropertyConstraints getPropertyConstraints() {
 		return propertyConstraints;
 	}
@@ -111,6 +132,7 @@ public abstract class TEntityTemplate extends HasId {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getType() {
 		return type;
 	}
@@ -155,6 +177,7 @@ public abstract class TEntityTemplate extends HasId {
 		 *
 		 * @return possible object is {@link Element } {@link Object }
 		 */
+		@Nullable
 		public Object getAny() {
 			return any;
 		}
@@ -216,6 +239,7 @@ public abstract class TEntityTemplate extends HasId {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TPropertyConstraint }
 		 */
+		@NonNull
 		public List<TPropertyConstraint> getPropertyConstraint() {
 			if (propertyConstraint == null) {
 				propertyConstraint = new ArrayList<TPropertyConstraint>();
@@ -238,33 +262,21 @@ public abstract class TEntityTemplate extends HasId {
 			super(entityTemplate);
 			this.type = entityTemplate.getType();
 			this.properties = entityTemplate.getProperties();
-			this.propertyConstraints = entityTemplate.getPropertyConstraints();
+			this.addPropertyConstraints(entityTemplate.getPropertyConstraints());
 		}
 
-		public Builder RMsetProperties(TEntityTemplate.Properties properties) {
+		public Builder setProperties(TEntityTemplate.Properties properties) {
 			this.properties = properties;
 			return this;
 		}
 
-		public Builder RMsetPropertyConstraints(TEntityTemplate.PropertyConstraints propertyConstraints) {
+		public Builder setPropertyConstraints(TEntityTemplate.PropertyConstraints propertyConstraints) {
 			this.propertyConstraints = propertyConstraints;
 			return this;
 		}
 
-		public Builder addProperties(Properties properties) {
-			if (properties == null) {
-				return this;
-			}
-
-			if (this.properties == null) {
-				this.properties = new TEntityTemplate.Properties();
-			}
-			this.properties.setAny(properties.getAny());
-			return this;
-		}
-
 		public Builder addPropertyConstraints(TEntityTemplate.PropertyConstraints propertyConstraints) {
-			if (propertyConstraints == null) {
+			if (propertyConstraints == null || propertyConstraints.getPropertyConstraint().isEmpty()) {
 				return this;
 			}
 
@@ -283,6 +295,16 @@ public abstract class TEntityTemplate extends HasId {
 
 			TEntityTemplate.PropertyConstraints tmp = new TEntityTemplate.PropertyConstraints();
 			tmp.getPropertyConstraint().addAll(propertyConstraints);
+			return addPropertyConstraints(tmp);
+		}
+
+		public Builder addPropertyConstraints(TPropertyConstraint propertyConstraints) {
+			if (propertyConstraints == null) {
+				return this;
+			}
+
+			TEntityTemplate.PropertyConstraints tmp = new TEntityTemplate.PropertyConstraints();
+			tmp.getPropertyConstraint().add(propertyConstraints);
 			return addPropertyConstraints(tmp);
 		}
 	}

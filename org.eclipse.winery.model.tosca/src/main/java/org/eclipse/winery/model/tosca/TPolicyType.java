@@ -8,10 +8,12 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,6 +21,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -61,11 +65,27 @@ public class TPolicyType extends TEntityType {
 		this.policyLanguage = builder.policyLanguage;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TPolicyType)) return false;
+		if (!super.equals(o)) return false;
+		TPolicyType that = (TPolicyType) o;
+		return Objects.equals(appliesTo, that.appliesTo) &&
+				Objects.equals(policyLanguage, that.policyLanguage);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), appliesTo, policyLanguage);
+	}
+
 	/**
 	 * Gets the value of the appliesTo property.
 	 *
 	 * @return possible object is {@link TAppliesTo }
 	 */
+	@Nullable
 	public TAppliesTo getAppliesTo() {
 		return appliesTo;
 	}
@@ -84,6 +104,7 @@ public class TPolicyType extends TEntityType {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getPolicyLanguage() {
 		return policyLanguage;
 	}

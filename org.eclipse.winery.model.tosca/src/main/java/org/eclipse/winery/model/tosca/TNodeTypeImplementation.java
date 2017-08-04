@@ -8,10 +8,13 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -113,11 +119,35 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 		this._final = builder._final;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeTypeImplementation)) return false;
+		if (!super.equals(o)) return false;
+		TNodeTypeImplementation that = (TNodeTypeImplementation) o;
+		return Objects.equals(tags, that.tags) &&
+				Objects.equals(derivedFrom, that.derivedFrom) &&
+				Objects.equals(requiredContainerFeatures, that.requiredContainerFeatures) &&
+				Objects.equals(implementationArtifacts, that.implementationArtifacts) &&
+				Objects.equals(deploymentArtifacts, that.deploymentArtifacts) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(targetNamespace, that.targetNamespace) &&
+				Objects.equals(nodeType, that.nodeType) &&
+				_abstract == that._abstract &&
+				_final == that._final;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), tags, derivedFrom, requiredContainerFeatures, implementationArtifacts, deploymentArtifacts, name, targetNamespace, nodeType, _abstract, _final);
+	}
+
 	/**
 	 * Gets the value of the tags property.
 	 *
 	 * @return possible object is {@link TTags }
 	 */
+	@Nullable
 	public TTags getTags() {
 		return tags;
 	}
@@ -136,6 +166,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TNodeTypeImplementation.DerivedFrom }
 	 */
+	/*@Nullable*/
 	public TNodeTypeImplementation.DerivedFrom getDerivedFrom() {
 		return derivedFrom;
 	}
@@ -154,6 +185,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TRequiredContainerFeatures }
 	 */
+	@Nullable
 	public TRequiredContainerFeatures getRequiredContainerFeatures() {
 		return requiredContainerFeatures;
 	}
@@ -172,6 +204,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TImplementationArtifacts }
 	 */
+	@Nullable
 	public TImplementationArtifacts getImplementationArtifacts() {
 		return implementationArtifacts;
 	}
@@ -190,6 +223,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TDeploymentArtifacts }
 	 */
+	@Nullable
 	public TDeploymentArtifacts getDeploymentArtifacts() {
 		return deploymentArtifacts;
 	}
@@ -208,6 +242,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -226,6 +261,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getTargetNamespace() {
 		return targetNamespace;
 	}
@@ -244,6 +280,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getNodeType() {
 		return nodeType;
 	}
@@ -262,6 +299,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getAbstract() {
 		if (_abstract == null) {
 			return TBoolean.NO;
@@ -284,6 +322,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getFinal() {
 		if (_final == null) {
 			return TBoolean.NO;
@@ -330,6 +369,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@NonNull
 		public QName getNodeTypeImplementationRef() {
 			return nodeTypeImplementationRef;
 		}
@@ -348,7 +388,7 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 		private final String name;
 		private final QName nodeType;
 		private TTags tags;
-		private TNodeTypeImplementation.DerivedFrom derivedFrom;
+		private DerivedFrom derivedFrom;
 		private TRequiredContainerFeatures requiredContainerFeatures;
 		private TImplementationArtifacts implementationArtifacts;
 		private TDeploymentArtifacts deploymentArtifacts;
@@ -371,39 +411,138 @@ public class TNodeTypeImplementation extends TExtensibleElements {
 			return this;
 		}
 
-		public Builder RMsetDerivedFrom(TNodeTypeImplementation.DerivedFrom derivedFrom) {
+		public Builder setDerivedFrom(TNodeTypeImplementation.DerivedFrom derivedFrom) {
 			this.derivedFrom = derivedFrom;
 			return this;
 		}
 
-		public Builder RMsetRequiredContainerFeatures(TRequiredContainerFeatures requiredContainerFeatures) {
+		public Builder setRequiredContainerFeatures(TRequiredContainerFeatures requiredContainerFeatures) {
 			this.requiredContainerFeatures = requiredContainerFeatures;
 			return this;
 		}
 
-		public Builder RMsetImplementationArtifacts(TImplementationArtifacts implementationArtifacts) {
+		public Builder setImplementationArtifacts(TImplementationArtifacts implementationArtifacts) {
 			this.implementationArtifacts = implementationArtifacts;
 			return this;
 		}
 
-		public Builder RMsetDeploymentArtifacts(TDeploymentArtifacts deploymentArtifacts) {
+		public Builder setDeploymentArtifacts(TDeploymentArtifacts deploymentArtifacts) {
 			this.deploymentArtifacts = deploymentArtifacts;
 			return this;
 		}
 
-		public Builder RMsetTargetNamespace(String targetNamespace) {
+		public Builder setTargetNamespace(String targetNamespace) {
 			this.targetNamespace = targetNamespace;
 			return this;
 		}
 
-		public Builder RMset_abstract(TBoolean _abstract) {
+		public Builder set_abstract(TBoolean _abstract) {
 			this._abstract = _abstract;
 			return this;
 		}
 
-		public Builder RMset_final(TBoolean _final) {
+		public Builder set_final(TBoolean _final) {
 			this._final = _final;
 			return this;
+		}
+
+		public Builder addRequiredContainerFeatures(TRequiredContainerFeatures requiredContainerFeatures) {
+			if (requiredContainerFeatures == null || requiredContainerFeatures.getRequiredContainerFeature().isEmpty()) {
+				return this;
+			}
+
+			if (this.requiredContainerFeatures == null) {
+				this.requiredContainerFeatures = requiredContainerFeatures;
+			} else {
+				this.requiredContainerFeatures.getRequiredContainerFeature().addAll(requiredContainerFeatures.getRequiredContainerFeature());
+			}
+			return this;
+		}
+
+		public Builder addRequiredContainerFeatures(List<TRequiredContainerFeature> requiredContainerFeatures) {
+			if (requiredContainerFeatures == null) {
+				return this;
+			}
+
+			TRequiredContainerFeatures tmp = new TRequiredContainerFeatures();
+			tmp.getRequiredContainerFeature().addAll(requiredContainerFeatures);
+			return addRequiredContainerFeatures(tmp);
+		}
+
+		public Builder addRequiredContainerFeatures(TRequiredContainerFeature requiredContainerFeatures) {
+			if (requiredContainerFeatures == null) {
+				return this;
+			}
+
+			TRequiredContainerFeatures tmp = new TRequiredContainerFeatures();
+			tmp.getRequiredContainerFeature().add(requiredContainerFeatures);
+			return addRequiredContainerFeatures(tmp);
+		}
+
+		public Builder addImplementationArtifacts(TImplementationArtifacts implementationArtifacts) {
+			if (implementationArtifacts == null || implementationArtifacts.getImplementationArtifact().isEmpty()) {
+				return this;
+			}
+
+			if (this.implementationArtifacts == null) {
+				this.implementationArtifacts = implementationArtifacts;
+			} else {
+				this.implementationArtifacts.getImplementationArtifact().addAll(implementationArtifacts.getImplementationArtifact());
+			}
+			return this;
+		}
+
+		public Builder addImplementationArtifacts(List<TImplementationArtifacts.ImplementationArtifact> implementationArtifacts) {
+			if (implementationArtifacts == null) {
+				return this;
+			}
+
+			TImplementationArtifacts tmp = new TImplementationArtifacts();
+			tmp.getImplementationArtifact().addAll(implementationArtifacts);
+			return addImplementationArtifacts(tmp);
+		}
+
+		public Builder addImplementationArtifacts(TImplementationArtifacts.ImplementationArtifact implementationArtifacts) {
+			if (implementationArtifacts == null) {
+				return this;
+			}
+
+			TImplementationArtifacts tmp = new TImplementationArtifacts();
+			tmp.getImplementationArtifact().add(implementationArtifacts);
+			return addImplementationArtifacts(tmp);
+		}
+
+		public Builder addDeploymentArtifacts(TDeploymentArtifacts deploymentArtifacts) {
+			if (deploymentArtifacts == null || deploymentArtifacts.getDeploymentArtifact().isEmpty()) {
+				return this;
+			}
+
+			if (this.deploymentArtifacts == null) {
+				this.deploymentArtifacts = deploymentArtifacts;
+			} else {
+				this.deploymentArtifacts.getDeploymentArtifact().addAll(deploymentArtifacts.getDeploymentArtifact());
+			}
+			return this;
+		}
+
+		public Builder addDeploymentArtifacts(List<TDeploymentArtifact> deploymentArtifacts) {
+			if (deploymentArtifacts == null) {
+				return this;
+			}
+
+			TDeploymentArtifacts tmp = new TDeploymentArtifacts();
+			tmp.getDeploymentArtifact().addAll(deploymentArtifacts);
+			return addDeploymentArtifacts(tmp);
+		}
+
+		public Builder addDeploymentArtifacts(TDeploymentArtifact deploymentArtifacts) {
+			if (deploymentArtifacts == null) {
+				return this;
+			}
+
+			TDeploymentArtifacts tmp = new TDeploymentArtifacts();
+			tmp.getDeploymentArtifact().add(deploymentArtifacts);
+			return addDeploymentArtifacts(tmp);
 		}
 
 		public TNodeTypeImplementation build() {

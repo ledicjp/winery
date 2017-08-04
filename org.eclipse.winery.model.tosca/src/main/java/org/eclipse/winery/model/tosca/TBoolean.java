@@ -16,10 +16,13 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 
 /**
  * <p>Java class for tBoolean.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -30,33 +33,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "tBoolean")
 @XmlEnum
 public enum TBoolean {
 
-    @XmlEnumValue("yes")
-    YES("yes"),
-    @XmlEnumValue("no")
-    NO("no");
-    private final String value;
+	@XmlEnumValue("yes")
+	YES("yes"),
+	@XmlEnumValue("no")
+	NO("no");
+	private final String value;
 
-    TBoolean(String v) {
-        value = v;
-    }
+	TBoolean(String v) {
+		value = v;
+	}
 
-    public String value() {
-        return value;
-    }
+	@NonNull
+	public static TBoolean fromValue(String v) {
+		for (TBoolean c : TBoolean.values()) {
+			if (c.value.equals(v)) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException(v);
+	}
 
-    public static TBoolean fromValue(String v) {
-        for (TBoolean c: TBoolean.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+	@Nullable
+	public String value() {
+		return value;
+	}
 
 }

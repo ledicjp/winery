@@ -8,18 +8,21 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -105,11 +108,29 @@ public class TNodeType extends TEntityType {
 		this.interfaces = builder.interfaces;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeType)) return false;
+		if (!super.equals(o)) return false;
+		TNodeType tNodeType = (TNodeType) o;
+		return Objects.equals(requirementDefinitions, tNodeType.requirementDefinitions) &&
+				Objects.equals(capabilityDefinitions, tNodeType.capabilityDefinitions) &&
+				Objects.equals(instanceStates, tNodeType.instanceStates) &&
+				Objects.equals(interfaces, tNodeType.interfaces);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), requirementDefinitions, capabilityDefinitions, instanceStates, interfaces);
+	}
+
 	/**
 	 * Gets the value of the requirementDefinitions property.
 	 *
 	 * @return possible object is {@link TNodeType.RequirementDefinitions }
 	 */
+	/*@Nullable*/
 	public TNodeType.RequirementDefinitions getRequirementDefinitions() {
 		return requirementDefinitions;
 	}
@@ -128,6 +149,7 @@ public class TNodeType extends TEntityType {
 	 *
 	 * @return possible object is {@link TNodeType.CapabilityDefinitions }
 	 */
+	/*@Nullable*/
 	public TNodeType.CapabilityDefinitions getCapabilityDefinitions() {
 		return capabilityDefinitions;
 	}
@@ -146,6 +168,7 @@ public class TNodeType extends TEntityType {
 	 *
 	 * @return possible object is {@link TTopologyElementInstanceStates }
 	 */
+	/*@Nullable*/
 	public TTopologyElementInstanceStates getInstanceStates() {
 		return instanceStates;
 	}
@@ -164,6 +187,7 @@ public class TNodeType extends TEntityType {
 	 *
 	 * @return possible object is {@link TNodeType.Interfaces }
 	 */
+	/*@Nullable*/
 	public TNodeType.Interfaces getInterfaces() {
 		return interfaces;
 	}
@@ -225,6 +249,7 @@ public class TNodeType extends TEntityType {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TCapabilityDefinition }
 		 */
+		@NonNull
 		public List<TCapabilityDefinition> getCapabilityDefinition() {
 			if (capabilityDefinition == null) {
 				capabilityDefinition = new ArrayList<TCapabilityDefinition>();
@@ -281,6 +306,7 @@ public class TNodeType extends TEntityType {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TInterface }
 		 */
+		@NonNull
 		public List<TInterface> getInterface() {
 			if (_interface == null) {
 				_interface = new ArrayList<TInterface>();
@@ -337,6 +363,7 @@ public class TNodeType extends TEntityType {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TRequirementDefinition }
 		 */
+		@NonNull
 		public List<TRequirementDefinition> getRequirementDefinition() {
 			if (requirementDefinition == null) {
 				requirementDefinition = new ArrayList<TRequirementDefinition>();
@@ -346,10 +373,10 @@ public class TNodeType extends TEntityType {
 	}
 
 	public static class Builder extends TEntityType.Builder {
-		TNodeType.RequirementDefinitions requirementDefinitions;
-		TNodeType.CapabilityDefinitions capabilityDefinitions;
-		TTopologyElementInstanceStates instanceStates;
-		TNodeType.Interfaces interfaces;
+		private RequirementDefinitions requirementDefinitions;
+		private CapabilityDefinitions capabilityDefinitions;
+		private TTopologyElementInstanceStates instanceStates;
+		private Interfaces interfaces;
 
 		public Builder(String name) {
 			super(name);
@@ -359,41 +386,28 @@ public class TNodeType extends TEntityType {
 			super(entityType);
 		}
 
-		public Builder RMsetRequirementDefinitions(TNodeType.RequirementDefinitions requirementDefinitions) {
+		public Builder setRequirementDefinitions(TNodeType.RequirementDefinitions requirementDefinitions) {
 			this.requirementDefinitions = requirementDefinitions;
 			return this;
 		}
 
-		public Builder RMsetCapabilityDefinitions(TNodeType.CapabilityDefinitions capabilityDefinitions) {
+		public Builder setCapabilityDefinitions(TNodeType.CapabilityDefinitions capabilityDefinitions) {
 			this.capabilityDefinitions = capabilityDefinitions;
 			return this;
 		}
 
-		public Builder RMsetInstanceStates(TTopologyElementInstanceStates instanceStates) {
+		public Builder setInstanceStates(TTopologyElementInstanceStates instanceStates) {
 			this.instanceStates = instanceStates;
 			return this;
 		}
 
-		public Builder RMsetInterfaces(TNodeType.Interfaces interfaces) {
+		public Builder setInterfaces(TNodeType.Interfaces interfaces) {
 			this.interfaces = interfaces;
 			return this;
 		}
 
-		public Builder addInterfaces(TNodeType.Interfaces interfaces) {
-			if (interfaces == null) {
-				return this;
-			}
-
-			if (this.interfaces == null) {
-				this.interfaces = interfaces;
-			} else {
-				this.interfaces.getInterface().addAll(interfaces.getInterface());
-			}
-			return this;
-		}
-
 		public Builder addRequirementDefinitions(TNodeType.RequirementDefinitions requirementDefinitions) {
-			if (requirementDefinitions == null) {
+			if (requirementDefinitions == null || requirementDefinitions.getRequirementDefinition().isEmpty()) {
 				return this;
 			}
 
@@ -415,18 +429,18 @@ public class TNodeType extends TEntityType {
 			return addRequirementDefinitions(tmp);
 		}
 
-		public Builder addRequirementDefinitions(TRequirementDefinition requirementDefinitions) {
-			if (requirementDefinitions == null) {
+		public Builder addRequirementDefinitions(TRequirementDefinition requirementDefinition) {
+			if (requirementDefinition == null) {
 				return this;
 			}
 
 			TNodeType.RequirementDefinitions tmp = new TNodeType.RequirementDefinitions();
-			tmp.getRequirementDefinition().add(requirementDefinitions);
+			tmp.getRequirementDefinition().add(requirementDefinition);
 			return addRequirementDefinitions(tmp);
 		}
 
 		public Builder addCapabilityDefinitions(TNodeType.CapabilityDefinitions capabilityDefinitions) {
-			if (capabilityDefinitions == null) {
+			if (capabilityDefinitions == null || capabilityDefinitions.getCapabilityDefinition().isEmpty()) {
 				return this;
 			}
 
@@ -456,6 +470,19 @@ public class TNodeType extends TEntityType {
 			TNodeType.CapabilityDefinitions tmp = new TNodeType.CapabilityDefinitions();
 			tmp.getCapabilityDefinition().add(capabilityDefinitions);
 			return addCapabilityDefinitions(tmp);
+		}
+
+		public Builder addInterfaces(TNodeType.Interfaces interfaces) {
+			if (interfaces == null || interfaces.getInterface().isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.getInterface().addAll(interfaces.getInterface());
+			}
+			return this;
 		}
 
 		public Builder addInterfaces(List<TInterface> interfaces) {

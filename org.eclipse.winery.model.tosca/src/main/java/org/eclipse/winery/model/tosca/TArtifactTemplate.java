@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -75,12 +79,29 @@ public class TArtifactTemplate
 		this.artifactReferences = builder.artifactReferences;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TArtifactTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TArtifactTemplate that = (TArtifactTemplate) o;
+		return Objects.equals(artifactReferences, that.artifactReferences) &&
+				Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), artifactReferences, name);
+	}
+
 	/**
 	 * Gets the value of the artifactReferences property.
 	 *
 	 * @return possible object is {@link TArtifactTemplate.ArtifactReferences }
 	 */
+	/*@Nullable*/
 	public TArtifactTemplate.ArtifactReferences getArtifactReferences() {
+
 		return artifactReferences;
 	}
 
@@ -98,6 +119,7 @@ public class TArtifactTemplate
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -159,6 +181,7 @@ public class TArtifactTemplate
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TArtifactReference }
 		 */
+		@NonNull
 		public List<TArtifactReference> getArtifactReference() {
 			if (artifactReference == null) {
 				artifactReference = new ArrayList<TArtifactReference>();
@@ -179,14 +202,47 @@ public class TArtifactTemplate
 			super(entityTemplate);
 		}
 
-		public Builder RMsetName(String name) {
+		public Builder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public Builder RMsetArtifactReferences(TArtifactTemplate.ArtifactReferences artifactReferences) {
+		public Builder setArtifactReferences(TArtifactTemplate.ArtifactReferences artifactReferences) {
 			this.artifactReferences = artifactReferences;
 			return this;
+		}
+
+		public Builder addArtifactReferences(TArtifactTemplate.ArtifactReferences artifactReferences) {
+			if (artifactReferences == null || artifactReferences.getArtifactReference().isEmpty()) {
+				return this;
+			}
+
+			if (this.artifactReferences == null) {
+				this.artifactReferences = artifactReferences;
+			} else {
+				this.artifactReferences.getArtifactReference().addAll(artifactReferences.artifactReference);
+			}
+			return this;
+		}
+
+		public Builder addArtifactReferences(List<TArtifactReference> artifactReferences) {
+			if (artifactReferences == null) {
+				return this;
+			}
+
+			TArtifactTemplate.ArtifactReferences tmp = new TArtifactTemplate.ArtifactReferences();
+			tmp.getArtifactReference().addAll(artifactReferences);
+			return addArtifactReferences(tmp);
+		}
+
+		public Builder addArtifactReferences(TArtifactReference artifactReferences) {
+			if (artifactReferences == null) {
+				return this;
+			}
+
+			TArtifactTemplate.ArtifactReferences tmp = new TArtifactTemplate.ArtifactReferences();
+			tmp.getArtifactReference().add(artifactReferences);
+			return addArtifactReferences(tmp);
 		}
 
 		public TArtifactTemplate build() {

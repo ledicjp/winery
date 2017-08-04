@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,6 +29,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
 
@@ -94,6 +97,21 @@ public class TExtensibleElements {
 		this.otherAttributes = builder.otherAttributes;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TExtensibleElements)) return false;
+		TExtensibleElements that = (TExtensibleElements) o;
+		return Objects.equals(documentation, that.documentation) &&
+				Objects.equals(any, that.any) &&
+				Objects.equals(otherAttributes, that.otherAttributes);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(documentation, any, otherAttributes);
+	}
+
 	/**
 	 * Gets the value of the documentation property.
 	 *
@@ -114,6 +132,7 @@ public class TExtensibleElements {
 	 * Objects of the following type(s) are allowed in the list
 	 * {@link TDocumentation }
 	 */
+	@NonNull
 	public List<TDocumentation> getDocumentation() {
 		if (documentation == null) {
 			documentation = new ArrayList<TDocumentation>();
@@ -142,6 +161,7 @@ public class TExtensibleElements {
 	 * {@link Element }
 	 * {@link Object }
 	 */
+	@NonNull
 	public List<Object> getAny() {
 		if (any == null) {
 			any = new ArrayList<Object>();
@@ -161,6 +181,7 @@ public class TExtensibleElements {
 	 *
 	 * @return always non-null
 	 */
+	@Nullable
 	public Map<QName, String> getOtherAttributes() {
 		return otherAttributes;
 	}
@@ -175,22 +196,22 @@ public class TExtensibleElements {
 		}
 
 		public Builder(TExtensibleElements extensibleElements) {
-			this.documentation = extensibleElements.getDocumentation();
-			this.any = extensibleElements.getAny();
-			this.otherAttributes = extensibleElements.getOtherAttributes();
+			this.addDocumentation(extensibleElements.getDocumentation());
+			this.addAny(extensibleElements.getAny());
+			this.addOtherAttributes(extensibleElements.getOtherAttributes());
 		}
 
-		public Builder RMsetDocumentation(List<TDocumentation> documentation) {
+		public Builder setDocumentation(List<TDocumentation> documentation) {
 			this.documentation = documentation;
 			return this;
 		}
 
-		public Builder RMsetAny(List<Object> any) {
+		public Builder setAny(List<Object> any) {
 			this.any = any;
 			return this;
 		}
 
-		public Builder RMsetOtherAttributes(Map<QName, String> otherAttributes) {
+		public Builder setOtherAttributes(Map<QName, String> otherAttributes) {
 			this.otherAttributes = otherAttributes;
 			return this;
 		}
@@ -239,7 +260,34 @@ public class TExtensibleElements {
 			return this;
 		}
 
+		public Builder addAny(List<Object> any) {
+			if (any == null || any.isEmpty()) {
+				return this;
+			}
+
+			if (this.any == null) {
+				this.any = any;
+			} else {
+				this.any.addAll(any);
+			}
+			return this;
+		}
+
+		public Builder addAny(Object any) {
+			if (any == null) {
+				return this;
+			}
+
+			List<Object> tmp = new ArrayList<>();
+			tmp.add(any);
+			return addAny(tmp);
+		}
+
 		public Builder addOtherAttributes(Map<QName, String> otherAttributes) {
+			if (otherAttributes == null || otherAttributes.isEmpty()) {
+				return this;
+			}
+
 			if (this.otherAttributes == null) {
 				this.otherAttributes = otherAttributes;
 			} else {

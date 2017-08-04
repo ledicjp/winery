@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code contribution
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 package org.eclipse.winery.model.tosca;
 

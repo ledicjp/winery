@@ -8,10 +8,12 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +24,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -77,11 +82,30 @@ public class TImplementationArtifact extends TExtensibleElements {
 		this.artifactRef = builder.artifactRef;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TImplementationArtifact)) return false;
+		if (!super.equals(o)) return false;
+		TImplementationArtifact that = (TImplementationArtifact) o;
+		return Objects.equals(name, that.name) &&
+				Objects.equals(interfaceName, that.interfaceName) &&
+				Objects.equals(operationName, that.operationName) &&
+				Objects.equals(artifactType, that.artifactType) &&
+				Objects.equals(artifactRef, that.artifactRef);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), name, interfaceName, operationName, artifactType, artifactRef);
+	}
+
 	/**
 	 * Gets the value of the name property.
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -100,6 +124,7 @@ public class TImplementationArtifact extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getInterfaceName() {
 		return interfaceName;
 	}
@@ -118,6 +143,7 @@ public class TImplementationArtifact extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getOperationName() {
 		return operationName;
 	}
@@ -136,6 +162,7 @@ public class TImplementationArtifact extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getArtifactType() {
 		return artifactType;
 	}
@@ -154,6 +181,7 @@ public class TImplementationArtifact extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@Nullable
 	public QName getArtifactRef() {
 		return artifactRef;
 	}

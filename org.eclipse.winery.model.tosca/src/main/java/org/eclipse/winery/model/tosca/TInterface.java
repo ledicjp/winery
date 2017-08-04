@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -62,6 +65,21 @@ public class TInterface {
 		this.name = builder.name;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+
+		if (this == o) return true;
+		if (!(o instanceof TInterface)) return false;
+		TInterface that = (TInterface) o;
+		return Objects.equals(operation, that.operation) &&
+				Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(operation, name);
+	}
+
 	/**
 	 * Gets the value of the operation property.
 	 *
@@ -82,6 +100,7 @@ public class TInterface {
 	 * Objects of the following type(s) are allowed in the list
 	 * {@link TOperation }
 	 */
+	@NonNull
 	public List<TOperation> getOperation() {
 		if (operation == null) {
 			operation = new ArrayList<TOperation>();
@@ -94,6 +113,7 @@ public class TInterface {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}

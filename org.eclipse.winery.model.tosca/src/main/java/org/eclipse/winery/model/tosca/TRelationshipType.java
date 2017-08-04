@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -117,11 +120,30 @@ public class TRelationshipType extends TEntityType {
 		this.validTarget = builder.validTarget;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRelationshipType)) return false;
+		if (!super.equals(o)) return false;
+		TRelationshipType that = (TRelationshipType) o;
+		return Objects.equals(instanceStates, that.instanceStates) &&
+				Objects.equals(sourceInterfaces, that.sourceInterfaces) &&
+				Objects.equals(targetInterfaces, that.targetInterfaces) &&
+				Objects.equals(validSource, that.validSource) &&
+				Objects.equals(validTarget, that.validTarget);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), instanceStates, sourceInterfaces, targetInterfaces, validSource, validTarget);
+	}
+
 	/**
 	 * Gets the value of the instanceStates property.
 	 *
 	 * @return possible object is {@link TTopologyElementInstanceStates }
 	 */
+	/*@Nullable*/
 	public TTopologyElementInstanceStates getInstanceStates() {
 		return instanceStates;
 	}
@@ -140,6 +162,7 @@ public class TRelationshipType extends TEntityType {
 	 *
 	 * @return possible object is {@link TRelationshipType.SourceInterfaces }
 	 */
+	/*@Nullable*/
 	public TRelationshipType.SourceInterfaces getSourceInterfaces() {
 		return sourceInterfaces;
 	}
@@ -158,6 +181,7 @@ public class TRelationshipType extends TEntityType {
 	 *
 	 * @return possible object is {@link TRelationshipType.TargetInterfaces }
 	 */
+	/*@Nullable*/
 	public TRelationshipType.TargetInterfaces getTargetInterfaces() {
 		return targetInterfaces;
 	}
@@ -176,6 +200,7 @@ public class TRelationshipType extends TEntityType {
 	 *
 	 * @return possible object is {@link TRelationshipType.ValidSource }
 	 */
+	/*@Nullable*/
 	public TRelationshipType.ValidSource getValidSource() {
 		return validSource;
 	}
@@ -194,6 +219,7 @@ public class TRelationshipType extends TEntityType {
 	 *
 	 * @return possible object is {@link TRelationshipType.ValidTarget }
 	 */
+	/*@Nullable*/
 	public TRelationshipType.ValidTarget getValidTarget() {
 		return validTarget;
 	}
@@ -255,6 +281,7 @@ public class TRelationshipType extends TEntityType {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TInterface }
 		 */
+		@NonNull
 		public List<TInterface> getInterface() {
 			if (_interface == null) {
 				_interface = new ArrayList<TInterface>();
@@ -311,6 +338,7 @@ public class TRelationshipType extends TEntityType {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TInterface }
 		 */
+		@NonNull
 		public List<TInterface> getInterface() {
 			if (_interface == null) {
 				_interface = new ArrayList<TInterface>();
@@ -347,6 +375,7 @@ public class TRelationshipType extends TEntityType {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@NonNull
 		public QName getTypeRef() {
 			return typeRef;
 		}
@@ -389,6 +418,7 @@ public class TRelationshipType extends TEntityType {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@NonNull
 		public QName getTypeRef() {
 			return typeRef;
 		}
@@ -405,10 +435,10 @@ public class TRelationshipType extends TEntityType {
 
 	public static class Builder extends TEntityType.Builder {
 		private TTopologyElementInstanceStates instanceStates;
-		private TRelationshipType.SourceInterfaces sourceInterfaces;
-		private TRelationshipType.TargetInterfaces targetInterfaces;
-		private TRelationshipType.ValidSource validSource;
-		private TRelationshipType.ValidTarget validTarget;
+		private SourceInterfaces sourceInterfaces;
+		private TargetInterfaces targetInterfaces;
+		private ValidSource validSource;
+		private ValidTarget validTarget;
 
 		public Builder(String name) {
 			super(name);
@@ -464,7 +494,7 @@ public class TRelationshipType extends TEntityType {
 		}
 
 		public Builder addSourceInterfaces(TRelationshipType.SourceInterfaces sourceInterfaces) {
-			if (sourceInterfaces == null) {
+			if (sourceInterfaces == null || sourceInterfaces.getInterface().isEmpty()) {
 				return this;
 			}
 
@@ -497,7 +527,7 @@ public class TRelationshipType extends TEntityType {
 		}
 
 		public Builder addTargetInterfaces(TRelationshipType.TargetInterfaces targetInterfaces) {
-			if (targetInterfaces == null) {
+			if (targetInterfaces == null || targetInterfaces.getInterface().isEmpty()) {
 				return this;
 			}
 

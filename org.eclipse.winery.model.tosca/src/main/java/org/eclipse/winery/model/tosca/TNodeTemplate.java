@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,6 +26,8 @@ import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -149,6 +152,27 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TNodeTemplate that = (TNodeTemplate) o;
+		return Objects.equals(requirements, that.requirements) &&
+				Objects.equals(capabilities, that.capabilities) &&
+				Objects.equals(policies, that.policies) &&
+				Objects.equals(deploymentArtifacts, that.deploymentArtifacts) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(minInstances, that.minInstances) &&
+				Objects.equals(maxInstances, that.maxInstances);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), requirements, capabilities, policies, deploymentArtifacts, name, minInstances, maxInstances);
+	}
+
+	@Override
+	@NonNull
 	public String getFakeJacksonType() {
 		return "nodetemplate";
 	}
@@ -176,6 +200,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link TNodeTemplate.Capabilities }
 	 */
+	/*@Nullable*/
 	public TNodeTemplate.Capabilities getCapabilities() {
 		return capabilities;
 	}
@@ -194,6 +219,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link TNodeTemplate.Policies }
 	 */
+	/*@Nullable*/
 	public TNodeTemplate.Policies getPolicies() {
 		return policies;
 	}
@@ -212,6 +238,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link TDeploymentArtifacts }
 	 */
+	@Nullable
 	public TDeploymentArtifacts getDeploymentArtifacts() {
 		return deploymentArtifacts;
 	}
@@ -230,6 +257,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -248,6 +276,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link Integer }
 	 */
+	@NonNull
 	public int getMinInstances() {
 		if (minInstances == null) {
 			return 1;
@@ -270,6 +299,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getMaxInstances() {
 		if (maxInstances == null) {
 			return "1";
@@ -335,6 +365,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TCapability }
 		 */
+		@NonNull
 		public List<TCapability> getCapability() {
 			if (capability == null) {
 				capability = new ArrayList<TCapability>();
@@ -391,6 +422,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TPolicy }
 		 */
+		@NonNull
 		public List<TPolicy> getPolicy() {
 			if (policy == null) {
 				policy = new ArrayList<TPolicy>();
@@ -447,6 +479,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TRequirement }
 		 */
+		@NonNull
 		public List<TRequirement> getRequirement() {
 			if (requirement == null) {
 				requirement = new ArrayList<TRequirement>();
@@ -456,9 +489,9 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 	}
 
 	public static class Builder extends RelationshipSourceOrTarget.Builder {
-		private TNodeTemplate.Requirements requirements;
-		private TNodeTemplate.Capabilities capabilities;
-		private TNodeTemplate.Policies policies;
+		private Requirements requirements;
+		private Capabilities capabilities;
+		private Policies policies;
 		private TDeploymentArtifacts deploymentArtifacts;
 		private String name;
 		private Integer minInstances;
@@ -472,43 +505,43 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 			super(entityTemplate);
 		}
 
-		public Builder RMsetRequirements(TNodeTemplate.Requirements requirements) {
+		public Builder setRequirements(TNodeTemplate.Requirements requirements) {
 			this.requirements = requirements;
 			return this;
 		}
 
-		public Builder RMsetCapabilities(TNodeTemplate.Capabilities capabilities) {
+		public Builder setCapabilities(TNodeTemplate.Capabilities capabilities) {
 			this.capabilities = capabilities;
 			return this;
 		}
 
-		public Builder RMsetPolicies(TNodeTemplate.Policies policies) {
+		public Builder setPolicies(TNodeTemplate.Policies policies) {
 			this.policies = policies;
 			return this;
 		}
 
-		public Builder RMsetDeploymentArtifacts(TDeploymentArtifacts deploymentArtifacts) {
+		public Builder setDeploymentArtifacts(TDeploymentArtifacts deploymentArtifacts) {
 			this.deploymentArtifacts = deploymentArtifacts;
 			return this;
 		}
 
-		public Builder RMsetName(String name) {
+		public Builder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public Builder RMsetMinInstances(Integer minInstances) {
+		public Builder setMinInstances(Integer minInstances) {
 			this.minInstances = minInstances;
 			return this;
 		}
 
-		public Builder RMsetMaxInstances(String maxInstances) {
+		public Builder setMaxInstances(String maxInstances) {
 			this.maxInstances = maxInstances;
 			return this;
 		}
 
 		public Builder addRequirements(TNodeTemplate.Requirements requirements) {
-			if (requirements == null) {
+			if (requirements == null || requirements.getRequirement().isEmpty()) {
 				return this;
 			}
 
@@ -541,7 +574,7 @@ public class TNodeTemplate extends RelationshipSourceOrTarget {
 		}
 
 		public Builder addCapabilities(TNodeTemplate.Capabilities capabilities) {
-			if (capabilities == null) {
+			if (capabilities == null || capabilities.getCapability().isEmpty()) {
 				return this;
 			}
 

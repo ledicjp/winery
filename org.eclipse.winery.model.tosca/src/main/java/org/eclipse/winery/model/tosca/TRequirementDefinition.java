@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -101,11 +104,30 @@ public class TRequirementDefinition extends TExtensibleElements {
 		this.upperBound = builder.upperBound;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRequirementDefinition)) return false;
+		if (!super.equals(o)) return false;
+		TRequirementDefinition that = (TRequirementDefinition) o;
+		return Objects.equals(constraints, that.constraints) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(requirementType, that.requirementType) &&
+				Objects.equals(lowerBound, that.lowerBound) &&
+				Objects.equals(upperBound, that.upperBound);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), constraints, name, requirementType, lowerBound, upperBound);
+	}
+
 	/**
 	 * Gets the value of the constraints property.
 	 *
 	 * @return possible object is {@link TRequirementDefinition.Constraints }
 	 */
+	/*@Nullable*/
 	public TRequirementDefinition.Constraints getConstraints() {
 		return constraints;
 	}
@@ -124,6 +146,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -142,6 +165,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getRequirementType() {
 		return requirementType;
 	}
@@ -160,6 +184,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link Integer }
 	 */
+	@NonNull
 	public int getLowerBound() {
 		if (lowerBound == null) {
 			return 1;
@@ -182,6 +207,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getUpperBound() {
 		if (upperBound == null) {
 			return "1";
@@ -247,6 +273,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TConstraint }
 		 */
+		@NonNull
 		public List<TConstraint> getConstraint() {
 			if (constraint == null) {
 				constraint = new ArrayList<TConstraint>();
@@ -259,7 +286,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 		private final String name;
 		private final QName requirementType;
 
-		private TRequirementDefinition.Constraints constraints;
+		private Constraints constraints;
 		private Integer lowerBound;
 		private String upperBound;
 
@@ -284,7 +311,7 @@ public class TRequirementDefinition extends TExtensibleElements {
 		}
 
 		public Builder addConstraints(TRequirementDefinition.Constraints constraints) {
-			if (constraints == null) {
+			if (constraints == null || constraints.getConstraint().isEmpty()) {
 				return this;
 			}
 

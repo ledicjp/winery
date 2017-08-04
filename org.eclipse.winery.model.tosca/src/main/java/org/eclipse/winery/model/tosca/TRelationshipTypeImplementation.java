@@ -8,10 +8,13 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -108,11 +114,34 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 		this._final = builder._final;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRelationshipTypeImplementation)) return false;
+		if (!super.equals(o)) return false;
+		TRelationshipTypeImplementation that = (TRelationshipTypeImplementation) o;
+		return Objects.equals(tags, that.tags) &&
+				Objects.equals(derivedFrom, that.derivedFrom) &&
+				Objects.equals(requiredContainerFeatures, that.requiredContainerFeatures) &&
+				Objects.equals(implementationArtifacts, that.implementationArtifacts) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(targetNamespace, that.targetNamespace) &&
+				Objects.equals(relationshipType, that.relationshipType) &&
+				_abstract == that._abstract &&
+				_final == that._final;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), tags, derivedFrom, requiredContainerFeatures, implementationArtifacts, name, targetNamespace, relationshipType, _abstract, _final);
+	}
+
 	/**
 	 * Gets the value of the tags property.
 	 *
 	 * @return possible object is {@link TTags }
 	 */
+	@Nullable
 	public TTags getTags() {
 		return tags;
 	}
@@ -131,6 +160,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TRelationshipTypeImplementation.DerivedFrom }
 	 */
+	/*@Nullable*/
 	public TRelationshipTypeImplementation.DerivedFrom getDerivedFrom() {
 		return derivedFrom;
 	}
@@ -149,6 +179,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TRequiredContainerFeatures }
 	 */
+	@Nullable
 	public TRequiredContainerFeatures getRequiredContainerFeatures() {
 		return requiredContainerFeatures;
 	}
@@ -167,6 +198,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TImplementationArtifacts }
 	 */
+	@Nullable
 	public TImplementationArtifacts getImplementationArtifacts() {
 		return implementationArtifacts;
 	}
@@ -185,6 +217,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -203,6 +236,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getTargetNamespace() {
 		return targetNamespace;
 	}
@@ -221,6 +255,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@NonNull
 	public QName getRelationshipType() {
 		return relationshipType;
 	}
@@ -239,6 +274,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getAbstract() {
 		if (_abstract == null) {
 			return TBoolean.NO;
@@ -261,6 +297,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getFinal() {
 		if (_final == null) {
 			return TBoolean.NO;
@@ -307,6 +344,7 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@NonNull
 		public QName getRelationshipTypeImplementationRef() {
 			return relationshipTypeImplementationRef;
 		}
@@ -371,14 +409,128 @@ public class TRelationshipTypeImplementation extends TExtensibleElements {
 			return this;
 		}
 
-		public Builder set_abstract(TBoolean _abstract) {
+		public Builder setAbstract(TBoolean _abstract) {
 			this._abstract = _abstract;
 			return this;
 		}
 
-		public Builder set_final(TBoolean _final) {
+		public Builder setFinal(TBoolean _final) {
 			this._final = _final;
 			return this;
+		}
+
+		public Builder addTags(TTags tags) {
+			if (tags == null || tags.getTag().isEmpty()) {
+				return this;
+			}
+
+			if (this.tags == null) {
+				this.tags = tags;
+			} else {
+				this.tags.getTag().addAll(tags.getTag());
+			}
+			return this;
+		}
+
+		public Builder addTags(List<TTag> tags) {
+			if (tags == null) {
+				return this;
+			}
+
+			TTags tmp = new TTags();
+			tmp.getTag().addAll(tags);
+			return addTags(tmp);
+		}
+
+		public Builder addTags(TTag tags) {
+			if (tags == null) {
+				return this;
+			}
+
+			TTags tmp = new TTags();
+			tmp.getTag().add(tags);
+			return addTags(tmp);
+		}
+
+		public Builder addTags(String name, String value) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			TTag tmp = new TTag();
+			tmp.setName(name);
+			tmp.setValue(value);
+			return addTags(tmp);
+		}
+
+		public Builder addRequiredContainerFeatures(TRequiredContainerFeatures requiredContainerFeatures) {
+			if (requiredContainerFeatures == null || requiredContainerFeatures.getRequiredContainerFeature().isEmpty()) {
+				return this;
+			}
+
+			if (this.requiredContainerFeatures == null) {
+				this.requiredContainerFeatures = requiredContainerFeatures;
+			} else {
+				this.requiredContainerFeatures.getRequiredContainerFeature().addAll(requiredContainerFeatures.getRequiredContainerFeature());
+			}
+			return this;
+		}
+
+		public Builder addRequiredContainerFeatures(List<TRequiredContainerFeature> requiredContainerFeatures) {
+			if (requiredContainerFeatures == null) {
+				return this;
+			}
+
+			TRequiredContainerFeatures tmp = new TRequiredContainerFeatures();
+			tmp.getRequiredContainerFeature().addAll(requiredContainerFeatures);
+			return addRequiredContainerFeatures(tmp);
+		}
+
+		public Builder addRequiredContainerFeatures(TRequiredContainerFeature requiredContainerFeatures) {
+			if (requiredContainerFeatures == null) {
+				return this;
+			}
+
+			TRequiredContainerFeatures tmp = new TRequiredContainerFeatures();
+			tmp.getRequiredContainerFeature().add(requiredContainerFeatures);
+			return addRequiredContainerFeatures(tmp);
+		}
+
+		public Builder addImplementationArtifacts(TImplementationArtifacts implementationArtifacts) {
+			if (implementationArtifacts == null || implementationArtifacts.getImplementationArtifact().isEmpty()) {
+				return this;
+			}
+
+			if (this.implementationArtifacts == null) {
+				this.implementationArtifacts = implementationArtifacts;
+			} else {
+				this.implementationArtifacts.getImplementationArtifact().addAll(implementationArtifacts.getImplementationArtifact());
+			}
+			return this;
+		}
+
+		public Builder addImplementationArtifacts(List<TImplementationArtifacts.ImplementationArtifact> implementationArtifacts) {
+			if (implementationArtifacts == null) {
+				return this;
+			}
+
+			TImplementationArtifacts tmp = new TImplementationArtifacts();
+			tmp.getImplementationArtifact().addAll(implementationArtifacts);
+			return addImplementationArtifacts(tmp);
+		}
+
+		public Builder addImplementationArtifacts(TImplementationArtifacts.ImplementationArtifact implementationArtifacts) {
+			if (implementationArtifacts == null) {
+				return this;
+			}
+
+			TImplementationArtifacts tmp = new TImplementationArtifacts();
+			tmp.getImplementationArtifact().add(implementationArtifacts);
+			return addImplementationArtifacts(tmp);
+		}
+
+		public TRelationshipTypeImplementation build() {
+			return new TRelationshipTypeImplementation(this);
 		}
 	}
 }

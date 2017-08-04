@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
 
@@ -144,9 +147,31 @@ public class TPlan extends TExtensibleElements {
 		this.planModel = builder.planModel;
 		this.planModelReference = builder.planModelReference;
 		this.id = builder.id;
-		this.name = builder.id;
+		this.name = builder.name;
 		this.planType = builder.planType;
 		this.planLanguage = builder.planLanguage;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TPlan)) return false;
+		if (!super.equals(o)) return false;
+		TPlan tPlan = (TPlan) o;
+		return Objects.equals(precondition, tPlan.precondition) &&
+				Objects.equals(inputParameters, tPlan.inputParameters) &&
+				Objects.equals(outputParameters, tPlan.outputParameters) &&
+				Objects.equals(planModel, tPlan.planModel) &&
+				Objects.equals(planModelReference, tPlan.planModelReference) &&
+				Objects.equals(id, tPlan.id) &&
+				Objects.equals(name, tPlan.name) &&
+				Objects.equals(planType, tPlan.planType) &&
+				Objects.equals(planLanguage, tPlan.planLanguage);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), precondition, inputParameters, outputParameters, planModel, planModelReference, id, name, planType, planLanguage);
 	}
 
 	/**
@@ -154,6 +179,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TCondition }
 	 */
+	@Nullable
 	public TCondition getPrecondition() {
 		return precondition;
 	}
@@ -172,6 +198,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TPlan.InputParameters }
 	 */
+	/*@Nullable*/
 	public TPlan.InputParameters getInputParameters() {
 		return inputParameters;
 	}
@@ -190,6 +217,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TPlan.OutputParameters }
 	 */
+	/*@Nullable*/
 	public TPlan.OutputParameters getOutputParameters() {
 		return outputParameters;
 	}
@@ -208,6 +236,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TPlan.PlanModel }
 	 */
+	/*@Nullable*/
 	public TPlan.PlanModel getPlanModel() {
 		return planModel;
 	}
@@ -226,6 +255,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TPlan.PlanModelReference }
 	 */
+	/*@Nullable*/
 	public TPlan.PlanModelReference getPlanModelReference() {
 		return planModelReference;
 	}
@@ -244,6 +274,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getId() {
 		return id;
 	}
@@ -262,6 +293,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -280,6 +312,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getPlanType() {
 		return planType;
 	}
@@ -298,6 +331,7 @@ public class TPlan extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getPlanLanguage() {
 		return planLanguage;
 	}
@@ -359,6 +393,7 @@ public class TPlan extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TParameter }
 		 */
+		@NonNull
 		public List<TParameter> getInputParameter() {
 			if (inputParameter == null) {
 				inputParameter = new ArrayList<TParameter>();
@@ -415,6 +450,7 @@ public class TPlan extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TParameter }
 		 */
+		@NonNull
 		public List<TParameter> getOutputParameter() {
 			if (outputParameter == null) {
 				outputParameter = new ArrayList<TParameter>();
@@ -455,6 +491,7 @@ public class TPlan extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link Element } {@link Object }
 		 */
+		@Nullable
 		public Object getAny() {
 			return any;
 		}
@@ -498,6 +535,7 @@ public class TPlan extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link String }
 		 */
+		@NonNull
 		public String getReference() {
 			return reference;
 		}
@@ -518,10 +556,10 @@ public class TPlan extends TExtensibleElements {
 		private final String planLanguage;
 
 		private TCondition precondition;
-		private TPlan.InputParameters inputParameters;
-		private TPlan.OutputParameters outputParameters;
-		private TPlan.PlanModel planModel;
-		private TPlan.PlanModelReference planModelReference;
+		private InputParameters inputParameters;
+		private OutputParameters outputParameters;
+		private PlanModel planModel;
+		private PlanModelReference planModelReference;
 		private String name;
 
 		public Builder(String id, String planType, String planLanguage) {

@@ -8,10 +8,12 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -20,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapability")
@@ -41,11 +44,26 @@ public class TCapability extends RelationshipSourceOrTarget {
 		this.name = builder.name;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TCapability)) return false;
+		if (!super.equals(o)) return false;
+		TCapability that = (TCapability) o;
+		return Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), name);
+	}
+
 	/**
 	 * Gets the value of the name property.
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -60,6 +78,7 @@ public class TCapability extends RelationshipSourceOrTarget {
 	}
 
 	@Override
+	@NonNull
 	public String getFakeJacksonType() {
 		return "capability";
 	}

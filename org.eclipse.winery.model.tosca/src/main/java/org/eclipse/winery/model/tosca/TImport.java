@@ -8,16 +8,21 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -62,11 +67,28 @@ public class TImport extends TExtensibleElements {
 		this.importType = builder.importType;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TImport)) return false;
+		if (!super.equals(o)) return false;
+		TImport tImport = (TImport) o;
+		return Objects.equals(namespace, tImport.namespace) &&
+				Objects.equals(location, tImport.location) &&
+				Objects.equals(importType, tImport.importType);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), namespace, location, importType);
+	}
+
 	/**
 	 * Gets the value of the namespace property.
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getNamespace() {
 		return namespace;
 	}
@@ -85,6 +107,7 @@ public class TImport extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getLocation() {
 		return location;
 	}
@@ -103,6 +126,7 @@ public class TImport extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getImportType() {
 		return importType;
 	}

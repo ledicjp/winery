@@ -8,10 +8,13 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,6 +26,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -80,7 +86,7 @@ import javax.xml.namespace.QName;
 		TArtifactType.class,
 		TPolicyType.class
 })
-public abstract class TEntityType extends TExtensibleElements {
+public class TEntityType extends TExtensibleElements {
 	@XmlElement(name = "Tags")
 	protected TTags tags;
 	@XmlElement(name = "DerivedFrom")
@@ -113,11 +119,31 @@ public abstract class TEntityType extends TExtensibleElements {
 		this.targetNamespace = builder.targetNamespace;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TEntityType)) return false;
+		TEntityType that = (TEntityType) o;
+		return Objects.equals(tags, that.tags) &&
+				Objects.equals(derivedFrom, that.derivedFrom) &&
+				Objects.equals(propertiesDefinition, that.propertiesDefinition) &&
+				Objects.equals(name, that.name) &&
+				_abstract == that._abstract &&
+				_final == that._final &&
+				Objects.equals(targetNamespace, that.targetNamespace);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tags, derivedFrom, propertiesDefinition, name, _abstract, _final, targetNamespace);
+	}
+
 	/**
 	 * Gets the value of the tags property.
 	 *
 	 * @return possible object is {@link TTags }
 	 */
+	@Nullable
 	public TTags getTags() {
 		return tags;
 	}
@@ -136,6 +162,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TEntityType.DerivedFrom }
 	 */
+	/*@Nullable*/
 	public TEntityType.DerivedFrom getDerivedFrom() {
 		return derivedFrom;
 	}
@@ -154,6 +181,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TEntityType.PropertiesDefinition }
 	 */
+	/*@Nullable*/
 	public TEntityType.PropertiesDefinition getPropertiesDefinition() {
 		return propertiesDefinition;
 	}
@@ -172,6 +200,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -190,6 +219,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getAbstract() {
 		if (_abstract == null) {
 			return TBoolean.NO;
@@ -212,6 +242,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getFinal() {
 		if (_final == null) {
 			return TBoolean.NO;
@@ -234,6 +265,7 @@ public abstract class TEntityType extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getTargetNamespace() {
 		return targetNamespace;
 	}
@@ -275,6 +307,7 @@ public abstract class TEntityType extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@NonNull
 		public QName getTypeRef() {
 			return typeRef;
 		}
@@ -320,6 +353,7 @@ public abstract class TEntityType extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@Nullable
 		public QName getElement() {
 			return element;
 		}
@@ -338,6 +372,7 @@ public abstract class TEntityType extends TExtensibleElements {
 		 *
 		 * @return possible object is {@link QName }
 		 */
+		@Nullable
 		public QName getType() {
 			return type;
 		}
@@ -360,7 +395,7 @@ public abstract class TEntityType extends TExtensibleElements {
 		private TEntityType.PropertiesDefinition propertiesDefinition;
 		private TBoolean _abstract;
 		private TBoolean _final;
-		private String targetNamespace = null;
+		private String targetNamespace;
 
 		public Builder(String name) {
 			this.name = name;
@@ -370,24 +405,24 @@ public abstract class TEntityType extends TExtensibleElements {
 			super(entityType);
 			this.name = entityType.getName();
 			this.derivedFrom = entityType.getDerivedFrom();
-			this.tags = entityType.getTags();
+			this.addTags(entityType.getTags());
 			this._abstract = entityType.getAbstract();
 			this._final = entityType.getFinal();
 			this.targetNamespace = entityType.getTargetNamespace();
 			this.propertiesDefinition = entityType.getPropertiesDefinition();
 		}
 
-		public Builder RMsetTags(TTags tags) {
+		public Builder setTags(TTags tags) {
 			this.tags = tags;
 			return this;
 		}
 
-		public Builder RMsetDerivedFrom(TEntityType.DerivedFrom derivedFrom) {
+		public Builder setDerivedFrom(TEntityType.DerivedFrom derivedFrom) {
 			this.derivedFrom = derivedFrom;
 			return this;
 		}
 
-		public Builder RMsetDerivedFrom(QName derivedFrom) {
+		public Builder setDerivedFrom(QName derivedFrom) {
 			if (derivedFrom == null) {
 				return this;
 			}
@@ -399,52 +434,52 @@ public abstract class TEntityType extends TExtensibleElements {
 			return this;
 		}
 
-		public Builder RMsetDerivedFrom(String derivedFrom) {
+		public Builder setDerivedFrom(String derivedFrom) {
 			if (derivedFrom == null || derivedFrom.length() == 0) {
 				return this;
 			}
 
-			return RMsetDerivedFrom(new QName(derivedFrom));
+			return setDerivedFrom(new QName(derivedFrom));
 		}
 
-		public Builder RMsetPropertiesDefinition(PropertiesDefinition propertiesDefinition) {
+		public Builder setPropertiesDefinition(PropertiesDefinition propertiesDefinition) {
 			this.propertiesDefinition = propertiesDefinition;
 			return this;
 		}
 
-		public Builder RMsetAbstract(TBoolean _abstract) {
+		public Builder setAbstract(TBoolean _abstract) {
 			this._abstract = _abstract;
 			return this;
 		}
 
-		public Builder RMsetAbstract(Boolean _abstract) {
+		public Builder setAbstract(Boolean _abstract) {
 			if (this._abstract == null) {
 				return this;
 			}
 
-			return RMsetAbstract(_abstract ? TBoolean.YES : TBoolean.NO);
+			return setAbstract(_abstract ? TBoolean.YES : TBoolean.NO);
 		}
 
-		public Builder RMsetFinal(TBoolean _final) {
+		public Builder setFinal(TBoolean _final) {
 			this._final = _final;
 			return this;
 		}
 
-		public Builder RMsetFinal(Boolean _final) {
+		public Builder setFinal(Boolean _final) {
 			if (this._final == null) {
 				return this;
 			}
 
-			return RMsetFinal(_final ? TBoolean.YES : TBoolean.NO);
+			return setFinal(_final ? TBoolean.YES : TBoolean.NO);
 		}
 
-		public Builder RMsetTargetNamespace(String targetNamespace) {
+		public Builder setTargetNamespace(String targetNamespace) {
 			this.targetNamespace = targetNamespace;
 			return this;
 		}
 
 		public Builder addTags(TTags tags) {
-			if (tags == null) {
+			if (tags == null || tags.getTag().isEmpty()) {
 				return this;
 			}
 
@@ -456,17 +491,27 @@ public abstract class TEntityType extends TExtensibleElements {
 			return this;
 		}
 
-		public Builder addTag(TTag tag) {
-			if (tag == null) {
+		public Builder addTags(List<TTag> tags) {
+			if (tags == null) {
 				return this;
 			}
 
 			TTags tmp = new TTags();
-			tmp.getTag().add(tag);
+			tmp.getTag().addAll(tags);
 			return addTags(tmp);
 		}
 
-		public Builder addTag(String key, String value) {
+		public Builder addTags(TTag tags) {
+			if (tags == null) {
+				return this;
+			}
+
+			TTags tmp = new TTags();
+			tmp.getTag().add(tags);
+			return addTags(tmp);
+		}
+
+		public Builder addTags(String key, String value) {
 			if (value == null) {
 				return this;
 			}
@@ -474,7 +519,11 @@ public abstract class TEntityType extends TExtensibleElements {
 			TTag tag = new TTag();
 			tag.setName(key);
 			tag.setValue(value);
-			return this.addTag(tag);
+			return this.addTags(tag);
+		}
+
+		public TEntityType build() {
+			return new TEntityType(this);
 		}
 	}
 }

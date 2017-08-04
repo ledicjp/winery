@@ -15,6 +15,7 @@ package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -100,11 +104,29 @@ public class TCapabilityDefinition extends TExtensibleElements {
 		this.upperBound = builder.upperBound;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TCapabilityDefinition)) return false;
+		TCapabilityDefinition that = (TCapabilityDefinition) o;
+		return Objects.equals(constraints, that.constraints) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(capabilityType, that.capabilityType) &&
+				Objects.equals(lowerBound, that.lowerBound) &&
+				Objects.equals(upperBound, that.upperBound);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(constraints, name, capabilityType, lowerBound, upperBound);
+	}
+
 	/**
 	 * Gets the value of the constraints property.
 	 *
 	 * @return possible object is {@link TCapabilityDefinition.Constraints }
 	 */
+	/*@Nullable*/
 	public TCapabilityDefinition.Constraints getConstraints() {
 		return constraints;
 	}
@@ -123,6 +145,7 @@ public class TCapabilityDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -141,6 +164,7 @@ public class TCapabilityDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@Nullable
 	public QName getCapabilityType() {
 		return capabilityType;
 	}
@@ -159,6 +183,7 @@ public class TCapabilityDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link Integer }
 	 */
+	@NonNull
 	public int getLowerBound() {
 		if (lowerBound == null) {
 			return 1;
@@ -181,6 +206,7 @@ public class TCapabilityDefinition extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getUpperBound() {
 		if (upperBound == null) {
 			return "1";
@@ -246,6 +272,7 @@ public class TCapabilityDefinition extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TConstraint }
 		 */
+		@NonNull
 		public List<TConstraint> getConstraint() {
 			if (constraint == null) {
 				constraint = new ArrayList<TConstraint>();
@@ -267,18 +294,31 @@ public class TCapabilityDefinition extends TExtensibleElements {
 			this.capabilityType = capabilityType;
 		}
 
-		public Builder RMsetConstraints(TCapabilityDefinition.Constraints constraints) {
+		public Builder setConstraints(TCapabilityDefinition.Constraints constraints) {
 			this.constraints = constraints;
 			return this;
 		}
 
-		public Builder RMsetLowerBound(Integer lowerBound) {
+		public Builder setLowerBound(Integer lowerBound) {
 			this.lowerBound = lowerBound;
 			return this;
 		}
 
-		public Builder RMsetUpperBound(String upperBound) {
+		public Builder setUpperBound(String upperBound) {
 			this.upperBound = upperBound;
+			return this;
+		}
+
+		public Builder addConstraints(TCapabilityDefinition.Constraints constraints) {
+			if (constraints == null || constraints.getConstraint().isEmpty()) {
+				return this;
+			}
+
+			if (this.constraints == null) {
+				this.constraints = constraints;
+			} else {
+				this.constraints.getConstraint().addAll(constraints.getConstraint());
+			}
 			return this;
 		}
 
@@ -287,11 +327,19 @@ public class TCapabilityDefinition extends TExtensibleElements {
 				return this;
 			}
 
-			if (this.constraints == null) {
-				this.constraints = new TCapabilityDefinition.Constraints();
+			TCapabilityDefinition.Constraints tmp = new TCapabilityDefinition.Constraints();
+			tmp.getConstraint().addAll(constraints);
+			return addConstraints(tmp);
+		}
+
+		public Builder addConstraints(TConstraint constraints) {
+			if (constraints == null) {
+				return this;
 			}
-			this.constraints.getConstraint().addAll(constraints);
-			return this;
+
+			TCapabilityDefinition.Constraints tmp = new TCapabilityDefinition.Constraints();
+			tmp.getConstraint().add(constraints);
+			return addConstraints(tmp);
 		}
 
 		public TCapabilityDefinition build() {

@@ -8,10 +8,13 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -20,6 +23,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 /**
@@ -94,11 +100,32 @@ public class TServiceTemplate extends HasId {
 		this.substitutableNodeType = builder.substitutableNodeType;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TServiceTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TServiceTemplate that = (TServiceTemplate) o;
+		return Objects.equals(tags, that.tags) &&
+				Objects.equals(boundaryDefinitions, that.boundaryDefinitions) &&
+				Objects.equals(topologyTemplate, that.topologyTemplate) &&
+				Objects.equals(plans, that.plans) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(targetNamespace, that.targetNamespace) &&
+				Objects.equals(substitutableNodeType, that.substitutableNodeType);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), tags, boundaryDefinitions, topologyTemplate, plans, name, targetNamespace, substitutableNodeType);
+	}
+
 	/**
 	 * Gets the value of the tags property.
 	 *
 	 * @return possible object is {@link TTags }
 	 */
+	@Nullable
 	public TTags getTags() {
 		return tags;
 	}
@@ -117,6 +144,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link TBoundaryDefinitions }
 	 */
+	@Nullable
 	public TBoundaryDefinitions getBoundaryDefinitions() {
 		return boundaryDefinitions;
 	}
@@ -135,6 +163,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link TTopologyTemplate }
 	 */
+	@NonNull
 	public TTopologyTemplate getTopologyTemplate() {
 		return topologyTemplate;
 	}
@@ -153,6 +182,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link TPlans }
 	 */
+	@Nullable
 	public TPlans getPlans() {
 		return plans;
 	}
@@ -171,6 +201,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -189,6 +220,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getTargetNamespace() {
 		return targetNamespace;
 	}
@@ -207,6 +239,7 @@ public class TServiceTemplate extends HasId {
 	 *
 	 * @return possible object is {@link QName }
 	 */
+	@Nullable
 	public QName getSubstitutableNodeType() {
 		return substitutableNodeType;
 	}
@@ -263,6 +296,39 @@ public class TServiceTemplate extends HasId {
 		public Builder setSubstitutableNodeType(QName substitutableNodeType) {
 			this.substitutableNodeType = substitutableNodeType;
 			return this;
+		}
+
+		public Builder addTags(TTags tags) {
+			if (tags == null || tags.getTag().isEmpty()) {
+				return this;
+			}
+
+			if (this.tags == null) {
+				this.tags = tags;
+			} else {
+				this.tags.getTag().addAll(tags.getTag());
+			}
+			return this;
+		}
+
+		public Builder addTags(List<TTag> tags) {
+			if (tags == null) {
+				return this;
+			}
+
+			TTags tmp = new TTags();
+			tmp.getTag().addAll(tags);
+			return addTags(tmp);
+		}
+
+		public Builder addTags(TTag tags) {
+			if (tags == null) {
+				return this;
+			}
+
+			TTags tmp = new TTags();
+			tmp.getTag().add(tags);
+			return addTags(tmp);
 		}
 
 		public TServiceTemplate build() {

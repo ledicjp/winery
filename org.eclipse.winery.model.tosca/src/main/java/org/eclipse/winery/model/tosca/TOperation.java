@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,6 +25,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -93,11 +96,28 @@ public class TOperation extends TExtensibleElements {
 		this.name = builder.name;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TOperation)) return false;
+		if (!super.equals(o)) return false;
+		TOperation that = (TOperation) o;
+		return Objects.equals(inputParameters, that.inputParameters) &&
+				Objects.equals(outputParameters, that.outputParameters) &&
+				Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), inputParameters, outputParameters, name);
+	}
+
 	/**
 	 * Gets the value of the inputParameters property.
 	 *
 	 * @return possible object is {@link TOperation.InputParameters }
 	 */
+	/*@Nullable*/
 	public TOperation.InputParameters getInputParameters() {
 		return inputParameters;
 	}
@@ -116,6 +136,7 @@ public class TOperation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link TOperation.OutputParameters }
 	 */
+	/*@Nullable*/
 	public TOperation.OutputParameters getOutputParameters() {
 		return outputParameters;
 	}
@@ -134,6 +155,7 @@ public class TOperation extends TExtensibleElements {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -194,6 +216,7 @@ public class TOperation extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TParameter }
 		 */
+		@NonNull
 		public List<TParameter> getInputParameter() {
 			if (inputParameter == null) {
 				inputParameter = new ArrayList<TParameter>();
@@ -249,6 +272,7 @@ public class TOperation extends TExtensibleElements {
 		 * Objects of the following type(s) are allowed in the list
 		 * {@link TParameter }
 		 */
+		@NonNull
 		public List<TParameter> getOutputParameter() {
 			if (outputParameter == null) {
 				outputParameter = new ArrayList<TParameter>();
@@ -259,9 +283,8 @@ public class TOperation extends TExtensibleElements {
 
 	public static class Builder extends TExtensibleElements.Builder {
 		private final String name;
-
-		private TOperation.InputParameters inputParameters;
-		private TOperation.OutputParameters outputParameters;
+		private InputParameters inputParameters;
+		private OutputParameters outputParameters;
 
 		public Builder(String name) {
 			this.name = name;
@@ -278,7 +301,7 @@ public class TOperation extends TExtensibleElements {
 		}
 
 		public Builder addInputParameters(TOperation.InputParameters inputParameters) {
-			if (inputParameters == null) {
+			if (inputParameters == null || inputParameters.getInputParameter().isEmpty()) {
 				return this;
 			}
 
@@ -311,7 +334,7 @@ public class TOperation extends TExtensibleElements {
 		}
 
 		public Builder addOutputParameters(TOperation.OutputParameters outputParameters) {
-			if (outputParameters == null) {
+			if (outputParameters == null || outputParameters.getOutputParameter().isEmpty()) {
 				return this;
 			}
 
@@ -341,6 +364,10 @@ public class TOperation extends TExtensibleElements {
 			TOperation.OutputParameters tmp = new TOperation.OutputParameters();
 			tmp.getOutputParameter().add(outputParameters);
 			return addOutputParameters(tmp);
+		}
+
+		public TOperation build() {
+			return new TOperation(this);
 		}
 	}
 }

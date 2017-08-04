@@ -8,13 +8,14 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,6 +29,7 @@ import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -65,6 +67,24 @@ public class TRelationshipTemplate extends TEntityTemplate {
 		this.name = builder.name;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRelationshipTemplate)) return false;
+		if (!super.equals(o)) return false;
+		TRelationshipTemplate that = (TRelationshipTemplate) o;
+		return Objects.equals(sourceElement, that.sourceElement) &&
+				Objects.equals(targetElement, that.targetElement) &&
+				Objects.equals(relationshipConstraints, that.relationshipConstraints) &&
+				Objects.equals(name, that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), sourceElement, targetElement, relationshipConstraints, name);
+	}
+
+	/*@NonNull*/
 	public TRelationshipTemplate.SourceOrTargetElement getSourceElement() {
 		return sourceElement;
 	}
@@ -85,6 +105,7 @@ public class TRelationshipTemplate extends TEntityTemplate {
 		this.targetElement = targetElement;
 	}
 
+	/*@NonNull*/
 	public TRelationshipTemplate.SourceOrTargetElement getTargetElement() {
 		return targetElement;
 	}
@@ -98,6 +119,7 @@ public class TRelationshipTemplate extends TEntityTemplate {
 	 *
 	 * @return possible object is {@link TRelationshipTemplate.RelationshipConstraints }
 	 */
+	/*@Nullable*/
 	public TRelationshipTemplate.RelationshipConstraints getRelationshipConstraints() {
 		return relationshipConstraints;
 	}
@@ -116,6 +138,7 @@ public class TRelationshipTemplate extends TEntityTemplate {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@Nullable
 	public String getName() {
 		return name;
 	}
@@ -285,9 +308,9 @@ public class TRelationshipTemplate extends TEntityTemplate {
 	}
 
 	public static class Builder extends TEntityTemplate.Builder {
-		private final TRelationshipTemplate.SourceOrTargetElement sourceElement;
-		private final TRelationshipTemplate.SourceOrTargetElement targetElement;
-		private TRelationshipTemplate.RelationshipConstraints relationshipConstraints;
+		private final SourceOrTargetElement sourceElement;
+		private final SourceOrTargetElement targetElement;
+		private RelationshipConstraints relationshipConstraints;
 		private String name;
 
 		public Builder(String id, QName type, TRelationshipTemplate.SourceOrTargetElement sourceElement, TRelationshipTemplate.SourceOrTargetElement targetElement) {
@@ -304,6 +327,39 @@ public class TRelationshipTemplate extends TEntityTemplate {
 		public Builder setName(String name) {
 			this.name = name;
 			return this;
+		}
+
+		public Builder addRelationshipConstraints(TRelationshipTemplate.RelationshipConstraints relationshipConstraints) {
+			if (relationshipConstraints == null || relationshipConstraints.getRelationshipConstraint().isEmpty()) {
+				return this;
+			}
+
+			if (this.relationshipConstraints == null) {
+				this.relationshipConstraints = relationshipConstraints;
+			} else {
+				this.relationshipConstraints.getRelationshipConstraint().addAll(relationshipConstraints.getRelationshipConstraint());
+			}
+			return this;
+		}
+
+		public Builder addRelationshipConstraints(List<RelationshipConstraints.RelationshipConstraint> relationshipConstraints) {
+			if (relationshipConstraints == null) {
+				return this;
+			}
+
+			TRelationshipTemplate.RelationshipConstraints tmp = new TRelationshipTemplate.RelationshipConstraints();
+			tmp.getRelationshipConstraint().addAll(relationshipConstraints);
+			return addRelationshipConstraints(tmp);
+		}
+
+		public Builder addRelationshipConstraints(RelationshipConstraints.RelationshipConstraint relationshipConstraints) {
+			if (relationshipConstraints == null) {
+				return this;
+			}
+
+			TRelationshipTemplate.RelationshipConstraints tmp = new TRelationshipTemplate.RelationshipConstraints();
+			tmp.getRelationshipConstraint().add(relationshipConstraints);
+			return addRelationshipConstraints(tmp);
 		}
 
 		public TRelationshipTemplate build() {

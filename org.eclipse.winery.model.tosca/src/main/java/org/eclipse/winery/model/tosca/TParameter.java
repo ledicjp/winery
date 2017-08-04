@@ -8,15 +8,19 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 
 /**
@@ -55,11 +59,27 @@ public class TParameter {
 		this.required = builder.required;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TParameter)) return false;
+		TParameter that = (TParameter) o;
+		return Objects.equals(name, that.name) &&
+				Objects.equals(type, that.type) &&
+				required == that.required;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, type, required);
+	}
+
 	/**
 	 * Gets the value of the name property.
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -78,6 +98,7 @@ public class TParameter {
 	 *
 	 * @return possible object is {@link String }
 	 */
+	@NonNull
 	public String getType() {
 		return type;
 	}
@@ -96,6 +117,7 @@ public class TParameter {
 	 *
 	 * @return possible object is {@link TBoolean }
 	 */
+	@NonNull
 	public TBoolean getRequired() {
 		if (required == null) {
 			return TBoolean.YES;

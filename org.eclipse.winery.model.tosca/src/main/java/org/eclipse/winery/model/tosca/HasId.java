@@ -8,15 +8,19 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code contribution
- *    Christoph Kleine - Builder implementation
+ *    Christoph Kleine - additional code contribution
  *******************************************************************************/
 package org.eclipse.winery.model.tosca;
+
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 public abstract class HasId extends TExtensibleElements {
 
@@ -38,6 +42,20 @@ public abstract class HasId extends TExtensibleElements {
 		this.id = builder.id;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof HasId)) return false;
+		HasId hasId = (HasId) o;
+		return Objects.equals(id, hasId.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@NonNull
 	public String getId() {
 		return id;
 	}
