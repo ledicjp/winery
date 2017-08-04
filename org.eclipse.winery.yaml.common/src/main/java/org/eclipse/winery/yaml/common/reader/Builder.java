@@ -13,6 +13,7 @@ package org.eclipse.winery.yaml.common.reader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,10 +64,9 @@ import org.eclipse.winery.model.tosca.yaml.TSubstitutionMappings;
 import org.eclipse.winery.model.tosca.yaml.TTopologyTemplateDefinition;
 import org.eclipse.winery.model.tosca.yaml.TVersion;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.support.StringList;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
-import org.eclipse.winery.model.tosca.yaml.support.TMapObjectValue;
+import org.eclipse.winery.model.tosca.yaml.support.TMapObject;
 import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
@@ -192,7 +192,7 @@ public class Builder {
 	}
 
 	@Nullable
-	public Map<String, ObjectValue> buildDsl_definitions(Object object) {
+	public Map<String, Object> buildDsl_definitions(Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -200,9 +200,9 @@ public class Builder {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) object;
 
-		Map<String, ObjectValue> dsl_definitions = new LinkedHashMap<>();
+		Map<String, Object> dsl_definitions = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			dsl_definitions.put(entry.getKey(), new ObjectValue(entry.getValue()));
+			dsl_definitions.put(entry.getKey(), entry.getValue());
 		}
 
 		return dsl_definitions;
@@ -328,10 +328,12 @@ public class Builder {
 		if (name.contains(":")) {
 			Integer pos = name.indexOf(":");
 			String prefix = name.substring(0, pos);
-			name = name.substring(pos, name.length());
+			name = name.substring(pos + 1, name.length());
 			return new QName(prefix2Namespace.get(prefix), name, prefix);
 		} else if (Defaults.TOSCA_NORMATIVE_NAMES.contains(name)) {
 			return new QName(Namespaces.TOSCA_NS, name, "tosca");
+		} else if (Defaults.YAML_TYPES.contains(name)) {
+			return new QName(Namespaces.YAML_NS, name, "yaml");
 		} else {
 			return new QName(namespace, name, "");
 		}
@@ -429,7 +431,7 @@ public class Builder {
 		TPropertyDefinition.Builder builder = new TPropertyDefinition.Builder(type);
 		builder.setDescription(buildDescription(map.get("description")));
 		builder.setRequired(buildRequired(map.get("required")));
-		builder.set_default(buildDefault(map.get("default")));
+		builder.set_default(map.get("default"));
 		builder.setStatus(buildStatus(map.get("status")));
 		builder.setConstraints(buildConstraints(map.get("constraints")));
 		builder.setEntry_schema(buildEntrySchema(map.get("entry_schema")));
@@ -451,17 +453,7 @@ public class Builder {
 			return (Boolean) object;
 		}
 
-		assert (object instanceof String || object instanceof Boolean);
 		return Boolean.FALSE;
-	}
-
-	@Nullable
-	public ObjectValue buildDefault(Object object) {
-		if (object == null) {
-			return null;
-		}
-
-		return new ObjectValue(object);
 	}
 
 	@Nullable
@@ -519,69 +511,53 @@ public class Builder {
 
 		switch (key) {
 			case "equal":
-				constraintClause.setEqual(buildObjectValue(object));
+				constraintClause.setEqual(object);
 				break;
 			case "greater_than":
-				constraintClause.setGreater_or_equal(buildObjectValue(object));
+				constraintClause.setGreater_or_equal(object);
 				break;
 			case "greater_or_equal":
-				constraintClause.setGreater_or_equal(buildObjectValue(object));
+				constraintClause.setGreater_or_equal(object);
 				break;
 			case "less_than":
-				constraintClause.setLess_than(buildObjectValue(object));
+				constraintClause.setLess_than(object);
 				break;
 			case "less_or_equal":
-				constraintClause.setLess_or_equal(buildObjectValue(object));
+				constraintClause.setLess_or_equal(object);
 				break;
 			case "in_range":
-				constraintClause.setIn_range(buildListObjectValue(object));
+				constraintClause.setIn_range(buildListObject(object));
 				break;
 			case "valid_values":
-				constraintClause.setValid_values(buildListObjectValue(object));
+				constraintClause.setValid_values(buildListObject(object));
 				break;
 			case "length":
-				constraintClause.setLength(buildObjectValue(object));
+				constraintClause.setLength(object);
 				break;
 			case "min_length":
-				constraintClause.setMin_length(buildObjectValue(object));
+				constraintClause.setMin_length(object);
 				break;
 			case "max_length":
-				constraintClause.setMax_length(buildObjectValue(object));
+				constraintClause.setMax_length(object);
 				break;
 			case "pattern":
-				constraintClause.setPattern(buildObjectValue(object));
+				constraintClause.setPattern(object);
 				break;
 			default:
-				assert (false);
 		}
 
 		return constraintClause;
 	}
 
 	@Nullable
-	public ObjectValue buildObjectValue(Object object) {
-		if (object == null) {
-			return null;
-		}
-
-		return new ObjectValue(object);
-	}
-
-	@Nullable
-	public List<ObjectValue> buildListObjectValue(Object object) {
+	public List<Object> buildListObject(Object object) {
 		if (object == null) {
 			return null;
 		}
 
 		@SuppressWarnings("unchecked")
-		List<Object> list = (List<Object>) object;
-
-		List<ObjectValue> objectValueList = new ArrayList<>();
-		for (Object entry : list) {
-			objectValueList.add(buildObjectValue(entry));
-		}
-
-		return objectValueList;
+		List<Object> result = (List<Object>) object;
+		return result;
 	}
 
 	@Nullable
@@ -630,7 +606,7 @@ public class Builder {
 		QName type = buildQName((String) map.get("type"));
 		TAttributeDefinition.Builder builder = new TAttributeDefinition.Builder(type);
 		builder.setDescription(buildDescription(map.get("description")));
-		builder.set_default(buildDefault(map.get("default")));
+		builder.set_default(map.get("default"));
 		builder.setStatus(buildStatus(map.get("status")));
 		builder.setEntry_schema(buildEntrySchema(map.get("entry_schema")));
 
@@ -779,6 +755,7 @@ public class Builder {
 		TOperationDefinition.Builder builder = new TOperationDefinition.Builder();
 		builder.setDescription(buildDescription(map.get("description")));
 		builder.setInputs(buildPropertyAssignmentOrDefinition(map.get("inputs"), context));
+		builder.setOutputs(buildPropertyAssignmentOrDefinition(map.get("outputs"), context));
 		builder.setImplementation(buildImplementation(map.get("implementation")));
 
 		return builder.build();
@@ -833,7 +810,7 @@ public class Builder {
 		}
 
 		TPropertyAssignment.Builder builder = new TPropertyAssignment.Builder();
-		builder.setValue(new ObjectValue(object));
+		builder.setValue(object);
 
 		return builder.build();
 	}
@@ -1114,18 +1091,24 @@ public class Builder {
 			String file = (String) object;
 			// TODO infer artifact type and mime type from file URI
 			String type = file.substring(file.lastIndexOf("."), file.length());
-			return new TArtifactDefinition.Builder(buildQName(type), file).build();
+			return new TArtifactDefinition.Builder(buildQName(type), new ArrayList<>(Collections.singleton(file))).build();
 		}
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) object;
 
 		QName type = buildQName((String) map.get("type"));
-		String file = (String) map.get("file");
-		TArtifactDefinition.Builder builder = new TArtifactDefinition.Builder(type, file);
+		List<String> files;
+		if (map.get("file") instanceof String) {
+			files = new ArrayList<>(Collections.singleton((String) map.get("file")));
+		} else {
+			files = buildListString(map.get("file"));
+		}
+		TArtifactDefinition.Builder builder = new TArtifactDefinition.Builder(type, files);
 		builder.setRepository((String) map.get("repository"));
 		builder.setDescription(buildDescription(map.get("description")));
 		builder.setDeploy_path((String) map.get("deploy_path"));
+		builder.setProperties(buildMapPropertyAssignment(map.get("properties")));
 
 		return builder.build();
 	}
@@ -1193,7 +1176,7 @@ public class Builder {
 
 		TPolicyType.Builder builder = new TPolicyType.Builder(buildEntityType(object));
 		builder.setTargets(buildListQName(buildListString(map.get("targets"))));
-		builder.setTriggers(buildObjectValue(map.get("triggers")));
+		builder.setTriggers(map.get("triggers"));
 
 		return builder.build();
 	}
@@ -1225,7 +1208,7 @@ public class Builder {
 		Map<String, Object> map = (Map<String, Object>) object;
 
 		TParameterDefinition.Builder builder = new TParameterDefinition.Builder(buildPropertyDefinition(object));
-		builder.setValue(buildObjectValue(map.get("value")));
+		builder.setValue(map.get("value"));
 
 		return builder.build();
 	}
@@ -1301,7 +1284,7 @@ public class Builder {
 
 		TAttributeAssignment.Builder builder = new TAttributeAssignment.Builder();
 		builder.setDescription(buildDescription(map.get("description")));
-		builder.setValue(buildObjectValue(map.get("value")));
+		builder.setValue(map.get("value"));
 
 		return builder.build();
 	}
@@ -1485,7 +1468,7 @@ public class Builder {
 	}
 
 	@Nullable
-	public List<TMapObjectValue> buildListMapObjectValue(Object object) {
+	public List<TMapObject> buildListMapObjectValue(Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -1493,7 +1476,7 @@ public class Builder {
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> list = (List<Map<String, Object>>) object;
 
-		List<TMapObjectValue> result = new ArrayList<>();
+		List<TMapObject> result = new ArrayList<>();
 		for (Map<String, Object> map : list) {
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				result.add(buildMapObjectValue(entry.getKey(), entry.getValue()));
@@ -1504,13 +1487,13 @@ public class Builder {
 	}
 
 	@Nullable
-	public TMapObjectValue buildMapObjectValue(String key, Object object) {
+	public TMapObject buildMapObjectValue(String key, Object object) {
 		if (object == null) {
 			return null;
 		}
 
-		TMapObjectValue result = new TMapObjectValue();
-		result.put(key, buildObjectValue(object));
+		TMapObject result = new TMapObject();
+		result.put(key, object);
 
 		return result;
 	}

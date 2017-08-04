@@ -9,26 +9,21 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml.visitor;
+package org.eclipse.winery.yaml.common.validator.support;
 
-import java.util.List;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 
-import org.eclipse.jdt.annotation.NonNull;
+public class Parameter extends AbstractParameter<Parameter> {
 
-public interface IParameter<P> {
-	String getKey();
+	@Override
+	public Parameter copy() {
+		Parameter parameter = new Parameter();
+		parameter.getContext().addAll(this.getContext());
+		return parameter;
+	}
 
-	List<String> getContext();
-
-	P addContext(String listName, String key);
-
-	P addContext(String key);
-
-	P addContext(List<String> context);
-
-	@NonNull
-	P copy();
-
-	@NonNull
-	P self();
+	@Override
+	public Parameter self() {
+		return this;
+	}
 }

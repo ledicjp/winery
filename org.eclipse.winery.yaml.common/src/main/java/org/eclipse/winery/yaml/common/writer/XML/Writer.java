@@ -18,12 +18,14 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.eclipse.winery.model.tosca.TDefinitions;
+import org.eclipse.winery.yaml.common.writer.XML.support.AnonymousPropertiesList;
+import org.eclipse.winery.yaml.common.writer.XML.support.PropertiesList;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 public class Writer {
 	public void writeXML(TDefinitions definitions, String fileName) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(TDefinitions.class);
+		JAXBContext context = JAXBContext.newInstance(TDefinitions.class, PropertiesList.class, AnonymousPropertiesList.class);
 
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

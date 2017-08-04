@@ -11,15 +11,21 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.winery.model.tosca.yaml.support.Annotations;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -37,20 +43,24 @@ public class TArtifactDefinition {
 	@XmlAttribute(name = "type", required = true)
 	private QName type;
 	@XmlAttribute(name = "file", required = true)
-	private String file;
+	private List<String> file;
 	private String repository;
 	private String description;
 	private String deploy_path;
+
+	@Annotations.StandardExtension
+	private Map<String, TPropertyAssignment> properties;
 
 	public TArtifactDefinition() {
 	}
 
 	public TArtifactDefinition(Builder builder) {
 		this.setType(builder.type);
-		this.setFile(builder.file);
+		this.setFiles(builder.file);
 		this.setRepository(builder.repository);
 		this.setDescription(builder.description);
 		this.setDeploy_path(builder.deploy_path);
+		this.setProperties(builder.properties);
 	}
 
 	@NonNull
@@ -62,12 +72,29 @@ public class TArtifactDefinition {
 		this.type = type;
 	}
 
+	@Annotations.StandardExtension
 	@NonNull
-	public String getFile() {
+	public List<String> getFiles() {
 		return file;
 	}
 
+	@Annotations.StandardExtension
+	public void setFiles(List<String> file) {
+		this.file = file;
+	}
+
+	@Deprecated
+	@NonNull
+	public String getFile() {
+		return this.file.get(0);
+	}
+
+	@Deprecated
 	public void setFile(String file) {
+		this.file = new ArrayList<>(Collections.singleton(file));
+	}
+
+	public void setFile(List<String> file) {
 		this.file = file;
 	}
 
@@ -98,21 +125,41 @@ public class TArtifactDefinition {
 		this.deploy_path = deploy_path;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public Map<String, TPropertyAssignment> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, TPropertyAssignment> properties) {
+		this.properties = properties;
+	}
+
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
 	public static class Builder {
 		private final QName type;
-		private final String file;
+		private final List<String> file;
 
 		private String repository;
 		private String description;
 		private String deploy_path;
 
-		public Builder(QName type, String file) {
+		@Annotations.StandardExtension
+		private Map<String, TPropertyAssignment> properties;
+
+		public Builder(QName type, List<String> file) {
 			this.type = type;
 			this.file = file;
+		}
+
+		public Builder(TArtifactDefinition artifactDefinition) {
+			this.type = artifactDefinition.getType();
+			this.file = artifactDefinition.getFiles();
+			this.repository = artifactDefinition.getRepository();
+			this.description = artifactDefinition.getDescription();
+			this.deploy_path = artifactDefinition.getDeploy_path();
+			this.properties = artifactDefinition.getProperties();
 		}
 
 		public Builder setRepository(String repository) {
@@ -127,6 +174,11 @@ public class TArtifactDefinition {
 
 		public Builder setDeploy_path(String deploy_path) {
 			this.deploy_path = deploy_path;
+			return this;
+		}
+
+		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+			this.properties = properties;
 			return this;
 		}
 

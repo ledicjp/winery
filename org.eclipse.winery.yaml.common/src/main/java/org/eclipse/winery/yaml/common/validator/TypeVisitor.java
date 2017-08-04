@@ -28,9 +28,9 @@ import org.eclipse.winery.model.tosca.yaml.TPolicyType;
 import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.yaml.common.Namespaces;
+import org.eclipse.winery.yaml.common.validator.support.Parameter;
+import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class TypeVisitor extends ImportVisitor {
 	private Map<String, List<String>> artifactTypes;
@@ -55,7 +55,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TArtifactType node, IParameter parameter) throws IException {
+	public Result visit(TArtifactType node, Parameter parameter) throws IException {
 		this.setArtifactTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), artifactTypes);
 		super.visit(node, parameter);
@@ -63,7 +63,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TDataType node, IParameter parameter) throws IException {
+	public Result visit(TDataType node, Parameter parameter) throws IException {
 		this.setDataTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), dataTypes);
 		super.visit(node, parameter);
@@ -71,7 +71,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TCapabilityType node, IParameter parameter) throws IException {
+	public Result visit(TCapabilityType node, Parameter parameter) throws IException {
 		this.setCapabilityTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), capabilityTypes);
 		super.visit(node, parameter);
@@ -79,7 +79,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TInterfaceType node, IParameter parameter) throws IException {
+	public Result visit(TInterfaceType node, Parameter parameter) throws IException {
 		this.setInterfaceTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), interfaceTypes);
 		super.visit(node, parameter);
@@ -87,7 +87,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TRelationshipType node, IParameter parameter) throws IException {
+	public Result visit(TRelationshipType node, Parameter parameter) throws IException {
 		this.setRelationshipTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), relationshipTypes);
 		super.visit(node, parameter);
@@ -95,7 +95,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TNodeType node, IParameter parameter) throws IException {
+	public Result visit(TNodeType node, Parameter parameter) throws IException {
 		this.setNodeTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), nodeTypes);
 		super.visit(node, parameter);
@@ -103,7 +103,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TGroupType node, IParameter parameter) throws IException {
+	public Result visit(TGroupType node, Parameter parameter) throws IException {
 		this.setGroupTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), groupTypes);
 		super.visit(node, parameter);
@@ -111,7 +111,7 @@ public class TypeVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TPolicyType node, IParameter parameter) throws IException {
+	public Result visit(TPolicyType node, Parameter parameter) throws IException {
 		this.setPolicyTypes(namespace, parameter.getKey());
 		setNormativeTypes(parameter.getKey(), node.getMetadata(), policyTypes);
 		super.visit(node, parameter);

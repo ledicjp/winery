@@ -9,40 +9,28 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml.support;
+package org.eclipse.winery.yaml.common.writer.XML.support;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ObjectValue", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"value"
-})
-public class ObjectValue {
-	private Object value;
+@XmlType(name = "")
+public class AnonymousPropertiesList {
+	@XmlAnyElement
+	private List<JAXBElement> entries = new ArrayList<>();
 
-	public ObjectValue() {
+	public AnonymousPropertiesList() {
+
 	}
 
-	// constructor for snakeYaml
-	public ObjectValue(Object value) {
-		this.value = value;
-	}
-
-	public Object getValue() {
-		return this.value;
-	}
-
-	public void setValue(Object any) {
-		this.value = any;
-	}
-
-	@Override
-	public String toString() {
-		if (this.value == null) {
-			return "";
-		}
-		return this.value.toString();
+	public AnonymousPropertiesList(String name, List<JAXBElement> entries) {
+		this.entries = entries;
 	}
 }

@@ -124,7 +124,7 @@ public class Reader {
 		// post parse checking
 		Validator validator = new Validator(new File(uri).getParentFile().getPath());
 		try {
-			validator.validate(result);
+			validator.validate(result, namespace);
 		} catch (YAMLParserException e) {
 			e.setFile_context(uri);
 			throw e;

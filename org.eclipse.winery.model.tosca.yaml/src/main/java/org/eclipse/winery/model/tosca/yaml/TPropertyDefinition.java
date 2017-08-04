@@ -21,10 +21,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -46,7 +45,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 	private String description;
 	private Boolean required;
 	@XmlElement(name = "default")
-	private ObjectValue _default;
+	private Object _default;
 	private TStatusValue status;
 	@XmlElement
 	private List<TConstraintClause> constraints;
@@ -96,17 +95,17 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 	}
 
 	@Nullable
-	public ObjectValue getDefault() {
+	public Object getDefault() {
 		return _default;
 	}
 
-	public void setDefault(String _default) {
-		ObjectValue tmp = new ObjectValue(_default);
-		setDefault(tmp);
+	public void setDefault(Object _default) {
+		this._default = _default;
 	}
 
-	public void setDefault(ObjectValue _default) {
-		this._default = _default;
+	public void setDefault(String _default) {
+		Object tmp = _default;
+		setDefault(tmp);
 	}
 
 	@NonNull
@@ -115,10 +114,6 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 			status = TStatusValue.supported;
 		}
 		return status;
-	}
-
-	public void setStatus(TStatusValue status) {
-		this.status = status;
 	}
 
 	public void setStatus(String status) {
@@ -137,6 +132,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 				break;
 			default:
 		}
+	}
+
+	public void setStatus(TStatusValue status) {
+		this.status = status;
 	}
 
 	@NonNull
@@ -160,7 +159,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.entry_schema = entry_schema;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
@@ -168,7 +167,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		private final QName type;
 		private String description;
 		private Boolean required;
-		private ObjectValue _default;
+		private Object _default;
 		private TStatusValue status;
 		private List<TConstraintClause> constraints;
 		private TEntrySchema entry_schema;
@@ -197,7 +196,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 			return this;
 		}
 
-		public Builder set_default(ObjectValue _default) {
+		public Builder set_default(Object _default) {
 			this._default = _default;
 			return this;
 		}

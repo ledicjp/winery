@@ -17,10 +17,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -37,107 +36,107 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 		"pattern"
 })
 public class TConstraintClause {
-	private ObjectValue equal;
-	private ObjectValue greater_than;
-	private ObjectValue greater_or_equal;
-	private ObjectValue less_than;
-	private ObjectValue less_or_equal;
-	private List<ObjectValue> in_range;
-	private List<ObjectValue> valid_values;
-	private ObjectValue length;
-	private ObjectValue min_length;
-	private ObjectValue max_length;
-	private ObjectValue pattern;
+	private Object equal;
+	private Object greater_than;
+	private Object greater_or_equal;
+	private Object less_than;
+	private Object less_or_equal;
+	private List<Object> in_range;
+	private List<Object> valid_values;
+	private Object length;
+	private Object min_length;
+	private Object max_length;
+	private Object pattern;
 
-	public ObjectValue getEqual() {
+	public Object getEqual() {
 		return equal;
 	}
 
-	public void setEqual(ObjectValue equal) {
+	public void setEqual(Object equal) {
 		this.equal = equal;
 	}
 
-	public ObjectValue getGreater_than() {
+	public Object getGreater_than() {
 		return greater_than;
 	}
 
-	public void setGreater_than(ObjectValue greater_than) {
+	public void setGreater_than(Object greater_than) {
 		this.greater_than = greater_than;
 	}
 
-	public ObjectValue getGreater_or_equal() {
+	public Object getGreater_or_equal() {
 		return greater_or_equal;
 	}
 
-	public void setGreater_or_equal(ObjectValue greater_or_equal) {
+	public void setGreater_or_equal(Object greater_or_equal) {
 		this.greater_or_equal = greater_or_equal;
 	}
 
-	public ObjectValue getLess_than() {
+	public Object getLess_than() {
 		return less_than;
 	}
 
-	public void setLess_than(ObjectValue less_than) {
+	public void setLess_than(Object less_than) {
 		this.less_than = less_than;
 	}
 
-	public ObjectValue getLess_or_equal() {
+	public Object getLess_or_equal() {
 		return less_or_equal;
 	}
 
-	public void setLess_or_equal(ObjectValue less_or_equal) {
+	public void setLess_or_equal(Object less_or_equal) {
 		this.less_or_equal = less_or_equal;
 	}
 
-	public List<ObjectValue> getIn_range() {
+	public List<Object> getIn_range() {
 		return in_range;
 	}
 
-	public void setIn_range(List<ObjectValue> in_range) {
+	public void setIn_range(List<Object> in_range) {
 		this.in_range = in_range;
 	}
 
-	public List<ObjectValue> getValid_values() {
+	public List<Object> getValid_values() {
 		return valid_values;
 	}
 
-	public void setValid_values(List<ObjectValue> valid_values) {
+	public void setValid_values(List<Object> valid_values) {
 		this.valid_values = valid_values;
 	}
 
-	public ObjectValue getLength() {
+	public Object getLength() {
 		return length;
 	}
 
-	public void setLength(ObjectValue length) {
+	public void setLength(Object length) {
 		this.length = length;
 	}
 
-	public ObjectValue getMin_length() {
+	public Object getMin_length() {
 		return min_length;
 	}
 
-	public void setMin_length(ObjectValue min_length) {
+	public void setMin_length(Object min_length) {
 		this.min_length = min_length;
 	}
 
-	public ObjectValue getMax_length() {
+	public Object getMax_length() {
 		return max_length;
 	}
 
-	public void setMax_length(ObjectValue max_length) {
+	public void setMax_length(Object max_length) {
 		this.max_length = max_length;
 	}
 
-	public ObjectValue getPattern() {
+	public Object getPattern() {
 		return pattern;
 	}
 
-	public void setPattern(ObjectValue pattern) {
+	public void setPattern(Object pattern) {
 		this.pattern = pattern;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 }

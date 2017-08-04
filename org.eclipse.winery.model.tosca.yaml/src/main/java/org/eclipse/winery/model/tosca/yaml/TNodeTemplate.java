@@ -24,9 +24,9 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -48,6 +48,9 @@ import org.eclipse.jdt.annotation.Nullable;
 		"metadata"
 })
 public class TNodeTemplate {
+	/**
+	 * Name of a {@link TNodeType}
+	 */
 	@XmlAttribute(name = "type", required = true)
 	private QName type;
 	private String description;
@@ -217,7 +220,7 @@ public class TNodeTemplate {
 		this.copy = copy;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 

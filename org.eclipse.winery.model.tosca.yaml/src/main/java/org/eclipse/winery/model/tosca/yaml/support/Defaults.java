@@ -9,26 +9,8 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml.visitor;
+package org.eclipse.winery.model.tosca.yaml.support;
 
-import java.util.List;
-
-import org.eclipse.jdt.annotation.NonNull;
-
-public interface IParameter<P> {
-	String getKey();
-
-	List<String> getContext();
-
-	P addContext(String listName, String key);
-
-	P addContext(String key);
-
-	P addContext(List<String> context);
-
-	@NonNull
-	P copy();
-
-	@NonNull
-	P self();
+public class Defaults {
+	public static final String DEFAULT_NS = "http://www.eclipse.org/winery/ns/simple/yaml/1.1/default";
 }

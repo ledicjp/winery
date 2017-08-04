@@ -21,21 +21,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tMapObjectValue", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
+@XmlType(name = "tMapObject", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"map"
 })
-public class TMapObjectValue implements Map<String, ObjectValue> {
-	private Map<String, ObjectValue> map;
+public class TMapObject implements Map<String, Object> {
+	private Map<String, Object> map;
 
-	public TMapObjectValue() {
+	public TMapObject() {
 		this.map = new LinkedHashMap<>();
 	}
 
-	public Map<String, ObjectValue> getMap() {
+	public Map<String, Object> getMap() {
 		return map;
 	}
 
-	public void setMap(Map<String, ObjectValue> map) {
+	public void setMap(Map<String, Object> map) {
 		this.map = map;
 	}
 
@@ -60,22 +60,22 @@ public class TMapObjectValue implements Map<String, ObjectValue> {
 	}
 
 	@Override
-	public ObjectValue get(Object o) {
+	public Object get(Object o) {
 		return this.map.get(o);
 	}
 
 	@Override
-	public ObjectValue put(String s, ObjectValue objectValue) {
-		return this.map.put(s, objectValue);
+	public Object put(String s, Object object) {
+		return this.map.put(s, object);
 	}
 
 	@Override
-	public ObjectValue remove(Object o) {
+	public Object remove(Object o) {
 		return this.map.remove(o);
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends ObjectValue> map) {
+	public void putAll(Map<? extends String, ? extends Object> map) {
 		this.map.putAll(map);
 	}
 
@@ -90,12 +90,12 @@ public class TMapObjectValue implements Map<String, ObjectValue> {
 	}
 
 	@Override
-	public Collection<ObjectValue> values() {
+	public Collection<Object> values() {
 		return this.map.values();
 	}
 
 	@Override
-	public Set<Entry<String, ObjectValue>> entrySet() {
+	public Set<Entry<String, Object>> entrySet() {
 		return this.map.entrySet();
 	}
 }

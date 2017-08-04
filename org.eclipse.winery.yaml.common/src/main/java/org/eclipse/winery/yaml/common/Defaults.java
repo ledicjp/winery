@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 public class Defaults {
 	public static final String TOSCA_NORMATIVE_TYPES = "tosca_simple_yaml_1_1.yml";
 	public static final List<String> YAML_TYPES = new ArrayList<>(Arrays.asList("string", "integer", "float", "boolean", "timestamp", "null"));
@@ -77,4 +79,7 @@ public class Defaults {
 			"tosca.policies.Update",
 			"tosca.policies.Performance"
 	));
+
+	public static final QName IMPLEMENTATION_ARTIFACTS = new QName(Namespaces.TOSCA_NS, "tosca.artifacts.Implementation");
+	public static final QName DEPLOYMENT_ARTIFACTS = new QName(Namespaces.TOSCA_NS, "tosca.artifacts.Deployment");
 }

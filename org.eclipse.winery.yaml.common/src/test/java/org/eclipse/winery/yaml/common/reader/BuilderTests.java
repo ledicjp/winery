@@ -14,6 +14,7 @@ package org.eclipse.winery.yaml.common.reader;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.yaml.common.Exception.MissingImportFile;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BuilderTests {
@@ -58,6 +59,7 @@ public class BuilderTests {
 		TServiceTemplate serviceTemplate = reader.parse(getName(name));
 	}
 
+	@Ignore
 	@Test(expected = MissingImportFile.class)
 	public void imports() throws Exception {
 		String name = "3_9_3_9-imports-1_1";

@@ -19,10 +19,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -34,7 +33,7 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TPolicyType extends TEntityType {
 	private List<QName> targets;
-	private ObjectValue triggers;
+	private Object triggers;
 
 	public TPolicyType() {
 	}
@@ -58,17 +57,17 @@ public class TPolicyType extends TEntityType {
 		this.targets = targets;
 	}
 
-	public ObjectValue getTriggers() {
+	public Object getTriggers() {
 		return triggers;
 	}
 
-	public void setTriggers(ObjectValue triggers) {
+	public void setTriggers(Object triggers) {
 		this.triggers = triggers;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
-		IResult ir1 = super.accept(visitor, parameter);
-		IResult ir2 = visitor.visit(this, parameter);
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+		R ir1 = super.accept(visitor, parameter);
+		R ir2 = visitor.visit(this, parameter);
 		if (ir1 == null) {
 			return ir2;
 		} else {
@@ -78,7 +77,7 @@ public class TPolicyType extends TEntityType {
 
 	public static class Builder extends TEntityType.Builder {
 		private List<QName> targets;
-		private ObjectValue triggers;
+		private Object triggers;
 
 		public Builder() {
 
@@ -93,7 +92,7 @@ public class TPolicyType extends TEntityType {
 			return this;
 		}
 
-		public Builder setTriggers(ObjectValue triggers) {
+		public Builder setTriggers(Object triggers) {
 			this.triggers = triggers;
 			return this;
 		}

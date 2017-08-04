@@ -17,9 +17,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.winery.model.tosca.yaml.support.Defaults;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -72,8 +73,11 @@ public class TImportDefinition {
 		this.repository = repository;
 	}
 
-	@Nullable
+	@NonNull
 	public String getNamespace_uri() {
+		if (namespace_uri == null || namespace_uri.isEmpty()) {
+			this.namespace_uri = Defaults.DEFAULT_NS;
+		}
 		return namespace_uri;
 	}
 
@@ -90,7 +94,7 @@ public class TImportDefinition {
 		this.namespace_prefix = namespace_prefix;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 

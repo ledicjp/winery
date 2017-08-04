@@ -18,11 +18,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.winery.model.tosca.yaml.support.TMapObjectValue;
+import org.eclipse.winery.model.tosca.yaml.support.TMapObject;
 import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -34,7 +34,7 @@ import org.eclipse.jdt.annotation.NonNull;
 })
 public class TNodeFilterDefinition {
 	private List<TMapPropertyFilterDefinition> properties;
-	private List<TMapObjectValue> capabilities;
+	private List<TMapObject> capabilities;
 
 	public TNodeFilterDefinition() {
 	}
@@ -58,7 +58,7 @@ public class TNodeFilterDefinition {
 	}
 
 	@NonNull
-	public List<TMapObjectValue> getCapabilities() {
+	public List<TMapObject> getCapabilities() {
 		if (this.capabilities == null) {
 			this.capabilities = new ArrayList<>();
 		}
@@ -66,17 +66,17 @@ public class TNodeFilterDefinition {
 		return capabilities;
 	}
 
-	public void setCapabilities(List<TMapObjectValue> capabilities) {
+	public void setCapabilities(List<TMapObject> capabilities) {
 		this.capabilities = capabilities;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
 	public static class Builder {
 		private List<TMapPropertyFilterDefinition> properties;
-		private List<TMapObjectValue> capabilities;
+		private List<TMapObject> capabilities;
 
 
 		public Builder() {
@@ -88,7 +88,7 @@ public class TNodeFilterDefinition {
 			return this;
 		}
 
-		public Builder setCapabilities(List<TMapObjectValue> capabilities) {
+		public Builder setCapabilities(List<TMapObject> capabilities) {
 			this.capabilities = capabilities;
 			return this;
 		}

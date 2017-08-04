@@ -18,10 +18,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -40,7 +39,7 @@ public class TAttributeDefinition {
 	@XmlAttribute(name = "type", required = true)
 	private QName type;
 	@XmlElement(name = "default")
-	private ObjectValue _default;
+	private Object _default;
 	private TStatusValue status;
 	private TEntrySchema entry_schema;
 
@@ -74,11 +73,11 @@ public class TAttributeDefinition {
 	}
 
 	@Nullable
-	public ObjectValue getDefault() {
+	public Object getDefault() {
 		return _default;
 	}
 
-	public void setDefault(ObjectValue _default) {
+	public void setDefault(Object _default) {
 		this._default = _default;
 	}
 
@@ -100,14 +99,14 @@ public class TAttributeDefinition {
 		this.entry_schema = entry_schema;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
 	public static class Builder {
 		private final QName type;
 		private String description;
-		private ObjectValue _default;
+		private Object _default;
 		private TStatusValue status;
 		private TEntrySchema entry_schema;
 
@@ -120,7 +119,7 @@ public class TAttributeDefinition {
 			return this;
 		}
 
-		public Builder set_default(ObjectValue _default) {
+		public Builder set_default(Object _default) {
 			this._default = _default;
 			return this;
 		}

@@ -52,84 +52,84 @@ import org.eclipse.winery.model.tosca.yaml.TTopologyTemplateDefinition;
 import org.eclipse.winery.model.tosca.yaml.TVersion;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 
-public interface IVisitor {
-	IResult visit(TArtifactDefinition node, IParameter parameter) throws IException;
+public interface IVisitor<R extends AbstractResult, P extends AbstractParameter> {
+	R visit(TArtifactDefinition node, P parameter) throws IException;
 
-	IResult visit(TArtifactType node, IParameter parameter) throws IException;
+	R visit(TArtifactType node, P parameter) throws IException;
 
-	IResult visit(TAttributeAssignment node, IParameter parameter) throws IException;
+	R visit(TAttributeAssignment node, P parameter) throws IException;
 
-	IResult visit(TAttributeDefinition node, IParameter parameter) throws IException;
+	R visit(TAttributeDefinition node, P parameter) throws IException;
 
-	IResult visit(TCapabilityAssignment node, IParameter parameter) throws IException;
+	R visit(TCapabilityAssignment node, P parameter) throws IException;
 
-	IResult visit(TCapabilityDefinition node, IParameter parameter) throws IException;
+	R visit(TCapabilityDefinition node, P parameter) throws IException;
 
-	IResult visit(TCapabilityType node, IParameter parameter) throws IException;
+	R visit(TCapabilityType node, P parameter) throws IException;
 
-	IResult visit(TConstraintClause node, IParameter parameter) throws IException;
+	R visit(TConstraintClause node, P parameter) throws IException;
 
-	IResult visit(TDataType node, IParameter parameter) throws IException;
+	R visit(TDataType node, P parameter) throws IException;
 
-	IResult visit(TEntityType node, IParameter parameter) throws IException;
+	R visit(TEntityType node, P parameter) throws IException;
 
-	IResult visit(TEntrySchema node, IParameter parameter) throws IException;
+	R visit(TEntrySchema node, P parameter) throws IException;
 
-	IResult visit(TGroupDefinition node, IParameter parameter) throws IException;
+	R visit(TGroupDefinition node, P parameter) throws IException;
 
-	IResult visit(TGroupType node, IParameter parameter) throws IException;
+	R visit(TGroupType node, P parameter) throws IException;
 
-	IResult visit(TImplementation node, IParameter parameter) throws IException;
+	R visit(TImplementation node, P parameter) throws IException;
 
-	IResult visit(TImportDefinition node, IParameter parameter) throws IException;
+	R visit(TImportDefinition node, P parameter) throws IException;
 
-	IResult visit(TInterfaceAssignment node, IParameter parameter) throws IException;
+	R visit(TInterfaceAssignment node, P parameter) throws IException;
 
-	IResult visit(TInterfaceDefinition node, IParameter parameter) throws IException;
+	R visit(TInterfaceDefinition node, P parameter) throws IException;
 
-	IResult visit(TInterfaceType node, IParameter parameter) throws IException;
+	R visit(TInterfaceType node, P parameter) throws IException;
 
-	IResult visit(TNodeFilterDefinition node, IParameter parameter) throws IException;
+	R visit(TNodeFilterDefinition node, P parameter) throws IException;
 
-	IResult visit(TNodeTemplate node, IParameter parameter) throws IException;
+	R visit(TNodeTemplate node, P parameter) throws IException;
 
-	IResult visit(TNodeType node, IParameter parameter) throws IException;
+	R visit(TNodeType node, P parameter) throws IException;
 
-	IResult visit(TOperationDefinition node, IParameter parameter) throws IException;
+	R visit(TOperationDefinition node, P parameter) throws IException;
 
-	IResult visit(TParameterDefinition node, IParameter parameter) throws IException;
+	R visit(TParameterDefinition node, P parameter) throws IException;
 
-	IResult visit(TPolicyDefinition node, IParameter parameter) throws IException;
+	R visit(TPolicyDefinition node, P parameter) throws IException;
 
-	IResult visit(TPolicyType node, IParameter parameter) throws IException;
+	R visit(TPolicyType node, P parameter) throws IException;
 
-	IResult visit(TPropertyAssignment node, IParameter parameter) throws IException;
+	R visit(TPropertyAssignment node, P parameter) throws IException;
 
-	IResult visit(TPropertyDefinition node, IParameter parameter) throws IException;
+	R visit(TPropertyDefinition node, P parameter) throws IException;
 
-	IResult visit(TPropertyFilterDefinition node, IParameter parameter) throws IException;
+	R visit(TPropertyFilterDefinition node, P parameter) throws IException;
 
-	IResult visit(TRelationshipAssignment node, IParameter parameter) throws IException;
+	R visit(TRelationshipAssignment node, P parameter) throws IException;
 
-	IResult visit(TRelationshipDefinition node, IParameter parameter) throws IException;
+	R visit(TRelationshipDefinition node, P parameter) throws IException;
 
-	IResult visit(TRelationshipTemplate node, IParameter parameter) throws IException;
+	R visit(TRelationshipTemplate node, P parameter) throws IException;
 
-	IResult visit(TRelationshipType node, IParameter parameter) throws IException;
+	R visit(TRelationshipType node, P parameter) throws IException;
 
-	IResult visit(TRepositoryDefinition node, IParameter parameter) throws IException;
+	R visit(TRepositoryDefinition node, P parameter) throws IException;
 
-	IResult visit(TRequirementAssignment node, IParameter parameter) throws IException;
+	R visit(TRequirementAssignment node, P parameter) throws IException;
 
-	IResult visit(TRequirementDefinition node, IParameter parameter) throws IException;
+	R visit(TRequirementDefinition node, P parameter) throws IException;
 
-	IResult visit(TServiceTemplate node, IParameter parameter) throws IException;
+	R visit(TServiceTemplate node, P parameter) throws IException;
 
-	IResult visit(TSubstitutionMappings node, IParameter parameter) throws IException;
+	R visit(TSubstitutionMappings node, P parameter) throws IException;
 
-	IResult visit(TTopologyTemplateDefinition node, IParameter parameter) throws IException;
+	R visit(TTopologyTemplateDefinition node, P parameter) throws IException;
 
-	IResult visit(TVersion node, IParameter parameter) throws IException;
+	R visit(TVersion node, P parameter) throws IException;
 
-	IResult visit(Metadata node, IParameter parameter) throws IException;
+	R visit(Metadata node, P parameter) throws IException;
 }

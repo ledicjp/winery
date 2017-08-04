@@ -15,13 +15,13 @@ import org.eclipse.winery.model.tosca.yaml.TImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Namespaces;
 import org.eclipse.winery.yaml.common.reader.Reader;
+import org.eclipse.winery.yaml.common.validator.support.Parameter;
+import org.eclipse.winery.yaml.common.validator.support.Result;
 
-public class ImportVisitor extends AbstractVisitor {
+public class ImportVisitor extends AbstractVisitor<Result, Parameter> {
 	protected final String path;
 	protected String namespace;
 
@@ -31,7 +31,7 @@ public class ImportVisitor extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TServiceTemplate node, IParameter parameter) throws IException {
+	public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
 		Reader reader = new Reader();
 		if (!this.namespace.equals(Namespaces.TOSCA_NS)) {
 			TServiceTemplate serviceTemplate = reader.parseSkipTest(
@@ -47,7 +47,7 @@ public class ImportVisitor extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TImportDefinition node, IParameter parameter) throws IException {
+	public Result visit(TImportDefinition node, Parameter parameter) throws IException {
 		Reader reader = new Reader();
 		String importNamespace = node.getNamespace_uri() == null ? this.namespace : node.getNamespace_uri();
 		TServiceTemplate serviceTemplate = reader.parse(node, path, importNamespace);

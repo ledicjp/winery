@@ -11,24 +11,5 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml.visitor;
 
-import java.util.List;
-
-import org.eclipse.jdt.annotation.NonNull;
-
-public interface IParameter<P> {
-	String getKey();
-
-	List<String> getContext();
-
-	P addContext(String listName, String key);
-
-	P addContext(String key);
-
-	P addContext(List<String> context);
-
-	@NonNull
-	P copy();
-
-	@NonNull
-	P self();
+public abstract class AbstractResult<R extends AbstractResult> implements IResult<R> {
 }

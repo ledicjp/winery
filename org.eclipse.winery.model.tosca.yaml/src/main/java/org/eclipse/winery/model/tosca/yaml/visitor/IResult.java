@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml.visitor;
 
-public interface IResult {
-	IResult add(IResult iResult);
+public interface IResult<R> {
+	R add(R r);
 }

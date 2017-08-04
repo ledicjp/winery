@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,9 +31,9 @@ public class TInterfaceAssignment extends TInterfaceDefinition {
 		super(builder);
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
-		IResult ir1 = super.accept(visitor, parameter);
-		IResult ir2 = visitor.visit(this, parameter);
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+		R ir1 = super.accept(visitor, parameter);
+		R ir2 = visitor.visit(this, parameter);
 		if (ir1 == null) {
 			return ir2;
 		} else {

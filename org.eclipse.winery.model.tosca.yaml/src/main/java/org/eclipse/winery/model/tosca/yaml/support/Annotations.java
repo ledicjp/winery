@@ -21,7 +21,7 @@ public @interface Annotations {
 	@Documented
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.PACKAGE, ElementType.PARAMETER, ElementType.TYPE})
-	public @interface StandardExtension {
+	@interface StandardExtension {
 
 	}
 }

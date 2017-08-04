@@ -22,24 +22,24 @@ import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.tosca.datatypes.Credential;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Exception.ImplementationArtifactInvalidOnInterfaceType;
 import org.eclipse.winery.yaml.common.Exception.InvalidTOSCAVersion;
 import org.eclipse.winery.yaml.common.Exception.MissingRequiredKeyname;
 import org.eclipse.winery.yaml.common.Exception.MissingTOSCAVersion;
 import org.eclipse.winery.yaml.common.Exception.ValueTypeMismatch;
+import org.eclipse.winery.yaml.common.validator.support.Parameter;
+import org.eclipse.winery.yaml.common.validator.support.Result;
 
-public class Validator extends AbstractVisitor {
+public class Validator extends AbstractVisitor<Result, Parameter> {
 	private final String path;
 
 	public Validator(String path) {
 		this.path = path;
 	}
 
-	public void validate(TServiceTemplate serviceTemplate) throws IException {
-		TypeValidator typeValidator = new TypeValidator(path);
+	public void validate(TServiceTemplate serviceTemplate, String namespace) throws IException {
+		TypeValidator typeValidator = new TypeValidator(path, namespace);
 		typeValidator.validate(serviceTemplate);
 
 		DefinitionValidator definitionValidator = new DefinitionValidator(path);
@@ -49,7 +49,7 @@ public class Validator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TInterfaceType node, IParameter parameter) throws IException {
+	public Result visit(TInterfaceType node, Parameter parameter) throws IException {
 		if (node.getOperations() != null) {
 			for (Map.Entry<String, TOperationDefinition> entry : node.getOperations().entrySet()) {
 				if (entry.getValue().getImplementation() != null) {
@@ -61,7 +61,7 @@ public class Validator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TImportDefinition node, IParameter parameter) throws IException {
+	public Result visit(TImportDefinition node, Parameter parameter) throws IException {
 		if (node.getFile() == null || node.getFile().isEmpty()) {
 			String context = "Import Definition \"" + parameter.getKey() + "\"";
 			String keyname = "file";
@@ -71,7 +71,7 @@ public class Validator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TServiceTemplate node, IParameter parameter) throws IException {
+	public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
 		if (node.getTosca_definitions_version() == null) {
 			String msg = "tosca_definition_version is missing";
 			throw new MissingTOSCAVersion(msg);
@@ -87,7 +87,7 @@ public class Validator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TRepositoryDefinition node, IParameter parameter) throws IException {
+	public Result visit(TRepositoryDefinition node, Parameter parameter) throws IException {
 		if (node == null) {
 			return null;
 		}
@@ -115,7 +115,7 @@ public class Validator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(Metadata node, IParameter parameter) throws IException {
+	public Result visit(Metadata node, Parameter parameter) throws IException {
 		if (node == null) {
 			return null;
 		}

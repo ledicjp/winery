@@ -9,26 +9,30 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml.visitor;
+package org.eclipse.winery.yaml.common.writer.XML.support;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public interface IParameter<P> {
-	String getKey();
+@XmlRootElement(name = "Properties")
+public class PropertiesList {
+	@XmlAnyElement
+	private List<JAXBElement> entries = new ArrayList<>();
 
-	List<String> getContext();
+	@XmlAttribute(name = "xmlns")
+	private String namespace;
 
-	P addContext(String listName, String key);
+	public PropertiesList() {
 
-	P addContext(String key);
+	}
 
-	P addContext(List<String> context);
-
-	@NonNull
-	P copy();
-
-	@NonNull
-	P self();
+	public PropertiesList(List<JAXBElement> entries, String namespace) {
+		this.entries = entries;
+		this.namespace = namespace;
+	}
 }

@@ -20,8 +20,8 @@ import java.util.Map;
 import org.eclipse.winery.model.tosca.yaml.TNodeTemplate;
 import org.eclipse.winery.model.tosca.yaml.TRepositoryDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
+import org.eclipse.winery.yaml.common.validator.support.Parameter;
+import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class DefinitionsVisitor extends ImportVisitor {
 	private Map<String, List<String>> nodeTemplates;
@@ -34,13 +34,13 @@ public class DefinitionsVisitor extends ImportVisitor {
 	}
 
 	@Override
-	public IResult visit(TNodeTemplate node, IParameter parameter) throws IException {
+	public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
 		setDefinitions(parameter.getKey(), nodeTemplates);
 		return super.visit(node, parameter);
 	}
 
 	@Override
-	public IResult visit(TRepositoryDefinition node, IParameter parameter) throws IException {
+	public Result visit(TRepositoryDefinition node, Parameter parameter) throws IException {
 		setDefinitions(parameter.getKey(), repositoryDefinitions);
 		return super.visit(node, parameter);
 	}

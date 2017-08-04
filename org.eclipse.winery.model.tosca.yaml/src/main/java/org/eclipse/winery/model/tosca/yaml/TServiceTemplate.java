@@ -23,11 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -57,7 +56,7 @@ public class TServiceTemplate {
 	private String tosca_definitions_version;
 	private Metadata metadata;
 	private String description;
-	private Map<String, ObjectValue> dsl_definitions;
+	private Map<String, Object> dsl_definitions;
 	private Map<String, TRepositoryDefinition> repositories;
 	private List<TMapImportDefinition> imports;
 	private Map<String, TArtifactType> artifact_types;
@@ -111,7 +110,7 @@ public class TServiceTemplate {
 	}
 
 	@NonNull
-	public Map<String, ObjectValue> getDsl_definitions() {
+	public Map<String, Object> getDsl_definitions() {
 		if (this.dsl_definitions == null) {
 			this.dsl_definitions = new LinkedHashMap<>();
 		}
@@ -119,7 +118,7 @@ public class TServiceTemplate {
 		return dsl_definitions;
 	}
 
-	public void setDsl_definitions(Map<String, ObjectValue> dsl_definitions) {
+	public void setDsl_definitions(Map<String, Object> dsl_definitions) {
 		this.dsl_definitions = dsl_definitions;
 	}
 
@@ -271,7 +270,7 @@ public class TServiceTemplate {
 		this.topology_template = topology_template;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
@@ -279,7 +278,7 @@ public class TServiceTemplate {
 		private final String tosca_definitions_version;
 		private Metadata metadata;
 		private String description;
-		private Map<String, ObjectValue> dsl_definitions;
+		private Map<String, Object> dsl_definitions;
 		private Map<String, TRepositoryDefinition> repositories;
 		private List<TMapImportDefinition> imports;
 		private Map<String, TArtifactType> artifact_types;
@@ -306,7 +305,7 @@ public class TServiceTemplate {
 			return this;
 		}
 
-		public Builder setDsl_definitions(Map<String, ObjectValue> dsl_definitions) {
+		public Builder setDsl_definitions(Map<String, Object> dsl_definitions) {
 			this.dsl_definitions = dsl_definitions;
 			return this;
 		}

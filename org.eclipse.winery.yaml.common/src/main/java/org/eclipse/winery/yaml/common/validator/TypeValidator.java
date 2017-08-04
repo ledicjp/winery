@@ -30,8 +30,6 @@ import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Exception.InvalidNativeTypeExtend;
 import org.eclipse.winery.yaml.common.Exception.InvalidParentType;
@@ -39,14 +37,16 @@ import org.eclipse.winery.yaml.common.Exception.MissingNodeType;
 import org.eclipse.winery.yaml.common.Exception.UnknownCapabilitySourceType;
 import org.eclipse.winery.yaml.common.Exception.UnknownDataType;
 import org.eclipse.winery.yaml.common.Namespaces;
+import org.eclipse.winery.yaml.common.validator.support.Parameter;
+import org.eclipse.winery.yaml.common.validator.support.Result;
 
-public class TypeValidator extends AbstractVisitor {
+public class TypeValidator extends AbstractVisitor<Result, Parameter> {
 	private TypeVisitor typeVisitor;
 
-	public TypeValidator(String path) {
-		this.typeVisitor = new TypeVisitor(Namespaces.DEFAULT_NS, path);
-		this.typeVisitor.addDataTypes(Defaults.YAML_TYPES, Namespaces.DEFAULT_NS);
-		this.typeVisitor.addDataTypes(Defaults.TOSCA_TYPES, Namespaces.DEFAULT_NS);
+	public TypeValidator(String path, String namespace) {
+		this.typeVisitor = new TypeVisitor(namespace, path);
+		this.typeVisitor.addDataTypes(Defaults.YAML_TYPES, Namespaces.YAML_NS);
+		this.typeVisitor.addDataTypes(Defaults.TOSCA_TYPES, Namespaces.TOSCA_NS);
 	}
 
 	public void validate(TServiceTemplate serviceTemplate) throws IException {
@@ -64,7 +64,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TArtifactType node, IParameter parameter) throws IException {
+	public Result visit(TArtifactType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getArtifactTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -74,7 +74,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TCapabilityType node, IParameter parameter) throws IException {
+	public Result visit(TCapabilityType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getCapabilityTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -95,7 +95,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TDataType node, IParameter parameter) throws IException {
+	public Result visit(TDataType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getDataTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -116,7 +116,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TGroupType node, IParameter parameter) throws IException {
+	public Result visit(TGroupType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getGroupTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -126,7 +126,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TInterfaceType node, IParameter parameter) throws IException {
+	public Result visit(TInterfaceType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getInterfaceTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -136,7 +136,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TRelationshipType node, IParameter parameter) throws IException {
+	public Result visit(TRelationshipType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getRelationshipTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -146,7 +146,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TNodeType node, IParameter parameter) throws IException {
+	public Result visit(TNodeType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getNodeTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -156,7 +156,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TPolicyType node, IParameter parameter) throws IException {
+	public Result visit(TPolicyType node, Parameter parameter) throws IException {
 		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getPolicyTypes())) {
 			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
 			throw new InvalidParentType(msg);
@@ -166,7 +166,7 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TNodeTemplate node, IParameter parameter) throws IException {
+	public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
 		if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getNodeTypes())) {
 			// TODO add parameter.getContext to exception
 			throw new MissingNodeType(node.getType().toString());
@@ -176,9 +176,9 @@ public class TypeValidator extends AbstractVisitor {
 	}
 
 	@Override
-	public IResult visit(TPropertyDefinition node, IParameter parameter) throws IException {
+	public Result visit(TPropertyDefinition node, Parameter parameter) throws IException {
 		if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getDataTypes())) {
-			String msg = parameter.getKey() + ":type \"" + node.getType() + "\" is undefined!" + print(parameter.getContext());
+			String msg = parameter.getKey() + ":type \"" + node.getType() + "\" is undefined!\n" + print(parameter.getContext());
 			throw new UnknownDataType(msg);
 		}
 

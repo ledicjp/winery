@@ -15,10 +15,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -30,18 +29,18 @@ import org.eclipse.jdt.annotation.Nullable;
 })
 public class TAttributeAssignment {
 	private String description;
-	private ObjectValue value;
+	private Object value;
 
 	public TAttributeAssignment() {
 
 	}
 
 	public TAttributeAssignment(Object value) {
-		this.value = new ObjectValue(value);
+		this.value = value;
 	}
 
 	public TAttributeAssignment(String value) {
-		this.value = new ObjectValue(value);
+		this.value = value;
 	}
 
 	public TAttributeAssignment(Builder builder) {
@@ -59,21 +58,21 @@ public class TAttributeAssignment {
 	}
 
 	@Nullable
-	public ObjectValue getValue() {
+	public Object getValue() {
 		return value;
 	}
 
-	public void setValue(ObjectValue value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
 		return visitor.visit(this, parameter);
 	}
 
 	public static class Builder {
 		private String description;
-		private ObjectValue value;
+		private Object value;
 
 		public Builder() {
 
@@ -84,7 +83,7 @@ public class TAttributeAssignment {
 			return this;
 		}
 
-		public Builder setValue(ObjectValue value) {
+		public Builder setValue(Object value) {
 			this.value = value;
 			return this;
 		}

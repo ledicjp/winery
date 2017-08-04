@@ -16,10 +16,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.winery.model.tosca.yaml.support.ObjectValue;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
-import org.eclipse.winery.model.tosca.yaml.visitor.IParameter;
-import org.eclipse.winery.model.tosca.yaml.visitor.IResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,7 +28,7 @@ import org.eclipse.jdt.annotation.Nullable;
 		"value"
 })
 public class TParameterDefinition extends TPropertyDefinition {
-	private ObjectValue value;
+	private Object value;
 
 	public TParameterDefinition() {
 	}
@@ -40,17 +39,17 @@ public class TParameterDefinition extends TPropertyDefinition {
 	}
 
 	@Nullable
-	public ObjectValue getValue() {
+	public Object getValue() {
 		return value;
 	}
 
-	public void setValue(ObjectValue value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
-	public IResult accept(IVisitor visitor, IParameter parameter) throws IException {
-		IResult ir1 = super.accept(visitor, parameter);
-		IResult ir2 = visitor.visit(this, parameter);
+	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+		R ir1 = super.accept(visitor, parameter);
+		R ir2 = visitor.visit(this, parameter);
 		if (ir1 == null) {
 			return ir2;
 		} else {
@@ -59,7 +58,7 @@ public class TParameterDefinition extends TPropertyDefinition {
 	}
 
 	public static class Builder extends TPropertyDefinition.Builder {
-		private ObjectValue value;
+		private Object value;
 
 		public Builder(QName type) {
 			super(type);
@@ -69,7 +68,7 @@ public class TParameterDefinition extends TPropertyDefinition {
 			super(propertyDefinition);
 		}
 
-		public Builder setValue(ObjectValue value) {
+		public Builder setValue(Object value) {
 			this.value = value;
 			return this;
 		}

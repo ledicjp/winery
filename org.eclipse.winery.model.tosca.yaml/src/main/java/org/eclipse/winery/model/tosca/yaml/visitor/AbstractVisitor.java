@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml.visitor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,681 +60,535 @@ import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
 
-public abstract class AbstractVisitor implements IVisitor {
+import org.eclipse.jdt.annotation.NonNull;
+
+public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends AbstractParameter<P>> implements IVisitor<R, P> {
 
 	@Override
-	public IResult visit(TArtifactDefinition node, IParameter parameter) throws IException {
+	public R visit(TArtifactDefinition node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TArtifactType node, IParameter parameter) throws IException {
+	public R visit(TArtifactType node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TAttributeAssignment node, IParameter parameter) throws IException {
+	public R visit(TAttributeAssignment node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TAttributeDefinition node, IParameter parameter) throws IException {
+	public R visit(TAttributeDefinition node, P parameter) throws IException {
+		R result = null;
 		if (node.getEntry_schema() != null) {
-			node.getEntry_schema().accept(this, new Parameter(parameter, "entry_schema"));
+			result = node.getEntry_schema().accept(this, parameter.copy().addContext("entry_schema"));
 		}
+		return result;
+	}
+
+	@Override
+	public R visit(TCapabilityAssignment node, P parameter) throws IException {
+		R result = visitPropertyAssignment(node.getProperties(), parameter);
+		return addR(result, visitAttributeAssignment(node.getAttributes(), parameter));
+	}
+
+	@Override
+	public R visit(TCapabilityDefinition node, P parameter) throws IException {
+		R result = visitPropertyDefinition(node.getProperties(), parameter);
+		addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
+
+		return result;
+	}
+
+	@Override
+	public R visit(TCapabilityType node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TCapabilityAssignment node, IParameter parameter) throws IException {
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeAssignment> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
-			}
-		}
+	public R visit(TConstraintClause node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TCapabilityDefinition node, IParameter parameter) throws IException {
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyDefinition> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeDefinition> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IResult visit(TCapabilityType node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TConstraintClause node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TDataType node, IParameter parameter) throws IException {
+	public R visit(TDataType node, P parameter) throws IException {
+		R result = null;
 		if (node.getConstraints() != null) {
 			for (TConstraintClause entry : node.getConstraints()) {
-				entry.accept(this, new Parameter(parameter, "constraints"));
+				R r = entry.accept(this, parameter.copy().addContext("constraints"));
+				result = result == null ? r : result.add(r);
 			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TEntityType node, IParameter parameter) throws IException {
+	public R visit(TEntityType node, P parameter) throws IException {
+		R result = null;
 		if (node.getVersion() != null) {
-			node.getVersion().accept(this, new Parameter(parameter, "version"));
+			result = node.getVersion().accept(this, parameter.copy().addContext("version"));
 		}
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyDefinition> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeDefinition> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
-			}
-		}
+		result = addR(result, visitPropertyDefinition(node.getProperties(), parameter));
+		addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = addR(result, node.getMetadata().accept(this, parameter.copy().addContext("metadata")));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TEntrySchema node, IParameter parameter) throws IException {
+	public R visit(TEntrySchema node, P parameter) throws IException {
+		R result = null;
 		if (node.getConstraints() != null) {
 			for (TConstraintClause entry : node.getConstraints()) {
-				entry.accept(this, new Parameter(parameter, "constraints"));
+				result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
 			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TGroupDefinition node, IParameter parameter) throws IException {
+	public R visit(TGroupDefinition node, P parameter) throws IException {
+		R result = null;
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		}
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
+		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
+		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
+		return result;
+	}
 
+	@Override
+	public R visit(TGroupType node, P parameter) throws IException {
+		R result = visitRequirementDefinition(node.getRequirements(), parameter);
+		result = addR(result, visitCapabilityDefinition(node.getCapabilities(), parameter));
+		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
+		return result;
+	}
+
+	@Override
+	public R visit(TImplementation node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TGroupType node, IParameter parameter) throws IException {
-		if (node.getRequirements() != null) {
-			for (TMapRequirementDefinition map : node.getRequirements()) {
-				for (Map.Entry<String, TRequirementDefinition> entry : map.entrySet()) {
-					if (entry.getValue() != null) {
-						entry.getValue().accept(this, new Parameter(parameter, "requirements", entry.getKey()));
-					}
-				}
+	public R visit(TImportDefinition node, P parameter) throws IException {
+		return null;
+	}
+
+	@Override
+	public R visit(TInterfaceAssignment node, P parameter) throws IException {
+		return null;
+	}
+
+	@Override
+	public R visit(TInterfaceDefinition node, P parameter) throws IException {
+		R result = visitPropertyAssignmentOrDefinition(node.getInputs(), parameter);
+		result = addR(result, visitOperationDefinition(node.getOperations(), parameter));
+		return result;
+	}
+
+	@Override
+	public R visit(TInterfaceType node, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TPropertyDefinition> entry : node.getInputs().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("inputs", entry.getKey())));
 			}
 		}
-		if (node.getCapabilities() != null) {
-			for (Map.Entry<String, TCapabilityDefinition> entry : node.getCapabilities().entrySet()) {
+		result = addR(result, visitOperationDefinition(node.getOperations(), parameter));
+		return result;
+	}
+
+	@Override
+	public R visit(TNodeFilterDefinition node, P parameter) throws IException {
+		R result = null;
+		for (TMapPropertyFilterDefinition map : node.getProperties()) {
+			for (Map.Entry<String, TPropertyFilterDefinition> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "capabilities", entry.getKey()));
+					result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("properties", entry.getKey())));
 				}
 			}
 		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TImplementation node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TImportDefinition node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TInterfaceAssignment node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TInterfaceDefinition node, IParameter parameter) throws IException {
-		if (node.getInputs() != null) {
-			for (Map.Entry<String, TPropertyAssignmentOrDefinition> entry : node.getInputs().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "inputs", entry.getKey()));
-				}
-			}
-		}
-		if (node.getOperations() != null) {
-			for (Map.Entry<String, TOperationDefinition> entry : node.getOperations().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "operations", entry.getKey()));
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IResult visit(TInterfaceType node, IParameter parameter) throws IException {
-		if (node.getInputs() != null) {
-			for (Map.Entry<String, TPropertyDefinition> entry : node.getInputs().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "inputs", entry.getKey()));
-				}
-			}
-		}
-		if (node.getOperations() != null) {
-			for (Map.Entry<String, TOperationDefinition> entry : node.getOperations().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "operations", entry.getKey()));
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IResult visit(TNodeFilterDefinition node, IParameter parameter) throws IException {
-		if (node.getProperties() != null) {
-			for (TMapPropertyFilterDefinition map : node.getProperties()) {
-				for (Map.Entry<String, TPropertyFilterDefinition> entry : map.entrySet()) {
-					if (entry.getValue() != null) {
-						entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IResult visit(TNodeTemplate node, IParameter parameter) throws IException {
+	public R visit(TNodeTemplate node, P parameter) throws IException {
+		R result = null;
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		}
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
+		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
+		result = addR(result, visitAttributeAssignment(node.getAttributes(), parameter));
+		for (TMapRequirementAssignment map : node.getRequirements()) {
+			for (Map.Entry<String, TRequirementAssignment> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
+					result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("requirements", entry.getKey())));
 				}
 			}
 		}
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeAssignment> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
+		for (Map.Entry<String, TCapabilityAssignment> entry : node.getCapabilities().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("capabilities", entry.getKey())));
 			}
 		}
-		if (node.getRequirements() != null) {
-			for (TMapRequirementAssignment map : node.getRequirements()) {
-				for (Map.Entry<String, TRequirementAssignment> entry : map.entrySet()) {
-					if (entry.getValue() != null) {
-						entry.getValue().accept(this, new Parameter(parameter, "requirements", entry.getKey()));
-					}
-				}
-			}
-		}
-		if (node.getCapabilities() != null) {
-			for (Map.Entry<String, TCapabilityAssignment> entry : node.getCapabilities().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "capabilities", entry.getKey()));
-				}
-			}
-		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		if (node.getArtifacts() != null) {
-			for (Map.Entry<String, TArtifactDefinition> entry : node.getArtifacts().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "artifacts", entry.getKey()));
-				}
-			}
-		}
+		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
+		result = addR(result, visitArtifactDefinition(node.getArtifacts(), parameter));
 		if (node.getNode_filter() != null) {
-			node.getNode_filter().accept(this, new Parameter(parameter, "node_filter"));
+			result = addR(result, node.getNode_filter().accept(this, parameter.copy().addContext("node_filter")));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TNodeType node, IParameter parameter) throws IException {
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeDefinition> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
-			}
-		}
-		if (node.getRequirements() != null) {
-			for (TMapRequirementDefinition map : node.getRequirements()) {
-				for (Map.Entry<String, TRequirementDefinition> entry : map.entrySet()) {
-					if (entry.getValue() != null) {
-						entry.getValue().accept(this, new Parameter(parameter, "requirements", entry.getKey()));
-					}
-				}
-			}
-		}
-		if (node.getCapabilities() != null) {
-			for (Map.Entry<String, TCapabilityDefinition> entry : node.getCapabilities().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "capabilities", entry.getKey()));
-				}
-			}
-		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		if (node.getArtifacts() != null) {
-			for (Map.Entry<String, TArtifactDefinition> entry : node.getArtifacts().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "artifacts", entry.getKey()));
-				}
-			}
-		}
-		return null;
+	public R visit(TNodeType node, P parameter) throws IException {
+		R result = visitAttributeDefinition(node.getAttributes(), parameter);
+		result = addR(result, visitRequirementDefinition(node.getRequirements(), parameter));
+		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
+		result = addR(result, visitArtifactDefinition(node.getArtifacts(), parameter));
+		return result;
 	}
 
 	@Override
-	public IResult visit(TOperationDefinition node, IParameter parameter) throws IException {
-		if (node.getInputs() != null) {
-			for (Map.Entry<String, TPropertyAssignmentOrDefinition> entry : node.getInputs().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "inputs", entry.getKey()));
-				}
-			}
-		}
+	public R visit(TOperationDefinition node, P parameter) throws IException {
+		R result = visitPropertyAssignmentOrDefinition(node.getInputs(), parameter);
 		if (node.getImplementation() != null) {
-			node.getImplementation().accept(this, new Parameter(parameter, "implementation"));
+			result = addR(result, node.getImplementation().accept(this, parameter.copy().addContext("implementation")));
 		}
+		return result;
+	}
+
+	@Override
+	public R visit(TParameterDefinition node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TParameterDefinition node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TPolicyDefinition node, IParameter parameter) throws IException {
+	public R visit(TPolicyDefinition node, P parameter) throws IException {
+		R result = null;
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		}
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
+		return addR(result, visitPropertyAssignment(node.getProperties(), parameter));
+	}
+
+	@Override
+	public R visit(TPolicyType node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TPolicyType node, IParameter parameter) throws IException {
+	public R visit(TPropertyAssignment node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TPropertyAssignment node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TPropertyDefinition node, IParameter parameter) throws IException {
-		if (node.getConstraints() != null) {
-			for (TConstraintClause entry : node.getConstraints()) {
-				entry.accept(this, new Parameter(parameter, "constraints"));
-			}
+	public R visit(TPropertyDefinition node, P parameter) throws IException {
+		R result = null;
+		for (TConstraintClause entry : node.getConstraints()) {
+			result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
 		}
 		if (node.getEntry_schema() != null) {
-			node.getEntry_schema().accept(this, new Parameter(parameter, "entry_schema"));
+			result = addR(result, node.getEntry_schema().accept(this, parameter.copy().addContext("entry_schema")));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TPropertyFilterDefinition node, IParameter parameter) throws IException {
-		if (node.getConstraints() != null) {
-			for (TConstraintClause entry : node.getConstraints()) {
-				entry.accept(this, new Parameter(parameter, "constraints"));
-			}
+	public R visit(TPropertyFilterDefinition node, P parameter) throws IException {
+		R result = null;
+		for (TConstraintClause entry : node.getConstraints()) {
+			result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TRelationshipAssignment node, IParameter parameter) throws IException {
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
+	public R visit(TRelationshipAssignment node, P parameter) throws IException {
+		R result = visitPropertyAssignment(node.getProperties(), parameter);
+		for (Map.Entry<String, TInterfaceAssignment> entry : node.getInterfaces().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("interfaces", entry.getKey())));
 			}
 		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceAssignment> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TRelationshipDefinition node, IParameter parameter) throws IException {
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		return null;
+	public R visit(TRelationshipDefinition node, P parameter) throws IException {
+		return visitInterfaceDefinition(node.getInterfaces(), parameter);
 	}
 
 	@Override
-	public IResult visit(TRelationshipTemplate node, IParameter parameter) throws IException {
+	public R visit(TRelationshipTemplate node, P parameter) throws IException {
+		R result = null;
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		}
-		if (node.getProperties() != null) {
-			for (Map.Entry<String, TPropertyAssignment> entry : node.getProperties().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "properties", entry.getKey()));
-				}
-			}
-		}
-		if (node.getAttributes() != null) {
-			for (Map.Entry<String, TAttributeAssignment> entry : node.getAttributes().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "attributes", entry.getKey()));
-				}
-			}
-		}
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
+		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
+		result = addR(result, visitAttributeAssignment(node.getAttributes(), parameter));
+		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
+		return result;
+	}
+
+	@Override
+	public R visit(TRelationshipType node, P parameter) throws IException {
+		return visitInterfaceDefinition(node.getInterfaces(), parameter);
+	}
+
+	@Override
+	public R visit(TRepositoryDefinition node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TRelationshipType node, IParameter parameter) throws IException {
-		if (node.getInterfaces() != null) {
-			for (Map.Entry<String, TInterfaceDefinition> entry : node.getInterfaces().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interfaces", entry.getKey()));
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IResult visit(TRepositoryDefinition node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TRequirementAssignment node, IParameter parameter) throws IException {
+	public R visit(TRequirementAssignment node, P parameter) throws IException {
+		R result = null;
 		if (node.getRelationship() != null) {
-			node.getRelationship().accept(this, new Parameter(parameter, "relationship"));
+			result = node.getRelationship().accept(this, parameter.copy().addContext("relationship"));
 		}
 		if (node.getNode_filter() != null) {
-			node.getNode_filter().accept(this, new Parameter(parameter, "node_filter"));
+			result = addR(result, node.getNode_filter().accept(this, parameter.copy().addContext("node_filter")));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TRequirementDefinition node, IParameter parameter) throws IException {
+	public R visit(TRequirementDefinition node, P parameter) throws IException {
+		R result = null;
 		if (node.getRelationship() != null) {
-			node.getRelationship().accept(this, new Parameter(parameter, "relationship"));
+			result = node.getRelationship().accept(this, parameter.copy().addContext("relationship"));
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public IResult visit(TServiceTemplate node, IParameter parameter) throws IException {
+	public R visit(TServiceTemplate node, P parameter) throws IException {
+		R result = null;
 		if (node.getMetadata() != null) {
-			node.getMetadata().accept(this, new Parameter(parameter, "metadata"));
+			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		}
-		if (node.getRepositories() != null) {
-			for (Map.Entry<String, TRepositoryDefinition> entry : node.getRepositories().entrySet()) {
+		for (Map.Entry<String, TRepositoryDefinition> entry : node.getRepositories().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("repositories", entry.getKey())));
+			}
+		}
+		for (TMapImportDefinition map : node.getImports()) {
+			for (Map.Entry<String, TImportDefinition> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "repositories", entry.getKey()));
+					result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("imports", entry.getKey())));
 				}
 			}
 		}
-		if (node.getImports() != null) {
-			for (TMapImportDefinition map : node.getImports()) {
-				for (Map.Entry<String, TImportDefinition> entry : map.entrySet()) {
-					if (entry.getValue() != null) {
-						entry.getValue().accept(this, new Parameter(parameter, "imports", entry.getKey()));
-					}
-				}
+		for (Map.Entry<String, TArtifactType> entry : node.getArtifact_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("artifact_types", entry.getKey())));
 			}
 		}
-		if (node.getArtifact_types() != null) {
-			for (Map.Entry<String, TArtifactType> entry : node.getArtifact_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "artifact_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TDataType> entry : node.getData_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("data_types", entry.getKey())));
 			}
 		}
-		if (node.getData_types() != null) {
-			for (Map.Entry<String, TDataType> entry : node.getData_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "data_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TCapabilityType> entry : node.getCapability_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("capability_types", entry.getKey())));
 			}
 		}
-		if (node.getCapability_types() != null) {
-			for (Map.Entry<String, TCapabilityType> entry : node.getCapability_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "capability_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TInterfaceType> entry : node.getInterface_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("interface_types", entry.getKey())));
 			}
 		}
-		if (node.getInterface_types() != null) {
-			for (Map.Entry<String, TInterfaceType> entry : node.getInterface_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "interface_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TRelationshipType> entry : node.getRelationship_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("relationship_types", entry.getKey())));
 			}
 		}
-		if (node.getRelationship_types() != null) {
-			for (Map.Entry<String, TRelationshipType> entry : node.getRelationship_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "relationship_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TNodeType> entry : node.getNode_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("node_types", entry.getKey())));
 			}
 		}
-		if (node.getNode_types() != null) {
-			for (Map.Entry<String, TNodeType> entry : node.getNode_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "node_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TGroupType> entry : node.getGroup_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("group_types", entry.getKey())));
 			}
 		}
-		if (node.getGroup_types() != null) {
-			for (Map.Entry<String, TGroupType> entry : node.getGroup_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "group_types", entry.getKey()));
-				}
-			}
-		}
-		if (node.getPolicy_types() != null) {
-			for (Map.Entry<String, TPolicyType> entry : node.getPolicy_types().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "policy_types", entry.getKey()));
-				}
+		for (Map.Entry<String, TPolicyType> entry : node.getPolicy_types().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("policy_types", entry.getKey())));
 			}
 		}
 		if (node.getTopology_template() != null) {
-			node.getTopology_template().accept(this, new Parameter(parameter, "topology_template"));
+			result = addR(result, node.getTopology_template().accept(this, parameter.copy().addContext("topology_template")));
 		}
+		return result;
+	}
+
+	@Override
+	public R visit(TSubstitutionMappings node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TSubstitutionMappings node, IParameter parameter) throws IException {
-		return null;
-	}
-
-	@Override
-	public IResult visit(TTopologyTemplateDefinition node, IParameter parameter) throws IException {
-		if (node.getInputs() != null) {
-			for (Map.Entry<String, TParameterDefinition> entry : node.getInputs().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "inputs", entry.getKey()));
-				}
+	public R visit(TTopologyTemplateDefinition node, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TParameterDefinition> entry : node.getInputs().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("inputs", entry.getKey())));
 			}
 		}
-		if (node.getNode_templates() != null) {
-			for (Map.Entry<String, TNodeTemplate> entry : node.getNode_templates().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "node_templates", entry.getKey()));
-				}
+		for (Map.Entry<String, TNodeTemplate> entry : node.getNode_templates().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("node_templates", entry.getKey())));
 			}
 		}
-		if (node.getRelationship_templates() != null) {
-			for (Map.Entry<String, TRelationshipTemplate> entry : node.getRelationship_templates().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "relationship_templates", entry.getKey()));
-				}
+		for (Map.Entry<String, TRelationshipTemplate> entry : node.getRelationship_templates().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("relationship_templates", entry.getKey())));
 			}
 		}
-		if (node.getGroups() != null) {
-			for (Map.Entry<String, TGroupDefinition> entry : node.getGroups().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "groups", entry.getKey()));
-				}
+		for (Map.Entry<String, TGroupDefinition> entry : node.getGroups().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("groups", entry.getKey())));
 			}
 		}
-		if (node.getPolicies() != null) {
-			for (Map.Entry<String, TPolicyDefinition> entry : node.getPolicies().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "policies", entry.getKey()));
-				}
+		for (Map.Entry<String, TPolicyDefinition> entry : node.getPolicies().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("policies", entry.getKey())));
 			}
 		}
-		if (node.getOutputs() != null) {
-			for (Map.Entry<String, TParameterDefinition> entry : node.getOutputs().entrySet()) {
-				if (entry.getValue() != null) {
-					entry.getValue().accept(this, new Parameter(parameter, "outputs", entry.getKey()));
-				}
+		for (Map.Entry<String, TParameterDefinition> entry : node.getOutputs().entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("outputs", entry.getKey())));
 			}
 		}
 		if (node.getSubstitution_mappings() != null) {
-			node.getSubstitution_mappings().accept(this, new Parameter(parameter, "substitution_mappings"));
+			result = addR(result, node.getSubstitution_mappings().accept(this, parameter.copy().addContext("substitution_mappings")));
 		}
+		return result;
+	}
+
+	@Override
+	public R visit(TVersion node, P parameter) throws IException {
 		return null;
 	}
 
 	@Override
-	public IResult visit(TVersion node, IParameter parameter) throws IException {
+	public R visit(Metadata node, P parameter) throws IException {
 		return null;
 	}
 
-	@Override
-	public IResult visit(Metadata node, IParameter parameter) throws IException {
-		return null;
+	private R visitPropertyDefinition(@NonNull Map<String, TPropertyDefinition> properties, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TPropertyDefinition> entry : properties.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("properties", entry.getKey())));
+			}
+		}
+		return result;
 	}
 
-	public static class Parameter implements IParameter {
-		private List<String> context;
-
-		public Parameter() {
-			this.context = new ArrayList<>();
+	public R visitPropertyAssignment(@NonNull Map<String, TPropertyAssignment> properties, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TPropertyAssignment> entry : properties.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("properties", entry.getKey())));
+			}
 		}
+		return result;
+	}
 
-		public Parameter(IParameter parameter, String contextEnd) {
-			this.context = new ArrayList<>();
-			this.context.addAll(parameter.getContext());
-			this.context.add(contextEnd);
+	private R visitAttributeDefinition(@NonNull Map<String, TAttributeDefinition> attributes, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TAttributeDefinition> entry : attributes.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("attributes", entry.getKey())));
+			}
 		}
+		return result;
+	}
 
-		public Parameter(IParameter parameter, String contextPart, String contextEnd) {
-			this.context = new ArrayList<>();
-			this.context.addAll(parameter.getContext());
-			this.context.add(contextPart);
-			this.context.add(contextEnd);
+	public R visitAttributeAssignment(@NonNull Map<String, TAttributeAssignment> attributes, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TAttributeAssignment> entry : attributes.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("attributes", entry.getKey())));
+			}
 		}
+		return result;
+	}
 
-		@Override
-		public String getKey() {
-			if (this.context.size() > 0) {
-				return this.context.get(this.context.size() - 1);
-			} else return "";
+	private R visitInterfaceDefinition(@NonNull Map<String, TInterfaceDefinition> interfaces, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TInterfaceDefinition> entry : interfaces.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("interfaces", entry.getKey())));
+			}
 		}
+		return result;
+	}
 
-		@Override
-		public List<String> getContext() {
-			return this.context;
+	private R visitRequirementDefinition(@NonNull List<TMapRequirementDefinition> requirements, P parameter) throws IException {
+		R result = null;
+		for (TMapRequirementDefinition map : requirements) {
+			for (Map.Entry<String, TRequirementDefinition> entry : map.entrySet()) {
+				if (entry.getValue() != null) {
+					result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("requirements", entry.getKey())));
+				}
+			}
 		}
+		return result;
+	}
+
+	private R visitCapabilityDefinition(@NonNull Map<String, TCapabilityDefinition> capabilities, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TCapabilityDefinition> entry : capabilities.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("capabilities", entry.getKey())));
+			}
+		}
+		return result;
+	}
+
+	private R visitPropertyAssignmentOrDefinition(@NonNull Map<String, TPropertyAssignmentOrDefinition> inputs, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TPropertyAssignmentOrDefinition> entry : inputs.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("inputs", entry.getKey())));
+			}
+		}
+		return result;
+	}
+
+	private R visitOperationDefinition(@NonNull Map<String, TOperationDefinition> operations, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TOperationDefinition> entry : operations.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("operations", entry.getKey())));
+			}
+		}
+		return result;
+	}
+
+	private R visitArtifactDefinition(@NonNull Map<String, TArtifactDefinition> artifacts, P parameter) throws IException {
+		R result = null;
+		for (Map.Entry<String, TArtifactDefinition> entry : artifacts.entrySet()) {
+			if (entry.getValue() != null) {
+				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("artifacts", entry.getKey())));
+			}
+		}
+		return result;
+	}
+
+	private R addR(R r1, R r2) {
+		if (r1 == null) {
+			return r2;
+		}
+		return r1.add(r2);
 	}
 }
