@@ -97,9 +97,7 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 	@Override
 	public R visit(TCapabilityDefinition node, P parameter) throws IException {
 		R result = visitPropertyDefinition(node.getProperties(), parameter);
-		addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
-
-		return result;
+		return addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
 	}
 
 	@Override
@@ -115,11 +113,8 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 	@Override
 	public R visit(TDataType node, P parameter) throws IException {
 		R result = null;
-		if (node.getConstraints() != null) {
-			for (TConstraintClause entry : node.getConstraints()) {
-				R r = entry.accept(this, parameter.copy().addContext("constraints"));
-				result = result == null ? r : result.add(r);
-			}
+		for (TConstraintClause entry : node.getConstraints()) {
+			result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
 		}
 		return result;
 	}
@@ -131,30 +126,22 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 			result = node.getVersion().accept(this, parameter.copy().addContext("version"));
 		}
 		result = addR(result, visitPropertyDefinition(node.getProperties(), parameter));
-		addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
-		if (node.getMetadata() != null) {
-			result = addR(result, node.getMetadata().accept(this, parameter.copy().addContext("metadata")));
-		}
-		return result;
+		result = addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
+		return addR(result, node.getMetadata().accept(this, parameter.copy().addContext("metadata")));
 	}
 
 	@Override
 	public R visit(TEntrySchema node, P parameter) throws IException {
 		R result = null;
-		if (node.getConstraints() != null) {
-			for (TConstraintClause entry : node.getConstraints()) {
-				result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
-			}
+		for (TConstraintClause entry : node.getConstraints()) {
+			result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
 		}
 		return result;
 	}
 
 	@Override
 	public R visit(TGroupDefinition node, P parameter) throws IException {
-		R result = null;
-		if (node.getMetadata() != null) {
-			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-		}
+		R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
 		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
 		return result;
@@ -217,10 +204,7 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
 	@Override
 	public R visit(TNodeTemplate node, P parameter) throws IException {
-		R result = null;
-		if (node.getMetadata() != null) {
-			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-		}
+		R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
 		result = addR(result, visitAttributeAssignment(node.getAttributes(), parameter));
 		for (TMapRequirementAssignment map : node.getRequirements()) {
@@ -268,10 +252,7 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
 	@Override
 	public R visit(TPolicyDefinition node, P parameter) throws IException {
-		R result = null;
-		if (node.getMetadata() != null) {
-			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-		}
+		R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		return addR(result, visitPropertyAssignment(node.getProperties(), parameter));
 	}
 
@@ -324,14 +305,10 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
 	@Override
 	public R visit(TRelationshipTemplate node, P parameter) throws IException {
-		R result = null;
-		if (node.getMetadata() != null) {
-			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-		}
+		R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		result = addR(result, visitPropertyAssignment(node.getProperties(), parameter));
 		result = addR(result, visitAttributeAssignment(node.getAttributes(), parameter));
-		result = addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
-		return result;
+		return addR(result, visitInterfaceDefinition(node.getInterfaces(), parameter));
 	}
 
 	@Override
@@ -367,10 +344,7 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
 	@Override
 	public R visit(TServiceTemplate node, P parameter) throws IException {
-		R result = null;
-		if (node.getMetadata() != null) {
-			result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-		}
+		R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
 		for (Map.Entry<String, TRepositoryDefinition> entry : node.getRepositories().entrySet()) {
 			if (entry.getValue() != null) {
 				result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("repositories", entry.getKey())));
