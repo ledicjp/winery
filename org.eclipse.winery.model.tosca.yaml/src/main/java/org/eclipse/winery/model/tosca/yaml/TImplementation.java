@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -52,6 +53,20 @@ public class TImplementation {
 	public TImplementation(Builder builder) {
 		this.setPrimary(builder.primary);
 		this.setDependencies(builder.dependencies);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TImplementation)) return false;
+		TImplementation that = (TImplementation) o;
+		return Objects.equals(primary, that.primary) &&
+				Objects.equals(dependencies, that.dependencies);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(primary, dependencies);
 	}
 
 	@NonNull

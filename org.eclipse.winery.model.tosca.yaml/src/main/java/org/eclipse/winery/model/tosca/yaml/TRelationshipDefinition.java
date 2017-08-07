@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -50,6 +51,20 @@ public class TRelationshipDefinition {
 	public TRelationshipDefinition(Builder builder) {
 		this.setType(builder.type);
 		this.setInterfaces(builder.interfaces);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRelationshipDefinition)) return false;
+		TRelationshipDefinition that = (TRelationshipDefinition) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(interfaces, that.interfaces);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, interfaces);
 	}
 
 	@Nullable

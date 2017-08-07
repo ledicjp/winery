@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,6 +55,22 @@ public class TOperationDefinition {
 		this.setDescription(builder.description);
 		this.setInputs(builder.inputs);
 		this.setImplementation(builder.implementation);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TOperationDefinition)) return false;
+		TOperationDefinition that = (TOperationDefinition) o;
+		return Objects.equals(description, that.description) &&
+				Objects.equals(inputs, that.inputs) &&
+				Objects.equals(outputs, that.outputs) &&
+				Objects.equals(implementation, that.implementation);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, inputs, outputs, implementation);
 	}
 
 	@Nullable

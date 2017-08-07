@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -90,6 +91,33 @@ public class TServiceTemplate {
 		this.setGroup_types(builder.group_types);
 		this.setPolicy_types(builder.policy_types);
 		this.setTopology_template(builder.topology_template);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TServiceTemplate)) return false;
+		TServiceTemplate that = (TServiceTemplate) o;
+		return Objects.equals(tosca_definitions_version, that.tosca_definitions_version) &&
+				Objects.equals(metadata, that.metadata) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(dsl_definitions, that.dsl_definitions) &&
+				Objects.equals(repositories, that.repositories) &&
+				Objects.equals(imports, that.imports) &&
+				Objects.equals(artifact_types, that.artifact_types) &&
+				Objects.equals(data_types, that.data_types) &&
+				Objects.equals(capability_types, that.capability_types) &&
+				Objects.equals(interface_types, that.interface_types) &&
+				Objects.equals(relationship_types, that.relationship_types) &&
+				Objects.equals(node_types, that.node_types) &&
+				Objects.equals(group_types, that.group_types) &&
+				Objects.equals(policy_types, that.policy_types) &&
+				Objects.equals(topology_template, that.topology_template);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tosca_definitions_version, metadata, description, dsl_definitions, repositories, imports, artifact_types, data_types, capability_types, interface_types, relationship_types, node_types, group_types, policy_types, topology_template);
 	}
 
 	@NonNull

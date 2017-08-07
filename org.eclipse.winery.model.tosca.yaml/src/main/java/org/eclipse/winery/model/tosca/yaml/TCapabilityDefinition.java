@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -64,6 +65,24 @@ public class TCapabilityDefinition {
 		this.setValid_source_types(builder.valid_source_types);
 		this.setProperties(builder.properties);
 		this.setAttributes(builder.attributes);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TCapabilityDefinition)) return false;
+		TCapabilityDefinition that = (TCapabilityDefinition) o;
+		return Objects.equals(description, that.description) &&
+				Objects.equals(occurrences, that.occurrences) &&
+				Objects.equals(valid_source_types, that.valid_source_types) &&
+				Objects.equals(type, that.type) &&
+				Objects.equals(properties, that.properties) &&
+				Objects.equals(attributes, that.attributes);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, occurrences, valid_source_types, type, properties, attributes);
 	}
 
 	@Nullable

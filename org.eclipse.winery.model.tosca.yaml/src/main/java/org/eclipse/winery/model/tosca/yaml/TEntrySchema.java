@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -46,6 +47,21 @@ public class TEntrySchema {
 		this.setType(builder.type);
 		this.setDescription(builder.description);
 		this.setConstraints(builder.constraints);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TEntrySchema)) return false;
+		TEntrySchema that = (TEntrySchema) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(constraints, that.constraints);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, description, constraints);
 	}
 
 	@Nullable

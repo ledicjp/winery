@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -57,6 +58,23 @@ public class TPolicyDefinition {
 		this.setMetadata(builder.metadata);
 		this.setProperties(builder.properties);
 		this.setTargets(builder.targets);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TPolicyDefinition)) return false;
+		TPolicyDefinition that = (TPolicyDefinition) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(metadata, that.metadata) &&
+				Objects.equals(properties, that.properties) &&
+				Objects.equals(targets, that.targets);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, description, metadata, properties, targets);
 	}
 
 	@NonNull

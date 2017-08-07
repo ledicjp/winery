@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -53,6 +55,22 @@ public class TImportDefinition {
 		this.setRepository(builder.repository);
 		this.setNamespace_uri(builder.namespace_uri);
 		this.setNamespace_prefix(builder.namespace_prefix);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TImportDefinition)) return false;
+		TImportDefinition that = (TImportDefinition) o;
+		return Objects.equals(file, that.file) &&
+				Objects.equals(repository, that.repository) &&
+				Objects.equals(namespace_uri, that.namespace_uri) &&
+				Objects.equals(namespace_prefix, that.namespace_prefix);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(file, repository, namespace_uri, namespace_prefix);
 	}
 
 	@NonNull

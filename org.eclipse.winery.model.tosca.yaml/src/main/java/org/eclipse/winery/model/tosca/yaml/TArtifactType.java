@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,6 +44,20 @@ public class TArtifactType extends TEntityType {
 		super(builder);
 		this.setMime_type(builder.mime_type);
 		this.setFile_ext(builder.file_ext);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TArtifactType)) return false;
+		TArtifactType that = (TArtifactType) o;
+		return Objects.equals(mime_type, that.mime_type) &&
+				Objects.equals(file_ext, that.file_ext);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(mime_type, file_ext);
 	}
 
 	@Nullable

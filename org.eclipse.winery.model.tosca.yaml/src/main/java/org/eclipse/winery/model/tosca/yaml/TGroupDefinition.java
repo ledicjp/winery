@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -60,6 +61,24 @@ public class TGroupDefinition {
 		this.setProperties(builder.properties);
 		this.setMembers(builder.members);
 		this.setInterfaces(builder.interfaces);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TGroupDefinition)) return false;
+		TGroupDefinition that = (TGroupDefinition) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(metadata, that.metadata) &&
+				Objects.equals(properties, that.properties) &&
+				Objects.equals(members, that.members) &&
+				Objects.equals(interfaces, that.interfaces);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, description, metadata, properties, members, interfaces);
 	}
 
 	@NonNull

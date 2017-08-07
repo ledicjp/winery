@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -46,6 +48,20 @@ public class TAttributeAssignment {
 	public TAttributeAssignment(Builder builder) {
 		this.setDescription(builder.description);
 		this.setValue(builder.value);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TAttributeAssignment)) return false;
+		TAttributeAssignment that = (TAttributeAssignment) o;
+		return Objects.equals(description, that.description) &&
+				Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, value);
 	}
 
 	@Nullable

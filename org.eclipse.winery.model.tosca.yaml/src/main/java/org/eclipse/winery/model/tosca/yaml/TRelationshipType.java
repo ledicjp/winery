@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,6 +46,21 @@ public class TRelationshipType extends TEntityType {
 		super(builder);
 		this.setValid_target_types(builder.valid_target_types);
 		this.setInterfaces(builder.interfaces);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRelationshipType)) return false;
+		if (!super.equals(o)) return false;
+		TRelationshipType that = (TRelationshipType) o;
+		return Objects.equals(valid_target_types, that.valid_target_types) &&
+				Objects.equals(interfaces, that.interfaces);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), valid_target_types, interfaces);
 	}
 
 	@NonNull

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -35,6 +37,19 @@ public class TVersion {
 
 	public TVersion(String version) {
 		this.version = version;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TVersion)) return false;
+		TVersion tVersion = (TVersion) o;
+		return Objects.equals(version, tVersion.version);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(version);
 	}
 
 	@Nullable

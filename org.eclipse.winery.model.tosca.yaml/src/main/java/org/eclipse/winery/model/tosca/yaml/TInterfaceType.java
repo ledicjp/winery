@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -42,6 +43,21 @@ public class TInterfaceType extends TEntityType {
 		super(builder);
 		this.setOperations(builder.operations);
 		this.setInputs(builder.inputs);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TInterfaceType)) return false;
+		if (!super.equals(o)) return false;
+		TInterfaceType that = (TInterfaceType) o;
+		return Objects.equals(operations, that.operations) &&
+				Objects.equals(inputs, that.inputs);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), operations, inputs);
 	}
 
 	@NonNull

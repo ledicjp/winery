@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,6 +42,20 @@ public class TCapabilityAssignment {
 	public TCapabilityAssignment(Builder builder) {
 		this.setProperties(builder.properties);
 		this.setAttributes(builder.attributes);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TCapabilityAssignment)) return false;
+		TCapabilityAssignment that = (TCapabilityAssignment) o;
+		return Objects.equals(properties, that.properties) &&
+				Objects.equals(attributes, that.attributes);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(properties, attributes);
 	}
 
 	@NonNull

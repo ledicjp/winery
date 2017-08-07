@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -39,6 +40,19 @@ public class TDataType extends TEntityType {
 	public TDataType(Builder builder) {
 		super(builder);
 		this.setConstraints(builder.constraints);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TDataType)) return false;
+		TDataType dataType = (TDataType) o;
+		return Objects.equals(constraints, dataType.constraints);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(constraints);
 	}
 
 	@NonNull

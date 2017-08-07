@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -61,6 +62,24 @@ public class TArtifactDefinition {
 		this.setDescription(builder.description);
 		this.setDeploy_path(builder.deploy_path);
 		this.setProperties(builder.properties);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TArtifactDefinition)) return false;
+		TArtifactDefinition that = (TArtifactDefinition) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(file, that.file) &&
+				Objects.equals(repository, that.repository) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(deploy_path, that.deploy_path) &&
+				Objects.equals(properties, that.properties);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, file, repository, description, deploy_path, properties);
 	}
 
 	@NonNull

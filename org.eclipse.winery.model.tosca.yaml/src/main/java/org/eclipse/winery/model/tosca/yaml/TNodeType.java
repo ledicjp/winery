@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,6 +55,24 @@ public class TNodeType extends TNodeOrGroupType {
 		this.setCapabilities(builder.capabilities);
 		this.setInterfaces(builder.interfaces);
 		this.setArtifacts(builder.artifacts);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeType)) return false;
+		if (!super.equals(o)) return false;
+		TNodeType tNodeType = (TNodeType) o;
+		return Objects.equals(attributes, tNodeType.attributes) &&
+				Objects.equals(requirements, tNodeType.requirements) &&
+				Objects.equals(capabilities, tNodeType.capabilities) &&
+				Objects.equals(interfaces, tNodeType.interfaces) &&
+				Objects.equals(artifacts, tNodeType.artifacts);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), attributes, requirements, capabilities, interfaces, artifacts);
 	}
 
 	@NonNull

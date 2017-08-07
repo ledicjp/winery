@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -36,6 +38,19 @@ public class TParameterDefinition extends TPropertyDefinition {
 	public TParameterDefinition(Builder builder) {
 		super(builder);
 		this.setValue(builder.value);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TParameterDefinition)) return false;
+		TParameterDefinition that = (TParameterDefinition) o;
+		return Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
 	}
 
 	@Nullable

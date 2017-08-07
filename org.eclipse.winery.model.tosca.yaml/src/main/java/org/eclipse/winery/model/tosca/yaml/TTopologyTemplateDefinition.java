@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -61,6 +62,26 @@ public class TTopologyTemplateDefinition {
 		this.setPolicies(builder.policies);
 		this.setOutputs(builder.outputs);
 		this.setSubstitution_mappings(builder.substitution_mappings);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TTopologyTemplateDefinition)) return false;
+		TTopologyTemplateDefinition that = (TTopologyTemplateDefinition) o;
+		return Objects.equals(description, that.description) &&
+				Objects.equals(inputs, that.inputs) &&
+				Objects.equals(node_templates, that.node_templates) &&
+				Objects.equals(relationship_templates, that.relationship_templates) &&
+				Objects.equals(groups, that.groups) &&
+				Objects.equals(policies, that.policies) &&
+				Objects.equals(outputs, that.outputs) &&
+				Objects.equals(substitution_mappings, that.substitution_mappings);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, inputs, node_templates, relationship_templates, groups, policies, outputs, substitution_mappings);
 	}
 
 	@Nullable
@@ -271,7 +292,7 @@ public class TTopologyTemplateDefinition {
 			} else {
 				this.relationship_templates.putAll(relationship_templates);
 			}
-			
+
 			return this;
 		}
 

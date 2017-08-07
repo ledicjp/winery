@@ -13,6 +13,7 @@ package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -57,6 +58,23 @@ public class TRequirementAssignment {
 		this.setRelationship(builder.relationship);
 		this.setNode_filter(builder.node_filter);
 		this.setOccurrences(builder.occurrences);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRequirementAssignment)) return false;
+		TRequirementAssignment that = (TRequirementAssignment) o;
+		return Objects.equals(node, that.node) &&
+				Objects.equals(relationship, that.relationship) &&
+				Objects.equals(capability, that.capability) &&
+				Objects.equals(node_filter, that.node_filter) &&
+				Objects.equals(occurrences, that.occurrences);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(node, relationship, capability, node_filter, occurrences);
 	}
 
 	@Nullable

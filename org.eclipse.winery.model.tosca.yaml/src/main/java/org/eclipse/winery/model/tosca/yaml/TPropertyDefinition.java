@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -63,6 +64,25 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		this.setStatus(builder.status);
 		this.setConstraints(builder.constraints);
 		this.setEntry_schema(builder.entry_schema);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TPropertyDefinition)) return false;
+		TPropertyDefinition that = (TPropertyDefinition) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(required, that.required) &&
+				Objects.equals(_default, that._default) &&
+				status == that.status &&
+				Objects.equals(constraints, that.constraints) &&
+				Objects.equals(entry_schema, that.entry_schema);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, description, required, _default, status, constraints, entry_schema);
 	}
 
 	@NonNull

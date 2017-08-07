@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,6 +45,20 @@ public class TNodeFilterDefinition {
 	public TNodeFilterDefinition(Builder builder) {
 		this.setProperties(builder.properties);
 		this.setCapabilities(builder.capabilities);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeFilterDefinition)) return false;
+		TNodeFilterDefinition that = (TNodeFilterDefinition) o;
+		return Objects.equals(properties, that.properties) &&
+				Objects.equals(capabilities, that.capabilities);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(properties, capabilities);
 	}
 
 	@NonNull

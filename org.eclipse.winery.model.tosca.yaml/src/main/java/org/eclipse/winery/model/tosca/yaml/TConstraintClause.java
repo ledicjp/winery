@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,6 +48,29 @@ public class TConstraintClause {
 	private Object min_length;
 	private Object max_length;
 	private Object pattern;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TConstraintClause)) return false;
+		TConstraintClause that = (TConstraintClause) o;
+		return Objects.equals(equal, that.equal) &&
+				Objects.equals(greater_than, that.greater_than) &&
+				Objects.equals(greater_or_equal, that.greater_or_equal) &&
+				Objects.equals(less_than, that.less_than) &&
+				Objects.equals(less_or_equal, that.less_or_equal) &&
+				Objects.equals(in_range, that.in_range) &&
+				Objects.equals(valid_values, that.valid_values) &&
+				Objects.equals(length, that.length) &&
+				Objects.equals(min_length, that.min_length) &&
+				Objects.equals(max_length, that.max_length) &&
+				Objects.equals(pattern, that.pattern);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(equal, greater_than, greater_or_equal, less_than, less_or_equal, in_range, valid_values, length, min_length, max_length, pattern);
+	}
 
 	public Object getEqual() {
 		return equal;

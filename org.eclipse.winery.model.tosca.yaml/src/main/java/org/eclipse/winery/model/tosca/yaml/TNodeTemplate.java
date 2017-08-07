@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -82,6 +83,30 @@ public class TNodeTemplate {
 		this.setArtifacts(builder.artifacts);
 		this.setNode_filter(builder.node_filter);
 		this.setCopy(builder.copy);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TNodeTemplate)) return false;
+		TNodeTemplate that = (TNodeTemplate) o;
+		return Objects.equals(type, that.type) &&
+				Objects.equals(description, that.description) &&
+				Objects.equals(metadata, that.metadata) &&
+				Objects.equals(directives, that.directives) &&
+				Objects.equals(properties, that.properties) &&
+				Objects.equals(attributes, that.attributes) &&
+				Objects.equals(requirements, that.requirements) &&
+				Objects.equals(capabilities, that.capabilities) &&
+				Objects.equals(interfaces, that.interfaces) &&
+				Objects.equals(artifacts, that.artifacts) &&
+				Objects.equals(node_filter, that.node_filter) &&
+				Objects.equals(copy, that.copy);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, description, metadata, directives, properties, attributes, requirements, capabilities, interfaces, artifacts, node_filter, copy);
 	}
 
 	@NonNull

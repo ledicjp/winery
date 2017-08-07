@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -51,6 +53,21 @@ public class TRepositoryDefinition {
 
 	public TRepositoryDefinition(String url) {
 		this.url = url;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TRepositoryDefinition)) return false;
+		TRepositoryDefinition that = (TRepositoryDefinition) o;
+		return Objects.equals(description, that.description) &&
+				Objects.equals(url, that.url) &&
+				Objects.equals(credential, that.credential);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, url, credential);
 	}
 
 	@Nullable

@@ -14,6 +14,7 @@ package org.eclipse.winery.model.tosca.yaml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -40,6 +41,19 @@ public class TCapabilityType extends TEntityType {
 	public TCapabilityType(Builder builder) {
 		super(builder);
 		this.setValid_source_types(builder.valid_source_types);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TCapabilityType)) return false;
+		TCapabilityType that = (TCapabilityType) o;
+		return Objects.equals(valid_source_types, that.valid_source_types);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(valid_source_types);
 	}
 
 	@NonNull
@@ -102,7 +116,7 @@ public class TCapabilityType extends TEntityType {
 
 			return addValid_source_types(Collections.singletonList(valid_source_type));
 		}
-		
+
 		public TCapabilityType build() {
 			return new TCapabilityType(this);
 		}
