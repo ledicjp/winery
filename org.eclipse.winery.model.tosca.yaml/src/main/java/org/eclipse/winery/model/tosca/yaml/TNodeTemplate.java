@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,8 +102,11 @@ public class TNodeTemplate {
 		this.description = description;
 	}
 
-	@Nullable
+	@NonNull
 	public Metadata getMetadata() {
+		if (this.metadata == null) {
+			this.metadata = new Metadata();
+		}
 		return metadata;
 	}
 
@@ -295,6 +299,182 @@ public class TNodeTemplate {
 		public Builder setCopy(QName copy) {
 			this.copy = copy;
 			return this;
+		}
+
+		public Builder addDirectives(List<String> directives) {
+			if (directives == null || directives.isEmpty()) {
+				return this;
+			}
+
+			if (this.directives == null) {
+				this.directives = directives;
+			} else {
+				this.directives.addAll(directives);
+			}
+
+			return this;
+		}
+
+		public Builder addDirectives(String directive) {
+			if (directive == null || directive.isEmpty()) {
+				return this;
+			}
+
+			return addDirectives(Collections.singletonList(directive));
+		}
+
+		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyAssignment property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
+			if (attributes == null || attributes.isEmpty()) {
+				return this;
+			}
+
+			if (this.attributes == null) {
+				this.attributes = attributes;
+			} else {
+				this.attributes.putAll(attributes);
+			}
+
+			return this;
+		}
+
+		public Builder addAttribtues(String name, TAttributeAssignment attribute) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return this.addAttributes(Collections.singletonMap(name, attribute));
+		}
+
+		public Builder addRequirements(List<TMapRequirementAssignment> requirements) {
+			if (requirements == null || requirements.isEmpty()) {
+				return this;
+			}
+
+			if (this.requirements == null) {
+				this.requirements = requirements;
+			} else {
+				this.requirements.addAll(requirements);
+			}
+
+			return this;
+		}
+
+		public Builder addRequirements(TMapRequirementAssignment requirement) {
+			if (requirement == null || requirement.isEmpty()) {
+				return this;
+			}
+
+			return addRequirements(Collections.singletonList(requirement));
+		}
+
+		public Builder addRequirements(Map<String, TRequirementAssignment> requirements) {
+			if (requirements == null || requirements.isEmpty()) {
+				return this;
+			}
+
+			requirements.forEach((key, value) -> {
+				TMapRequirementAssignment tmp = new TMapRequirementAssignment();
+				tmp.put(key, value);
+				addRequirements(tmp);
+			});
+
+			return this;
+		}
+
+		public Builder addRequirements(String name, TRequirementAssignment requirement) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRequirements(Collections.singletonMap(name, requirement));
+		}
+
+		public Builder addCapabilities(Map<String, TCapabilityAssignment> capabilities) {
+			if (capabilities == null || capabilities.isEmpty()) {
+				return this;
+			}
+
+			if (this.capabilities == null) {
+				this.capabilities = capabilities;
+			} else {
+				this.capabilities.putAll(capabilities);
+			}
+
+			return this;
+		}
+
+		public Builder addCapabilities(String name, TCapabilityAssignment capability) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addCapabilities(Collections.singletonMap(name, capability));
+		}
+
+		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+			if (interfaces == null || interfaces.isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.putAll(interfaces);
+			}
+
+			return this;
+		}
+
+		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInterfaces(Collections.singletonMap(name, _interface));
+		}
+
+		public Builder addArtifacts(Map<String, TArtifactDefinition> artifacts) {
+			if (artifacts == null || artifacts.isEmpty()) {
+				return this;
+			}
+
+			if (this.artifacts == null) {
+				this.artifacts = artifacts;
+			} else {
+				this.artifacts.putAll(artifacts);
+			}
+
+			return this;
+		}
+
+		public Builder addArtifacts(String name, TArtifactDefinition artifact) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addArtifacts(Collections.singletonMap(name, artifact));
 		}
 
 		public TNodeTemplate build() {

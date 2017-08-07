@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -214,6 +215,138 @@ public class TTopologyTemplateDefinition {
 		public Builder setSubstitution_mappings(TSubstitutionMappings substitution_mappings) {
 			this.substitution_mappings = substitution_mappings;
 			return this;
+		}
+
+		public Builder addInputs(Map<String, TParameterDefinition> inputs) {
+			if (inputs == null || inputs.isEmpty()) {
+				return this;
+			}
+
+			if (this.inputs == null) {
+				this.inputs = inputs;
+			} else {
+				this.inputs.putAll(inputs);
+			}
+
+			return this;
+		}
+
+		public Builder addInputs(String name, TParameterDefinition input) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInputs(Collections.singletonMap(name, input));
+		}
+
+		public Builder addNode_templates(Map<String, TNodeTemplate> node_templates) {
+			if (node_templates == null || node_templates.isEmpty()) {
+				return this;
+			}
+
+			if (this.node_templates == null) {
+				this.node_templates = node_templates;
+			} else {
+				this.node_templates.putAll(node_templates);
+			}
+
+			return this;
+		}
+
+		public Builder addNode_templates(String name, TNodeTemplate node_template) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addNode_templates(Collections.singletonMap(name, node_template));
+		}
+
+		public Builder addRelationship_templates(Map<String, TRelationshipTemplate> relationship_templates) {
+			if (relationship_templates == null || relationship_templates.isEmpty()) {
+				return this;
+			}
+
+			if (this.relationship_templates == null) {
+				this.relationship_templates = relationship_templates;
+			} else {
+				this.relationship_templates.putAll(relationship_templates);
+			}
+			
+			return this;
+		}
+
+		public Builder addRelationship_templates(String name, TRelationshipTemplate relationship_template) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRelationship_templates(Collections.singletonMap(name, relationship_template));
+		}
+
+		public Builder addGroups(Map<String, TGroupDefinition> groups) {
+			if (groups == null || groups.isEmpty()) {
+				return this;
+			}
+
+			if (this.groups == null) {
+				this.groups = groups;
+			} else {
+				this.groups.putAll(groups);
+			}
+
+			return this;
+		}
+
+		public Builder addGroups(String name, TGroupDefinition group) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addGroups(Collections.singletonMap(name, group));
+		}
+
+		public Builder addPolicies(Map<String, TPolicyDefinition> policies) {
+			if (policies == null || policies.isEmpty()) {
+				return this;
+			}
+
+			if (this.policies == null) {
+				this.policies = policies;
+			} else {
+				this.policies.putAll(policies);
+			}
+
+			return this;
+		}
+
+		public Builder addPolicies(String name, TPolicyDefinition policy) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addPolicies(Collections.singletonMap(name, policy));
+		}
+
+		public Builder addOutputs(Map<String, TParameterDefinition> outputs) {
+			if (outputs == null || outputs.isEmpty()) {
+				return this;
+			}
+
+			if (this.outputs == null) {
+				this.outputs = outputs;
+			} else {
+				this.outputs.putAll(outputs);
+			}
+
+			return this;
+		}
+
+		public Builder addOutputs(String name, TParameterDefinition output) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addOutputs(Collections.singletonMap(name, output));
 		}
 
 		public TTopologyTemplateDefinition build() {

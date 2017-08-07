@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -95,6 +96,28 @@ public class TPolicyType extends TEntityType {
 		public Builder setTriggers(Object triggers) {
 			this.triggers = triggers;
 			return this;
+		}
+
+		public Builder addTargets(List<QName> targets) {
+			if (targets == null || targets.isEmpty()) {
+				return this;
+			}
+
+			if (this.targets == null) {
+				this.targets = targets;
+			} else {
+				this.targets.addAll(targets);
+			}
+
+			return this;
+		}
+
+		public Builder addTargets(QName target) {
+			if (target == null) {
+				return this;
+			}
+
+			return addTargets(Collections.singletonList(target));
 		}
 
 		public TPolicyType build() {

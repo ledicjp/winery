@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,50 @@ public class TPolicyDefinition {
 		public Builder setTargets(List<QName> targets) {
 			this.targets = targets;
 			return this;
+		}
+
+		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyAssignment property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addTargets(List<QName> targets) {
+			if (targets == null || targets.isEmpty()) {
+				return this;
+			}
+
+			if (this.targets == null) {
+				this.targets = targets;
+			} else {
+				this.targets.addAll(targets);
+			}
+
+			return this;
+		}
+
+		public Builder addTargets(QName target) {
+			if (target == null) {
+				return this;
+			}
+
+			return addTargets(Collections.singletonList(target));
 		}
 
 		public TPolicyDefinition build() {

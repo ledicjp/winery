@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,6 +194,94 @@ public class TCapabilityDefinition {
 		public Builder setAttributes(Map<String, TAttributeDefinition> attributes) {
 			this.attributes = attributes;
 			return this;
+		}
+
+		public Builder addOccurrences(List<String> occurrences) {
+			if (occurrences == null || occurrences.isEmpty()) {
+				return this;
+			}
+
+			if (this.occurrences == null) {
+				this.occurrences = occurrences;
+			} else {
+				this.occurrences.addAll(occurrences);
+			}
+
+			return this;
+		}
+
+		public Builder addOccurrences(String occurrence) {
+			if (occurrence == null || occurrence.isEmpty()) {
+				return this;
+			}
+
+			return addOccurrences(Collections.singletonList(occurrence));
+		}
+
+		public Builder addValid_source_types(List<QName> valid_source_types) {
+			if (valid_source_types == null || valid_source_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.valid_source_types == null) {
+				this.valid_source_types = valid_source_types;
+			} else {
+				this.valid_source_types.addAll(valid_source_types);
+			}
+
+			return this;
+		}
+
+		public Builder addValid_source_types(QName valid_source_type) {
+			if (valid_source_type == null) {
+				return this;
+			}
+
+			return addValid_source_types(Collections.singletonList(valid_source_type));
+		}
+
+		public Builder addProperties(Map<String, TPropertyDefinition> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyDefinition property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addAttributes(Map<String, TAttributeDefinition> attributes) {
+			if (attributes == null || attributes.isEmpty()) {
+				return this;
+			}
+
+			if (this.attributes == null) {
+				this.attributes = attributes;
+			} else {
+				this.attributes.putAll(attributes);
+			}
+
+			return this;
+		}
+
+		public Builder addAttributes(String name, TAttributeDefinition attribute) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addAttributes(Collections.singletonMap(name, attribute));
 		}
 
 		public TCapabilityDefinition build() {

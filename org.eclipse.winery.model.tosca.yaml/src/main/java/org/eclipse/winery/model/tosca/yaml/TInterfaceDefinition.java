@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -108,6 +109,50 @@ public class TInterfaceDefinition {
 		public Builder setOperations(Map<String, TOperationDefinition> operations) {
 			this.operations = operations;
 			return this;
+		}
+
+		public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+			if (inputs == null || inputs.isEmpty()) {
+				return this;
+			}
+
+			if (this.inputs == null) {
+				this.inputs = inputs;
+			} else {
+				this.inputs.putAll(inputs);
+			}
+
+			return this;
+		}
+
+		public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInputs(Collections.singletonMap(name, input));
+		}
+
+		public Builder addOperations(Map<String, TOperationDefinition> operations) {
+			if (operations == null || operations.isEmpty()) {
+				return this;
+			}
+
+			if (this.operations == null) {
+				this.operations = operations;
+			} else {
+				this.operations.putAll(operations);
+			}
+
+			return this;
+		}
+
+		public Builder addOperations(String name, TOperationDefinition operation) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addOperations(Collections.singletonMap(name, operation));
 		}
 
 		public TInterfaceDefinition build() {

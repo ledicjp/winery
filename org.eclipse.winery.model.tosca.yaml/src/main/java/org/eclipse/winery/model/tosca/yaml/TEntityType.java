@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -71,13 +72,13 @@ public class TEntityType {
 		return version;
 	}
 
-	public void setVersion(TVersion version) {
-		this.version = version;
-	}
-
 	public void setVersion(String version) {
 		TVersion tmp = new TVersion(version);
 		setVersion(tmp);
+	}
+
+	public void setVersion(TVersion version) {
+		this.version = version;
 	}
 
 	@Nullable
@@ -115,8 +116,11 @@ public class TEntityType {
 		this.attributes = attributes;
 	}
 
-	@Nullable
+	@NonNull
 	public Metadata getMetadata() {
+		if (this.metadata == null) {
+			this.metadata = new Metadata();
+		}
 		return metadata;
 	}
 
@@ -187,6 +191,50 @@ public class TEntityType {
 			Metadata metadata = new Metadata();
 			metadata.put(key, value);
 			return this.setMetadata(metadata);
+		}
+
+		public Builder addProperties(Map<String, TPropertyDefinition> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyDefinition property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addAttributes(Map<String, TAttributeDefinition> attributes) {
+			if (attributes == null || attributes.isEmpty()) {
+				return this;
+			}
+
+			if (this.attributes == null) {
+				this.attributes = attributes;
+			} else {
+				this.attributes.putAll(attributes);
+			}
+
+			return this;
+		}
+
+		public Builder addAttributes(String name, TAttributeDefinition attribute) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addAttributes(Collections.singletonMap(name, attribute));
 		}
 
 		public TEntityType build() {

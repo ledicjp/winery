@@ -23,22 +23,22 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "StringList", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
+@XmlType(name = "TListString", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"list"
 })
-public class StringList implements List<String> {
+public class TListString implements List<String> {
 	private List<String> list;
 
-	public StringList() {
+	public TListString() {
 		this.list = new ArrayList<>();
 	}
 
-	public StringList(String str) {
+	public TListString(String str) {
 		this.list = new ArrayList<>();
 		this.list.add(str);
 	}
 
-	public StringList(String... str) {
+	public TListString(String... str) {
 		this.list = new ArrayList<>(Arrays.asList(str));
 	}
 

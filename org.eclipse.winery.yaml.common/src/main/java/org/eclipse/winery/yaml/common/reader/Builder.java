@@ -64,7 +64,7 @@ import org.eclipse.winery.model.tosca.yaml.TSubstitutionMappings;
 import org.eclipse.winery.model.tosca.yaml.TTopologyTemplateDefinition;
 import org.eclipse.winery.model.tosca.yaml.TVersion;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
-import org.eclipse.winery.model.tosca.yaml.support.StringList;
+import org.eclipse.winery.model.tosca.yaml.support.TListString;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.support.TMapObject;
 import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
@@ -1660,7 +1660,7 @@ public class Builder {
 	}
 
 	@Nullable
-	public Map<String, StringList> buildMapStringList(Object object) {
+	public Map<String, TListString> buildMapStringList(Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -1668,7 +1668,7 @@ public class Builder {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) object;
 
-		Map<String, StringList> result = new LinkedHashMap<>();
+		Map<String, TListString> result = new LinkedHashMap<>();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			result.put(entry.getKey(), buildStringList(entry.getValue()));
 		}
@@ -1677,7 +1677,7 @@ public class Builder {
 	}
 
 	@Nullable
-	public StringList buildStringList(Object object) {
+	public TListString buildStringList(Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -1685,7 +1685,7 @@ public class Builder {
 		@SuppressWarnings("unchecked")
 		List<String> tmp = (List<String>) object;
 
-		StringList stringList = new StringList();
+		TListString stringList = new TListString();
 		stringList.addAll(tmp);
 
 		return stringList;

@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -77,6 +78,28 @@ public class TDataType extends TEntityType {
 		public Builder setConstraints(List<TConstraintClause> constraints) {
 			this.constraints = constraints;
 			return this;
+		}
+
+		public Builder addConstraints(List<TConstraintClause> constraints) {
+			if (constraints == null || constraints.isEmpty()) {
+				return this;
+			}
+
+			if (this.constraints == null) {
+				this.constraints = constraints;
+			} else {
+				this.constraints.addAll(constraints);
+			}
+
+			return this;
+		}
+
+		public Builder addConstraints(TConstraintClause contraint) {
+			if (contraint == null) {
+				return this;
+			}
+
+			return addConstraints(Collections.singletonList(contraint));
 		}
 
 		public TDataType build() {

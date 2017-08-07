@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +80,12 @@ public class TGroupDefinition {
 		this.description = description;
 	}
 
-	@Nullable
+	@NonNull
 	public Metadata getMetadata() {
+		if (this.metadata == null) {
+			this.metadata = new Metadata();
+		}
+
 		return metadata;
 	}
 
@@ -166,6 +171,72 @@ public class TGroupDefinition {
 		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
 			this.interfaces = interfaces;
 			return this;
+		}
+
+		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyAssignment property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addMembers(List<QName> members) {
+			if (members == null || members.isEmpty()) {
+				return this;
+			}
+
+			if (this.members == null) {
+				this.members = members;
+			} else {
+				this.members.addAll(members);
+			}
+
+			return this;
+		}
+
+		public Builder addMembers(QName member) {
+			if (member == null) {
+				return this;
+			}
+
+			return addMembers(Collections.singletonList(member));
+		}
+
+		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+			if (interfaces == null || interfaces.isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.putAll(interfaces);
+			}
+
+			return this;
+		}
+
+		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+			if (name == null) {
+				return this;
+			}
+
+			return addInterfaces(Collections.singletonMap(name, _interface));
 		}
 
 		public TGroupDefinition build() {

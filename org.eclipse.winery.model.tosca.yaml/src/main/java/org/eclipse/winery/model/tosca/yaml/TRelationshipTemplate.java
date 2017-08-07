@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -182,6 +183,72 @@ public class TRelationshipTemplate {
 		public Builder setCopy(QName copy) {
 			this.copy = copy;
 			return this;
+		}
+
+		public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
+			if (attributes == null || attributes.isEmpty()) {
+				return this;
+			}
+
+			if (this.attributes == null) {
+				this.attributes = attributes;
+			} else {
+				this.attributes.putAll(attributes);
+			}
+
+			return this;
+		}
+
+		public Builder addAttribtues(String name, TAttributeAssignment attribute) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return this.addAttributes(Collections.singletonMap(name, attribute));
+		}
+
+		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyAssignment property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+			if (interfaces == null || interfaces.isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.putAll(interfaces);
+			}
+
+			return this;
+		}
+
+		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInterfaces(Collections.singletonMap(name, _interface));
 		}
 
 		public TRelationshipTemplate build() {

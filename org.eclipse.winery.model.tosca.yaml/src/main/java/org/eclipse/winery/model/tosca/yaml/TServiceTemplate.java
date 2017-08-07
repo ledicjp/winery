@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,8 +101,11 @@ public class TServiceTemplate {
 		this.tosca_definitions_version = tosca_definitions_version;
 	}
 
-	@Nullable
+	@NonNull
 	public Metadata getMetadata() {
+		if (this.metadata == null) {
+			this.metadata = new Metadata();
+		}
 		return metadata;
 	}
 
@@ -371,6 +375,270 @@ public class TServiceTemplate {
 		public Builder setTopology_template(TTopologyTemplateDefinition topology_template) {
 			this.topology_template = topology_template;
 			return this;
+		}
+
+		public Builder addDsl_definitions(Map<String, Object> dsl_definitions) {
+			if (dsl_definitions == null || dsl_definitions.isEmpty()) {
+				return this;
+			}
+
+			if (this.dsl_definitions == null) {
+				this.dsl_definitions = dsl_definitions;
+			} else {
+				this.dsl_definitions.putAll(dsl_definitions);
+			}
+
+			return this;
+		}
+
+		public Builder addDsl_definitions(String name, Object dsl_definition) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addDsl_definitions(Collections.singletonMap(name, dsl_definition));
+		}
+
+		public Builder addRepositories(Map<String, TRepositoryDefinition> repositories) {
+			if (repositories == null || repositories.isEmpty()) {
+				return this;
+			}
+
+			if (this.repositories == null) {
+				this.repositories = repositories;
+			} else {
+				this.repositories.putAll(repositories);
+			}
+
+			return this;
+		}
+
+		public Builder addRepositories(String name, TRepositoryDefinition repository) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRepositories(Collections.singletonMap(name, repository));
+		}
+
+		public Builder addImports(List<TMapImportDefinition> imports) {
+			if (imports == null || imports.isEmpty()) {
+				return this;
+			}
+
+			if (this.imports == null) {
+				this.imports = imports;
+			} else {
+				this.imports.addAll(imports);
+			}
+
+			return this;
+		}
+
+		public Builder addImports(TMapImportDefinition _import) {
+			if (_import == null | _import.isEmpty()) {
+				return this;
+			}
+
+			return addImports(Collections.singletonList(_import));
+		}
+
+		public Builder addImports(Map<String, TImportDefinition> imports) {
+			if (imports == null || imports.isEmpty()) {
+				return this;
+			}
+
+			imports.forEach((key, value) -> {
+				TMapImportDefinition tmp = new TMapImportDefinition();
+				tmp.put(key, value);
+				addImports(tmp);
+			});
+
+			return this;
+		}
+
+		public Builder addImports(String name, TImportDefinition _import) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addImports(Collections.singletonMap(name, _import));
+		}
+
+		public Builder addArtifact_types(Map<String, TArtifactType> artifact_types) {
+			if (artifact_types == null || artifact_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.artifact_types == null) {
+				this.artifact_types = artifact_types;
+			} else {
+				this.artifact_types.putAll(artifact_types);
+			}
+
+			return this;
+		}
+
+		public Builder addArtifact_types(String name, TArtifactType artifact_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addArtifact_types(Collections.singletonMap(name, artifact_type));
+		}
+
+		public Builder addData_types(Map<String, TDataType> data_types) {
+			if (data_types == null || data_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.data_types == null) {
+				this.data_types = data_types;
+			} else {
+				this.data_types.putAll(data_types);
+			}
+
+			return this;
+		}
+
+		public Builder addData_types(String name, TDataType data_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addData_types(Collections.singletonMap(name, data_type));
+		}
+
+		public Builder addCapability_types(Map<String, TCapabilityType> capability_types) {
+			if (capability_types == null || capability_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.capability_types == null) {
+				this.capability_types = capability_types;
+			} else {
+				this.capability_types.putAll(capability_types);
+			}
+
+			return this;
+		}
+
+		public Builder addCapability_types(String name, TCapabilityType capability_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addCapability_types(Collections.singletonMap(name, capability_type));
+		}
+
+		public Builder addInterface_types(Map<String, TInterfaceType> interface_types) {
+			if (interface_types == null || interface_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.interface_types == null) {
+				this.interface_types = interface_types;
+			} else {
+				this.interface_types.putAll(interface_types);
+			}
+
+			return this;
+		}
+
+		public Builder addInterface_types(String name, TInterfaceType interface_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInterface_types(Collections.singletonMap(name, interface_type));
+		}
+
+		public Builder addRelationship_types(Map<String, TRelationshipType> relationship_types) {
+			if (relationship_types == null || relationship_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.relationship_types == null) {
+				this.relationship_types = relationship_types;
+			} else {
+				this.relationship_types.putAll(relationship_types);
+			}
+
+			return this;
+		}
+
+		public Builder addRelationship_types(String name, TRelationshipType relationship_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRelationship_types(Collections.singletonMap(name, relationship_type));
+		}
+
+		public Builder addNode_types(Map<String, TNodeType> node_types) {
+			if (node_types == null || node_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.node_types == null) {
+				this.node_types = node_types;
+			} else {
+				this.node_types.putAll(node_types);
+			}
+
+			return this;
+		}
+
+		public Builder addNode_types(String name, TNodeType node_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addNode_types(Collections.singletonMap(name, node_type));
+		}
+
+		public Builder addGroup_types(Map<String, TGroupType> group_types) {
+			if (group_types == null || group_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.group_types == null) {
+				this.group_types = group_types;
+			} else {
+				this.group_types.putAll(group_types);
+			}
+
+			return this;
+		}
+
+		public Builder addGroup_types(String name, TGroupType group_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addGroup_types(Collections.singletonMap(name, group_type));
+		}
+
+		public Builder addPolicy_types(Map<String, TPolicyType> policy_types) {
+			if (policy_types == null || policy_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.policy_types == null) {
+				this.policy_types = policy_types;
+			} else {
+				this.policy_types.putAll(policy_types);
+			}
+
+			return this;
+		}
+
+		public Builder addPolicy_types(String name, TPolicyType policy_type) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addPolicy_types(Collections.singletonMap(name, policy_type));
 		}
 
 		public TServiceTemplate build() {

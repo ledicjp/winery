@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -110,6 +111,50 @@ public class TRelationshipAssignment {
 		public Builder setInterfaces(Map<String, TInterfaceAssignment> interfaces) {
 			this.interfaces = interfaces;
 			return this;
+		}
+
+		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.putAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyAssignment property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addInterfaces(Map<String, TInterfaceAssignment> interfaces) {
+			if (interfaces == null || interfaces.isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.putAll(interfaces);
+			}
+
+			return this;
+		}
+
+		public Builder addInterfaces(String name, TInterfaceAssignment _interface) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInterfaces(Collections.singletonMap(name, _interface));
 		}
 
 		public TRelationshipAssignment build() {

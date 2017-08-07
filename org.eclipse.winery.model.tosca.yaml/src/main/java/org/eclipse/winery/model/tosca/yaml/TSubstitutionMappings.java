@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.winery.model.tosca.yaml.support.StringList;
+import org.eclipse.winery.model.tosca.yaml.support.TListString;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -39,8 +40,8 @@ import org.eclipse.jdt.annotation.Nullable;
 })
 public class TSubstitutionMappings {
 	private QName node_type;
-	private Map<String, StringList> capabilities;
-	private Map<String, StringList> requirements;
+	private Map<String, TListString> capabilities;
+	private Map<String, TListString> requirements;
 
 	public TSubstitutionMappings() {
 	}
@@ -61,7 +62,7 @@ public class TSubstitutionMappings {
 	}
 
 	@NonNull
-	public Map<String, StringList> getCapabilities() {
+	public Map<String, TListString> getCapabilities() {
 		if (this.capabilities == null) {
 			this.capabilities = new LinkedHashMap<>();
 		}
@@ -69,12 +70,12 @@ public class TSubstitutionMappings {
 		return capabilities;
 	}
 
-	public void setCapabilities(Map<String, StringList> capabilities) {
+	public void setCapabilities(Map<String, TListString> capabilities) {
 		this.capabilities = capabilities;
 	}
 
 	@NonNull
-	public Map<String, StringList> getRequirements() {
+	public Map<String, TListString> getRequirements() {
 		if (this.requirements == null) {
 			this.requirements = new LinkedHashMap<>();
 		}
@@ -82,7 +83,7 @@ public class TSubstitutionMappings {
 		return requirements;
 	}
 
-	public void setRequirements(Map<String, StringList> requirements) {
+	public void setRequirements(Map<String, TListString> requirements) {
 		this.requirements = requirements;
 	}
 
@@ -92,8 +93,8 @@ public class TSubstitutionMappings {
 
 	public static class Builder {
 		private QName node_type;
-		private Map<String, StringList> capabilities;
-		private Map<String, StringList> requirements;
+		private Map<String, TListString> capabilities;
+		private Map<String, TListString> requirements;
 
 		public Builder() {
 
@@ -104,14 +105,58 @@ public class TSubstitutionMappings {
 			return this;
 		}
 
-		public Builder setCapabilities(Map<String, StringList> capabilities) {
+		public Builder setCapabilities(Map<String, TListString> capabilities) {
 			this.capabilities = capabilities;
 			return this;
 		}
 
-		public Builder setRequirements(Map<String, StringList> requirements) {
+		public Builder setRequirements(Map<String, TListString> requirements) {
 			this.requirements = requirements;
 			return this;
+		}
+
+		public Builder addCapabilities(Map<String, TListString> capabilities) {
+			if (capabilities == null || capabilities.isEmpty()) {
+				return this;
+			}
+
+			if (this.capabilities == null) {
+				this.capabilities = capabilities;
+			} else {
+				this.capabilities.putAll(capabilities);
+			}
+
+			return this;
+		}
+
+		public Builder addCapabilities(String name, TListString capability) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addCapabilities(Collections.singletonMap(name, capability));
+		}
+
+		public Builder addRequirements(Map<String, TListString> requirements) {
+			if (requirements == null || requirements.isEmpty()) {
+				return this;
+			}
+
+			if (this.requirements == null) {
+				this.requirements = requirements;
+			} else {
+				this.requirements.putAll(requirements);
+			}
+
+			return this;
+		}
+
+		public Builder addRequirements(String name, TListString requirement) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRequirements(Collections.singletonMap(name, requirement));
 		}
 
 		public TSubstitutionMappings build() {

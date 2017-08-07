@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -135,6 +136,50 @@ public class TOperationDefinition {
 		public Builder setImplementation(TImplementation implementation) {
 			this.implementation = implementation;
 			return this;
+		}
+
+		public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+			if (inputs == null || inputs.isEmpty()) {
+				return this;
+			}
+
+			if (this.inputs == null) {
+				this.inputs = inputs;
+			} else {
+				this.inputs.putAll(inputs);
+			}
+
+			return this;
+		}
+
+		public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInputs(Collections.singletonMap(name, input));
+		}
+
+		public Builder addOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+			if (outputs == null || outputs.isEmpty()) {
+				return this;
+			}
+
+			if (this.outputs == null) {
+				this.outputs = outputs;
+			} else {
+				this.outputs.putAll(outputs);
+			}
+
+			return this;
+		}
+
+		public Builder addOutputs(String name, TPropertyAssignmentOrDefinition output) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addOutputs(Collections.singletonMap(name, output));
 		}
 
 		public TOperationDefinition build() {

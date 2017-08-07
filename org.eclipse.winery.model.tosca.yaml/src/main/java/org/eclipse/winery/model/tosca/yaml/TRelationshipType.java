@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +103,28 @@ public class TRelationshipType extends TEntityType {
 		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
 			this.interfaces = interfaces;
 			return this;
+		}
+
+		public Builder addValid_target_types(List<QName> valid_target_types) {
+			if (valid_target_types == null || valid_target_types.isEmpty()) {
+				return this;
+			}
+
+			if (this.valid_target_types == null) {
+				this.valid_target_types = valid_target_types;
+			} else {
+				this.valid_target_types.addAll(valid_target_types);
+			}
+
+			return this;
+		}
+
+		public Builder addValid_target_types(QName valid_target_type) {
+			if (valid_target_type == null) {
+				return this;
+			}
+
+			return addValid_target_types(Collections.singletonList(valid_target_type));
 		}
 
 		public TRelationshipType build() {

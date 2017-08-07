@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.winery.model.tosca.yaml.support.Annotations;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
@@ -43,7 +44,7 @@ public class TRequirementDefinition {
 	private TRelationshipDefinition relationship;
 	private List<String> occurrences;
 
-	// experimental: not defined in the specification but used in the specification
+	@Annotations.StandardExtension
 	private String description;
 
 	public TRequirementDefinition() {

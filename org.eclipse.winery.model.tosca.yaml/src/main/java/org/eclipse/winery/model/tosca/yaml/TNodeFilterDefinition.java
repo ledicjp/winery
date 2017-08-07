@@ -12,7 +12,9 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -91,6 +93,94 @@ public class TNodeFilterDefinition {
 		public Builder setCapabilities(List<TMapObject> capabilities) {
 			this.capabilities = capabilities;
 			return this;
+		}
+
+		public Builder addProperties(List<TMapPropertyFilterDefinition> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			if (this.properties == null) {
+				this.properties = properties;
+			} else {
+				this.properties.addAll(properties);
+			}
+
+			return this;
+		}
+
+		public Builder addProperties(TMapPropertyFilterDefinition property) {
+			if (property == null || property.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonList(property));
+		}
+
+		public Builder addProperties(Map<String, TPropertyFilterDefinition> properties) {
+			if (properties == null || properties.isEmpty()) {
+				return this;
+			}
+
+			properties.forEach((key, value) -> {
+				TMapPropertyFilterDefinition tmp = new TMapPropertyFilterDefinition();
+				tmp.put(key, value);
+				addProperties(tmp);
+			});
+
+			return this;
+		}
+
+		public Builder addProperties(String name, TPropertyFilterDefinition property) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addProperties(Collections.singletonMap(name, property));
+		}
+
+		public Builder addCapabilities(List<TMapObject> capabilities) {
+			if (capabilities == null || capabilities.isEmpty()) {
+				return this;
+			}
+
+			if (this.capabilities == null) {
+				this.capabilities = capabilities;
+			} else {
+				this.capabilities.addAll(capabilities);
+			}
+
+			return this;
+		}
+
+		public Builder addCapabilities(TMapObject capability) {
+			if (capability == null || capability.isEmpty()) {
+				return this;
+			}
+
+			return addCapabilities(Collections.singletonList(capability));
+		}
+
+		public Builder addCapabilities(Map<String, Object> capabilities) {
+			if (capabilities == null || capabilities.isEmpty()) {
+				return this;
+			}
+
+			capabilities.forEach((key, value) -> {
+				TMapObject tmp = new TMapObject();
+				tmp.put(key, value);
+				addCapabilities(tmp);
+			});
+
+			return this;
+		}
+
+		public Builder addCapabilities(String name, Object capability) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addCapabilities(Collections.singletonMap(name, capability));
 		}
 
 		public TNodeFilterDefinition build() {

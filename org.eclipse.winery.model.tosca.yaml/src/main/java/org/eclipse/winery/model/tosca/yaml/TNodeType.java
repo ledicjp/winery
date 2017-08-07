@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,6 +168,138 @@ public class TNodeType extends TNodeOrGroupType {
 		public Builder setArtifacts(Map<String, TArtifactDefinition> artifacts) {
 			this.artifacts = artifacts;
 			return this;
+		}
+
+		public Builder addAttributes(Map<String, TAttributeDefinition> attributes) {
+			if (attributes == null || attributes.isEmpty()) {
+				return this;
+			}
+
+			if (this.attributes == null) {
+				this.attributes = attributes;
+			} else {
+				this.attributes.putAll(attributes);
+			}
+
+			return this;
+		}
+
+		public Builder addAttributes(String name, TAttributeDefinition attribute) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addAttributes(Collections.singletonMap(name, attribute));
+		}
+
+		public Builder addRequirements(List<TMapRequirementDefinition> requirements) {
+			if (requirements == null || requirements.isEmpty()) {
+				return this;
+			}
+
+			if (this.requirements == null) {
+				this.requirements = requirements;
+			} else {
+				this.requirements.addAll(requirements);
+			}
+
+			return this;
+		}
+
+		public Builder addRequirements(TMapRequirementDefinition requirement) {
+			if (requirement == null || requirement.isEmpty()) {
+				return this;
+			}
+
+			return addRequirements(Collections.singletonList(requirement));
+		}
+
+		public Builder addRequirements(Map<String, TRequirementDefinition> requirements) {
+			if (requirements == null || requirements.isEmpty()) {
+				return this;
+			}
+
+			requirements.forEach((key, value) -> {
+				TMapRequirementDefinition tmp = new TMapRequirementDefinition();
+				tmp.put(key, value);
+				addRequirements(tmp);
+			});
+
+			return this;
+		}
+
+		public Builder addRequirements(String name, TRequirementDefinition requirement) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addRequirements(Collections.singletonMap(name, requirement));
+		}
+
+		public Builder addCapabilities(Map<String, TCapabilityDefinition> capabilities) {
+			if (capabilities == null || capabilities.isEmpty()) {
+				return this;
+			}
+
+			if (this.capabilities == null) {
+				this.capabilities = capabilities;
+			} else {
+				this.capabilities.putAll(capabilities);
+			}
+
+			return this;
+		}
+
+		public Builder addCapabilities(String name, TCapabilityDefinition capability) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addCapabilities(Collections.singletonMap(name, capability));
+		}
+
+		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+			if (interfaces == null || interfaces.isEmpty()) {
+				return this;
+			}
+
+			if (this.interfaces == null) {
+				this.interfaces = interfaces;
+			} else {
+				this.interfaces.putAll(interfaces);
+			}
+
+			return this;
+		}
+
+		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addInterfaces(Collections.singletonMap(name, _interface));
+		}
+
+		public Builder addArtifacts(Map<String, TArtifactDefinition> artifacts) {
+			if (artifacts == null || artifacts.isEmpty()) {
+				return this;
+			}
+
+			if (this.artifacts == null) {
+				this.artifacts = artifacts;
+			} else {
+				this.artifacts.putAll(artifacts);
+			}
+
+			return this;
+		}
+
+		public Builder addArtifacts(String name, TArtifactDefinition artifact) {
+			if (name == null || name.isEmpty()) {
+				return this;
+			}
+
+			return addArtifacts(Collections.singletonMap(name, artifact));
 		}
 
 		public TNodeType build() {

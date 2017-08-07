@@ -12,7 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -99,11 +99,26 @@ public class TArtifactType extends TEntityType {
 			return this;
 		}
 
-		public Builder setFile_ext(String file_ext) {
-			String tmp = file_ext.replace("[", "");
-			tmp = tmp.replace("]", "");
-			tmp = tmp.replaceAll("\\s+", "");
-			return setFile_ext(new ArrayList<>(Arrays.asList(tmp.split(","))));
+		public Builder addFile_ext(List<String> file_ext) {
+			if (file_ext == null || file_ext.isEmpty()) {
+				return this;
+			}
+
+			if (this.file_ext == null) {
+				this.file_ext = file_ext;
+			} else {
+				this.file_ext.addAll(file_ext);
+			}
+
+			return this;
+		}
+
+		public Builder addFile_ext(String file_ext) {
+			if (file_ext == null || file_ext.isEmpty()) {
+				return this;
+			}
+
+			return addFile_ext(Collections.singletonList(file_ext));
 		}
 
 		public TArtifactType build() {

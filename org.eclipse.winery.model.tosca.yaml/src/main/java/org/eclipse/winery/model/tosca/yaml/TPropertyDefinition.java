@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -214,6 +215,28 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 		public Builder setEntry_schema(TEntrySchema entry_schema) {
 			this.entry_schema = entry_schema;
 			return this;
+		}
+
+		public Builder addConstraints(List<TConstraintClause> constraints) {
+			if (constraints == null || constraints.isEmpty()) {
+				return this;
+			}
+
+			if (this.constraints == null) {
+				this.constraints = constraints;
+			} else {
+				this.constraints.addAll(constraints);
+			}
+
+			return this;
+		}
+
+		public Builder addConstraints(TConstraintClause constraint) {
+			if (constraint == null) {
+				return this;
+			}
+
+			return addConstraints(Collections.singletonList(constraint));
 		}
 
 		public TPropertyDefinition build() {

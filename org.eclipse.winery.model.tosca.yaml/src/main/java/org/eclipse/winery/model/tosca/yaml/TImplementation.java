@@ -12,6 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -90,6 +91,28 @@ public class TImplementation {
 		public Builder setDependencies(List<QName> dependencies) {
 			this.dependencies = dependencies;
 			return this;
+		}
+
+		public Builder addDependencies(List<QName> dependencies) {
+			if (dependencies == null || dependencies.isEmpty()) {
+				return this;
+			}
+
+			if (this.dependencies == null) {
+				this.dependencies = dependencies;
+			} else {
+				this.dependencies.addAll(dependencies);
+			}
+
+			return this;
+		}
+
+		public Builder addDependencies(QName dependency) {
+			if (dependency == null) {
+				return this;
+			}
+
+			return addDependencies(Collections.singletonList(dependency));
 		}
 
 		public TImplementation build() {
