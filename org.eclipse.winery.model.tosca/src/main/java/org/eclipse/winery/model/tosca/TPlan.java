@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
@@ -110,6 +112,7 @@ import org.w3c.dom.Element;
         "planModel",
         "planModelReference"
 })
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TPlan extends TExtensibleElements {
     @XmlElement(name = "Precondition")
     protected TCondition precondition;

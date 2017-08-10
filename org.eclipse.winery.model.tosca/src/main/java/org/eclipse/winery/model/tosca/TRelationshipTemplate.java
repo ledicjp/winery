@@ -27,8 +27,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
@@ -39,6 +41,7 @@ import org.w3c.dom.Element;
         "relationshipConstraints"
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TRelationshipTemplate extends TEntityTemplate {
 
     @XmlElement(name = "SourceElement", required = true)

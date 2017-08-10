@@ -23,12 +23,16 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -113,7 +117,7 @@ public abstract class TEntityTemplate extends HasId {
      *
      * @return possible object is {@link TEntityTemplate.PropertyConstraints }
      */
-    /*@Nullable*/
+	/*@Nullable*/
     public TEntityTemplate.PropertyConstraints getPropertyConstraints() {
         return propertyConstraints;
     }
@@ -190,7 +194,41 @@ public abstract class TEntityTemplate extends HasId {
         public void setAny(Object value) {
             this.any = value;
         }
+
+        /**
+         * This is a special method for Winery. Winery allows to define a property by specifying name/value values.
+         * Instead of parsing the XML contained in TNodeType, this method is a convenience method to access this
+         * information Assumes the properties are key/value pairs (see WinerysPropertiesDefinition), all other cases are
+         * not implemented yet.
+         *
+         * The return type "Properties" is used because of the key/value properties.
+         */
+        @XmlTransient
+        @JsonIgnore
+        public java.util.Properties getKVProperties() {
+            java.util.Properties properties = new java.util.Properties();
+            org.eclipse.winery.model.tosca.TEntityTemplate.Properties tprops = this;
+            if (tprops != null) {
+                // no checking for validity, just reading
+                Element el = (Element) tprops.getAny();
+                if (el == null) {
+                    // somehow invalid .tosca. We return empty properties instead of throwing a NPE
+                    return properties;
+                }
+                NodeList childNodes = el.getChildNodes();
+                for (int i = 0; i < childNodes.getLength(); i++) {
+                    Node item = childNodes.item(i);
+                    if (item instanceof Element) {
+                        String key = item.getLocalName();
+                        String value = item.getTextContent();
+                        properties.put(key, value);
+                    }
+                }
+            }
+            return properties;
+        }
     }
+
 
     /**
      * <p>Java class for anonymous complex type.

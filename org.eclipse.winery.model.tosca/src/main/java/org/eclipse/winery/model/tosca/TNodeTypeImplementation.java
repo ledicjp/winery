@@ -436,12 +436,12 @@ public class TNodeTypeImplementation extends TExtensibleElements {
             return this;
         }
 
-        public Builder set_abstract(TBoolean _abstract) {
+        public Builder setAbstract(TBoolean _abstract) {
             this._abstract = _abstract;
             return this;
         }
 
-        public Builder set_final(TBoolean _final) {
+        public Builder setFinal(TBoolean _final) {
             this._final = _final;
             return this;
         }
