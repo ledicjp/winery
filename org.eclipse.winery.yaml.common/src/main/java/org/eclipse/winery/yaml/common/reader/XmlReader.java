@@ -9,9 +9,25 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.model.tosca.yaml.support;
+package org.eclipse.winery.yaml.common.reader;
 
-public class Defaults {
-	public static final String DEFAULT_NS = "http://www.eclipse.org/winery/ns/simple/yaml/1.1/default";
-	public static final String TOSCA_DEFINITIONS_VERSION = "tosca_simple_yaml_1_1";
+import java.io.File;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import org.eclipse.winery.model.tosca.Definitions;
+
+public class XmlReader {
+	private final Unmarshaller unmarshaller;
+
+	public XmlReader() throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(Definitions.class);
+		unmarshaller = jaxbContext.createUnmarshaller();
+	}
+
+	public Definitions parse(File file) throws JAXBException {
+		return (Definitions) unmarshaller.unmarshal(file);
+	}
 }

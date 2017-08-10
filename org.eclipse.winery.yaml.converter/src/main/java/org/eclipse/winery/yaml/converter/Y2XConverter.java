@@ -154,7 +154,6 @@ public class Y2XConverter {
 		Definitions.Builder builder = new Definitions.Builder(id + "_Definitions", target_namespace);
 
 		builder.setImport(convert(node.getImports()));
-
 		builder.addTypes(convert(node.getData_types()));
 		builder.addTypes(convert(node.getGroup_types()));
 		builder.addServiceTemplates(convertServiceTemplate(node, id, target_namespace));

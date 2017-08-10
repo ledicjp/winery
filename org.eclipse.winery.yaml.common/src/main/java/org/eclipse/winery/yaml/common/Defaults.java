@@ -79,7 +79,6 @@ public class Defaults {
 			"tosca.policies.Update",
 			"tosca.policies.Performance"
 	));
-
 	public static final QName IMPLEMENTATION_ARTIFACTS = new QName(Namespaces.TOSCA_NS, "tosca.artifacts.Implementation");
 	public static final QName DEPLOYMENT_ARTIFACTS = new QName(Namespaces.TOSCA_NS, "tosca.artifacts.Deployment");
 }
