@@ -1,8 +1,19 @@
 # Eclipse Winery™ Developer Guide
 
+This document provides (i) guides about development and (ii) design ideas of Winery.
+
+Other sources of information:
+
+- [CodeHeaders](CodeHeaders) - documentation about required code headers
+- [Encoding](Encoding) - information about how percent-encoding is used at Winery
+- [RepositoryLayout](RepositoryLayout) - documents the layout of the repository (stored as plain text files)
+- [ToolChain](ToolChain) - GitHub workflow
+- [TOSCA](../tosca/) - notes on OASIS TOSCA
+
+Table of contents:
+
 <!-- toc -->
 
-- [Overview](#overview)
 - [Development Setup](#development-setup)
   * [IntelliJ Ultimate setup](#intellij-ultimate-setup)
   * [Eclipse setup](#eclipse-setup)
@@ -16,8 +27,10 @@
   * [Project org.eclipse.winery.model.csar.toscametafile](#project-orgeclipsewinerymodelcsartoscametafile)
   * [Project org.eclipse.winery.model.selfservice](#project-orgeclipsewinerymodelselfservice)
   * [Project org.eclipse.winery.model.tosca](#project-orgeclipsewinerymodeltosca)
-  * [Project org.eclipse.winery.repository.client](#project-orgeclipsewineryrepositoryclient)
   * [Project org.eclipse.winery.repository](#project-orgeclipsewineryrepository)
+  * [Project org.eclipse.winery.repository.client](#project-orgeclipsewineryrepositoryclient)
+  * [Project org.eclipse.winery.repository.configuration](#project-orgeclipsewineryrepositoryconfiguration)
+  * [Project org.eclipse.winery.repository.ui](#project-orgeclipsewineryrepositoryui)
   * [Project org.eclipse.winery.topologymodeler](#project-orgeclipsewinerytopologymodeler)
 - [TOSCA Definitions in Winery](#tosca-definitions-in-winery)
 - [Uniqueness of QNames](#uniqueness-of-qnames)
@@ -26,7 +39,7 @@
   * [TOSCAComponentId](#toscacomponentid)
   * [Filesystem Layout](#filesystem-layout)
   * [REST Resources](#rest-resources)
-  * [URL Schema](#url-schema)
+  * [URL Structure](#url-structure)
   * [Collections of Components](#collections-of-components)
   * [Component Instances](#component-instances)
   * [AbstractComponentInstanceResourceWithNameDerivedFromAbstractFinal](#abstractcomponentinstanceresourcewithnamederivedfromabstractfinal)
@@ -38,7 +51,6 @@
   * [IGenericRepository](#igenericrepository)
   * [IRepository](#irepository)
   * [IWineryRepository](#iwineryrepository)
-- [Shared JSPs and TAGs](#shared-jsps-and-tags)
 - [Type, Template, and Artifact Management](#type-template-and-artifact-management)
 - [Topology Modeler](#topology-modeler)
 - [Debugging Hints](#debugging-hints)
@@ -49,26 +61,17 @@
   * [Faster Redeployment](#faster-redeployment)
 - [Miscellaneous Hints](#miscellaneous-hints)
   * [Generating the Right Output](#generating-the-right-output)
+  * [Trouble shooting IntelliJ](#trouble-shooting-intellij)
   * [Other Troubleshootings](#other-troubleshootings)
   * ["name" vs. "id" at Entities](#name-vs-id-at-entities)
   * [Possible Attachments of Artifacts](#possible-attachments-of-artifacts)
 - [Example Repository](#example-repository)
+- [Recommended Programming Literature](#recommended-programming-literature)
 - [Abbreviations](#abbreviations)
 - [References](#references)
 - [License](#license)
 
 <!-- tocstop -->
-
-## Overview
-
-This document provides (i) guides about development and (ii) design ideas of Winery.
-
-Other sources of information:
-
-- [ToolChain](ToolChain) - GitHub workflow
-- [CodeHeaders](CodeHeaders) - documentation about required code headers
-- [RepositoryLayout](RepositoryLayout) - documents the layout of the repository (stored as plain text files)
-- [TOSCA](../tosca/) - notes on OASIS TOSCA
 
 ## Development Setup
 
@@ -96,10 +99,12 @@ Run `mvn package`.
 In case [bower] fails, try to investigate using `mvn package -X`.
 You can start bower manually in `org.eclipse.winery.repository` and `org.eclipse.winery.topologymodeler` by issuing `bower install`.
 
-There are two WARs generated:
+There are four WARs generated:
 
-* `org.eclipse.winery.repository/target/winery.war` and
-* `org.eclipse.winery.topologymodeler/target/winery-topologymodeler.war`
+* `org.eclipse.winery.repository/target/winery.war` - the repository
+* `org.eclipse.winery.repository.ui/target/winery-ui.war` - the UI for the repository
+* `org.eclipse.winery.topologymodeler/target/winery-topologymodeler.war` - the topology modeler
+* `org.eclipse.winery.workflowmodeler/target/winery-workflowmodeler.war` - the workflow modeler
 
 They can be deployed on a Apache Tomcat runtime environment.
 
@@ -146,15 +151,26 @@ This project contains a JAX B generated model of the XSD of OASIS TOSCA v1.0. Th
 enable proper referencing and use. An Implementation Artifactmay carry a "name" attribute. The contents of
 properties of Boundary Definitions are processed in "lax" mode.
 
+### Project org.eclipse.winery.repository
+
+This is the heart of Winery. This project hosts the repository, where all entities of TOSCA are stored and
+managed. It realizes the components "Type, Template, and Artifact Management" and "Repository" (Figure 1).
+
 ### Project org.eclipse.winery.repository.client
 
 Whis project hosts a client using the REST API of the repository and offering a Java object based client to the
 Winery repository.
 
-### Project org.eclipse.winery.repository
+### Project org.eclipse.winery.repository.configuration
 
-This is the heart of Winery. This project hosts the repository, where all entities of TOSCA are stored and
-managed. It realizes the components "Type, Template, and Artifact Management" and "Repository" (Figure 1).
+This project contains configurations used in the repository. Example are GitHub OAuth credentials. They must be 
+configured in order to use them locally!
+
+### Project org.eclipse.winery.repository.ui
+
+This project contains the Angular ui for the repository. Here, the whole repository can be managed and
+configured. The repository-ui documentation is generated during `npm run build` process and can be found in
+`org.eclipse.winery.repository.ui/dist/doc/` folder.
 
 ### Project org.eclipse.winery.topologymodeler
 
@@ -176,12 +192,14 @@ Future versions might redesign the backend to use a QName as the unique key.
 
 ## Winery's Id System
 
-The general idea behind the storage of Winery is that each entity comes with an id. The id is either self
-contained or references a parent id, where the element is nested in. All Ids inherit from GenericId.  
-Figure 2 shows the inheritance hierarchy of GenericId. The child "AdminId" is used for all administrative elements
-required for internal management. "DummyParentForGeneratedXSDRef" is required during the export of 
-generated XML Schema Definitions due to the use of Winery's key/value properties. "TOSCAComponentId" is
-the parent element for all TOSCA Elements which may be defined directly as child of a "Definitions" element.
+The general idea behind the storage of Winery is that each entity comes with an id.
+The id is either self contained or references a parent id, where the element is nested in.
+All Ids inherit from GenericId.
+
+Figure 2 shows the inheritance hierarchy of `GenericId`.
+The child `AdminId` is used for all administrative elements required for internal management.
+`DummyParentForGeneratedXSDRef` is required during the export of generated XML Schema Definitions due to the use of Winery's key/value properties.
+`TOSCAComponentId` is the parent element for all TOSCA Elements which may be defined directly as child of a "Definitions" element.
 All other elements have "TOSCAElementId" as parent.
 
 ![GenericId Hierarchy](graphics/GenericIdHierarchy.png)  
@@ -189,11 +207,13 @@ All other elements have "TOSCAElementId" as parent.
 
 ### AdminId
 
-Figure 3 shows the inheritance hierarchy of AdminId. "NamespacesId" is used as container for a mapping file
-from namespace prefixes to namespaces. "TypesId" is the parent element of all types user can set. This are 
-not node types etc., but ConstraintTypes (for Constraints), PlanLanguages (for plans), and PlanTypes (for plans).
-The inclusion of "PlanLanguages" is due to reuse of the class AbstractTypesManager for plan languages. TOSCA
-does not restrict these enumerations. Therefore, Winery manages all known types for itself.
+Figure 3 shows the inheritance hierarchy of `AdminId`.
+`NamespacesId` is used as container for a mapping file from namespace prefixes to namespaces. 
+`TypesId` is the parent element of all types user can set.
+These are not node types etc., but `ConstraintTypes` (for Constraints), `PlanLanguages` (for plans), and `PlanTypes` (for plans).
+The inclusion of `PlanLanguages` is due to reuse of the class `AbstractTypesManager` for plan languages.
+TOSCA does not restrict these enumerations.
+Therefore, Winery manages all known types for itself.
 
 ![AdminId Hierarchy](graphics/AdminIdHierarchy.png)  
 **Figure 3: Inheritance hierarchy of AdminId**
@@ -208,10 +228,10 @@ id attribute. This is ensured by ToscaComponentId. Figure 4 shows the inheritanc
 **Figure 4: inheritance hierarchy of ToscaComponentId**
 
 
-"EntityTemplateId" collects all Entity Templates directly nested in a Definitions element. As a result, the ids of
-NodeTemplates or RelationshipTemplates do not inherit from EntityTemplateId. They are contained in a Service Template
-and not directly in the Definitions element. Thus, the only children of EntityTemplateId are ArtifactTemplateId,
-PolicyTemplateId, and ServiceTemplateId.
+`EntityTemplateId` collects all Entity Templates directly nested in a Definitions element.
+As a result, the ids of NodeTemplates or RelationshipTemplates do not inherit from EntityTemplateId.
+They are contained in a Service Template and not directly in the Definitions element.
+Thus, the only children of EntityTemplateId are ArtifactTemplateId, PolicyTemplateId, and ServiceTemplateId.
 
 "EntityTypeId" collects all Entity Types directly nested in a TDefinitions element.These are IDs for ArtifactTypes,
 CapabilityTypes, PolicyTypes, RequirementTypes, NodeTypes and RelationshipTypes. Node Types and RelationshipTypes
@@ -220,8 +240,8 @@ have the direct parent "TopologyGraphElementTypeId" as these two Types form the 
 "EntityTypeImplementationId" is the parent id for NodeTypeImplementationId and RelationshipTypeImplementationId and thus
 subsumes the two possible entities which can be implementations.
 
-"GenericImportId" is an artificial entity. It is used to be able to store imports of an imported CSAR. These
-imports might be XSD definitions, vut als WSDL files.
+"GenericImportId" is an artificial entity. It is used to be able to store imports of an imported CSAR.
+These imports might be XSD definitions, but also WSDL files.
 
 ### Filesystem Layout
 
@@ -229,50 +249,51 @@ See [RepositoryLayout](RepositoryLayout).
 
 ### REST Resources
 
-All resources are implemented in classes in the package org.eclipse.winery.repository.resources. We call all
-elements directly nested in the definitions element "components". They are implemented using JAX RS 1.1 
-using Jersey 1.17
+All resources are implemented in classes in the package `org.eclipse.winery.repository.resources`.
+We call all elements directly nested in the definitions element "components".
+They are implemented using JAX RS 1.1 using [Jersey 1.x](https://jersey.github.io/documentation/1.19.1/index.html).
 
-The full set the API is used by the Type, Template, and Artifact Management UI (see Section 10). A subset of the
-API is used at IWineryRepository (see Section 8.4).
+The full set the API is used by the Type, Template, and Artifact Management UI (see [User Documentation](../user/)).
+A subset of the API is used at [IWineryRepository](#iwineryrepository).
 
-### URL Schema
+### URL Structure
 
-The idea behind the URL schema may shortly describes by ROOT/<componenttype>s/<double-encoded-namespace>/<double-encoded-id>/<resource-specific-part>,
-which makes the structure similar to the file system (cf. Section 6). Encoding is done following RFC 3986. An online
-URL-encoder may be found at: http://www.albinoresearch.com/misc/urlencode.php .
+The idea behind the URL structure may shortly describes by `ROOT/<componenttype>s/<double-encoded-namespace>/<double-encoded-id>/<resource-specific-part>`, which makes the structure similar to one of the [file system](RepositoryLayout).
+Encoding is done following [RFC 3986](https://tools.ietf.org/html/rfc3986#section-2.1). 
+An online URL-encoder may be found at: <http://www.albinoresearch.com/misc/urlencode.php>.
 
-For instance, the NodeType "NT1" in the namespace "http://www.example.com/NodeTypes" is found behind the URL "nodetypes/http%253A%252F%252Fexample.com%252FNodeTypes/NT1/".
-As the browser decodes the URL, the namespace and the id are double encoded. note the additional encoding of the symbol "%" in
-comparison to the encoding at the filesystem (see Section 6).
+For instance, the NodeType "NT1" in the namespace `http://www.example.com/NodeTypes` is found at the URL `nodetypes/http%253A%252F%252Fexample.com%252FNodeTypes/NT1/`.
+As the browser decodes the URL, the namespace and the id are double encoded. 
+Note the additional encoding of the symbol `%` in comparison to the encoding at the filesystem.
+This is due to security decisions to disallow `%2F` in URLs.
 
-The part until "<componenttype>s"is realized by "AbstractComponentsResource" and its subclasses (see Section 7.2).
-The resource specific part is realized by subclasses of AbstractComponentInstanceResource (see Section 7.3).
+The part until `<componenttype>s` is realized by ["AbstractComponentsResource" and its subclasses](#collections-of-components).
+The resource specific part is realized by [subclasses of AbstractComponentInstanceResource](#component-instances).
+
+More information on encoding is given at [Encoding](Encoding).
 
 ### Collections of Components
 
-
 ![AbstractCompoenentResource Inheritance](graphics/InheritanceOfAbstractComponentResource.png)  
 **Figure 6: Inheritance of AbstractComponentResource**
-
 
 Figure 6 shows the inheritance of AbstractComponentsResource. It contains an intermediate class
 "AbstractComponentsWithTypeReferenceResource" which handles a POST with an additional type. It is used at
 all components which have a type associated. These are artifact templates, node type implementations,
 relationship type implementations and policy templates.
 
-All logic is implemented in AbstractComponentsRessource. it handles creation of resources (using POST) and
-creation of AbstractComponentInstanceResources.
+All logic is implemented in AbstractComponentsRessource.
+It handles creation of resources (using POST) and creation of AbstractComponentInstanceResources.
 
 ### Component Instances
-
 
 ![AbstractComponentInstanceResource Inheritance](graphics/InheritanceOfAbstractComponentInstanceResource.png)  
 **Figure 7: Inheritance of AbstractComponentInstanceResource**
 
-
-Figure 7 shows the inheritance of AbstractComponentInstanceResource. For each component, a class exists.
-Using Intermediate classes, common properties are handled. These are explained in the following sections.
+Figure 7 shows the inheritance of AbstractComponentInstanceResource.
+For each component, a class exists.
+Using Intermediate classes, common properties are handled.
+These are explained in the following sections.
 
 ### AbstractComponentInstanceResourceWithNameDerivedFromAbstractFinal
 
@@ -363,56 +384,6 @@ object out of a QName.
 Jersey 1.1. web client. it uses a subset of the REST API to communicate with the repository. Currently, the client
 has features required by the topology modeler.
 
-## Shared JSPs and TAGs
-
-In the "generate-sources" Maven phase of the repository, shared jsps and tags are copied from the topology modeler.
-
-Figure 9 shows the shared jsps. Currently, it is only one JSP. the "dialog.jsp" is used for Yes/No dialogs.
-
-Figure 10 shows the shared tags "orioneditor.tag" is a wrapper for an Orion based editing area. Orion
-( https://www.eclipse.org/orion ) is a web-based IDE by the Eclipse Software Foundation. The tags in the
-"policies" folder are used for creating and rendering policies. The tags in the "templates" folder implement
-functionality for all entity templates such as artifact templates or node templates. Node templates may carry
-requirements and capabilities. The respective tags are contained in the "reqscaps" folder.
-
-
-![Shared JSP Files](graphics/SharedJSPFiles.png)  
-**Figure 9: Shared JSP files**
-
-
-
-![Shared Tags](graphics/SharedTags.png)  
-**Figure 10: Shared Tags**
-
-
-## Type, Template, and Artifact Management
-
-The REST resources offer the method getHTML, which returns a HTML page, when *text/html* is requested.
-It uses JSPs to generate the requested page. Figure 11 shows the structure of the available jsps. They are sorted
-according the different entity types available in TOSCA.
-
-
-![JSP Structure](graphics/JSPStructure.png)  
-**Figure 11: JSP structure**
-
-
-Figure 12 shows the rendered result for the instance states of a node type. The URL used is
-nodetypes/http%253A%252F%252Fexample.com%252FNodeTypes/NT1/#instancestates. A GET with accept
-text/html on the resource nodetypes/http%253A%252F%252Fexample.com%252FNodeTypes/NT1/instancestates
-leads to a processing of the GET request at org.eclipse.winery.repository.resources.entitytypes.InstanceStateResource(getHTML()).
-This renders/jsp/entitytypes/instancestates.jsp. A click on the "Add" button will result on a POST on the
-InstanceStateResource. After a HTTP 304, the instance state is inserted in the table by the client side-
-JavaScript.
-
-The general idea is to have the content of the fragment identifier rendered by a separate resource. The switch
-functionality is implemented in "hashloading.jsp". At each change of the fragment identifier, the respective
-URL is constricted and the content of the div containing the tab content is replaced by the response of the server.
-
-
-![Nodetypes Rendering](graphics/WinerysRenderingofNodetypes.png)  
-**Figure 12 Winery's rendering of nodetypes/http%253A%252F%252Fexample.com%252FNodeTypes/NT1/#instancestates**
-
-
 ## Topology Modeler
 
 The main file of the topology modeler is the "index.jsp". It uses embedded Java code to connect to the repository.
@@ -431,49 +402,63 @@ whereby "tmpl" is bound to "/WEB-INF/tags/common/templates". the property on the
 **Figure 13: Winery's topology modeler**
 
 
-## Debugging Hints
+## Debugging hints
 
-### Debugging JavaScript Code
+### Debugging JavaScript code
 
 #### Chrome
 
-Press f12 to open the debug console
+- Press <kbd>F12</kbd> to open the debug console
+- Use the [Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd) Chrome extension
 
 #### Firefox
 
-Use Firebug ( https://getfirebug.com ) It offers more possibilities than the built in console.
-
-### Automatic Browser Refresh
-
-One can use the browser extension LiveReload ( http://www.livereload.com ) to enable reloading of pages after a change.
-Set *workspaces\valesca\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\winery* as directory, use
-http://localhost:8080/winery as URL, and enable LiveReload in the browser.
+- Press <kbd>F12</kbd> to open the debug console
 
 ### Faster Redeployment
 
-It takes a few seconds until the whole application is redeployed. You can use JRebel ( http://www.jrebel.com )
-for hot code replacement in the Tomcat in Eclipse.
+It takes a few seconds until the whole application is redeployed.
+You can use [JRebel](http://www.jrebel.com) for hot code replacement in the Tomcat in Eclipse and IntelliJ.
 
-## Miscellaneous Hints
+## Miscellaneous hints
 
-### Generating the Right Output
+### Generating the right output
 
-*	If necessary, set the content type of the JSP: <%@page contentType="image/svg+xml; charset=utf-8" %>
-  *		Otherwise, answer is plain text (and not XML)
+* If necessary, set the content type of the JSP: `<%@page contentType="image/svg+xml; charset=utf-8" %>`
+  * Otherwise, answer is plain text (and not XML)
 
-*	XML documents have to contain the header <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-  *		standalone=yes means that there is no external DTD
-  *		eleminates parsing errors in firefox
+* XML documents have to contain the header `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`
+  * `standalone=yes` means that there is no external DTD
+  * this eleminates parsing errors in firefox
 
 ### Trouble shooting IntelliJ
 
-  * `java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already` and `java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [org.apache.xerces.util.XMLGrammarPoolImpl].`
-    * `mvn clean package`
-    * Build -> Build Artifacts... -> org.eclipse.winery.repository.war:exploded: Clean
-    * Build -> Rebuild Project
-  * Has issues with a new selfserivce portal model:  Use [everything](https://www.voidtools.com/) (`choco install everything`) to locate all "selfservice metadata jars" and delete them. Otherwise, Winery does not compile.
+#### Strange errors
+I get strange errors:
+    `java.lang.ClassNotFoundException: com.sun.jersey.spi.container.servlet.ServletContainer`,
+    `java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already`,
+    `java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [org.apache.xerces.util.XMLGrammarPoolImpl].`, or
+    `java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [javax.xml.validation.Schema].`
 
-### Other Troubleshootings
+Solution 1:
+
+1. Stop Tomcat
+2. `mvn clean package` - either via command line or using the menu in IntelliJ
+3. Build -> Build Artifacts... -> org.eclipse.winery.repository.war:exploded: Clean
+4. Build -> Rebuild Project
+
+Solution 2:
+
+Someone could have used an `ExecutorService` and not adhered the lifecycle.
+
+#### Has issues with a new selfservice portal model
+
+Use [everything](https://www.voidtools.com/) (`choco install everything`) to locate all "selfservice metadata jars" and delete them.
+Otherwise, Winery does not compile.
+
+### Other troubleshootings
+
+When executing tests, winery logs its output in `winery-debug.log`, too.
 
 In case some JavaScript libraries cannot be found by the browser, execute `bower prune`, `bower install`, `bower update` in both `org.eclipse.winery.repository` and `org.eclipse.winery.topologymodeler`.
 
@@ -501,12 +486,12 @@ When running in jetty 9.0.5, there is always the error message "Request Entity T
 There is the `maxFormContentSize` set in `jetty-web.xml`, but it currently does not help to solve this issue.
 
 When doing a copy-libs-to-tomcat hack, possibly "W3C_XML_SCHEMA_NS_URI cannot be resolved or is not a field" appears.
-Remove `stax-api-1.0.1.jar` out of `tomcat7/lib`: Java's `rt.jar` should be used instead for `javax.xml.XMLConstants`.
+Remove `stax-api-1.0.1.jar` out of `tomcat8/lib`: Java's `rt.jar` should be used instead for `javax.xml.XMLConstants`.
 
 ### "name" vs. "id" at Entities
 
-Some entities carry a name, some an id and some both. A justification is available at TOSCA issue 47
-( https://issues.oasis-open.org/browse/TOSCA-47 ).
+Some entities carry a name, some an id and some both
+ A justification is available at [TOSCA issue 47](https://issues.oasis-open.org/browse/TOSCA-47).
 
 ### Possible Attachments of Artifacts
 
@@ -517,22 +502,24 @@ Implementation Artifacts (IAs) may be attached at
 * NodeTemplate
 
 Deployment Artifacts (DAs) may be attached at
-*NodeType
-*NodeTemplate
-	
-## Example Repository
+* NodeType
+* NodeTemplate
 
-An example Repository is available at
-https://github.com/OpenTOSCA/OpenTOSCA.github.io/blob/master/third-party/winery-repository.zip .
+## Example repository
+
+An example repository is available at <files.opentosca.org/third-party/v2.0.0/winery-repository.zip>.
 One can import the repository by *Administration*, then *Repository* and finally *Import repository*.
 
-## Recommended Programming Literature
+The test repository is availabe at <https://github.com/winery/test-repository>.
+This can be directly cloned into `c:\winery-repository`.
+
+## Recommended programming literature
 
 * Joshua Bloch. Effective Java, 2nd edition. Addison-Wesley
 
 ## Abbreviations
 
-|       |                                                                       |
+| Abbreviation  | Meaning |
 |-------|-----------------------------------------------------------------------|
 | BPMN  | Buisness Process Model and Notation                                   |
 | TOSCA | OASIS Topology and Orchestration Specification for Cloud Applications |
@@ -547,11 +534,7 @@ One can import the repository by *Administration*, then *Repository* and finally
 
 Copyright (c) 2013-2017 University of Stuttgart.
 
-All rights reserved. This program and the accompanying materials
-are made available under the terms of the [Eclipse Public License v1.0]
-and the [Apache License v2.0] which both accompany this distribution,
-and are available at http://www.eclipse.org/legal/epl-v10.html
-and http://www.apache.org/licenses/LICENSE-2.0
+All rights reserved. Made available under the terms of the [Eclipse Public License v1.0] and the [Apache License v2.0] which both accompany this distribution.
 
  [Apache Maven]: https://maven.apache.org/
  [Apache License v2.0]: http://www.apache.org/licenses/LICENSE-2.0.html

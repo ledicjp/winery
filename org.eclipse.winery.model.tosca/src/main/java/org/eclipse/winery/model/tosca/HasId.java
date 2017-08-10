@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code contribution
- *    Christoph Kleine - additional code contribution
+ *    Christoph Kleine - hashcode, equals, builder pattern, Nullable and NonNull annotations
  *******************************************************************************/
 package org.eclipse.winery.model.tosca;
 
