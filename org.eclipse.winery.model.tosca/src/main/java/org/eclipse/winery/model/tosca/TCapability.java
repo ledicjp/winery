@@ -27,72 +27,72 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapability")
 @JsonTypeInfo(
-		defaultImpl = TCapability.class,
-		use = JsonTypeInfo.Id.NAME,
-		include = JsonTypeInfo.As.EXISTING_PROPERTY,
-		property = "fakeJacksonType")
+        defaultImpl = TCapability.class,
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "fakeJacksonType")
 public class TCapability extends RelationshipSourceOrTarget {
 
-	@XmlAttribute(name = "name", required = true)
-	protected String name;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
 
-	public TCapability() {
-	}
+    public TCapability() {
+    }
 
-	public TCapability(Builder builder) {
-		super(builder);
-		this.name = builder.name;
-	}
+    public TCapability(Builder builder) {
+        super(builder);
+        this.name = builder.name;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TCapability)) return false;
-		if (!super.equals(o)) return false;
-		TCapability that = (TCapability) o;
-		return Objects.equals(name, that.name);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCapability)) return false;
+        if (!super.equals(o)) return false;
+        TCapability that = (TCapability) o;
+        return Objects.equals(name, that.name);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), name);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	@Override
-	@NonNull
-	public String getFakeJacksonType() {
-		return "capability";
-	}
+    @Override
+    @NonNull
+    public String getFakeJacksonType() {
+        return "capability";
+    }
 
-	public static class Builder extends RelationshipSourceOrTarget.Builder {
-		private final String name;
+    public static class Builder extends RelationshipSourceOrTarget.Builder {
+        private final String name;
 
-		public Builder(String id, QName type, String name) {
-			super(id, type);
-			this.name = name;
-		}
+        public Builder(String id, QName type, String name) {
+            super(id, type);
+            this.name = name;
+        }
 
-		public TCapability build() {
-			return new TCapability(this);
-		}
-	}
+        public TCapability build() {
+            return new TCapability(this);
+        }
+    }
 }

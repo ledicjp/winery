@@ -36,24 +36,24 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactType")
 public class TArtifactType extends TEntityType {
-	public TArtifactType() {
-	}
+    public TArtifactType() {
+    }
 
-	public TArtifactType(Builder builder) {
-		super(builder);
-	}
+    public TArtifactType(Builder builder) {
+        super(builder);
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		public Builder(String name) {
-			super(name);
-		}
+    public static class Builder extends TEntityType.Builder {
+        public Builder(String name) {
+            super(name);
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public TArtifactType build() {
-			return new TArtifactType(this);
-		}
-	}
+        public TArtifactType build() {
+            return new TArtifactType(this);
+        }
+    }
 }

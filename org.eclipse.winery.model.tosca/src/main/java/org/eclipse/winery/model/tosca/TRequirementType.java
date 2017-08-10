@@ -43,68 +43,68 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementType")
 public class TRequirementType extends TEntityType {
-	@XmlAttribute(name = "requiredCapabilityType")
-	protected QName requiredCapabilityType;
+    @XmlAttribute(name = "requiredCapabilityType")
+    protected QName requiredCapabilityType;
 
-	public TRequirementType() {
-	}
+    public TRequirementType() {
+    }
 
-	public TRequirementType(Builder builder) {
-		super(builder);
-		this.requiredCapabilityType = builder.requiredCapabilityType;
-	}
+    public TRequirementType(Builder builder) {
+        super(builder);
+        this.requiredCapabilityType = builder.requiredCapabilityType;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRequirementType)) return false;
-		if (!super.equals(o)) return false;
-		TRequirementType that = (TRequirementType) o;
-		return Objects.equals(requiredCapabilityType, that.requiredCapabilityType);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRequirementType)) return false;
+        if (!super.equals(o)) return false;
+        TRequirementType that = (TRequirementType) o;
+        return Objects.equals(requiredCapabilityType, that.requiredCapabilityType);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), requiredCapabilityType);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), requiredCapabilityType);
+    }
 
-	/**
-	 * Gets the value of the requiredCapabilityType property.
-	 *
-	 * @return possible object is {@link QName }
-	 */
-	@Nullable
-	public QName getRequiredCapabilityType() {
-		return requiredCapabilityType;
-	}
+    /**
+     * Gets the value of the requiredCapabilityType property.
+     *
+     * @return possible object is {@link QName }
+     */
+    @Nullable
+    public QName getRequiredCapabilityType() {
+        return requiredCapabilityType;
+    }
 
-	/**
-	 * Sets the value of the requiredCapabilityType property.
-	 *
-	 * @param value allowed object is {@link QName }
-	 */
-	public void setRequiredCapabilityType(QName value) {
-		this.requiredCapabilityType = value;
-	}
+    /**
+     * Sets the value of the requiredCapabilityType property.
+     *
+     * @param value allowed object is {@link QName }
+     */
+    public void setRequiredCapabilityType(QName value) {
+        this.requiredCapabilityType = value;
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private QName requiredCapabilityType;
+    public static class Builder extends TEntityType.Builder {
+        private QName requiredCapabilityType;
 
-		public Builder(String name) {
-			super(name);
-		}
+        public Builder(String name) {
+            super(name);
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setRequiredCapabilityType(QName requiredCapabilityType) {
-			this.requiredCapabilityType = requiredCapabilityType;
-			return this;
-		}
+        public Builder setRequiredCapabilityType(QName requiredCapabilityType) {
+            this.requiredCapabilityType = requiredCapabilityType;
+            return this;
+        }
 
-		public TRequirementType build() {
-			return new TRequirementType(this);
-		}
-	}
+        public TRequirementType build() {
+            return new TRequirementType(this);
+        }
+    }
 }

@@ -46,112 +46,112 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tDeploymentArtifact")
 public class TDeploymentArtifact extends TExtensibleElements {
-	@XmlAttribute(name = "name", required = true)
-	protected String name;
-	@XmlAttribute(name = "artifactType", required = true)
-	protected QName artifactType;
-	@XmlAttribute(name = "artifactRef")
-	protected QName artifactRef;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
+    @XmlAttribute(name = "artifactType", required = true)
+    protected QName artifactType;
+    @XmlAttribute(name = "artifactRef")
+    protected QName artifactRef;
 
-	public TDeploymentArtifact() {
-	}
+    public TDeploymentArtifact() {
+    }
 
-	public TDeploymentArtifact(Builder builder) {
-		super(builder);
-		this.name = builder.name;
-		this.artifactType = builder.artifactType;
-		this.artifactRef = builder.artifactRef;
-	}
+    public TDeploymentArtifact(Builder builder) {
+        super(builder);
+        this.name = builder.name;
+        this.artifactType = builder.artifactType;
+        this.artifactRef = builder.artifactRef;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TDeploymentArtifact)) return false;
-		TDeploymentArtifact that = (TDeploymentArtifact) o;
-		return Objects.equals(name, that.name) &&
-				Objects.equals(artifactType, that.artifactType) &&
-				Objects.equals(artifactRef, that.artifactRef);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TDeploymentArtifact)) return false;
+        TDeploymentArtifact that = (TDeploymentArtifact) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(artifactType, that.artifactType) &&
+                Objects.equals(artifactRef, that.artifactRef);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, artifactType, artifactRef);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, artifactType, artifactRef);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	/**
-	 * Gets the value of the artifactType property.
-	 *
-	 * @return possible object is {@link QName }
-	 */
-	@NonNull
-	public QName getArtifactType() {
-		return artifactType;
-	}
+    /**
+     * Gets the value of the artifactType property.
+     *
+     * @return possible object is {@link QName }
+     */
+    @NonNull
+    public QName getArtifactType() {
+        return artifactType;
+    }
 
-	/**
-	 * Sets the value of the artifactType property.
-	 *
-	 * @param value allowed object is {@link QName }
-	 */
-	public void setArtifactType(QName value) {
-		this.artifactType = value;
-	}
+    /**
+     * Sets the value of the artifactType property.
+     *
+     * @param value allowed object is {@link QName }
+     */
+    public void setArtifactType(QName value) {
+        this.artifactType = value;
+    }
 
-	/**
-	 * Gets the value of the artifactRef property.
-	 *
-	 * @return possible object is {@link QName }
-	 */
-	@Nullable
-	public QName getArtifactRef() {
-		return artifactRef;
-	}
+    /**
+     * Gets the value of the artifactRef property.
+     *
+     * @return possible object is {@link QName }
+     */
+    @Nullable
+    public QName getArtifactRef() {
+        return artifactRef;
+    }
 
-	/**
-	 * Sets the value of the artifactRef property.
-	 *
-	 * @param value allowed object is {@link QName }
-	 */
-	public void setArtifactRef(QName value) {
-		this.artifactRef = value;
-	}
+    /**
+     * Sets the value of the artifactRef property.
+     *
+     * @param value allowed object is {@link QName }
+     */
+    public void setArtifactRef(QName value) {
+        this.artifactRef = value;
+    }
 
-	public static class Builder extends TExtensibleElements.Builder {
-		private final String name;
-		private final QName artifactType;
-		private QName artifactRef;
+    public static class Builder extends TExtensibleElements.Builder {
+        private final String name;
+        private final QName artifactType;
+        private QName artifactRef;
 
-		public Builder(String name, QName artifactType) {
-			this.name = name;
-			this.artifactType = artifactType;
-		}
+        public Builder(String name, QName artifactType) {
+            this.name = name;
+            this.artifactType = artifactType;
+        }
 
-		public Builder setArtifactRef(QName artifactRef) {
-			this.artifactRef = artifactRef;
-			return this;
-		}
+        public Builder setArtifactRef(QName artifactRef) {
+            this.artifactRef = artifactRef;
+            return this;
+        }
 
-		public TDeploymentArtifact build() {
-			return new TDeploymentArtifact(this);
-		}
-	}
+        public TDeploymentArtifact build() {
+            return new TDeploymentArtifact(this);
+        }
+    }
 }

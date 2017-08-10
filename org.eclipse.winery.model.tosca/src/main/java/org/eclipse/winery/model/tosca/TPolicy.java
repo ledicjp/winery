@@ -46,117 +46,117 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicy")
 public class TPolicy extends TExtensibleElements {
-	@XmlAttribute(name = "name")
-	protected String name;
-	@XmlAttribute(name = "policyType", required = true)
-	protected QName policyType;
-	@XmlAttribute(name = "policyRef")
-	protected QName policyRef;
+    @XmlAttribute(name = "name")
+    protected String name;
+    @XmlAttribute(name = "policyType", required = true)
+    protected QName policyType;
+    @XmlAttribute(name = "policyRef")
+    protected QName policyRef;
 
-	public TPolicy() {
-	}
+    public TPolicy() {
+    }
 
-	public TPolicy(Builder builder) {
-		super(builder);
-		this.name = builder.name;
-		this.policyType = builder.policyType;
-		this.policyRef = builder.policyRef;
-	}
+    public TPolicy(Builder builder) {
+        super(builder);
+        this.name = builder.name;
+        this.policyType = builder.policyType;
+        this.policyRef = builder.policyRef;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPolicy)) return false;
-		if (!super.equals(o)) return false;
-		TPolicy tPolicy = (TPolicy) o;
-		return Objects.equals(name, tPolicy.name) &&
-				Objects.equals(policyType, tPolicy.policyType) &&
-				Objects.equals(policyRef, tPolicy.policyRef);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPolicy)) return false;
+        if (!super.equals(o)) return false;
+        TPolicy tPolicy = (TPolicy) o;
+        return Objects.equals(name, tPolicy.name) &&
+                Objects.equals(policyType, tPolicy.policyType) &&
+                Objects.equals(policyRef, tPolicy.policyRef);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), name, policyType, policyRef);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, policyType, policyRef);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@Nullable
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @Nullable
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	/**
-	 * Gets the value of the policyType property.
-	 *
-	 * @return possible object is {@link QName }
-	 */
-	@NonNull
-	public QName getPolicyType() {
-		return policyType;
-	}
+    /**
+     * Gets the value of the policyType property.
+     *
+     * @return possible object is {@link QName }
+     */
+    @NonNull
+    public QName getPolicyType() {
+        return policyType;
+    }
 
-	/**
-	 * Sets the value of the policyType property.
-	 *
-	 * @param value allowed object is {@link QName }
-	 */
-	public void setPolicyType(QName value) {
-		this.policyType = value;
-	}
+    /**
+     * Sets the value of the policyType property.
+     *
+     * @param value allowed object is {@link QName }
+     */
+    public void setPolicyType(QName value) {
+        this.policyType = value;
+    }
 
-	/**
-	 * Gets the value of the policyRef property.
-	 *
-	 * @return possible object is {@link QName }
-	 */
-	@Nullable
-	public QName getPolicyRef() {
-		return policyRef;
-	}
+    /**
+     * Gets the value of the policyRef property.
+     *
+     * @return possible object is {@link QName }
+     */
+    @Nullable
+    public QName getPolicyRef() {
+        return policyRef;
+    }
 
-	/**
-	 * Sets the value of the policyRef property.
-	 *
-	 * @param value allowed object is {@link QName }
-	 */
-	public void setPolicyRef(QName value) {
-		this.policyRef = value;
-	}
+    /**
+     * Sets the value of the policyRef property.
+     *
+     * @param value allowed object is {@link QName }
+     */
+    public void setPolicyRef(QName value) {
+        this.policyRef = value;
+    }
 
-	public static class Builder extends TExtensibleElements.Builder {
-		private final QName policyType;
-		private String name;
-		private QName policyRef;
+    public static class Builder extends TExtensibleElements.Builder {
+        private final QName policyType;
+        private String name;
+        private QName policyRef;
 
-		public Builder(QName policyType) {
-			this.policyType = policyType;
-		}
+        public Builder(QName policyType) {
+            this.policyType = policyType;
+        }
 
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
 
-		public Builder setPolicyRef(QName policyRef) {
-			this.policyRef = policyRef;
-			return this;
-		}
+        public Builder setPolicyRef(QName policyRef) {
+            this.policyRef = policyRef;
+            return this;
+        }
 
-		public TPolicy build() {
-			return new TPolicy(this);
-		}
-	}
+        public TPolicy build() {
+            return new TPolicy(this);
+        }
+    }
 }

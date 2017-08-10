@@ -47,84 +47,84 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlType(name = "tPropertyMapping")
 public class TPropertyMapping {
 
-	@XmlAttribute(name = "serviceTemplatePropertyRef", required = true)
-	protected String serviceTemplatePropertyRef;
-	@XmlAttribute(name = "targetObjectRef", required = true)
-	@XmlIDREF
-	@XmlSchemaType(name = "IDREF")
-	protected Object targetObjectRef;
-	@XmlAttribute(name = "targetPropertyRef", required = true)
-	protected String targetPropertyRef;
+    @XmlAttribute(name = "serviceTemplatePropertyRef", required = true)
+    protected String serviceTemplatePropertyRef;
+    @XmlAttribute(name = "targetObjectRef", required = true)
+    @XmlIDREF
+    @XmlSchemaType(name = "IDREF")
+    protected Object targetObjectRef;
+    @XmlAttribute(name = "targetPropertyRef", required = true)
+    protected String targetPropertyRef;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPropertyMapping)) return false;
-		TPropertyMapping that = (TPropertyMapping) o;
-		return Objects.equals(serviceTemplatePropertyRef, that.serviceTemplatePropertyRef) &&
-				Objects.equals(targetObjectRef, that.targetObjectRef) &&
-				Objects.equals(targetPropertyRef, that.targetPropertyRef);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPropertyMapping)) return false;
+        TPropertyMapping that = (TPropertyMapping) o;
+        return Objects.equals(serviceTemplatePropertyRef, that.serviceTemplatePropertyRef) &&
+                Objects.equals(targetObjectRef, that.targetObjectRef) &&
+                Objects.equals(targetPropertyRef, that.targetPropertyRef);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(serviceTemplatePropertyRef, targetObjectRef, targetPropertyRef);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(serviceTemplatePropertyRef, targetObjectRef, targetPropertyRef);
+    }
 
-	/**
-	 * Gets the value of the serviceTemplatePropertyRef property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getServiceTemplatePropertyRef() {
-		return serviceTemplatePropertyRef;
-	}
+    /**
+     * Gets the value of the serviceTemplatePropertyRef property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getServiceTemplatePropertyRef() {
+        return serviceTemplatePropertyRef;
+    }
 
-	/**
-	 * Sets the value of the serviceTemplatePropertyRef property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setServiceTemplatePropertyRef(String value) {
-		this.serviceTemplatePropertyRef = value;
-	}
+    /**
+     * Sets the value of the serviceTemplatePropertyRef property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setServiceTemplatePropertyRef(String value) {
+        this.serviceTemplatePropertyRef = value;
+    }
 
-	/**
-	 * Gets the value of the targetObjectRef property.
-	 *
-	 * @return possible object is {@link Object }
-	 */
-	@NonNull
-	public Object getTargetObjectRef() {
-		return targetObjectRef;
-	}
+    /**
+     * Gets the value of the targetObjectRef property.
+     *
+     * @return possible object is {@link Object }
+     */
+    @NonNull
+    public Object getTargetObjectRef() {
+        return targetObjectRef;
+    }
 
-	/**
-	 * Sets the value of the targetObjectRef property.
-	 *
-	 * @param value allowed object is {@link Object }
-	 */
-	public void setTargetObjectRef(Object value) {
-		this.targetObjectRef = value;
-	}
+    /**
+     * Sets the value of the targetObjectRef property.
+     *
+     * @param value allowed object is {@link Object }
+     */
+    public void setTargetObjectRef(Object value) {
+        this.targetObjectRef = value;
+    }
 
-	/**
-	 * Gets the value of the targetPropertyRef property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getTargetPropertyRef() {
-		return targetPropertyRef;
-	}
+    /**
+     * Gets the value of the targetPropertyRef property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getTargetPropertyRef() {
+        return targetPropertyRef;
+    }
 
-	/**
-	 * Sets the value of the targetPropertyRef property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setTargetPropertyRef(String value) {
-		this.targetPropertyRef = value;
-	}
+    /**
+     * Sets the value of the targetPropertyRef property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setTargetPropertyRef(String value) {
+        this.targetPropertyRef = value;
+    }
 }

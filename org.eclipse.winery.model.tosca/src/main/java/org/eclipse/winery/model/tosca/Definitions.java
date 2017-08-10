@@ -38,21 +38,21 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "")
 @XmlRootElement(name = "Definitions")
 public class Definitions extends TDefinitions {
-	public Definitions() {
+    public Definitions() {
 
-	}
+    }
 
-	public Definitions(Builder builder) {
-		super(builder);
-	}
+    public Definitions(Builder builder) {
+        super(builder);
+    }
 
-	public static class Builder extends TDefinitions.Builder {
-		public Builder(String id, String target_namespace) {
-			super(id, target_namespace);
-		}
+    public static class Builder extends TDefinitions.Builder {
+        public Builder(String id, String target_namespace) {
+            super(id, target_namespace);
+        }
 
-		public Definitions build() {
-			return new Definitions(this);
-		}
-	}
+        public Definitions build() {
+            return new Definitions(this);
+        }
+    }
 }

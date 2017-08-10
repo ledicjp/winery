@@ -51,99 +51,99 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tDocumentation", propOrder = {
-		"content"
+        "content"
 })
 public class TDocumentation {
 
-	@XmlMixed
-	@XmlAnyElement(lax = true)
-	protected List<Object> content;
-	@XmlAttribute(name = "source")
-	@XmlSchemaType(name = "anyURI")
-	protected String source;
-	@XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
-	protected String lang;
+    @XmlMixed
+    @XmlAnyElement(lax = true)
+    protected List<Object> content;
+    @XmlAttribute(name = "source")
+    @XmlSchemaType(name = "anyURI")
+    protected String source;
+    @XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
+    protected String lang;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TDocumentation)) return false;
-		TDocumentation that = (TDocumentation) o;
-		return Objects.equals(content, that.content) &&
-				Objects.equals(source, that.source) &&
-				Objects.equals(lang, that.lang);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TDocumentation)) return false;
+        TDocumentation that = (TDocumentation) o;
+        return Objects.equals(content, that.content) &&
+                Objects.equals(source, that.source) &&
+                Objects.equals(lang, that.lang);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(content, source, lang);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(content, source, lang);
+    }
 
-	/**
-	 * Gets the value of the content property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the content property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getContent().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link Element }
-	 * {@link String }
-	 * {@link Object }
-	 */
-	@NonNull
-	public List<Object> getContent() {
-		if (content == null) {
-			content = new ArrayList<Object>();
-		}
-		return this.content;
-	}
+    /**
+     * Gets the value of the content property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the content property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getContent().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Element }
+     * {@link String }
+     * {@link Object }
+     */
+    @NonNull
+    public List<Object> getContent() {
+        if (content == null) {
+            content = new ArrayList<Object>();
+        }
+        return this.content;
+    }
 
-	/**
-	 * Gets the value of the source property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@Nullable
-	public String getSource() {
-		return source;
-	}
+    /**
+     * Gets the value of the source property.
+     *
+     * @return possible object is {@link String }
+     */
+    @Nullable
+    public String getSource() {
+        return source;
+    }
 
-	/**
-	 * Sets the value of the source property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setSource(String value) {
-		this.source = value;
-	}
+    /**
+     * Sets the value of the source property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setSource(String value) {
+        this.source = value;
+    }
 
-	/**
-	 * Gets the value of the lang property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@Nullable
-	public String getLang() {
-		return lang;
-	}
+    /**
+     * Gets the value of the lang property.
+     *
+     * @return possible object is {@link String }
+     */
+    @Nullable
+    public String getLang() {
+        return lang;
+    }
 
-	/**
-	 * Sets the value of the lang property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setLang(String value) {
-		this.lang = value;
-	}
+    /**
+     * Sets the value of the lang property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setLang(String value) {
+        this.lang = value;
+    }
 }

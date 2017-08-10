@@ -43,60 +43,60 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlType(name = "tTag")
 public class TTag {
 
-	@XmlAttribute(name = "name", required = true)
-	protected String name;
-	@XmlAttribute(name = "value", required = true)
-	protected String value;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
+    @XmlAttribute(name = "value", required = true)
+    protected String value;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TTag)) return false;
-		TTag tTag = (TTag) o;
-		return Objects.equals(name, tTag.name) &&
-				Objects.equals(value, tTag.value);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TTag)) return false;
+        TTag tTag = (TTag) o;
+        return Objects.equals(name, tTag.name) &&
+                Objects.equals(value, tTag.value);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, value);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	/**
-	 * Gets the value of the value property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getValue() {
-		return value;
-	}
+    /**
+     * Gets the value of the value property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * Sets the value of the value property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * Sets the value of the value property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

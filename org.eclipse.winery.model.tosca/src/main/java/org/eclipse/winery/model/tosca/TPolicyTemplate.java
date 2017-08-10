@@ -43,65 +43,65 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicyTemplate")
 public class TPolicyTemplate extends TEntityTemplate {
-	@XmlAttribute(name = "name")
-	protected String name;
+    @XmlAttribute(name = "name")
+    protected String name;
 
-	public TPolicyTemplate() {
+    public TPolicyTemplate() {
 
-	}
+    }
 
-	public TPolicyTemplate(Builder builder) {
-		super(builder);
-		this.name = builder.name;
-	}
+    public TPolicyTemplate(Builder builder) {
+        super(builder);
+        this.name = builder.name;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPolicyTemplate)) return false;
-		if (!super.equals(o)) return false;
-		TPolicyTemplate that = (TPolicyTemplate) o;
-		return Objects.equals(name, that.name);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPolicyTemplate)) return false;
+        if (!super.equals(o)) return false;
+        TPolicyTemplate that = (TPolicyTemplate) o;
+        return Objects.equals(name, that.name);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), name);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@Nullable
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @Nullable
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	public static class Builder extends TEntityTemplate.Builder {
-		private String name;
+    public static class Builder extends TEntityTemplate.Builder {
+        private String name;
 
-		public Builder(String id, QName type) {
-			super(id, type);
-		}
+        public Builder(String id, QName type) {
+            super(id, type);
+        }
 
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
 
-		public TPolicyTemplate build() {
-			return new TPolicyTemplate(this);
-		}
-	}
+        public TPolicyTemplate build() {
+            return new TPolicyTemplate(this);
+        }
+    }
 }

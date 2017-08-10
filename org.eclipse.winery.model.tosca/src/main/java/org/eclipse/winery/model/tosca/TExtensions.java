@@ -46,53 +46,53 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tExtensions", propOrder = {
-		"extension"
+        "extension"
 })
 public class TExtensions
-		extends TExtensibleElements {
+        extends TExtensibleElements {
 
-	@XmlElement(name = "Extension", required = true)
-	protected List<TExtension> extension;
+    @XmlElement(name = "Extension", required = true)
+    protected List<TExtension> extension;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TExtensions)) return false;
-		if (!super.equals(o)) return false;
-		TExtensions that = (TExtensions) o;
-		return Objects.equals(extension, that.extension);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TExtensions)) return false;
+        if (!super.equals(o)) return false;
+        TExtensions that = (TExtensions) o;
+        return Objects.equals(extension, that.extension);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), extension);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), extension);
+    }
 
-	/**
-	 * Gets the value of the extension property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the extension property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getExtension().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link TExtension }
-	 */
-	@NonNull
-	public List<TExtension> getExtension() {
-		if (extension == null) {
-			extension = new ArrayList<TExtension>();
-		}
-		return this.extension;
-	}
+    /**
+     * Gets the value of the extension property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the extension property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getExtension().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TExtension }
+     */
+    @NonNull
+    public List<TExtension> getExtension() {
+        if (extension == null) {
+            extension = new ArrayList<TExtension>();
+        }
+        return this.extension;
+    }
 }

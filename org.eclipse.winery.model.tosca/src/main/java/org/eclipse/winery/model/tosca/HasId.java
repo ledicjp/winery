@@ -24,56 +24,56 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public abstract class HasId extends TExtensibleElements {
 
-	@XmlAttribute(name = "id", required = true)
-	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-	@XmlID
-	@XmlSchemaType(name = "ID")
-	private String id;
+    @XmlAttribute(name = "id", required = true)
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlID
+    @XmlSchemaType(name = "ID")
+    private String id;
 
-	public HasId() {
-	}
+    public HasId() {
+    }
 
-	public HasId(String id) {
-		this.setId(id);
-	}
+    public HasId(String id) {
+        this.setId(id);
+    }
 
-	public HasId(Builder builder) {
-		super(builder);
-		this.id = builder.id;
-	}
+    public HasId(Builder builder) {
+        super(builder);
+        this.id = builder.id;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof HasId)) return false;
-		HasId hasId = (HasId) o;
-		return Objects.equals(id, hasId.id);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HasId)) return false;
+        HasId hasId = (HasId) o;
+        return Objects.equals(id, hasId.id);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
-	@NonNull
-	public String getId() {
-		return id;
-	}
+    @NonNull
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String value) {
-		this.id = value;
-	}
+    public void setId(String value) {
+        this.id = value;
+    }
 
-	public static class Builder extends TExtensibleElements.Builder {
-		private final String id;
+    public static class Builder extends TExtensibleElements.Builder {
+        private final String id;
 
-		public Builder(String id) {
-			this.id = id;
-		}
+        public Builder(String id) {
+            this.id = id;
+        }
 
-		public Builder(HasId hasId) {
-			super(hasId);
-			this.id = hasId.id;
-		}
-	}
+        public Builder(HasId hasId) {
+            super(hasId);
+            this.id = hasId.id;
+        }
+    }
 }

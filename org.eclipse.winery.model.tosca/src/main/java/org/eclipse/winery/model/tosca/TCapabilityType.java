@@ -36,24 +36,24 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityType")
 public class TCapabilityType extends TEntityType {
-	public TCapabilityType() {
-	}
+    public TCapabilityType() {
+    }
 
-	public TCapabilityType(Builder builder) {
-		super(builder);
-	}
+    public TCapabilityType(Builder builder) {
+        super(builder);
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		public Builder(String name) {
-			super(name);
-		}
+    public static class Builder extends TEntityType.Builder {
+        public Builder(String name) {
+            super(name);
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public TCapabilityType build() {
-			return new TCapabilityType(this);
-		}
-	}
+        public TCapabilityType build() {
+            return new TCapabilityType(this);
+        }
+    }
 }

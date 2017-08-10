@@ -38,29 +38,29 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlEnum
 public enum TBoolean {
 
-	@XmlEnumValue("yes")
-	YES("yes"),
-	@XmlEnumValue("no")
-	NO("no");
-	private final String value;
+    @XmlEnumValue("yes")
+    YES("yes"),
+    @XmlEnumValue("no")
+    NO("no");
+    private final String value;
 
-	TBoolean(String v) {
-		value = v;
-	}
+    TBoolean(String v) {
+        value = v;
+    }
 
-	@NonNull
-	public static TBoolean fromValue(String v) {
-		for (TBoolean c : TBoolean.values()) {
-			if (c.value.equals(v)) {
-				return c;
-			}
-		}
-		throw new IllegalArgumentException(v);
-	}
+    @NonNull
+    public static TBoolean fromValue(String v) {
+        for (TBoolean c : TBoolean.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
 
-	@Nullable
-	public String value() {
-		return value;
-	}
+    @Nullable
+    public String value() {
+        return value;
+    }
 
 }

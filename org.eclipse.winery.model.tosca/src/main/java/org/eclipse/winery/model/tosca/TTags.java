@@ -43,109 +43,109 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTags", propOrder = {
-		"tag"
+        "tag"
 })
 public class TTags {
 
-	@XmlElement(name = "Tag", required = true)
-	protected List<TTag> tag;
+    @XmlElement(name = "Tag", required = true)
+    protected List<TTag> tag;
 
-	public TTags() {
-	}
+    public TTags() {
+    }
 
-	public TTags(Builder builder) {
-		this.tag = builder.tag;
-	}
+    public TTags(Builder builder) {
+        this.tag = builder.tag;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TTags)) return false;
-		TTags tTags = (TTags) o;
-		return Objects.equals(tag, tTags.tag);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TTags)) return false;
+        TTags tTags = (TTags) o;
+        return Objects.equals(tag, tTags.tag);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(tag);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(tag);
+    }
 
-	/**
-	 * Gets the value of the tag property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the tag property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getTag().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link TTag }
-	 */
-	@NonNull
-	public List<TTag> getTag() {
-		if (tag == null) {
-			tag = new ArrayList<TTag>();
-		}
-		return this.tag;
-	}
+    /**
+     * Gets the value of the tag property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the tag property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTag().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TTag }
+     */
+    @NonNull
+    public List<TTag> getTag() {
+        if (tag == null) {
+            tag = new ArrayList<TTag>();
+        }
+        return this.tag;
+    }
 
-	public static class Builder {
-		private List<TTag> tag;
+    public static class Builder {
+        private List<TTag> tag;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setTag(List<TTag> tag) {
-			this.tag = tag;
-			return this;
-		}
+        public Builder setTag(List<TTag> tag) {
+            this.tag = tag;
+            return this;
+        }
 
-		public Builder addTag(List<TTag> tag) {
-			if (tag == null) {
-				return this;
-			}
+        public Builder addTag(List<TTag> tag) {
+            if (tag == null) {
+                return this;
+            }
 
-			if (this.tag == null) {
-				this.tag = tag;
-			} else {
-				this.tag.addAll(tag);
-			}
-			return this;
-		}
+            if (this.tag == null) {
+                this.tag = tag;
+            } else {
+                this.tag.addAll(tag);
+            }
+            return this;
+        }
 
-		public Builder addTag(TTag tag) {
-			if (tag == null) {
-				return this;
-			}
+        public Builder addTag(TTag tag) {
+            if (tag == null) {
+                return this;
+            }
 
-			List<TTag> tmp = new ArrayList<>();
-			tmp.add(tag);
-			return addTag(tmp);
-		}
+            List<TTag> tmp = new ArrayList<>();
+            tmp.add(tag);
+            return addTag(tmp);
+        }
 
-		public Builder addTag(String name, String value) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addTag(String name, String value) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			TTag tag = new TTag();
-			tag.setName(name);
-			tag.setValue(value);
-			return addTag(tag);
-		}
+            TTag tag = new TTag();
+            tag.setName(name);
+            tag.setValue(value);
+            return addTag(tag);
+        }
 
-		public TTags build() {
-			return new TTags(this);
-		}
-	}
+        public TTags build() {
+            return new TTags(this);
+        }
+    }
 }

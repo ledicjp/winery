@@ -48,68 +48,68 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tConstraint", propOrder = {
-		"any"
+        "any"
 })
 @XmlSeeAlso({
-		TPropertyConstraint.class
+        TPropertyConstraint.class
 })
 public class TConstraint {
 
-	@XmlAnyElement(lax = true)
-	protected Object any;
-	@XmlAttribute(name = "constraintType", required = true)
-	@XmlSchemaType(name = "anyURI")
-	protected String constraintType;
+    @XmlAnyElement(lax = true)
+    protected Object any;
+    @XmlAttribute(name = "constraintType", required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String constraintType;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TConstraint)) return false;
-		TConstraint that = (TConstraint) o;
-		return Objects.equals(any, that.any) &&
-				Objects.equals(constraintType, that.constraintType);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TConstraint)) return false;
+        TConstraint that = (TConstraint) o;
+        return Objects.equals(any, that.any) &&
+                Objects.equals(constraintType, that.constraintType);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(any, constraintType);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(any, constraintType);
+    }
 
-	/**
-	 * Gets the value of the any property.
-	 *
-	 * @return possible object is {@link Element } {@link Object }
-	 */
-	@Nullable
-	public Object getAny() {
-		return any;
-	}
+    /**
+     * Gets the value of the any property.
+     *
+     * @return possible object is {@link Element } {@link Object }
+     */
+    @Nullable
+    public Object getAny() {
+        return any;
+    }
 
-	/**
-	 * Sets the value of the any property.
-	 *
-	 * @param value allowed object is {@link Element } {@link Object }
-	 */
-	public void setAny(Object value) {
-		this.any = value;
-	}
+    /**
+     * Sets the value of the any property.
+     *
+     * @param value allowed object is {@link Element } {@link Object }
+     */
+    public void setAny(Object value) {
+        this.any = value;
+    }
 
-	/**
-	 * Gets the value of the constraintType property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getConstraintType() {
-		return constraintType;
-	}
+    /**
+     * Gets the value of the constraintType property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getConstraintType() {
+        return constraintType;
+    }
 
-	/**
-	 * Sets the value of the constraintType property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setConstraintType(String value) {
-		this.constraintType = value;
-	}
+    /**
+     * Sets the value of the constraintType property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setConstraintType(String value) {
+        this.constraintType = value;
+    }
 }

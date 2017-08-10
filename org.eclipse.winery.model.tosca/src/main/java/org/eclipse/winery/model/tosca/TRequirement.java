@@ -27,72 +27,72 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirement")
 @JsonTypeInfo(
-		defaultImpl = TRequirement.class,
-		use = JsonTypeInfo.Id.NAME,
-		include = JsonTypeInfo.As.EXISTING_PROPERTY,
-		property = "fakeJacksonType")
+        defaultImpl = TRequirement.class,
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "fakeJacksonType")
 public class TRequirement extends RelationshipSourceOrTarget {
 
-	@XmlAttribute(name = "name", required = true)
-	protected String name;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
 
-	public TRequirement() {
-	}
+    public TRequirement() {
+    }
 
-	public TRequirement(Builder builder) {
-		super(builder);
-		this.name = builder.name;
-	}
+    public TRequirement(Builder builder) {
+        super(builder);
+        this.name = builder.name;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRequirement)) return false;
-		if (!super.equals(o)) return false;
-		TRequirement that = (TRequirement) o;
-		return Objects.equals(name, that.name);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRequirement)) return false;
+        if (!super.equals(o)) return false;
+        TRequirement that = (TRequirement) o;
+        return Objects.equals(name, that.name);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), name);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
 
-	/**
-	 * Gets the value of the name property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the value of the name property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Sets the value of the name property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setName(String value) {
-		this.name = value;
-	}
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 
-	@Override
-	@NonNull
-	public String getFakeJacksonType() {
-		return "requirement";
-	}
+    @Override
+    @NonNull
+    public String getFakeJacksonType() {
+        return "requirement";
+    }
 
-	public static class Builder extends RelationshipSourceOrTarget.Builder {
-		private final String name;
+    public static class Builder extends RelationshipSourceOrTarget.Builder {
+        private final String name;
 
-		public Builder(String id, QName type) {
-			super(id, type);
-			this.name = id;
-		}
+        public Builder(String id, QName type) {
+            super(id, type);
+            this.name = id;
+        }
 
-		public TRequirement build() {
-			return new TRequirement(this);
-		}
-	}
+        public TRequirement build() {
+            return new TRequirement(this);
+        }
+    }
 }

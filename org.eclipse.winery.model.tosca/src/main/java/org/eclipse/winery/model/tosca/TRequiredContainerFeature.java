@@ -43,39 +43,39 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlType(name = "tRequiredContainerFeature")
 public class TRequiredContainerFeature {
 
-	@XmlAttribute(name = "feature", required = true)
-	@XmlSchemaType(name = "anyURI")
-	protected String feature;
+    @XmlAttribute(name = "feature", required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String feature;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRequiredContainerFeature)) return false;
-		TRequiredContainerFeature that = (TRequiredContainerFeature) o;
-		return Objects.equals(feature, that.feature);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRequiredContainerFeature)) return false;
+        TRequiredContainerFeature that = (TRequiredContainerFeature) o;
+        return Objects.equals(feature, that.feature);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(feature);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(feature);
+    }
 
-	/**
-	 * Gets the value of the feature property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getFeature() {
-		return feature;
-	}
+    /**
+     * Gets the value of the feature property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getFeature() {
+        return feature;
+    }
 
-	/**
-	 * Sets the value of the feature property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setFeature(String value) {
-		this.feature = value;
-	}
+    /**
+     * Sets the value of the feature property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setFeature(String value) {
+        this.feature = value;
+    }
 }

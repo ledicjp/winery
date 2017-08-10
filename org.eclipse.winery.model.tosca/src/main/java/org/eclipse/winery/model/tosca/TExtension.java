@@ -45,100 +45,100 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tExtension")
 public class TExtension extends TExtensibleElements {
-	@XmlAttribute(name = "namespace", required = true)
-	@XmlSchemaType(name = "anyURI")
-	protected String namespace;
-	@XmlAttribute(name = "mustUnderstand")
-	protected TBoolean mustUnderstand;
+    @XmlAttribute(name = "namespace", required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String namespace;
+    @XmlAttribute(name = "mustUnderstand")
+    protected TBoolean mustUnderstand;
 
-	public TExtension() {
-	}
+    public TExtension() {
+    }
 
-	public TExtension(Builder builder) {
-		super(builder);
-	}
+    public TExtension(Builder builder) {
+        super(builder);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TExtension)) return false;
-		if (!super.equals(o)) return false;
-		TExtension that = (TExtension) o;
-		return Objects.equals(namespace, that.namespace) &&
-				mustUnderstand == that.mustUnderstand;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TExtension)) return false;
+        if (!super.equals(o)) return false;
+        TExtension that = (TExtension) o;
+        return Objects.equals(namespace, that.namespace) &&
+                mustUnderstand == that.mustUnderstand;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), namespace, mustUnderstand);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), namespace, mustUnderstand);
+    }
 
-	/**
-	 * Gets the value of the namespace property.
-	 *
-	 * @return possible object is {@link String }
-	 */
-	@NonNull
-	public String getNamespace() {
-		return namespace;
-	}
+    /**
+     * Gets the value of the namespace property.
+     *
+     * @return possible object is {@link String }
+     */
+    @NonNull
+    public String getNamespace() {
+        return namespace;
+    }
 
-	/**
-	 * Sets the value of the namespace property.
-	 *
-	 * @param value allowed object is {@link String }
-	 */
-	public void setNamespace(String value) {
-		this.namespace = value;
-	}
+    /**
+     * Sets the value of the namespace property.
+     *
+     * @param value allowed object is {@link String }
+     */
+    public void setNamespace(String value) {
+        this.namespace = value;
+    }
 
-	/**
-	 * Gets the value of the mustUnderstand property.
-	 *
-	 * @return possible object is {@link TBoolean }
-	 */
-	@NonNull
-	public TBoolean getMustUnderstand() {
-		if (mustUnderstand == null) {
-			return TBoolean.YES;
-		} else {
-			return mustUnderstand;
-		}
-	}
+    /**
+     * Gets the value of the mustUnderstand property.
+     *
+     * @return possible object is {@link TBoolean }
+     */
+    @NonNull
+    public TBoolean getMustUnderstand() {
+        if (mustUnderstand == null) {
+            return TBoolean.YES;
+        } else {
+            return mustUnderstand;
+        }
+    }
 
-	/**
-	 * Sets the value of the mustUnderstand property.
-	 *
-	 * @param value allowed object is {@link TBoolean }
-	 */
-	public void setMustUnderstand(TBoolean value) {
-		this.mustUnderstand = value;
-	}
+    /**
+     * Sets the value of the mustUnderstand property.
+     *
+     * @param value allowed object is {@link TBoolean }
+     */
+    public void setMustUnderstand(TBoolean value) {
+        this.mustUnderstand = value;
+    }
 
-	public static class Builder extends TExtensibleElements.Builder {
-		private final String namespace;
-		private TBoolean mustUnderstand;
+    public static class Builder extends TExtensibleElements.Builder {
+        private final String namespace;
+        private TBoolean mustUnderstand;
 
-		public Builder(String namespace) {
-			this.namespace = namespace;
-		}
+        public Builder(String namespace) {
+            this.namespace = namespace;
+        }
 
-		public Builder setMustUnderstand(TBoolean mustUnderstand) {
-			this.mustUnderstand = mustUnderstand;
-			return this;
-		}
+        public Builder setMustUnderstand(TBoolean mustUnderstand) {
+            this.mustUnderstand = mustUnderstand;
+            return this;
+        }
 
-		public Builder setMustUnderstand(Boolean mustUnderstand) {
-			if (mustUnderstand == null) {
-				return this;
-			}
+        public Builder setMustUnderstand(Boolean mustUnderstand) {
+            if (mustUnderstand == null) {
+                return this;
+            }
 
-			this.mustUnderstand = mustUnderstand ? TBoolean.YES : TBoolean.NO;
-			return this;
-		}
+            this.mustUnderstand = mustUnderstand ? TBoolean.YES : TBoolean.NO;
+            return this;
+        }
 
-		public TExtension build() {
-			return new TExtension(this);
-		}
-	}
+        public TExtension build() {
+            return new TExtension(this);
+        }
+    }
 }
