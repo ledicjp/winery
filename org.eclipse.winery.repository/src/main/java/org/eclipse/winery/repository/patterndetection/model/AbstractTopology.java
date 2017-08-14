@@ -3,7 +3,6 @@ package org.eclipse.winery.repository.patterndetection.model;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -217,94 +216,6 @@ public class AbstractTopology {
 			}
 			return;
 		}
-	}
-
-	/**
-	 * Create all possible subgraphs of the mapped topology
-	 * @param baseGraph the labeled topology graph
-	 * @param baseNode the lowest node in the graph with no outgoing relations
-	 * @return a list containing all subgraphs
-	 */
-	public List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> createSubgraphs(DirectedGraph<TNodeTemplateExtended, RelationshipEdge> baseGraph, TNodeTemplateExtended baseNode) {
-		for (TNodeTemplateExtended node: baseGraph.vertexSet()) {
-			DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
-			tempGraph.addVertex(node);
-			DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet());
-			subgraphList.add(subgraph);
-		}
-		DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
-		tempGraph.addVertex(baseNode);
-		DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
-		DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraphOriginal = new DirectedSubgraph<>(baseGraph);
-		subgraphList.add(subgraphOriginal);
-		getAllPossibleSubgraphs(baseNode, baseGraph, subgraph);
-		return subgraphList;
-	}
-
-	private void getAllPossibleSubgraphs(TNodeTemplateExtended base, DirectedGraph<TNodeTemplateExtended, RelationshipEdge> baseGraph, DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> lastSubgraph) {
-		if (visitedNodes.contains(base)) {
-			return;
-		}
-		HashMap<TNodeTemplateExtended, RelationshipEdge> localList = new HashMap<>();
-		for (RelationshipEdge edge: baseGraph.edgesOf(base)) {
-			if (baseGraph.edgesOf(base).isEmpty()) {
-				visitedNodes.add(base);
-				return;
-			}
-			if (edge.getV2() != base) {
-				if (visitedNodes.contains(edge.getV2())) {
-					visitedNodes.add(base);
-				} else {
-					TNodeTemplateExtended target = (TNodeTemplateExtended) edge.getV2();
-					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
-					tempGraph.addVertex(base);
-					tempGraph.addVertex(target);
-					tempGraph.addEdge(base, target, edge);
-					DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
-					lastSubgraph.addVertex(target);
-					lastSubgraph.addEdge(base, target, edge);
-					subgraphList.add(subgraph);
-					visitedNodes.add(base);
-					localList.put(target, edge);
-					getAllPossibleSubgraphs((TNodeTemplateExtended) edge.getV2(), baseGraph, lastSubgraph);
-				}
-			} else if (edge.getV1() != base) {
-				if (visitedNodes.contains(edge.getV1())) {
-					visitedNodes.add(base);
-
-				} else {
-					TNodeTemplateExtended target = (TNodeTemplateExtended) edge.getV1();
-					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
-					tempGraph.addVertex(base);
-					tempGraph.addVertex(target);
-					tempGraph.addEdge(target, base, edge);
-					DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
-					lastSubgraph.addVertex(target);
-					lastSubgraph.addEdge(target, base, edge);
-					subgraphList.add(subgraph);
-					visitedNodes.add(base);
-					localList.put(target, edge);
-					getAllPossibleSubgraphs((TNodeTemplateExtended) edge.getV1(), baseGraph, lastSubgraph);
-				}
-			}
-		}
-		if (localList.size() > 1) {
-			DirectedGraph<TNodeTemplateExtended, RelationshipEdge> tempGraph = new DefaultDirectedGraph<>(RelationshipEdge.class);
-			tempGraph.addVertex(base);
-			for (TNodeTemplateExtended tNodeTemplateExtended: localList.keySet()) {
-				TNodeTemplateExtended node = tNodeTemplateExtended;
-				RelationshipEdge edge = localList.get(tNodeTemplateExtended);
-				tempGraph.addVertex(node);
-				if (edge.getV1().equals(node)) {
-					tempGraph.addEdge(node, base, edge);
-				} else {
-					tempGraph.addEdge(base, node, edge);
-				}
-			}
-			DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge> subgraph = new DirectedSubgraph<>(baseGraph, tempGraph.vertexSet(), tempGraph.edgeSet());
-			subgraphList.add(subgraph);
-		}
-
 	}
 
 	public DirectedGraph<TNodeTemplateExtended, RelationshipEdge> getGraph() {

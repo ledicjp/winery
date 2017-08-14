@@ -23,6 +23,7 @@ import org.eclipse.winery.repository.patterndetection.keywords.Storage;
 import org.eclipse.winery.repository.patterndetection.keywords.VirtualHardware;
 import org.eclipse.winery.repository.patterndetection.model.AbstractTopology;
 import org.eclipse.winery.repository.patterndetection.model.PatternComponent;
+import org.eclipse.winery.repository.patterndetection.model.PatternPosition;
 import org.eclipse.winery.repository.patterndetection.model.RelationshipEdge;
 import org.eclipse.winery.repository.patterndetection.model.TNodeTemplateExtended;
 import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticLoadBalancerPattern;
@@ -30,6 +31,7 @@ import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticQueu
 import org.eclipse.winery.repository.patterndetection.model.patterns.ElasticityManagerPattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.EnvironmentBasedAvailabilityPattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.ExecutionEnvironmentPattern;
+import org.eclipse.winery.repository.patterndetection.model.patterns.ExecutionEnvironmentPattern2;
 import org.eclipse.winery.repository.patterndetection.model.patterns.KeyValueStoragePattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.MessageOrientedMiddlewarePattern;
 import org.eclipse.winery.repository.patterndetection.model.patterns.NodeBasedAvailabilityPattern;
@@ -41,7 +43,6 @@ import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplateR
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.isomorphism.IsomorphicGraphMapping;
-import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
 import org.jgrapht.alg.isomorphism.VF2SubgraphIsomorphismInspector;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
@@ -109,7 +110,10 @@ public class Detection {
 
 	private ServiceTemplateId serviceTemplateId;
 
+	private List<PatternPosition> patternPositions;
+
 	public Detection(ServiceTemplateId serviceTemplateId) {
+		patternPositions = new ArrayList<>();
 		this.serviceTemplateId = serviceTemplateId;
 		properties = new Properties();
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFilename);
@@ -168,6 +172,10 @@ public class Detection {
 		listLists.add(patternProbabilityLow);
 		listLists.add(impossiblePattern);
 		return listLists;
+	}
+
+	public List<PatternPosition> getPatternPositions() {
+		return patternPositions;
 	}
 
 	/**
@@ -253,12 +261,19 @@ public class Detection {
 				} else if (keyword.equals(keywordOpenstack) || keyword.equals(keywordEC2)) {
 					tempEdge = iaasGraph.getEdge(iaas.getIaas(), iaas.getElasticInfrastructure());
 					iaasGraph.setEdgeWeight(tempEdge, 0.75);
-				} else if (keyword.equals(keywordMongoDB) || keyword.equals(keywordMySQL)) {
+				} else if (keyword.equals(keywordMySQL)) {
 					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getRelationalDatabase());
 					paasGraph.setEdgeWeight(tempEdge, 0.99);
+					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getKeyValueStorage());
+					paasGraph.setEdgeWeight(tempEdge, 0.0);
 				} else if (keyword.equals(keywordJava) || keyword.equals(keywordPython) || keyword.equals(keywordTomcat) || keyword.equals(keywordApache)) {
 					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getExecEnvironment());
 					paasGraph.setEdgeWeight(tempEdge, 0.75);
+				} else if (keyword.equals(keywordMongoDB)) {
+					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getKeyValueStorage());
+					paasGraph.setEdgeWeight(tempEdge, 0.99);
+					tempEdge = paasGraph.getEdge(paas.getPaas(), paas.getRelationalDatabase());
+					paasGraph.setEdgeWeight(tempEdge, 0.0);
 				}
 			}
 
@@ -351,6 +366,7 @@ public class Detection {
 		MessageOrientedMiddlewarePattern messageOrientedMiddlewarePattern = new MessageOrientedMiddlewarePattern();
 		RelationalDatabasePattern relationalDatabasePattern = new RelationalDatabasePattern();
 		KeyValueStoragePattern keyValueStoragePattern = new KeyValueStoragePattern();
+		ExecutionEnvironmentPattern2 executionEnvironmentPattern2 = new ExecutionEnvironmentPattern2();
 
 		patternNames.put(0, patternExecEnv);
 		patternNames.put(1, patternNodeBasedAvail);
@@ -361,6 +377,7 @@ public class Detection {
 		patternNames.put(6, patternMessageMiddleware);
 		patternNames.put(7, patternRelationalDatabase);
 		patternNames.put(8, patternKeyValueStorage);
+		patternNames.put(9, patternExecEnv);
 
 		patternList.add(executionEnvironmentPattern.getPatternGraph());
 		patternList.add(nodeBasedAvailabilityPattern.getPatternGraph());
@@ -371,9 +388,9 @@ public class Detection {
 		patternList.add(messageOrientedMiddlewarePattern.getPatternGraph());
 		patternList.add(relationalDatabasePattern.getPatternGraph());
 		patternList.add(keyValueStoragePattern.getPatternGraph());
+		patternList.add(executionEnvironmentPattern2.getPatternGraph());
 
 		int countIndex = 0;
-
 		for (DirectedGraph<PatternComponent, RelationshipEdge> pattern : patternList) {
 			VF2SubgraphIsomorphismInspector<TNodeTemplateExtended, RelationshipEdge> inspector = new VF2SubgraphIsomorphismInspector(abstractTopology.getGraph(), pattern);
 			if (inspector.isomorphismExists()) {
@@ -381,32 +398,23 @@ public class Detection {
 				while (it.hasNext()) {
 					IsomorphicGraphMapping mapping = (IsomorphicGraphMapping) it.next();
 					List<Boolean> matched = new ArrayList<>();
-					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> originalGraph = new SimpleDirectedGraph<>(RelationshipEdge.class);
+					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> originGraph = new SimpleDirectedGraph<>(RelationshipEdge.class);
 					for (PatternComponent p : pattern.vertexSet()) {
 						//check if matched subgraph and topology have the same components
 						TNodeTemplateExtended v = (TNodeTemplateExtended) mapping.getVertexCorrespondence(p, false);
 						if (p.getName().equals(v.getLabel())) {
 							matched.add(true);
-							originalGraph.addVertex(v);
+							originGraph.addVertex(v);
+
 						} else {
 							matched.add(false);
 						}
 					}
-					/*
-					for (RelationshipEdge r : pattern.edgeSet()) {
-						RelationshipEdge re = (RelationshipEdge) mapping.getEdgeCorrespondence(r, false);
-						System.out.println("added " + re.toString() + " as an edge to original graph");
-						originalGraph.addEdge((TNodeTemplateExtended) re.getV1(), (TNodeTemplateExtended) re.getV2());
-					}*/
 
-					if (!matched.contains(false)) {
+					if (!matched.contains(false) && !impossiblePattern.contains(patternNames.get(countIndex))) {
+						PatternPosition temp = new PatternPosition(patternNames.get(countIndex), originGraph);
+						patternPositions.add(temp);
 						detectedPattern.add(patternNames.get(countIndex));
-						VF2GraphIsomorphismInspector<TNodeTemplateExtended, RelationshipEdge> inspector2 = new VF2GraphIsomorphismInspector(abstractTopology.getGraph(), pattern);
-						Iterator it2 = inspector2.getMappings();
-						while (it2.hasNext()) {
-							IsomorphicGraphMapping mapping2 = (IsomorphicGraphMapping) it.next();
-						}
-
 						if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {
 							patternProbabilityHigh.add(patternPublicCloud);
 						} else if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {

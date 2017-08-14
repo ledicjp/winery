@@ -50,8 +50,11 @@ import org.eclipse.winery.repository.backend.BackendUtils;
 import org.eclipse.winery.repository.client.IWineryRepositoryClient;
 import org.eclipse.winery.repository.client.WineryRepositoryClientFactory;
 import org.eclipse.winery.repository.patterndetection.Detection;
+import org.eclipse.winery.repository.patterndetection.model.PatternPosition;
+import org.eclipse.winery.repository.patterndetection.model.TNodeTemplateExtended;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplateResource;
 import org.eclipse.winery.repository.resources.servicetemplates.ServiceTemplatesResource;
+import org.eclipse.winery.repository.splitting.Splitting;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource.Builder;
@@ -68,6 +71,8 @@ public class TopologyTemplateResource {
 	private final TTopologyTemplate topologyTemplate;
 
 	private final ServiceTemplateResource serviceTemplateRes;
+
+	private List<PatternPosition> patternPositions;
 
 
 	/**
@@ -354,7 +359,6 @@ public class TopologyTemplateResource {
 		return Utils.getXML(TTopologyTemplate.class, this.topologyTemplate);
 	}
 
-	/*
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response split(@Context UriInfo uriInfo) {
@@ -368,8 +372,9 @@ public class TopologyTemplateResource {
 		}
 		URI url = uriInfo.getBaseUri().resolve(Utils.getAbsoluteURL(splitServiceTemplateId));
 		return Response.created(url).build();
-	}*/
+	}
 
+	@Path("patterndetection/")
 	@POST
 	public Response detectPattern(@Context UriInfo uriInfo) {
 		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
@@ -438,6 +443,29 @@ public class TopologyTemplateResource {
 
 		String result = builder.toString();
 		return Response.status(Response.Status.OK).entity(result).build();
+	}
+
+	@Path("visualizepatterns/")
+	@POST
+	public Response visualizePatterns() {
+		Detection detection = new Detection((ServiceTemplateId) this.serviceTemplateRes.getId());
+		List<List<String>> listList = detection.detectPattern();
+		patternPositions = detection.getPatternPositions();
+		System.out.println("Size: " + patternPositions.size());
+		System.out.println(patternPositions.size());
+		if (patternPositions != null) {
+			StringBuilder sb = new StringBuilder();
+			for (PatternPosition p: patternPositions) {
+				sb.append(p.getPatternName() + ":");
+				for (TNodeTemplateExtended t: p.getNodesOfOriginGraph().vertexSet()) {
+					sb.append(t.getNodeTemplate().getId() + ",");
+				}
+				sb.append("\n");
+			}
+			String result = sb.toString();
+			return Response.status(Response.Status.OK).entity(result).build();
+		}
+		return Response.status(Response.Status.NOT_FOUND).build();
 	}
 
 }

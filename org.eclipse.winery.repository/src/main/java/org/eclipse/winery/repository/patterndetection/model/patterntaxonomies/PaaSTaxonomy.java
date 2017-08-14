@@ -28,6 +28,7 @@ public class PaaSTaxonomy {
 	private String relationalDatabase;
 	private String execEnvironment;
 	private String messagingMiddleware;
+	private String keyValueStorage;
 
 
 	private SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> paasTaxonomie;
@@ -53,6 +54,7 @@ public class PaaSTaxonomy {
 		relationalDatabase = properties.getProperty("nodeRelationalDatabase");
 		execEnvironment = properties.getProperty("nodeExecEnv");
 		messagingMiddleware = properties.getProperty("nodeMessaging");
+		keyValueStorage = properties.getProperty("nodeKeyValue");
 
 		paasTaxonomie.addVertex(paas);
 		paasTaxonomie.addVertex(elasticPlatform);
@@ -65,6 +67,7 @@ public class PaaSTaxonomy {
 		paasTaxonomie.addVertex(relationalDatabase);
 		paasTaxonomie.addVertex(execEnvironment);
 		paasTaxonomie.addVertex(messagingMiddleware);
+		paasTaxonomie.addVertex(keyValueStorage);
 
 		paasTaxonomie.addEdge(paas, elasticPlatform);
 		paasTaxonomie.addEdge(elasticPlatform, envBasedAv);
@@ -73,12 +76,14 @@ public class PaaSTaxonomy {
 		paasTaxonomie.addEdge(elasticPlatform, elasticLoadBalancer);
 		paasTaxonomie.addEdge(elasticPlatform, elasticQueue);
 		paasTaxonomie.addEdge(elasticPlatform, relationalDatabase);
+		paasTaxonomie.addEdge(elasticPlatform, keyValueStorage);
 		paasTaxonomie.addEdge(elasticPlatform, messagingMiddleware);
 		paasTaxonomie.addEdge(envBasedAv, publicCloud);
 		paasTaxonomie.addEdge(paas, nodeBasedAv);
 		paasTaxonomie.addEdge(paas, envBasedAv);
 		paasTaxonomie.addEdge(paas, messagingMiddleware);
 		paasTaxonomie.addEdge(paas, relationalDatabase);
+		paasTaxonomie.addEdge(paas, keyValueStorage);
 		paasTaxonomie.addEdge(paas, execEnvironment);
 		paasTaxonomie.addEdge(messagingMiddleware, elasticQueue);
 
@@ -131,5 +136,7 @@ public class PaaSTaxonomy {
 	public String getElasticLoadBalancer() {
 		return elasticLoadBalancer;
 	}
+
+	public String getKeyValueStorage() { return keyValueStorage; }
 
 }

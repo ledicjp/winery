@@ -455,6 +455,8 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 
 		<button class="btn btn-default" onclick="winery.events.fire(winery.events.name.command.PATTERN_DETECTION);" id="patterndetectionBtn" data-loading-text="Detecting...">Pattern Detection</button>
 
+		<button class="btn btn-default" onclick="winery.events.fire(winery.events.name.command.VISUALIZE_PATTERNS);" id="visualizePatternBtn">Visualize</button>
+
 		<button class="btn btn-default topbutton" onclick="winery.events.fire(winery.events.name.command.IMPORT_TOPOLOGY);" id="importBtn">Import Topology</button>
 
 		<div class="btn-group">
@@ -465,6 +467,12 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 				<li><a id="exportCSARbtn" href="<%=topologyTemplateURL%>../?csar" target="_blank">Export CSAR</a></li>
 				<li><a href="#" onclick="showAbout();">about</a></li>
 			</ul>
+		</div>
+
+		<div class="btn-group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Patterns <span class="caret"></span></button>
+
+			<ul id="patternList" class="dropdown-menu" role="menu"/>
 		</div>
 
 		<script>
@@ -659,8 +667,19 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 		winery.events.register(winery.events.name.command.SAVE, wt.save);
 		winery.events.register(winery.events.name.command.SPLIT, wt.split);
 		winery.events.register(winery.events.name.command.PATTERN_DETECTION, wt.detectPattern);
+		winery.events.register(winery.events.name.command.VISUALIZE_PATTERNS, wt.visualizePatterns);
 		wt.setTopologyTemplateURL("<%=topologyTemplateURL%>");
 	});
+</script>
+
+<script>
+	function highlightPattern(id) {
+		require(["winery-topologymodeler-AMD"], function(wt) {
+			console.log("Current id: " + id);
+			wt.highlightPattern(id);
+		});
+		//winery.events.fire(winery.events.name.command.HIGHLIGHT_PATTERN);
+	}
 </script>
 <script>
 
@@ -942,7 +961,7 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 			function() {
 				var numSelected = $("div.NodeTemplateShape.selected").length;
 
-				if (numSelected == 1) {
+					if (numSelected == 1) {
 
 					var selectedNodeTemplate = $("div.NodeTemplateShape.selected");
 					if (isShownNodeTemplateShapeChangeBoxes(selectedNodeTemplate)) {
@@ -969,6 +988,13 @@ Collection<QNameWithName> artifactTemplateList = client.getListOfAllInstances(Ar
 				updateVisibilityToggleButtons();
 			}
 		);
+		winery.events.register(
+			winery.events.name.VISUALIZE,
+			function () {
+				$("div.NodeTemplateShape").addClass("detected");
+				//var selectedNodeTemplate = $("div.NodeTemplateShape.detected");
+				//showNodeTemplateShapeChangeBoxes(selectedNodeTemplate);
+		});
 		winery.events.register(
 			winery.events.name.command.SELECT_ALL_NODETEMPLATES,
 			function () {
