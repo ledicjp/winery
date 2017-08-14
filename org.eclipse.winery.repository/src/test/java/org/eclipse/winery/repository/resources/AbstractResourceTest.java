@@ -231,4 +231,13 @@ public abstract class AbstractResourceTest extends AbstractWineryWithRepositoryT
 			throw new RuntimeException(e);
 		}
 	}
+
+	protected static final String testStringConverter(String baseString) {
+		String returnVal = "";
+		if (returnVal != null) {
+			returnVal = baseString.replace("%3A", "%253A")
+					.replace("%2F", "%252F");
+		}
+		return returnVal;
+	}
 }

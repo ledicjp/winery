@@ -9,37 +9,25 @@
  * Contributors:
  *     Oliver Kopp - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.repository.resources.entitytypes.capabilitytypes;
+package org.eclipse.winery.repository.resources.servicetemplates;
 
-import java.io.IOException;
-
-import org.eclipse.winery.common.ids.Namespace;
-import org.eclipse.winery.common.ids.XMLId;
-import org.eclipse.winery.common.ids.definitions.CapabilityTypeId;
-import org.eclipse.winery.repository.PrefsTestEnabledGitBackedRepository;
-import org.eclipse.winery.repository.backend.Repository;
-import org.eclipse.winery.repository.backend.filebased.GitBasedRepository;
 import org.eclipse.winery.repository.resources.AbstractResourceTest;
-import org.eclipse.winery.repository.resources.ResourceTest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-public class CapabilityTypeResourceTest extends AbstractResourceTest {
-	private final String ENTITY_TYPE = "capabilitytypes/";
-	private final String INSTANCE_XML_PATH = "entitytypes/" + ENTITY_TYPE + "instance.xml";
-	private final String BAOBAB_JSON_PATH = "entitytypes/" + ENTITY_TYPE + "baobab_inital.json";
+public class PolicyTemplateResourceTest extends AbstractResourceTest {
 
-	public static final String FOLDERPATH = "http%3A%2F%2Fwinery.opentosca.org%2Ftest%2Fcapabilitytypes%2Ffruits/Healthy";
+	private final String ENTITY_TYPE = "policytemplates/";
+	private final String INSTANCE_XML_PATH = "servicetemplates/" + ENTITY_TYPE + "instance.xml";
+	private final String BAOBAB_JSON_PATH = "servicetemplates/" + ENTITY_TYPE + "baobab_inital.json";
+
+	public static final String FOLDERPATH = "http%3A%2F%2Fwinery.opentosca.org%2Ftest%2Fpolicytemplates%2Ffruits/german";
 
 
 	private final String INSTANCE_URL = ENTITY_TYPE + FOLDERPATH;
 
 
-	
+
 
 	@Test
 	public void getInstanceXml() throws Exception {

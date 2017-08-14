@@ -10,22 +10,26 @@
  * Lukas Harzenetter - initial API and implementation
  */
 
-package org.eclipse.winery.repository.resources.entitytypeimplementations.relationshiptypeimplementations;
+package org.eclipse.winery.repository.resources.entitytypes.artifacttypes;
 
 import org.eclipse.winery.repository.resources.AbstractResourceTest;
 
 import org.junit.Test;
 
-public class RelationshipTypeImplementationResourceTest extends AbstractResourceTest {
+public class ArtifactTypeResourceTest extends AbstractResourceTest {
 
-	private final String ENTITY_TYPE = "relationshiptypeimplementations/";
-	private final String INSTANCE_XML_PATH = "entityimplementations/" + ENTITY_TYPE + "instance.xml";
-	private final String BAOBAB_JSON_PATH = "entityimplementations/" + ENTITY_TYPE + "baobab_inital.json";
+	private final String ENTITY_TYPE = "artifacttypes/";
+	private final String INSTANCE_XML_PATH = "entitytypes/" + ENTITY_TYPE + "instance.xml";
+	private final String BAOBAB_JSON_PATH = "entitytypes/" + ENTITY_TYPE + "baobab_inital.json";
 
-	public static final String FOLDERPATH = "http%3A%2F%2Fwinery.opentosca.org%2Ftest%2Frelationshiptypeimplementations%2Ffruits/kiwi_implementation";
+	public static final String FOLDERPATH = "http%3A%2F%2Fwinery.opentosca.org%2Ftest%2Fponyuniverse/DressageEquipment_Pony";
 
 
 	private final String INSTANCE_URL = ENTITY_TYPE + FOLDERPATH;
+
+
+
+
 
 	@Test
 	public void getInstanceXml() throws Exception {
@@ -38,10 +42,5 @@ public class RelationshipTypeImplementationResourceTest extends AbstractResource
 		this.setRevisionTo("c25aa724201824fce6eddcc7c35a666c6e015880");
 		this.assertGet(ENTITY_TYPE, BAOBAB_JSON_PATH);
 	}
-	
-	@Test
-	public void getComponentAsJson() throws Exception {
-		this.setRevisionTo("3fe0df76e98d46ead68295920e5d1cf1354bdea1");
-		this.assertGet("relationshiptypeimplementations/http%253A%252F%252Fwinery.opentosca.org%252Ftest%252Frelationshiptypeimplementations%252Ffruits/kiwi_implementation/", "entityimplementations/relationshiptypeimplementations/initial.json");
-	}
+
 }
