@@ -29,9 +29,12 @@ public class TestConsistencyRelationshipTypeId extends AbstractResourceTest {
 		this.setRevisionTo("c25aa724201824fce6eddcc7c35a666c6e015880"); // prepare local Repository.
 		List<String> errors = new ArrayList<>(); // collect Errors in list.
 		Set<RelationshipTypeId> list = Repository.INSTANCE.getAllTOSCAComponentIds(RelationshipTypeId.class);
-		
-		
-		
-		// Hint 2: now We should iterate over all Elements of our Result List and get all Linked objects and check if they are part oft the Repository, too.
+		for (RelationshipTypeId id : list) { // Iterate all ArtifactTemplateId
+			Collection<TOSCAComponentId> linked = TOSCAExportUtil.getReferencedTOSCAComponentIds(id);
+			// get All Linke TOSCAComponentIds
+			// Hint 3: now we gotall Linked objects, next  check if they are part oft the Repository, too.
+			// If they  are part of the Repository you should add the name of the main 
+			// Object you are Iterating and the found linked object. If there are collected Errors the Test should Fail!
+		}
 	}
 }
