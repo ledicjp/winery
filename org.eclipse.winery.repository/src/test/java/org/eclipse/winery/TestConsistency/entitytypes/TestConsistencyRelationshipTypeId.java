@@ -32,9 +32,15 @@ public class TestConsistencyRelationshipTypeId extends AbstractResourceTest {
 		for (RelationshipTypeId id : list) { // Iterate all ArtifactTemplateId
 			Collection<TOSCAComponentId> linked = TOSCAExportUtil.getReferencedTOSCAComponentIds(id);
 			// get All Linke TOSCAComponentIds
-			// Hint 3: now we gotall Linked objects, next  check if they are part oft the Repository, too.
-			// If they  are part of the Repository you should add the name of the main 
-			// Object you are Iterating and the found linked object. If there are collected Errors the Test should Fail!
+
+			for (TOSCAComponentId l : linked) {
+				// Iterate all linked TOSCAComponentIds
+				if (!Repository.INSTANCE.exists(l)) { // If Repository already has the linked TOSCAComponentId in it.
+					errors.add(id.getQName().toString() + l.getQName().toString()); // Collect found Error.
+				}
+			}
+			
+			// Hint 4: now we got all errors as objects, if there are collected Errors the Test should Fail!
 		}
 	}
 }
