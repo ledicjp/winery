@@ -39,8 +39,10 @@ public class TestConsistencyRelationshipTypeId extends AbstractResourceTest {
 					errors.add(id.getQName().toString() + l.getQName().toString()); // Collect found Error.
 				}
 			}
-			
-			// Hint 4: now we got all errors as objects, if there are collected Errors the Test should Fail!
+			if (!errors.isEmpty()) {
+				fail(); // If we have found one thing the Test Fails.
+			}
+			// The test is over, thank you!
 		}
 	}
 }
