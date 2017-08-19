@@ -38,7 +38,11 @@
     </div>
   </div>
 
-  <accordion #accordion>
+  <!-- Repaint jsPlumb on every accordion click -->
+
+  <accordion #accordion
+             (click)="repaint()">
+
 
     <!-- PROPERTIES -->
     <accordion-group
