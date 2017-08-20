@@ -154,7 +154,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy 
           break;
         }
       }*/
-      setTimeout(() => this.askForRepaint.emit(), 1);
+      this.repaint();
     }
   }
 
@@ -184,6 +184,10 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy 
       (this.longpress) ? $event.preventDefault() : this.connectorEndpointVisible = !this.connectorEndpointVisible;
       this.checkIfNodeInSelection.emit(this.title);
     }
+  }
+
+  private repaint() {
+    setTimeout(() => this.askForRepaint.emit(), 1);
   }
 
   ngOnDestroy() {
