@@ -8,16 +8,17 @@
  *
  * Contributors:
  *     Josip Ledic - initial API and implementation
+ *     Thommy Zelenik - Implementation and Refactoring
  */
 import {Component, OnDestroy} from '@angular/core';
 import {WineryAlertService} from '../winery-alert/winery-alert.service';
 import {NgRedux} from '@angular-redux/store';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
 import {ButtonsStateModel} from '../models/buttonsState.model';
-import {IAppState} from '../redux/store/app.store';
+import {IWIneryState} from '../redux/store/winery.store';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'winery-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
@@ -31,7 +32,7 @@ export class NavbarComponent implements OnDestroy {
   navBarButtonsStateSubscription;
 
   constructor(private alert: WineryAlertService,
-              private ngRedux: NgRedux<IAppState>,
+              private ngRedux: NgRedux<IWIneryState>,
               private actions: TopologyRendererActions) {
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(newButtonsState => this.setButtonsState(newButtonsState));

@@ -1,16 +1,27 @@
+/**
+ * Copyright (c) 2017 University of Stuttgart.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and the Apache License 2.0 which both accompany this distribution,
+ * and are available at http://www.eclipse.org/legal/epl-v10.html
+ * and http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Contributors:
+ *     Thommy Zelenik - initial API and implementation
+ */
 import {Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
 import {JsPlumbService} from '../jsPlumbService';
 import {JsonService} from '../jsonService/json.service';
 import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
 import {LayoutDirective} from '../layout.directive';
-import {AppActions} from '../redux/actions/app.actions';
+import {WineryActions} from '../redux/actions/winery.actions';
 import {NgRedux} from '@angular-redux/store';
-import {IAppState} from '../redux/store/app.store';
+import {IWIneryState} from '../redux/store/winery.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
 
 @Component({
-  selector: 'app-canvas',
+  selector: 'winery-canvas',
   providers: [LayoutDirective],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css']
@@ -49,14 +60,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
               differsPressedNavBarButton: KeyValueDiffers,
-              private ngRedux: NgRedux<IAppState>,
-              private actions: AppActions,
+              private ngRedux: NgRedux<IWIneryState>,
+              private actions: WineryActions,
               private topologyRendererActions: TopologyRendererActions) {
-    this.nodeTemplatesSubscription = this.ngRedux.select(state => state.appState.currentJsonTopology.nodeTemplates)
+    this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
-    this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.appState.currentJsonTopology.relationshipTemplates)
+    this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
       .subscribe(currentRelationships => this.addNewRelationship(currentRelationships));
-    this.gridSubscription = this.ngRedux.select(state => state.appState.currentPaletteOpenedState)
+    this.gridSubscription = this.ngRedux.select(state => state.wineryState.currentPaletteOpenedState)
       .subscribe(currentPaletteOpened => this.updateGridState(currentPaletteOpened));
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));

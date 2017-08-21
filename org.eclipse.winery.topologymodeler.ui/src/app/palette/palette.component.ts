@@ -1,13 +1,13 @@
-import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { PaletteService } from '../palette.service';
-import {AppActions} from '../redux/actions/app.actions';
+import {WineryActions} from '../redux/actions/winery.actions';
 import {NgRedux} from '@angular-redux/store';
-import {IAppState} from '../redux/store/app.store';
+import {IWIneryState} from '../redux/store/winery.store';
 import {TNodeTemplate} from '../ttopology-template';
 
 @Component({
-  selector: 'app-palette-component',
+  selector: 'winery-palette-component',
   templateUrl: './palette.component.html',
   styleUrls: ['./palette.component.css'],
   providers: [PaletteService],
@@ -65,11 +65,11 @@ export class PaletteComponent implements OnInit, OnDestroy {
   paletteOpenedSubscription;
 
   constructor(private paletteService: PaletteService,
-              private ngRedux: NgRedux<IAppState>,
-              private actions: AppActions) {
-    this.nodeTemplatesSubscription = ngRedux.select(state => state.appState.currentJsonTopology.nodeTemplates)
+              private ngRedux: NgRedux<IWIneryState>,
+              private actions: WineryActions) {
+    this.nodeTemplatesSubscription = ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
-    this.paletteOpenedSubscription = this.ngRedux.select(state => state.appState.currentPaletteOpenedState)
+    this.paletteOpenedSubscription = this.ngRedux.select(state => state.wineryState.currentPaletteOpenedState)
       .subscribe(currentPaletteOpened => this.updateState(currentPaletteOpened));
     this.paletteItems = paletteService.getPaletteData();
   }

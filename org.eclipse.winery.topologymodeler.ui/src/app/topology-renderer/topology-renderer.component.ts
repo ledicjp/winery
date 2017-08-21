@@ -18,7 +18,7 @@ import { JsonService } from '../jsonService/json.service';
 import { Visuals } from '../ttopology-template';
 
 @Component({
-  selector: 'app-topology-renderer',
+  selector: 'winery-topology-renderer',
   templateUrl: './topology-renderer.component.html',
   styleUrls: ['./topology-renderer.component.css']
 })

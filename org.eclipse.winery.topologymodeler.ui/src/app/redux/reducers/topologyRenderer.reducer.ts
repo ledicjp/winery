@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Josip Ledic - initial API and implementation
+ *     Thommy Zelenik - implementation
  */
 import { Action } from 'redux';
 import { TopologyRendererActions } from '../actions/topologyRenderer.actions';

@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Josip Ledic - initial API and implementation, Refactoring to use Redux instead
+ *     Thommy Zelenik - implementation, Refactoring
  */
 import {
   AfterViewInit,
@@ -20,13 +21,10 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
-import { NgRedux } from '@angular-redux/store';
-import {IAppState} from '../redux/store/app.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 
 @Component({
-  selector: 'app-node',
+  selector: 'winery-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.css'],
 })
@@ -61,9 +59,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
 
   constructor(differsSelectedNodes: IterableDiffers,
               differsNavBar: KeyValueDiffers,
-              differsUnselectedNodes: IterableDiffers,
-              private ngRedux: NgRedux<IAppState>,
-              private actions: TopologyRendererActions) {
+              differsUnselectedNodes: IterableDiffers) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();

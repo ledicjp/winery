@@ -11,31 +11,31 @@
  */
 import { Action } from 'redux';
 import {
-  AppActions, SaveNodeTemplateAction, SaveRelationshipAction,
+  WineryActions, SaveNodeTemplateAction, SaveRelationshipAction,
   SendPaletteOpenedAction,
-} from '../actions/app.actions';
+} from '../actions/winery.actions';
 import {TNodeTemplate, TRelationshipTemplate, TTopologyTemplate} from 'app/ttopology-template';
 
-export interface AppState {
+export interface WineryState {
   currentPaletteOpenedState: boolean;
   currentJsonTopology: TTopologyTemplate;
 }
 
-export const INITIAL_APP_STATE: AppState = {
+export const INITIAL_WINERY_STATE: WineryState = {
   currentPaletteOpenedState: false,
   currentJsonTopology: new TTopologyTemplate
 };
 
-export const AppReducer =
-  function (lastState: AppState = INITIAL_APP_STATE, action: Action): AppState {
+export const WineryReducer =
+  function (lastState: WineryState = INITIAL_WINERY_STATE, action: Action): WineryState {
     switch (action.type) {
-      case AppActions.SEND_PALETTE_OPENED:
+      case WineryActions.SEND_PALETTE_OPENED:
         const paletteOpened: boolean = (<SendPaletteOpenedAction>action).paletteOpened;
         return {
           ...lastState,
           currentPaletteOpenedState: paletteOpened
         };
-      case AppActions.SAVE_NODE_TEMPLATE:
+      case WineryActions.SAVE_NODE_TEMPLATE:
         const newNode: TNodeTemplate = (<SaveNodeTemplateAction>action).nodeTemplate;
         return {
           ...lastState,
@@ -44,7 +44,7 @@ export const AppReducer =
             relationshipTemplates: lastState.currentJsonTopology.relationshipTemplates
           }
         };
-      case AppActions.SAVE_RELATIONSHIP:
+      case WineryActions.SAVE_RELATIONSHIP:
         const newRelationship: TRelationshipTemplate = (<SaveRelationshipAction>action).relationshipTemplate;
         return {
           ...lastState,

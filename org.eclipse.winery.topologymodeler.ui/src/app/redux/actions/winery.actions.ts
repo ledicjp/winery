@@ -26,24 +26,24 @@ export interface SaveRelationshipAction extends Action {
 }
 
 @Injectable()
-export class AppActions {
+export class WineryActions {
     static SEND_PALETTE_OPENED = 'SEND_PALETTE_OPENED';
     static SAVE_NODE_TEMPLATE = 'SAVE_NODE_TEMPLATE';
     static SAVE_RELATIONSHIP = 'SAVE_RELATIONSHIP';
 
     sendPaletteOpened: ActionCreator<SendPaletteOpenedAction> =
       ((paletteOpened) => ({
-        type: AppActions.SEND_PALETTE_OPENED,
+        type: WineryActions.SEND_PALETTE_OPENED,
         paletteOpened: paletteOpened
       }));
     saveNodeTemplate: ActionCreator<SaveNodeTemplateAction> =
       ((newNode) => ({
-        type: AppActions.SAVE_NODE_TEMPLATE,
+        type: WineryActions.SAVE_NODE_TEMPLATE,
         nodeTemplate: newNode
       }));
     saveRelationship: ActionCreator<SaveRelationshipAction> =
       ((newRelationship) => ({
-        type: AppActions.SAVE_RELATIONSHIP,
+        type: WineryActions.SAVE_RELATIONSHIP,
         relationshipTemplate: newRelationship
       }));
 }

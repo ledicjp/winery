@@ -73,7 +73,7 @@
         type="button"
         id="policies"
         (click)="toggleButton($event)"
-        [style.background-color]="getStyle(navbarButtonsState.policiesButton)">
+        [style.background-color]="getStyle(navbarButtonsState.buttonsState.policiesButton)">
         Policies
       </button>
       <button
@@ -81,7 +81,7 @@
         type="button"
         id="targetLocations"
         (click)="toggleButton($event)"
-        [style.background-color]="getStyle(navbarButtonsState.targetLocationsButton)">
+        [style.background-color]="getStyle(navbarButtonsState.buttonsState.targetLocationsButton)">
         Target Locations
       </button>
     </div>
