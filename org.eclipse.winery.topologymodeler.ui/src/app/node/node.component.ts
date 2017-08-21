@@ -22,6 +22,7 @@ import {
   Output
 } from '@angular/core';
 import {ButtonsStateModel} from '../models/buttonsState.model';
+import {TNodeTemplate} from "../ttopology-template";
 
 @Component({
   selector: 'winery-node',
@@ -47,7 +48,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() navBarButtonClicked: any;
   @Output() addNodeToDragSelection: EventEmitter<any>;
   @Output() checkIfNodeInSelection: EventEmitter<string>;
-  @Input() selectedNodes: any[] = [];
+  @Input() selectedNodes: string[] = [];
   @Input() navbarButtonsState: ButtonsStateModel;
   differSelectedNodes: any;
   differNavBar: any;
