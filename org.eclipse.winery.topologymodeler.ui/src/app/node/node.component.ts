@@ -22,7 +22,6 @@ import {
   Output
 } from '@angular/core';
 import {ButtonsStateModel} from '../models/buttonsState.model';
-import {TNodeTemplate} from "../ttopology-template";
 
 @Component({
   selector: 'winery-node',
@@ -45,8 +44,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() nodeColor: string;
   @Input() nodeImageUrl: string;
   @Output() askForRepaint: EventEmitter<string>;
-  @Input() navBarButtonClicked: any;
-  @Output() addNodeToDragSelection: EventEmitter<any>;
+  @Output() addNodeToDragSelection: EventEmitter<string>;
   @Output() checkIfNodeInSelection: EventEmitter<string>;
   @Input() selectedNodes: string[] = [];
   @Input() navbarButtonsState: ButtonsStateModel;
