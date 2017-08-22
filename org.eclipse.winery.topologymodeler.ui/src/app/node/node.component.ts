@@ -17,7 +17,6 @@ import {
   EventEmitter,
   Input,
   IterableDiffers,
-  KeyValueDiffers,
   OnInit,
   Output
 } from '@angular/core';
@@ -43,29 +42,21 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   @Output() sendId: EventEmitter<string>;
   @Input() nodeColor: string;
   @Input() nodeImageUrl: string;
-  @Output() askForRepaint: EventEmitter<string>;
   @Output() addNodeToDragSelection: EventEmitter<string>;
   @Output() checkIfNodeInSelection: EventEmitter<string>;
   @Input() selectedNodes: string[] = [];
   @Input() navbarButtonsState: ButtonsStateModel;
   differSelectedNodes: any;
-  differNavBar: any;
-  differUnselectedNodes: any;
 
   public addItem(): void {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-  constructor(differsSelectedNodes: IterableDiffers,
-              differsNavBar: KeyValueDiffers,
-              differsUnselectedNodes: IterableDiffers) {
+  constructor(differsSelectedNodes: IterableDiffers) {
     this.sendId = new EventEmitter();
-    this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();
     this.checkIfNodeInSelection = new EventEmitter();
     this.differSelectedNodes = differsSelectedNodes.find([]).create(null);
-    this.differNavBar = differsNavBar.find([]).create(null);
-    this.differUnselectedNodes = differsUnselectedNodes.find([]).create(null);
   }
 
   ngOnInit() {
@@ -91,8 +82,6 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
           }
         }
       );
-    } else if (navBarButtonClicked) {
-      this.repaint();
     }
   }
 
@@ -123,13 +112,4 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       this.checkIfNodeInSelection.emit(this.title);
     }
   }
-
-  private repaint() {
-    setTimeout(() => this.askForRepaint.emit(), 1);
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
 }
