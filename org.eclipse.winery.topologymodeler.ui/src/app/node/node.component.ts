@@ -91,6 +91,8 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
           }
         }
       );
+    } else if (navBarButtonClicked) {
+      this.repaint();
     }
   }
 
@@ -121,4 +123,13 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       this.checkIfNodeInSelection.emit(this.title);
     }
   }
+
+  private repaint() {
+    setTimeout(() => this.askForRepaint.emit(), 1);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }
