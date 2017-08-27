@@ -9,16 +9,16 @@
  * Contributors:
  *     Thommy Zelenik - initial API and implementation
  */
-import {Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
-import {JsPlumbService} from '../jsPlumbService';
-import {JsonService} from '../jsonService/json.service';
-import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
-import {LayoutDirective} from '../layout.directive';
-import {WineryActions} from '../redux/actions/winery.actions';
-import {NgRedux} from '@angular-redux/store';
-import {IWIneryState} from '../redux/store/winery.store';
-import {ButtonsStateModel} from '../models/buttonsState.model';
-import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
+import { Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit } from '@angular/core';
+import { JsPlumbService } from '../jsPlumbService';
+import { JsonService } from '../jsonService/json.service';
+import { TNodeTemplate, TRelationshipTemplate } from '../ttopology-template';
+import { LayoutDirective } from '../layout.directive';
+import { WineryActions } from '../redux/actions/winery.actions';
+import { NgRedux } from '@angular-redux/store';
+import { IWIneryState } from '../redux/store/winery.store';
+import { ButtonsStateModel } from '../models/buttonsState.model';
+import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
 
 @Component({
   selector: 'winery-canvas',
@@ -29,12 +29,15 @@ import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions
 export class CanvasComponent implements OnInit, OnDestroy {
   allNodeTemplates: Array<TNodeTemplate> = [];
   allRelationshipTemplates: Array<TRelationshipTemplate> = [];
+  relationshipTemplates: Array<TRelationshipTemplate> = [];
+  nodeTypes: any[] = [];
+  selectedNodes: Array<TNodeTemplate> = [];
   navbarButtonsState: ButtonsStateModel;
-  selectedNodes: string[] = [];
+  topologymodeler;
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
-  nodeArrayEmpty = false;
+
   pageX: Number;
   pageY: Number;
   selectionActive: boolean;
@@ -73,11 +76,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void{
+  addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1])
+      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1]);
     }
   }
+
   addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
     const newRelationship = currentRelationships[currentRelationships.length - 1];
     if (currentRelationships.length > 0) {
@@ -97,21 +101,29 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   setButtonsState(currentButtonsState: ButtonsStateModel): void {
-      this.navbarButtonsState = currentButtonsState;
-      setTimeout(() => this.repaintJsPlumb(), 1);
-      const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
-      const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
-      const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
-      if (alignmentButtonLayout) {
-        this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
-      } else if (alignmentButtonAlignH){
+    this.navbarButtonsState = currentButtonsState;
+    setTimeout(() => this.repaintJsPlumb(), 1);
+    const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
+    const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
+    const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
+    if (alignmentButtonLayout) {
+      this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
+      this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
+    } else if (alignmentButtonAlignH) {
+      if (this.selectedNodes.length > 1) {
+        this._layoutDirective.alignHorizontal(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
         this._layoutDirective.alignHorizontal(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
-      } else if (alignmentButtonAlignV) {
-        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
       }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
+    } else if (alignmentButtonAlignV) {
+      if (this.selectedNodes.length > 1) {
+        this._layoutDirective.alignVertical(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
+        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
+      }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
+    }
   }
 
   displayRelationships(newRelationship: TRelationshipTemplate): void {
@@ -133,7 +145,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @HostListener('click', ['$event'])
   onClick($event) {
     if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
+      this.newJsPlumbInstance.removeFromAllPosses(this.getStringIds(this.selectedNodes));
       this.clearArray(this.selectedNodes);
       if ($event.clientX > 200) {
         this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
@@ -143,6 +155,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   clearArray(array: any[]): void {
     array.length = 0;
+    // TODO hostlistener on click klappt nur auf nodes in firefox?
   }
 
   @HostListener('mousedown', ['$event'])
@@ -193,6 +206,22 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.selectionWidth = 0;
       this.selectionHeight = 0;
     }
+    // This is just a hack for firefox, the same code is in the click listener
+    if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
+      this.newJsPlumbInstance.removeFromAllPosses(this.getStringIds(this.selectedNodes));
+      this.clearArray(this.selectedNodes);
+      if ($event.clientX > 200) {
+        this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+      }
+    }
+  }
+
+  private getStringIds(Nodes: Array<TNodeTemplate>) {
+    const nodeIds: String[] = [];
+    for (const node of Nodes) {
+      nodeIds.push(node.id);
+    }
+    return nodeIds;
   }
 
   private getOffset(el) {
@@ -250,27 +279,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.newJsPlumbInstance.draggable($event);
   }
 
-  private checkingNodeSelectionForDuplicateIDs(id: string) {
-    this.nodeSelected = false;
-    for (const node of this.selectedNodes) {
-      if (node === id) {
-        this.nodeSelected = true;
-      }
-    }
-    if (this.nodeSelected === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
+  checkIfNodeInSelection($event): void {
+    if (this.arrayContainsNode(this.selectedNodes, $event) === false) {
+      this.newJsPlumbInstance.removeFromAllPosses(this.getStringIds(this.selectedNodes));
       this.clearArray(this.selectedNodes);
     }
   }
 
-  checkIfNodeInSelection($event): void {
-    this.checkingNodeSelectionForDuplicateIDs($event);
-  }
-
-  arrayContainsNode(arrayOfNodes: any[], id: string): boolean {
-    if (arrayOfNodes !== null && arrayOfNodes.length > 0) {
-      for (let i = 0; i < arrayOfNodes.length; i++) {
-        if (arrayOfNodes[i] === id) {
+  private arrayContainsNode(Nodes: any[], id: string): boolean {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
           return true;
         }
       }
@@ -279,11 +298,19 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   private enhanceDragSelection(id: string) {
-    this.nodeArrayEmpty = false;
     this.newJsPlumbInstance.addToPosse(id, 'dragSelection');
-    this.nodeArrayEmpty = this.arrayContainsNode(this.selectedNodes, id);
-    if (!this.nodeArrayEmpty) {
-      this.selectedNodes.push(id);
+    if (!this.arrayContainsNode(this.selectedNodes, id)) {
+      this.selectedNodes.push(this.getNodeByID(this.allNodeTemplates, id));
+    }
+  }
+
+  private getNodeByID(Nodes: Array<TNodeTemplate>, id: string) {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
+          return node;
+        }
+      }
     }
   }
 
