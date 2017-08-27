@@ -14,7 +14,7 @@
 }
 
 .card-header {
-  background-color: rgba(115,115,115,0.5);
+  background-color: rgba(5,5,5,0.4);
 }
 
 .card {
@@ -22,7 +22,7 @@
 }
 
 .panel.accordionGroupPanel .panel-body {
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255,255,255,0.75);
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
