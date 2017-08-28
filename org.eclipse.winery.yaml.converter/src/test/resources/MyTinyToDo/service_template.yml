@@ -8,6 +8,7 @@ imports:
       file: /relationship_types.yml
       namespace_uri: http://www.example.com/MiTinyToDo/RelationshipTypes
       namespace_prefix: rtype
+      
   - artifact_types:
       file: /artifact_types.yml
       namespace_uri: http://www.example.com/MiTinyToDo/ArtifactTypes
@@ -31,7 +32,7 @@ topology_template:
       type: DockerEngine
       properties:
         DockerEngineURL: { get_input: DockerEngineURL }
-        DockerEngineVertificate:
+        DockerEngineCertificate:
   
   relationship_templates:
     con_17:
