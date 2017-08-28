@@ -15,7 +15,7 @@ import {WineryAlertService} from '../winery-alert/winery-alert.service';
 import {NgRedux} from '@angular-redux/store';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
 import {ButtonsStateModel} from '../models/buttonsState.model';
-import {IWIneryState} from '../redux/store/winery.store';
+import {IWineryState} from '../redux/store/winery.store';
 
 @Component({
   selector: 'winery-navbar',
@@ -32,7 +32,7 @@ export class NavbarComponent implements OnDestroy {
   navBarButtonsStateSubscription;
 
   constructor(private alert: WineryAlertService,
-              private ngRedux: NgRedux<IWIneryState>,
+              private ngRedux: NgRedux<IWineryState>,
               private actions: TopologyRendererActions) {
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(newButtonsState => this.setButtonsState(newButtonsState));

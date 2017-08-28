@@ -1,13 +1,15 @@
-<div class="container rounded" style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
+<div class="container rounded"
+     style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
      (mousedown)="trackTimeOfMouseDown()"
      (mouseup)="trackTimeOfMouseUp()"
-     (click)="showConnectorEndpoint($event)">
+     (click)="showConnectorEndpoint($event); openSidebar($event);">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
        [class.unselected]="!makeSelectionVisible">
     <div class="col-sm-3">
-      <img *ngIf="!nodeImageUrl" src="https://api.adorable.io/avatars/50/{{title}}" style="border-radius: 10%; margin-top: 1px">
+      <img *ngIf="!nodeImageUrl" src="https://api.adorable.io/avatars/50/{{title}}"
+           style="border-radius: 10%; margin-top: 1px">
       <img *ngIf="nodeImageUrl" src="{{nodeImageUrl}}">
     </div>
     <div id="specifierDiv" class="col-sm-9">
@@ -53,7 +55,7 @@
         Properties
         <i class="pull-sm-0 float-sm-right fa icon-styling padding-top--2px"
            [ngClass]="{'fa-chevron-down': propertiesgroup?.isOpen, 'fa-chevron-right': !propertiesgroup?.isOpen}"
-           ></i>
+        ></i>
       </div>
       <winery-properties></winery-properties>
     </accordion-group>
@@ -79,7 +81,7 @@
       panelClass="accordionGroupPanel"
       *ngIf="navbarButtonsState.buttonsState.requirementsCapabilitiesButton">
       <div accordion-heading>
-        Requirements - Capabilities
+        Requirements & Capabilities
         <i class="pull-sm-0 float-sm-right fa icon-styling padding-top--2px"
            [ngClass]="{'fa-chevron-down': requirementscapabilitiesgroup?.isOpen,
            'fa-chevron-right': !requirementscapabilitiesgroup?.isOpen}"

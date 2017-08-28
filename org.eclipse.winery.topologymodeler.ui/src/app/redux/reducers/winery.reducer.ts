@@ -12,17 +12,19 @@
 import { Action } from 'redux';
 import {
   WineryActions, SaveNodeTemplateAction, SaveRelationshipAction,
-  SendPaletteOpenedAction,
+  SendPaletteOpenedAction, OpenSidebar,
 } from '../actions/winery.actions';
 import {TNodeTemplate, TRelationshipTemplate, TTopologyTemplate} from 'app/ttopology-template';
 
 export interface WineryState {
   currentPaletteOpenedState: boolean;
+  sidebarVisible: boolean;
   currentJsonTopology: TTopologyTemplate;
 }
 
 export const INITIAL_WINERY_STATE: WineryState = {
   currentPaletteOpenedState: false,
+  sidebarVisible: false,
   currentJsonTopology: new TTopologyTemplate
 };
 
@@ -34,6 +36,12 @@ export const WineryReducer =
         return {
           ...lastState,
           currentPaletteOpenedState: paletteOpened
+        };
+      case WineryActions.OPEN_SIDEBAR:
+        const sidebarVisible: boolean = (<OpenSidebar>action).sidebarVisible;
+        return {
+          ...lastState,
+          sidebarVisible: sidebarVisible
         };
       case WineryActions.SAVE_NODE_TEMPLATE:
         const newNode: TNodeTemplate = (<SaveNodeTemplateAction>action).nodeTemplate;

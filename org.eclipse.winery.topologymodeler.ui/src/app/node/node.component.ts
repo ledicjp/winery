@@ -22,6 +22,9 @@ import {
 } from '@angular/core';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
+import { NgRedux } from '@angular-redux/store';
+import { IWineryState } from '../redux/store/winery.store';
+import { WineryActions } from '../redux/actions/winery.actions';
 
 @Component({
   selector: 'winery-node',
@@ -35,6 +38,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   connectorEndpointVisible = false;
   startTime;
   endTime;
+  toggle = false;
   longpress = false;
   makeSelectionVisible = false;
   @Input() title: string;
@@ -54,7 +58,9 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-  constructor(differsSelectedNodes: IterableDiffers) {
+  constructor(differsSelectedNodes: IterableDiffers,
+              private $ngRedux: NgRedux<IWineryState>,
+              private actions: WineryActions) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();
@@ -117,5 +123,11 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       (this.longpress) ? $event.preventDefault() : this.connectorEndpointVisible = !this.connectorEndpointVisible;
       this.checkIfNodeInSelection.emit(this.title);
     }
+  }
+
+  openSidebar($event): void {
+    $event.stopPropagation();
+    this.toggle = !this.toggle;
+    this.$ngRedux.dispatch(this.actions.openSidebar(this.toggle));
   }
 }
