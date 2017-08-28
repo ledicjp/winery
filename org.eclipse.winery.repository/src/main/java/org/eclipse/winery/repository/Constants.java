@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012-2013 University of Stuttgart.
+ * Copyright (c) 2012-2017 University of Stuttgart.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * and the Apache License 2.0 which both accompany this distribution,
@@ -8,9 +8,12 @@
  *
  * Contributors:
  *     Oliver Kopp - initial API and implementation
+ *     Philipp Meyer- support for source directory
  *******************************************************************************/
 package org.eclipse.winery.repository;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,7 +23,7 @@ public class Constants {
 	public static final String DEFAULT_REPO_NAME = "winery-repository";
 	// this directory is checked for existence. If it does not exist
 	// $HOME/DEFAULT_REPO_NAME is used
-	public static final String GLOBAL_REPO_PATH_WINDOWS = "C:\\" + Constants.DEFAULT_REPO_NAME;
+	public static final Path GLOBAL_REPO_PATH_WINDOWS = Paths.get("C:/" + Constants.DEFAULT_REPO_NAME);
 
 	/** file-system in general **/
 	public static final String newline = System.getProperty("line.separator");
@@ -34,6 +37,11 @@ public class Constants {
 
 	// suffix for CSAR files
 	public static final String SUFFIX_CSAR = ".csar";
+	
+	// suffix for ZIP files
+	public static final String SUFFIX_ZIP = ".zip";
+	
+	
 
 	// suffix for files in the directory PATH_MIMETYPEIMAGES, including "."
 	public static final String SUFFIX_MIMETYPEIMAGES = ".png";
