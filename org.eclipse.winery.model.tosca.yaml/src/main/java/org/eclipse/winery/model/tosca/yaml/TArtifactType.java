@@ -30,8 +30,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"mime_type",
-		"file_ext"
+	"mime_type",
+	"file_ext"
 })
 public class TArtifactType extends TEntityType {
 	private String mime_type;
@@ -52,7 +52,7 @@ public class TArtifactType extends TEntityType {
 		if (!(o instanceof TArtifactType)) return false;
 		TArtifactType that = (TArtifactType) o;
 		return Objects.equals(mime_type, that.mime_type) &&
-				Objects.equals(file_ext, that.file_ext);
+			Objects.equals(file_ext, that.file_ext);
 	}
 
 	@Override

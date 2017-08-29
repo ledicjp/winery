@@ -24,80 +24,80 @@ import org.eclipse.winery.model.tosca.yaml.TRequirementAssignment;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tMapRequirementAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"map"
+    "map"
 })
 public class TMapRequirementAssignment implements Map<String, TRequirementAssignment> {
-	private Map<String, TRequirementAssignment> map;
+    private Map<String, TRequirementAssignment> map;
 
-	public TMapRequirementAssignment() {
-		this.map = new LinkedHashMap<>();
-	}
+    public TMapRequirementAssignment() {
+        this.map = new LinkedHashMap<>();
+    }
 
-	public Map<String, TRequirementAssignment> getMap() {
-		return map;
-	}
+    public Map<String, TRequirementAssignment> getMap() {
+        return map;
+    }
 
-	public void setMap(Map<String, TRequirementAssignment> map) {
-		this.map = map;
-	}
+    public void setMap(Map<String, TRequirementAssignment> map) {
+        this.map = map;
+    }
 
-	@Override
-	public int size() {
-		return this.map.size();
-	}
+    @Override
+    public int size() {
+        return this.map.size();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this.map.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.map.isEmpty();
+    }
 
-	@Override
-	public boolean containsKey(Object o) {
-		return this.map.containsKey(o);
-	}
+    @Override
+    public boolean containsKey(Object o) {
+        return this.map.containsKey(o);
+    }
 
-	@Override
-	public boolean containsValue(Object o) {
-		return this.map.containsValue(o);
-	}
-	
-	@Override
-	public TRequirementAssignment get(Object o) {
-		return this.map.get(o);
-	}
+    @Override
+    public boolean containsValue(Object o) {
+        return this.map.containsValue(o);
+    }
 
-	@Override
-	public TRequirementAssignment put(String s, TRequirementAssignment requirementAssignment) {
-		return this.map.put(s, requirementAssignment);
-	}
+    @Override
+    public TRequirementAssignment get(Object o) {
+        return this.map.get(o);
+    }
 
-	@Override
-	public TRequirementAssignment remove(Object o) {
-		return this.map.remove(o);
-	}
+    @Override
+    public TRequirementAssignment put(String s, TRequirementAssignment requirementAssignment) {
+        return this.map.put(s, requirementAssignment);
+    }
 
-	@Override
-	public void putAll(Map<? extends String, ? extends TRequirementAssignment> map) {
-		this.map.putAll(map);
-	}
+    @Override
+    public TRequirementAssignment remove(Object o) {
+        return this.map.remove(o);
+    }
 
-	@Override
-	public void clear() {
-		this.map.clear();
-	}
+    @Override
+    public void putAll(Map<? extends String, ? extends TRequirementAssignment> map) {
+        this.map.putAll(map);
+    }
 
-	@Override
-	public Set<String> keySet() {
-		return this.map.keySet();
-	}
+    @Override
+    public void clear() {
+        this.map.clear();
+    }
 
-	@Override
-	public Collection<TRequirementAssignment> values() {
-		return this.map.values();
-	}
+    @Override
+    public Set<String> keySet() {
+        return this.map.keySet();
+    }
 
-	@Override
-	public Set<Entry<String, TRequirementAssignment>> entrySet() {
-		return this.map.entrySet();
-	}
+    @Override
+    public Collection<TRequirementAssignment> values() {
+        return this.map.values();
+    }
+
+    @Override
+    public Set<Entry<String, TRequirementAssignment>> entrySet() {
+        return this.map.entrySet();
+    }
 }

@@ -16,19 +16,19 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 public interface IParameter<P> {
-	String getKey();
+    String getKey();
 
-	List<String> getContext();
+    List<String> getContext();
 
-	P addContext(String listName, String key);
+    P addContext(String listName, String key);
 
-	P addContext(String key);
+    P addContext(String key);
 
-	P addContext(List<String> context);
+    P addContext(List<String> context);
 
-	@NonNull
-	P copy();
+    @NonNull
+    P copy();
 
-	@NonNull
-	P self();
+    @NonNull
+    P self();
 }

@@ -19,62 +19,62 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Credential", namespace = "http://docs.oasis-open.org/tosca/ns/2011/12")
 public class Credential {
 
-	@XmlElement
-	private String protocol;
+    @XmlElement
+    private String protocol;
 
-	@XmlElement(required = true, defaultValue = "password")
-	private String token_type;
+    @XmlElement(required = true, defaultValue = "password")
+    private String token_type;
 
-	@XmlElement(required = true)
-	private String token;
+    @XmlElement(required = true)
+    private String token;
 
-	@XmlElement
-	private Map<String, String> keys;
+    @XmlElement
+    private Map<String, String> keys;
 
-	@XmlElement
-	private String user;
+    @XmlElement
+    private String user;
 
-	public Credential() {
-		this.token_type = "password";
-	}
+    public Credential() {
+        this.token_type = "password";
+    }
 
-	public String getProtocol() {
-		return protocol;
-	}
+    public String getProtocol() {
+        return protocol;
+    }
 
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
 
-	public String getToken_type() {
-		return token_type;
-	}
+    public String getToken_type() {
+        return token_type;
+    }
 
-	public void setToken_type(String token_type) {
-		this.token_type = token_type;
-	}
+    public void setToken_type(String token_type) {
+        this.token_type = token_type;
+    }
 
-	public String getToken() {
-		return token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public Map<String, String> getKeys() {
-		return keys;
-	}
+    public Map<String, String> getKeys() {
+        return keys;
+    }
 
-	public void setKeys(Map<String, String> keys) {
-		this.keys = keys;
-	}
+    public void setKeys(Map<String, String> keys) {
+        this.keys = keys;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 }

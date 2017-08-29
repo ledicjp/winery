@@ -20,21 +20,21 @@ import org.eclipse.winery.model.tosca.Definitions;
 import org.junit.Test;
 
 public class XmlReaderTest {
-	public final static String PATH = "src/test/resources/reader/";
-	public final XmlReader reader;
+    public final static String PATH = "src/test/resources/reader/";
+    public final XmlReader reader;
 
-	public XmlReaderTest() throws JAXBException {
-		reader = new XmlReader();
-	}
+    public XmlReaderTest() throws JAXBException {
+        reader = new XmlReader();
+    }
 
-	@Test
-	public void TestReader() throws Exception {
-		String file = "ArtifactType_WAR.xml";
-		Definitions definitions = reader.parse(getFile(file));
-		System.out.println(definitions);
-	}
+    @Test
+    public void TestReader() throws Exception {
+        String file = "ArtifactType_WAR.xml";
+        Definitions definitions = reader.parse(getFile(file));
+        System.out.println(definitions);
+    }
 
-	private File getFile(String file) {
-		return new File(PATH + file);
-	}
+    private File getFile(String file) {
+        return new File(PATH + file);
+    }
 }

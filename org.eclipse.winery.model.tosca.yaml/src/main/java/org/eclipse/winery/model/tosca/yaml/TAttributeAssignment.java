@@ -26,86 +26,86 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tAttributeAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"description",
-		"value"
+    "description",
+    "value"
 })
 public class TAttributeAssignment {
-	private String description;
-	private Object value;
+    private String description;
+    private Object value;
 
-	public TAttributeAssignment() {
+    public TAttributeAssignment() {
 
-	}
+    }
 
-	public TAttributeAssignment(Object value) {
-		this.value = value;
-	}
+    public TAttributeAssignment(Object value) {
+        this.value = value;
+    }
 
-	public TAttributeAssignment(String value) {
-		this.value = value;
-	}
+    public TAttributeAssignment(String value) {
+        this.value = value;
+    }
 
-	public TAttributeAssignment(Builder builder) {
-		this.setDescription(builder.description);
-		this.setValue(builder.value);
-	}
+    public TAttributeAssignment(Builder builder) {
+        this.setDescription(builder.description);
+        this.setValue(builder.value);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TAttributeAssignment)) return false;
-		TAttributeAssignment that = (TAttributeAssignment) o;
-		return Objects.equals(description, that.description) &&
-				Objects.equals(value, that.value);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TAttributeAssignment)) return false;
+        TAttributeAssignment that = (TAttributeAssignment) o;
+        return Objects.equals(description, that.description) &&
+            Objects.equals(value, that.value);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(description, value);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, value);
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Nullable
-	public Object getValue() {
-		return value;
-	}
+    @Nullable
+    public Object getValue() {
+        return value;
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private String description;
-		private Object value;
+    public static class Builder {
+        private String description;
+        private Object value;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setValue(Object value) {
-			this.value = value;
-			return this;
-		}
+        public Builder setValue(Object value) {
+            this.value = value;
+            return this;
+        }
 
-		public TAttributeAssignment build() {
-			return new TAttributeAssignment(this);
-		}
-	}
+        public TAttributeAssignment build() {
+            return new TAttributeAssignment(this);
+        }
+    }
 }

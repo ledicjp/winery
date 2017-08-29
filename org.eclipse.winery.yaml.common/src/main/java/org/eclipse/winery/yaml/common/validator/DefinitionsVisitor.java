@@ -24,40 +24,40 @@ import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class DefinitionsVisitor extends ImportVisitor {
-	private Map<String, List<String>> nodeTemplates;
-	private Map<String, List<String>> repositoryDefinitions;
+    private Map<String, List<String>> nodeTemplates;
+    private Map<String, List<String>> repositoryDefinitions;
 
-	public DefinitionsVisitor(String namespace, String path) {
-		super(namespace, path);
-		this.nodeTemplates = new LinkedHashMap<>();
-		this.repositoryDefinitions = new LinkedHashMap<>();
-	}
+    public DefinitionsVisitor(String namespace, String path) {
+        super(namespace, path);
+        this.nodeTemplates = new LinkedHashMap<>();
+        this.repositoryDefinitions = new LinkedHashMap<>();
+    }
 
-	@Override
-	public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
-		setDefinitions(parameter.getKey(), nodeTemplates);
-		return super.visit(node, parameter);
-	}
+    @Override
+    public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
+        setDefinitions(parameter.getKey(), nodeTemplates);
+        return super.visit(node, parameter);
+    }
 
-	@Override
-	public Result visit(TRepositoryDefinition node, Parameter parameter) throws IException {
-		setDefinitions(parameter.getKey(), repositoryDefinitions);
-		return super.visit(node, parameter);
-	}
+    @Override
+    public Result visit(TRepositoryDefinition node, Parameter parameter) throws IException {
+        setDefinitions(parameter.getKey(), repositoryDefinitions);
+        return super.visit(node, parameter);
+    }
 
-	private void setDefinitions(String name, Map<String, List<String>> map) {
-		if (map.containsKey(namespace)) {
-			map.get(namespace).add(name);
-		} else {
-			map.put(namespace, new ArrayList<>(Collections.singletonList(name)));
-		}
-	}
+    private void setDefinitions(String name, Map<String, List<String>> map) {
+        if (map.containsKey(namespace)) {
+            map.get(namespace).add(name);
+        } else {
+            map.put(namespace, new ArrayList<>(Collections.singletonList(name)));
+        }
+    }
 
-	public Map<String, List<String>> getNodeTemplates() {
-		return nodeTemplates;
-	}
+    public Map<String, List<String>> getNodeTemplates() {
+        return nodeTemplates;
+    }
 
-	public Map<String, List<String>> getRepositoryDefinitions() {
-		return repositoryDefinitions;
-	}
+    public Map<String, List<String>> getRepositoryDefinitions() {
+        return repositoryDefinitions;
+    }
 }

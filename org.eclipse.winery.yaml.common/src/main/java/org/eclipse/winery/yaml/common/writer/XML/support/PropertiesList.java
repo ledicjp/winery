@@ -21,18 +21,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "Properties")
 public class PropertiesList {
-	@XmlAnyElement
-	private List<JAXBElement> entries = new ArrayList<>();
+    @XmlAnyElement
+    private List<JAXBElement> entries = new ArrayList<>();
 
-	@XmlAttribute(name = "xmlns")
-	private String namespace;
+    @XmlAttribute(name = "xmlns")
+    private String namespace;
 
-	public PropertiesList() {
+    public PropertiesList() {
 
-	}
+    }
 
-	public PropertiesList(List<JAXBElement> entries, String namespace) {
-		this.entries = entries;
-		this.namespace = namespace;
-	}
+    public PropertiesList(List<JAXBElement> entries, String namespace) {
+        this.entries = entries;
+        this.namespace = namespace;
+    }
 }

@@ -34,147 +34,147 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"properties",
-		"interfaces"
+    "type",
+    "properties",
+    "interfaces"
 })
 public class TRelationshipAssignment {
-	private QName type;
-	private Map<String, TPropertyAssignment> properties;
-	private Map<String, TInterfaceAssignment> interfaces;
+    private QName type;
+    private Map<String, TPropertyAssignment> properties;
+    private Map<String, TInterfaceAssignment> interfaces;
 
-	public TRelationshipAssignment() {
-	}
+    public TRelationshipAssignment() {
+    }
 
-	public TRelationshipAssignment(QName type) {
-		this.type = type;
-	}
+    public TRelationshipAssignment(QName type) {
+        this.type = type;
+    }
 
-	public TRelationshipAssignment(Builder builder) {
-		this.setType(builder.type);
-		this.setProperties(builder.properties);
-		this.setInterfaces(builder.interfaces);
-	}
+    public TRelationshipAssignment(Builder builder) {
+        this.setType(builder.type);
+        this.setProperties(builder.properties);
+        this.setInterfaces(builder.interfaces);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRelationshipAssignment)) return false;
-		TRelationshipAssignment that = (TRelationshipAssignment) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(properties, that.properties) &&
-				Objects.equals(interfaces, that.interfaces);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRelationshipAssignment)) return false;
+        TRelationshipAssignment that = (TRelationshipAssignment) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(properties, that.properties) &&
+            Objects.equals(interfaces, that.interfaces);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, properties, interfaces);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, properties, interfaces);
+    }
 
-	@Nullable
-	public QName getType() {
-		return type;
-	}
+    @Nullable
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignment> getProperties() {
-		if (this.properties == null) {
-			this.properties = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignment> getProperties() {
+        if (this.properties == null) {
+            this.properties = new LinkedHashMap<>();
+        }
 
-		return properties;
-	}
+        return properties;
+    }
 
-	public void setProperties(Map<String, TPropertyAssignment> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, TPropertyAssignment> properties) {
+        this.properties = properties;
+    }
 
-	@NonNull
-	public Map<String, TInterfaceAssignment> getInterfaces() {
-		if (this.interfaces == null) {
-			this.interfaces = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TInterfaceAssignment> getInterfaces() {
+        if (this.interfaces == null) {
+            this.interfaces = new LinkedHashMap<>();
+        }
 
-		return interfaces;
-	}
+        return interfaces;
+    }
 
-	public void setInterfaces(Map<String, TInterfaceAssignment> interfaces) {
-		this.interfaces = interfaces;
-	}
+    public void setInterfaces(Map<String, TInterfaceAssignment> interfaces) {
+        this.interfaces = interfaces;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private Map<String, TPropertyAssignment> properties;
-		private Map<String, TInterfaceAssignment> interfaces;
+    public static class Builder {
+        private final QName type;
+        private Map<String, TPropertyAssignment> properties;
+        private Map<String, TInterfaceAssignment> interfaces;
 
-		public Builder(QName type) {
-			this.type = type;
-		}
+        public Builder(QName type) {
+            this.type = type;
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			this.properties = properties;
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            this.properties = properties;
+            return this;
+        }
 
-		public Builder setInterfaces(Map<String, TInterfaceAssignment> interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}
+        public Builder setInterfaces(Map<String, TInterfaceAssignment> interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
 
-		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
-			if (properties == null || properties.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+            if (properties == null || properties.isEmpty()) {
+                return this;
+            }
 
-			if (this.properties == null) {
-				this.properties = properties;
-			} else {
-				this.properties.putAll(properties);
-			}
+            if (this.properties == null) {
+                this.properties = properties;
+            } else {
+                this.properties.putAll(properties);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addProperties(String name, TPropertyAssignment property) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(String name, TPropertyAssignment property) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addProperties(Collections.singletonMap(name, property));
-		}
+            return addProperties(Collections.singletonMap(name, property));
+        }
 
-		public Builder addInterfaces(Map<String, TInterfaceAssignment> interfaces) {
-			if (interfaces == null || interfaces.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(Map<String, TInterfaceAssignment> interfaces) {
+            if (interfaces == null || interfaces.isEmpty()) {
+                return this;
+            }
 
-			if (this.interfaces == null) {
-				this.interfaces = interfaces;
-			} else {
-				this.interfaces.putAll(interfaces);
-			}
+            if (this.interfaces == null) {
+                this.interfaces = interfaces;
+            } else {
+                this.interfaces.putAll(interfaces);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addInterfaces(String name, TInterfaceAssignment _interface) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(String name, TInterfaceAssignment _interface) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addInterfaces(Collections.singletonMap(name, _interface));
-		}
+            return addInterfaces(Collections.singletonMap(name, _interface));
+        }
 
-		public TRelationshipAssignment build() {
-			return new TRelationshipAssignment(this);
-		}
-	}
+        public TRelationshipAssignment build() {
+            return new TRelationshipAssignment(this);
+        }
+    }
 }

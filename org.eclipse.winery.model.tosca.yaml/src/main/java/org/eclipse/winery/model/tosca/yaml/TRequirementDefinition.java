@@ -33,10 +33,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"occurrences",
-		"capability",
-		"node",
-		"relationship"
+	"occurrences",
+	"capability",
+	"node",
+	"relationship"
 })
 public class TRequirementDefinition {
 	@XmlAttribute(name = "capability", required = true)
@@ -66,10 +66,10 @@ public class TRequirementDefinition {
 		if (!(o instanceof TRequirementDefinition)) return false;
 		TRequirementDefinition that = (TRequirementDefinition) o;
 		return Objects.equals(capability, that.capability) &&
-				Objects.equals(node, that.node) &&
-				Objects.equals(relationship, that.relationship) &&
-				Objects.equals(occurrences, that.occurrences) &&
-				Objects.equals(description, that.description);
+			Objects.equals(node, that.node) &&
+			Objects.equals(relationship, that.relationship) &&
+			Objects.equals(occurrences, that.occurrences) &&
+			Objects.equals(description, that.description);
 	}
 
 	@Override

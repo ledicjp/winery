@@ -20,18 +20,18 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public class Util {
 
-	/**
-	 * Converts a string representation of an array (for example "[ a1, a2, a3, a4 ]" ) to a list of strings
-	 */
-	@NonNull
-	public static List<String> convertStringArray(String array) {
-		if (array == null || array.isEmpty()) {
-			return new ArrayList<>();
-		}
+    /**
+     * Converts a string representation of an array (for example "[ a1, a2, a3, a4 ]" ) to a list of strings
+     */
+    @NonNull
+    public static List<String> convertStringArray(String array) {
+        if (array == null || array.isEmpty()) {
+            return new ArrayList<>();
+        }
 
-		return Stream.of(array.replace("[", "")
-				.replace("]", "")
-				.replaceAll("\\s+", "")
-				.split(",")).collect(Collectors.toList());
-	}
+        return Stream.of(array.replace("[", "")
+            .replace("]", "")
+            .replaceAll("\\s+", "")
+            .split(",")).collect(Collectors.toList());
+    }
 }

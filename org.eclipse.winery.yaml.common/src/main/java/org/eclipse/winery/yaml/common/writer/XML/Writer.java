@@ -24,20 +24,20 @@ import org.eclipse.winery.yaml.common.writer.XML.support.PropertiesList;
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 public class Writer {
-	public void writeXML(TDefinitions definitions, String fileName) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(TDefinitions.class, PropertiesList.class, AnonymousPropertiesList.class);
+    public void writeXML(TDefinitions definitions, String fileName) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(TDefinitions.class, PropertiesList.class, AnonymousPropertiesList.class);
 
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
-			@Override
-			public String getPreferredPrefix(String s, String s1, boolean b) {
-				return "tosca";
-			}
-		});
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
+            @Override
+            public String getPreferredPrefix(String s, String s1, boolean b) {
+                return "tosca";
+            }
+        });
 
-		File file = new File(fileName);
-		file.getParentFile().mkdirs();
-		marshaller.marshal(definitions, file);
-	}
+        File file = new File(fileName);
+        file.getParentFile().mkdirs();
+        marshaller.marshal(definitions, file);
+    }
 }

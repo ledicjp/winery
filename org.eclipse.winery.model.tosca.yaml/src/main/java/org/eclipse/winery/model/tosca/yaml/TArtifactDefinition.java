@@ -34,11 +34,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"files",
-		"repository",
-		"description",
-		"deploy_path"
+	"type",
+	"files",
+	"repository",
+	"description",
+	"deploy_path"
 })
 public class TArtifactDefinition {
 	@XmlAttribute(name = "type", required = true)
@@ -71,11 +71,11 @@ public class TArtifactDefinition {
 		if (!(o instanceof TArtifactDefinition)) return false;
 		TArtifactDefinition that = (TArtifactDefinition) o;
 		return Objects.equals(type, that.type) &&
-				Objects.equals(files, that.files) &&
-				Objects.equals(repository, that.repository) &&
-				Objects.equals(description, that.description) &&
-				Objects.equals(deploy_path, that.deploy_path) &&
-				Objects.equals(properties, that.properties);
+			Objects.equals(files, that.files) &&
+			Objects.equals(repository, that.repository) &&
+			Objects.equals(description, that.description) &&
+			Objects.equals(deploy_path, that.deploy_path) &&
+			Objects.equals(properties, that.properties);
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class TArtifactDefinition {
 	public List<String> getFiles() {
 		return files;
 	}
-	
+
 	public void setFiles(List<String> files) {
 		this.files = files;
 	}

@@ -14,17 +14,17 @@ package org.eclipse.winery.yaml.common.Exception;
 import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 
 public class YAMLParserException extends IException {
-	private String file_context;
+    private String file_context;
 
-	public YAMLParserException(String msg) {
-		super(msg);
-	}
+    public YAMLParserException(String msg) {
+        super(msg);
+    }
 
-	public void setFile_context(String msg) {
-		this.file_context = "Context::FILE = " + msg;
-	}
+    public void setFile_context(String msg) {
+        this.file_context = "Context::FILE = " + msg;
+    }
 
-	public String getMessage() {
-		return super.getMessage() + "\n" + this.file_context + "\n";
-	}
+    public String getMessage() {
+        return super.getMessage() + "\n" + this.file_context + "\n";
+    }
 }

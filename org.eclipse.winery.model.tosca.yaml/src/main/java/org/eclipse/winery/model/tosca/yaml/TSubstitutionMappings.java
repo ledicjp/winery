@@ -35,148 +35,148 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tSubstitutionMapping", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"node_type",
-		"capabilities",
-		"requirements"
+    "node_type",
+    "capabilities",
+    "requirements"
 })
 public class TSubstitutionMappings {
-	private QName node_type;
-	private Map<String, TListString> capabilities;
-	private Map<String, TListString> requirements;
+    private QName node_type;
+    private Map<String, TListString> capabilities;
+    private Map<String, TListString> requirements;
 
-	public TSubstitutionMappings() {
-	}
+    public TSubstitutionMappings() {
+    }
 
-	public TSubstitutionMappings(Builder builder) {
-		this.setNode_type(builder.node_type);
-		this.setCapabilities(builder.capabilities);
-		this.setRequirements(builder.requirements);
-	}
+    public TSubstitutionMappings(Builder builder) {
+        this.setNode_type(builder.node_type);
+        this.setCapabilities(builder.capabilities);
+        this.setRequirements(builder.requirements);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TSubstitutionMappings)) return false;
-		TSubstitutionMappings that = (TSubstitutionMappings) o;
-		return Objects.equals(node_type, that.node_type) &&
-				Objects.equals(capabilities, that.capabilities) &&
-				Objects.equals(requirements, that.requirements);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TSubstitutionMappings)) return false;
+        TSubstitutionMappings that = (TSubstitutionMappings) o;
+        return Objects.equals(node_type, that.node_type) &&
+            Objects.equals(capabilities, that.capabilities) &&
+            Objects.equals(requirements, that.requirements);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(node_type, capabilities, requirements);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(node_type, capabilities, requirements);
+    }
 
-	@Nullable
-	public QName getNode_type() {
-		return node_type;
-	}
+    @Nullable
+    public QName getNode_type() {
+        return node_type;
+    }
 
-	public void setNode_type(QName node_type) {
-		this.node_type = node_type;
-	}
+    public void setNode_type(QName node_type) {
+        this.node_type = node_type;
+    }
 
-	@NonNull
-	public Map<String, TListString> getCapabilities() {
-		if (this.capabilities == null) {
-			this.capabilities = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TListString> getCapabilities() {
+        if (this.capabilities == null) {
+            this.capabilities = new LinkedHashMap<>();
+        }
 
-		return capabilities;
-	}
+        return capabilities;
+    }
 
-	public void setCapabilities(Map<String, TListString> capabilities) {
-		this.capabilities = capabilities;
-	}
+    public void setCapabilities(Map<String, TListString> capabilities) {
+        this.capabilities = capabilities;
+    }
 
-	@NonNull
-	public Map<String, TListString> getRequirements() {
-		if (this.requirements == null) {
-			this.requirements = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TListString> getRequirements() {
+        if (this.requirements == null) {
+            this.requirements = new LinkedHashMap<>();
+        }
 
-		return requirements;
-	}
+        return requirements;
+    }
 
-	public void setRequirements(Map<String, TListString> requirements) {
-		this.requirements = requirements;
-	}
+    public void setRequirements(Map<String, TListString> requirements) {
+        this.requirements = requirements;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private QName node_type;
-		private Map<String, TListString> capabilities;
-		private Map<String, TListString> requirements;
+    public static class Builder {
+        private QName node_type;
+        private Map<String, TListString> capabilities;
+        private Map<String, TListString> requirements;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setNode_type(QName node_type) {
-			this.node_type = node_type;
-			return this;
-		}
+        public Builder setNode_type(QName node_type) {
+            this.node_type = node_type;
+            return this;
+        }
 
-		public Builder setCapabilities(Map<String, TListString> capabilities) {
-			this.capabilities = capabilities;
-			return this;
-		}
+        public Builder setCapabilities(Map<String, TListString> capabilities) {
+            this.capabilities = capabilities;
+            return this;
+        }
 
-		public Builder setRequirements(Map<String, TListString> requirements) {
-			this.requirements = requirements;
-			return this;
-		}
+        public Builder setRequirements(Map<String, TListString> requirements) {
+            this.requirements = requirements;
+            return this;
+        }
 
-		public Builder addCapabilities(Map<String, TListString> capabilities) {
-			if (capabilities == null || capabilities.isEmpty()) {
-				return this;
-			}
+        public Builder addCapabilities(Map<String, TListString> capabilities) {
+            if (capabilities == null || capabilities.isEmpty()) {
+                return this;
+            }
 
-			if (this.capabilities == null) {
-				this.capabilities = capabilities;
-			} else {
-				this.capabilities.putAll(capabilities);
-			}
+            if (this.capabilities == null) {
+                this.capabilities = capabilities;
+            } else {
+                this.capabilities.putAll(capabilities);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addCapabilities(String name, TListString capability) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addCapabilities(String name, TListString capability) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addCapabilities(Collections.singletonMap(name, capability));
-		}
+            return addCapabilities(Collections.singletonMap(name, capability));
+        }
 
-		public Builder addRequirements(Map<String, TListString> requirements) {
-			if (requirements == null || requirements.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(Map<String, TListString> requirements) {
+            if (requirements == null || requirements.isEmpty()) {
+                return this;
+            }
 
-			if (this.requirements == null) {
-				this.requirements = requirements;
-			} else {
-				this.requirements.putAll(requirements);
-			}
+            if (this.requirements == null) {
+                this.requirements = requirements;
+            } else {
+                this.requirements.putAll(requirements);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addRequirements(String name, TListString requirement) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(String name, TListString requirement) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addRequirements(Collections.singletonMap(name, requirement));
-		}
+            return addRequirements(Collections.singletonMap(name, requirement));
+        }
 
-		public TSubstitutionMappings build() {
-			return new TSubstitutionMappings(this);
-		}
-	}
+        public TSubstitutionMappings build() {
+            return new TSubstitutionMappings(this);
+        }
+    }
 }

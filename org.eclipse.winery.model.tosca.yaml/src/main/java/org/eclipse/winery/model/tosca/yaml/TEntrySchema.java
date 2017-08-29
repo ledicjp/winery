@@ -31,121 +31,121 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEntrySchema", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"description",
-		"constraints"
+    "type",
+    "description",
+    "constraints"
 })
 public class TEntrySchema {
-	private QName type;
-	private String description;
-	private List<TConstraintClause> constraints;
+    private QName type;
+    private String description;
+    private List<TConstraintClause> constraints;
 
-	public TEntrySchema() {
-	}
+    public TEntrySchema() {
+    }
 
-	public TEntrySchema(Builder builder) {
-		this.setType(builder.type);
-		this.setDescription(builder.description);
-		this.setConstraints(builder.constraints);
-	}
+    public TEntrySchema(Builder builder) {
+        this.setType(builder.type);
+        this.setDescription(builder.description);
+        this.setConstraints(builder.constraints);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TEntrySchema)) return false;
-		TEntrySchema that = (TEntrySchema) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(description, that.description) &&
-				Objects.equals(constraints, that.constraints);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TEntrySchema)) return false;
+        TEntrySchema that = (TEntrySchema) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(constraints, that.constraints);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, description, constraints);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, description, constraints);
+    }
 
-	@Nullable
-	public QName getType() {
-		return type;
-	}
+    @Nullable
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@NonNull
-	public List<TConstraintClause> getConstraints() {
-		if (this.constraints == null) {
-			this.constraints = new ArrayList<>();
-		}
+    @NonNull
+    public List<TConstraintClause> getConstraints() {
+        if (this.constraints == null) {
+            this.constraints = new ArrayList<>();
+        }
 
-		return constraints;
-	}
+        return constraints;
+    }
 
-	public void setConstraints(List<TConstraintClause> constraints) {
-		this.constraints = constraints;
-	}
+    public void setConstraints(List<TConstraintClause> constraints) {
+        this.constraints = constraints;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private QName type;
-		private String description;
-		private List<TConstraintClause> constraints;
+    public static class Builder {
+        private QName type;
+        private String description;
+        private List<TConstraintClause> constraints;
 
-		public Builder() {
-		}
+        public Builder() {
+        }
 
-		public Builder setType(QName type) {
-			this.type = type;
-			return this;
-		}
+        public Builder setType(QName type) {
+            this.type = type;
+            return this;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setConstraints(List<TConstraintClause> constraints) {
-			this.constraints = constraints;
-			return this;
-		}
+        public Builder setConstraints(List<TConstraintClause> constraints) {
+            this.constraints = constraints;
+            return this;
+        }
 
-		public Builder addConstraints(List<TConstraintClause> constraints) {
-			if (constraints == null || constraints.isEmpty()) {
-				return this;
-			}
+        public Builder addConstraints(List<TConstraintClause> constraints) {
+            if (constraints == null || constraints.isEmpty()) {
+                return this;
+            }
 
-			if (this.constraints == null) {
-				this.constraints = constraints;
-			} else {
-				this.constraints.addAll(constraints);
-			}
+            if (this.constraints == null) {
+                this.constraints = constraints;
+            } else {
+                this.constraints.addAll(constraints);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addConstraints(TConstraintClause contraint) {
-			if (contraint == null) {
-				return this;
-			}
+        public Builder addConstraints(TConstraintClause contraint) {
+            if (contraint == null) {
+                return this;
+            }
 
-			return addConstraints(Collections.singletonList(contraint));
-		}
+            return addConstraints(Collections.singletonList(contraint));
+        }
 
-		public TEntrySchema build() {
-			return new TEntrySchema(this);
-		}
-	}
+        public TEntrySchema build() {
+            return new TEntrySchema(this);
+        }
+    }
 }

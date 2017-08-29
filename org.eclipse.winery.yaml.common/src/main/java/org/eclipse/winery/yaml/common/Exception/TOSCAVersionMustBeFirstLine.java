@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class TOSCAVersionMustBeFirstLine extends YAMLParserException {
-	public TOSCAVersionMustBeFirstLine(String msg) {
-		super(msg);
-	}
+    public TOSCAVersionMustBeFirstLine(String msg) {
+        super(msg);
+    }
 }

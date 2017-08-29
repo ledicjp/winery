@@ -18,18 +18,18 @@ import java.util.Set;
 import org.eclipse.winery.yaml.common.Exception.TOSCAVersionMustBeFirstLine;
 
 public class ObjectValidator {
-	public void validateObject(Object object) throws TOSCAVersionMustBeFirstLine {
-		if (object instanceof LinkedHashMap) {
-			LinkedHashMap map = (LinkedHashMap) object;
-			Set<Map.Entry> entries = map.entrySet();
-			if (entries.size() == 0 || !entries.iterator().next().getKey().equals("tosca_definitions_version")) {
-				for (Map.Entry entry : entries) {
-					if (entry.getKey().equals("tosca_definitions_version")) {
-						String msg = "tosca_definitions_version must be defined before all other YAML elements!";
-						throw new TOSCAVersionMustBeFirstLine(msg);
-					}
-				}
-			}
-		}
-	}
+    public void validateObject(Object object) throws TOSCAVersionMustBeFirstLine {
+        if (object instanceof LinkedHashMap) {
+            LinkedHashMap map = (LinkedHashMap) object;
+            Set<Map.Entry> entries = map.entrySet();
+            if (entries.size() == 0 || !entries.iterator().next().getKey().equals("tosca_definitions_version")) {
+                for (Map.Entry entry : entries) {
+                    if (entry.getKey().equals("tosca_definitions_version")) {
+                        String msg = "tosca_definitions_version must be defined before all other YAML elements!";
+                        throw new TOSCAVersionMustBeFirstLine(msg);
+                    }
+                }
+            }
+        }
+    }
 }

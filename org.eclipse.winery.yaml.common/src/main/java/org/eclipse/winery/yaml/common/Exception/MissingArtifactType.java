@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class MissingArtifactType extends YAMLParserException {
-	public MissingArtifactType(String msg) {
-		super(msg);
-	}
+    public MissingArtifactType(String msg) {
+        super(msg);
+    }
 }

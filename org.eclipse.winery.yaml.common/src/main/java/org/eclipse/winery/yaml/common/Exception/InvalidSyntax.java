@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class InvalidSyntax extends YAMLParserException {
-	public InvalidSyntax(String msg) {
-		super(msg);
-	}
+    public InvalidSyntax(String msg) {
+        super(msg);
+    }
 }

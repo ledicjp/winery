@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class InvalidNativeTypeExtend extends YAMLParserException {
-	public InvalidNativeTypeExtend(String msg) {
-		super(msg);
-	}
+    public InvalidNativeTypeExtend(String msg) {
+        super(msg);
+    }
 }

@@ -15,15 +15,15 @@ import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 
 public class Parameter extends AbstractParameter<Parameter> {
 
-	@Override
-	public Parameter copy() {
-		Parameter parameter = new Parameter();
-		parameter.getContext().addAll(this.getContext());
-		return parameter;
-	}
+    @Override
+    public Parameter copy() {
+        Parameter parameter = new Parameter();
+        parameter.getContext().addAll(this.getContext());
+        return parameter;
+    }
 
-	@Override
-	public Parameter self() {
-		return this;
-	}
+    @Override
+    public Parameter self() {
+        return this;
+    }
 }

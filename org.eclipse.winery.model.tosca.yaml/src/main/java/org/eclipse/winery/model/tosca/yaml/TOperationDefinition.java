@@ -32,172 +32,172 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tOperationDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"description",
-		"inputs",
-		"implementation"
+    "description",
+    "inputs",
+    "implementation"
 })
 public class TOperationDefinition {
-	private String description;
-	private Map<String, TPropertyAssignmentOrDefinition> inputs;
-	@Annotations.StandardExtension
-	private Map<String, TPropertyAssignmentOrDefinition> outputs;
-	@Annotations.StandardExtension
-	private TImplementation implementation;
+    private String description;
+    private Map<String, TPropertyAssignmentOrDefinition> inputs;
+    @Annotations.StandardExtension
+    private Map<String, TPropertyAssignmentOrDefinition> outputs;
+    @Annotations.StandardExtension
+    private TImplementation implementation;
 
-	public TOperationDefinition() {
+    public TOperationDefinition() {
 
-	}
+    }
 
-	public TOperationDefinition(QName implementation) {
-		this.implementation = new TImplementation(implementation);
-	}
+    public TOperationDefinition(QName implementation) {
+        this.implementation = new TImplementation(implementation);
+    }
 
-	public TOperationDefinition(Builder builder) {
-		this.setDescription(builder.description);
-		this.setInputs(builder.inputs);
-		this.setImplementation(builder.implementation);
-	}
+    public TOperationDefinition(Builder builder) {
+        this.setDescription(builder.description);
+        this.setInputs(builder.inputs);
+        this.setImplementation(builder.implementation);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TOperationDefinition)) return false;
-		TOperationDefinition that = (TOperationDefinition) o;
-		return Objects.equals(description, that.description) &&
-				Objects.equals(inputs, that.inputs) &&
-				Objects.equals(outputs, that.outputs) &&
-				Objects.equals(implementation, that.implementation);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TOperationDefinition)) return false;
+        TOperationDefinition that = (TOperationDefinition) o;
+        return Objects.equals(description, that.description) &&
+            Objects.equals(inputs, that.inputs) &&
+            Objects.equals(outputs, that.outputs) &&
+            Objects.equals(implementation, that.implementation);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(description, inputs, outputs, implementation);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, inputs, outputs, implementation);
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignmentOrDefinition> getInputs() {
-		if (this.inputs == null) {
-			this.inputs = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignmentOrDefinition> getInputs() {
+        if (this.inputs == null) {
+            this.inputs = new LinkedHashMap<>();
+        }
 
-		return inputs;
-	}
+        return inputs;
+    }
 
-	public void setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-		this.inputs = inputs;
-	}
-	
-	@NonNull
-	public Map<String, TPropertyAssignmentOrDefinition> getOutputs() {
-		if (this.outputs == null) {
-			this.outputs = new LinkedHashMap<>();
-		}
-		return outputs;
-	}
-	
-	public TOperationDefinition setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
-		this.outputs = outputs;
-		return this;
-	}
+    public void setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+        this.inputs = inputs;
+    }
 
-	@Nullable
-	public TImplementation getImplementation() {
-		return implementation;
-	}
+    @NonNull
+    public Map<String, TPropertyAssignmentOrDefinition> getOutputs() {
+        if (this.outputs == null) {
+            this.outputs = new LinkedHashMap<>();
+        }
+        return outputs;
+    }
 
-	public void setImplementation(TImplementation implementation) {
-		this.implementation = implementation;
-	}
+    public TOperationDefinition setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+        this.outputs = outputs;
+        return this;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    @Nullable
+    public TImplementation getImplementation() {
+        return implementation;
+    }
 
-	public static class Builder {
-		private String description;
-		private Map<String, TPropertyAssignmentOrDefinition> inputs;
-		private Map<String, TPropertyAssignmentOrDefinition> outputs;
-		private TImplementation implementation;
+    public void setImplementation(TImplementation implementation) {
+        this.implementation = implementation;
+    }
 
-		public Builder() {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-		}
+    public static class Builder {
+        private String description;
+        private Map<String, TPropertyAssignmentOrDefinition> inputs;
+        private Map<String, TPropertyAssignmentOrDefinition> outputs;
+        private TImplementation implementation;
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder() {
 
-		public Builder setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-			this.inputs = inputs;
-			return this;
-		}
-		
-		public Builder setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
-			this.outputs = outputs;
-			return this;
-		}
+        }
 
-		public Builder setImplementation(TImplementation implementation) {
-			this.implementation = implementation;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-			if (inputs == null || inputs.isEmpty()) {
-				return this;
-			}
+        public Builder setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+            this.inputs = inputs;
+            return this;
+        }
 
-			if (this.inputs == null) {
-				this.inputs = inputs;
-			} else {
-				this.inputs.putAll(inputs);
-			}
+        public Builder setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+            this.outputs = outputs;
+            return this;
+        }
 
-			return this;
-		}
+        public Builder setImplementation(TImplementation implementation) {
+            this.implementation = implementation;
+            return this;
+        }
 
-		public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+            if (inputs == null || inputs.isEmpty()) {
+                return this;
+            }
 
-			return addInputs(Collections.singletonMap(name, input));
-		}
+            if (this.inputs == null) {
+                this.inputs = inputs;
+            } else {
+                this.inputs.putAll(inputs);
+            }
 
-		public Builder addOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
-			if (outputs == null || outputs.isEmpty()) {
-				return this;
-			}
+            return this;
+        }
 
-			if (this.outputs == null) {
-				this.outputs = outputs;
-			} else {
-				this.outputs.putAll(outputs);
-			}
+        public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return this;
-		}
+            return addInputs(Collections.singletonMap(name, input));
+        }
 
-		public Builder addOutputs(String name, TPropertyAssignmentOrDefinition output) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
+            if (outputs == null || outputs.isEmpty()) {
+                return this;
+            }
 
-			return addOutputs(Collections.singletonMap(name, output));
-		}
+            if (this.outputs == null) {
+                this.outputs = outputs;
+            } else {
+                this.outputs.putAll(outputs);
+            }
 
-		public TOperationDefinition build() {
-			return new TOperationDefinition(this);
-		}
-	}
+            return this;
+        }
+
+        public Builder addOutputs(String name, TPropertyAssignmentOrDefinition output) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
+
+            return addOutputs(Collections.singletonMap(name, output));
+        }
+
+        public TOperationDefinition build() {
+            return new TOperationDefinition(this);
+        }
+    }
 }

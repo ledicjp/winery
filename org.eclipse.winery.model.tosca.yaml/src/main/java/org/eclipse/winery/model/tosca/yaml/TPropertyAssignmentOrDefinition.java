@@ -24,9 +24,9 @@ import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyAssignmentOrDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {})
 @XmlSeeAlso({
-		TPropertyAssignment.class,
-		TPropertyDefinition.class
+    TPropertyAssignment.class,
+    TPropertyDefinition.class
 })
 public abstract class TPropertyAssignmentOrDefinition {
-	public abstract <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException;
+    public abstract <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException;
 }

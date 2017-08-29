@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class UnknownDataType extends YAMLParserException {
-	public UnknownDataType(String msg) {
-		super(msg);
-	}
+    public UnknownDataType(String msg) {
+        super(msg);
+    }
 }

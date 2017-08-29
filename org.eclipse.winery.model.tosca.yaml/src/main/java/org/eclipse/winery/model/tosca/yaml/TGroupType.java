@@ -33,254 +33,254 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tGroupType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"members",
-		"requirements",
-		"capabilities",
-		"interfaces"
+    "members",
+    "requirements",
+    "capabilities",
+    "interfaces"
 })
 public class TGroupType extends TNodeOrGroupType {
-	private List<QName> members;
-	private List<TMapRequirementDefinition> requirements;
-	private Map<String, TCapabilityDefinition> capabilities;
-	private Map<String, TInterfaceDefinition> interfaces;
+    private List<QName> members;
+    private List<TMapRequirementDefinition> requirements;
+    private Map<String, TCapabilityDefinition> capabilities;
+    private Map<String, TInterfaceDefinition> interfaces;
 
-	public TGroupType() {
-	}
+    public TGroupType() {
+    }
 
-	public TGroupType(Builder builder) {
-		super(builder);
-		this.setMembers(builder.members);
-		this.setRequirements(builder.requirements);
-		this.setCapabilities(builder.capabilities);
-		this.setInterfaces(builder.interfaces);
-	}
+    public TGroupType(Builder builder) {
+        super(builder);
+        this.setMembers(builder.members);
+        this.setRequirements(builder.requirements);
+        this.setCapabilities(builder.capabilities);
+        this.setInterfaces(builder.interfaces);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TGroupType)) return false;
-		if (!super.equals(o)) return false;
-		TGroupType that = (TGroupType) o;
-		return Objects.equals(members, that.members) &&
-				Objects.equals(requirements, that.requirements) &&
-				Objects.equals(capabilities, that.capabilities) &&
-				Objects.equals(interfaces, that.interfaces);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TGroupType)) return false;
+        if (!super.equals(o)) return false;
+        TGroupType that = (TGroupType) o;
+        return Objects.equals(members, that.members) &&
+            Objects.equals(requirements, that.requirements) &&
+            Objects.equals(capabilities, that.capabilities) &&
+            Objects.equals(interfaces, that.interfaces);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), members, requirements, capabilities, interfaces);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), members, requirements, capabilities, interfaces);
+    }
 
-	@NonNull
-	public List<QName> getMembers() {
-		if (this.members == null) {
-			this.members = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getMembers() {
+        if (this.members == null) {
+            this.members = new ArrayList<>();
+        }
 
-		return members;
-	}
+        return members;
+    }
 
-	public void setMembers(List<QName> members) {
-		this.members = members;
-	}
+    public void setMembers(List<QName> members) {
+        this.members = members;
+    }
 
-	@NonNull
-	public List<TMapRequirementDefinition> getRequirements() {
-		if (this.requirements == null) {
-			this.requirements = new ArrayList<>();
-		}
+    @NonNull
+    public List<TMapRequirementDefinition> getRequirements() {
+        if (this.requirements == null) {
+            this.requirements = new ArrayList<>();
+        }
 
-		return requirements;
-	}
+        return requirements;
+    }
 
-	public void setRequirements(List<TMapRequirementDefinition> requirements) {
-		this.requirements = requirements;
-	}
+    public void setRequirements(List<TMapRequirementDefinition> requirements) {
+        this.requirements = requirements;
+    }
 
-	@NonNull
-	public Map<String, TCapabilityDefinition> getCapabilities() {
-		if (this.capabilities == null) {
-			this.capabilities = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TCapabilityDefinition> getCapabilities() {
+        if (this.capabilities == null) {
+            this.capabilities = new LinkedHashMap<>();
+        }
 
-		return capabilities;
-	}
+        return capabilities;
+    }
 
-	public void setCapabilities(Map<String, TCapabilityDefinition> capabilities) {
-		this.capabilities = capabilities;
-	}
+    public void setCapabilities(Map<String, TCapabilityDefinition> capabilities) {
+        this.capabilities = capabilities;
+    }
 
-	@NonNull
-	public Map<String, TInterfaceDefinition> getInterfaces() {
-		if (this.interfaces == null) {
-			this.interfaces = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TInterfaceDefinition> getInterfaces() {
+        if (this.interfaces == null) {
+            this.interfaces = new LinkedHashMap<>();
+        }
 
-		return interfaces;
-	}
+        return interfaces;
+    }
 
-	public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-		this.interfaces = interfaces;
-	}
+    public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+        this.interfaces = interfaces;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private List<QName> members;
-		private List<TMapRequirementDefinition> requirements;
-		private Map<String, TCapabilityDefinition> capabilities;
-		private Map<String, TInterfaceDefinition> interfaces;
+    public static class Builder extends TEntityType.Builder {
+        private List<QName> members;
+        private List<TMapRequirementDefinition> requirements;
+        private Map<String, TCapabilityDefinition> capabilities;
+        private Map<String, TInterfaceDefinition> interfaces;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setMembers(List<QName> members) {
-			this.members = members;
-			return this;
-		}
+        public Builder setMembers(List<QName> members) {
+            this.members = members;
+            return this;
+        }
 
-		public Builder setRequirements(List<TMapRequirementDefinition> requirements) {
-			this.requirements = requirements;
-			return this;
-		}
+        public Builder setRequirements(List<TMapRequirementDefinition> requirements) {
+            this.requirements = requirements;
+            return this;
+        }
 
-		public Builder setCapabilities(Map<String, TCapabilityDefinition> capabilities) {
-			this.capabilities = capabilities;
-			return this;
-		}
+        public Builder setCapabilities(Map<String, TCapabilityDefinition> capabilities) {
+            this.capabilities = capabilities;
+            return this;
+        }
 
-		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}
+        public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
 
-		public Builder addMembers(List<QName> members) {
-			if (members == null || members.isEmpty()) {
-				return this;
-			}
+        public Builder addMembers(List<QName> members) {
+            if (members == null || members.isEmpty()) {
+                return this;
+            }
 
-			if (this.members == null) {
-				this.members = members;
-			} else {
-				this.members.addAll(members);
-			}
+            if (this.members == null) {
+                this.members = members;
+            } else {
+                this.members.addAll(members);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addMembers(QName member) {
-			if (member == null) {
-				return this;
-			}
+        public Builder addMembers(QName member) {
+            if (member == null) {
+                return this;
+            }
 
-			return addMembers(Collections.singletonList(member));
-		}
+            return addMembers(Collections.singletonList(member));
+        }
 
-		public Builder addRequirements(List<TMapRequirementDefinition> requirements) {
-			if (requirements == null || requirements.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(List<TMapRequirementDefinition> requirements) {
+            if (requirements == null || requirements.isEmpty()) {
+                return this;
+            }
 
-			if (this.requirements == null) {
-				this.requirements = requirements;
-			} else {
-				this.requirements.addAll(requirements);
-			}
+            if (this.requirements == null) {
+                this.requirements = requirements;
+            } else {
+                this.requirements.addAll(requirements);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addRequirements(TMapRequirementDefinition requirement) {
-			if (requirement == null || requirement.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(TMapRequirementDefinition requirement) {
+            if (requirement == null || requirement.isEmpty()) {
+                return this;
+            }
 
-			return addRequirements(Collections.singletonList(requirement));
-		}
+            return addRequirements(Collections.singletonList(requirement));
+        }
 
-		public Builder addRequirements(Map<String, TRequirementDefinition> requirements) {
-			if (requirements == null || requirements.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(Map<String, TRequirementDefinition> requirements) {
+            if (requirements == null || requirements.isEmpty()) {
+                return this;
+            }
 
-			// TOSCA YAML syntax: one RequirementDefinition per MapRequirementDefinition
-			requirements.forEach((key, value) -> {
-				TMapRequirementDefinition tmp = new TMapRequirementDefinition();
-				tmp.put(key, value);
-				addRequirements(tmp);
-			});
+            // TOSCA YAML syntax: one RequirementDefinition per MapRequirementDefinition
+            requirements.forEach((key, value) -> {
+                TMapRequirementDefinition tmp = new TMapRequirementDefinition();
+                tmp.put(key, value);
+                addRequirements(tmp);
+            });
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addRequirements(String name, TRequirementDefinition requirement) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addRequirements(String name, TRequirementDefinition requirement) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addRequirements(Collections.singletonMap(name, requirement));
-		}
+            return addRequirements(Collections.singletonMap(name, requirement));
+        }
 
-		public Builder addCapabilities(Map<String, TCapabilityDefinition> capabilities) {
-			if (capabilities == null || capabilities.isEmpty()) {
-				return this;
-			}
+        public Builder addCapabilities(Map<String, TCapabilityDefinition> capabilities) {
+            if (capabilities == null || capabilities.isEmpty()) {
+                return this;
+            }
 
-			if (this.capabilities == null) {
-				this.capabilities = capabilities;
-			} else {
-				this.capabilities.putAll(capabilities);
-			}
+            if (this.capabilities == null) {
+                this.capabilities = capabilities;
+            } else {
+                this.capabilities.putAll(capabilities);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addCapabilities(String key, TCapabilityDefinition capability) {
-			if (key == null || key.isEmpty()) {
-				return this;
-			}
+        public Builder addCapabilities(String key, TCapabilityDefinition capability) {
+            if (key == null || key.isEmpty()) {
+                return this;
+            }
 
-			return addCapabilities(Collections.singletonMap(key, capability));
-		}
+            return addCapabilities(Collections.singletonMap(key, capability));
+        }
 
-		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			if (interfaces == null || interfaces.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            if (interfaces == null || interfaces.isEmpty()) {
+                return this;
+            }
 
-			if (this.interfaces == null) {
-				this.interfaces = interfaces;
-			} else {
-				this.interfaces.putAll(interfaces);
-			}
+            if (this.interfaces == null) {
+                this.interfaces = interfaces;
+            } else {
+                this.interfaces.putAll(interfaces);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
-			if (name == null) {
-				return this;
-			}
+        public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+            if (name == null) {
+                return this;
+            }
 
-			return addInterfaces(Collections.singletonMap(name, _interface));
-		}
+            return addInterfaces(Collections.singletonMap(name, _interface));
+        }
 
-		public TGroupType build() {
-			return new TGroupType(this);
-		}
-	}
+        public TGroupType build() {
+            return new TGroupType(this);
+        }
+    }
 }

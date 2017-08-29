@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum(String.class)
 public enum TStatusValue {
-	supported,
-	unsupported,
-	experimental,
-	deprecated
+    supported,
+    unsupported,
+    experimental,
+    deprecated
 }

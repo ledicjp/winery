@@ -41,162 +41,162 @@ import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class TypeValidator extends AbstractVisitor<Result, Parameter> {
-	private TypeVisitor typeVisitor;
+    private TypeVisitor typeVisitor;
 
-	public TypeValidator(String path, String namespace) {
-		this.typeVisitor = new TypeVisitor(namespace, path);
-		this.typeVisitor.addDataTypes(Defaults.YAML_TYPES, Namespaces.YAML_NS);
-		this.typeVisitor.addDataTypes(Defaults.TOSCA_TYPES, Namespaces.TOSCA_NS);
-	}
+    public TypeValidator(String path, String namespace) {
+        this.typeVisitor = new TypeVisitor(namespace, path);
+        this.typeVisitor.addDataTypes(Defaults.YAML_TYPES, Namespaces.YAML_NS);
+        this.typeVisitor.addDataTypes(Defaults.TOSCA_TYPES, Namespaces.TOSCA_NS);
+    }
 
-	public void validate(TServiceTemplate serviceTemplate) throws IException {
-		this.typeVisitor.visit(serviceTemplate, new Parameter());
+    public void validate(TServiceTemplate serviceTemplate) throws IException {
+        this.typeVisitor.visit(serviceTemplate, new Parameter());
 
-		this.visit(serviceTemplate, new Parameter());
-	}
+        this.visit(serviceTemplate, new Parameter());
+    }
 
-	/**
-	 * Validates that a map of lists contains a list mapped to the namespace uri of a QName
-	 * and the list contains the local name of the QName
-	 */
-	private Boolean validateTypeIsDefined(QName type, Map<String, List<String>> map) {
-		return map.containsKey(type.getNamespaceURI()) && map.get(type.getNamespaceURI()).contains(type.getLocalPart());
-	}
+    /**
+     * Validates that a map of lists contains a list mapped to the namespace uri of a QName
+     * and the list contains the local name of the QName
+     */
+    private Boolean validateTypeIsDefined(QName type, Map<String, List<String>> map) {
+        return map.containsKey(type.getNamespaceURI()) && map.get(type.getNamespaceURI()).contains(type.getLocalPart());
+    }
 
-	@Override
-	public Result visit(TArtifactType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getArtifactTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TArtifactType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getArtifactTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TCapabilityType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getCapabilityTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
+    @Override
+    public Result visit(TCapabilityType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getCapabilityTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
 
-		if (node.getValid_source_types() != null) {
-			for (QName source : node.getValid_source_types()) {
-				if (!validateTypeIsDefined(source, typeVisitor.getNodeTypes())) {
-					String msg = "The valid source type \"" + source + "\" for the capability type \""
-							+ parameter.getKey() + "\" is undefined. \n" + print(parameter.getContext());
-					throw new UnknownCapabilitySourceType(msg);
-				}
-			}
-		}
+        if (node.getValid_source_types() != null) {
+            for (QName source : node.getValid_source_types()) {
+                if (!validateTypeIsDefined(source, typeVisitor.getNodeTypes())) {
+                    String msg = "The valid source type \"" + source + "\" for the capability type \""
+                        + parameter.getKey() + "\" is undefined. \n" + print(parameter.getContext());
+                    throw new UnknownCapabilitySourceType(msg);
+                }
+            }
+        }
 
-		super.visit(node, parameter);
-		return null;
-	}
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TDataType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getDataTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
+    @Override
+    public Result visit(TDataType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getDataTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
 
-		// Extend a native DataType should fail
-		if (node.getDerived_from() != null &&
-				(Defaults.YAML_TYPES.contains(node.getDerived_from().getLocalPart()) ||
-						Defaults.TOSCA_TYPES.contains(node.getDerived_from().getLocalPart())
-				) &&
-				node.getProperties() != null && node.getProperties().size() != 0) {
-			String msg = "The native data type \"" + parameter.getKey() + "\" cannot be extended with properties! \n" + print(parameter.getContext());
-			throw new InvalidNativeTypeExtend(msg);
-		}
+        // Extend a native DataType should fail
+        if (node.getDerived_from() != null &&
+            (Defaults.YAML_TYPES.contains(node.getDerived_from().getLocalPart()) ||
+                Defaults.TOSCA_TYPES.contains(node.getDerived_from().getLocalPart())
+            ) &&
+            node.getProperties() != null && node.getProperties().size() != 0) {
+            String msg = "The native data type \"" + parameter.getKey() + "\" cannot be extended with properties! \n" + print(parameter.getContext());
+            throw new InvalidNativeTypeExtend(msg);
+        }
 
-		super.visit(node, parameter);
-		return null;
-	}
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TGroupType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getGroupTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TGroupType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getGroupTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TInterfaceType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getInterfaceTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TInterfaceType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getInterfaceTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TRelationshipType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getRelationshipTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TRelationshipType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getRelationshipTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TNodeType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getNodeTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TNodeType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getNodeTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TPolicyType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getPolicyTypes())) {
-			String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
-			throw new InvalidParentType(msg);
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TPolicyType node, Parameter parameter) throws IException {
+        if (node.getDerived_from() != null && !validateTypeIsDefined(node.getDerived_from(), typeVisitor.getPolicyTypes())) {
+            String msg = "The parent type \"" + node.getDerived_from() + "\" is undefined! \n" + print(parameter.getContext());
+            throw new InvalidParentType(msg);
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
-		if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getNodeTypes())) {
-			// TODO add parameter.getContext to exception
-			throw new MissingNodeType(node.getType().toString());
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TNodeTemplate node, Parameter parameter) throws IException {
+        if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getNodeTypes())) {
+            // TODO add parameter.getContext to exception
+            throw new MissingNodeType(node.getType().toString());
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TPropertyDefinition node, Parameter parameter) throws IException {
-		if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getDataTypes())) {
-			String msg = parameter.getKey() + ":type \"" + node.getType() + "\" is undefined!\n" + print(parameter.getContext());
-			throw new UnknownDataType(msg);
-		}
+    @Override
+    public Result visit(TPropertyDefinition node, Parameter parameter) throws IException {
+        if (node.getType() != null && !validateTypeIsDefined(node.getType(), typeVisitor.getDataTypes())) {
+            String msg = parameter.getKey() + ":type \"" + node.getType() + "\" is undefined!\n" + print(parameter.getContext());
+            throw new UnknownDataType(msg);
+        }
 
-		if (node.getType() != null && (node.getType().getLocalPart().equals("list") || node.getType().getLocalPart().equals("map"))) {
-			if (node.getEntry_schema() != null) {
-				TEntrySchema entrySchema = node.getEntry_schema();
-				if (entrySchema.getType() != null && !validateTypeIsDefined(entrySchema.getType(), typeVisitor.getDataTypes())) {
-					String msg = parameter.getKey() + "entry_schema:type \"" + entrySchema.getType() + "\" is undefined!" + print(parameter.getContext());
-					throw new UnknownDataType(msg);
-				}
-			}
-		}
+        if (node.getType() != null && (node.getType().getLocalPart().equals("list") || node.getType().getLocalPart().equals("map"))) {
+            if (node.getEntry_schema() != null) {
+                TEntrySchema entrySchema = node.getEntry_schema();
+                if (entrySchema.getType() != null && !validateTypeIsDefined(entrySchema.getType(), typeVisitor.getDataTypes())) {
+                    String msg = parameter.getKey() + "entry_schema:type \"" + entrySchema.getType() + "\" is undefined!" + print(parameter.getContext());
+                    throw new UnknownDataType(msg);
+                }
+            }
+        }
 
-		super.visit(node, parameter);
-		return null;
-	}
+        super.visit(node, parameter);
+        return null;
+    }
 
-	private String print(List<String> list) {
-		return "Context::INLINE = " + String.join(":", list);
-	}
+    private String print(List<String> list) {
+        return "Context::INLINE = " + String.join(":", list);
+    }
 }

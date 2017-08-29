@@ -22,80 +22,80 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tMapObject", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"map"
+    "map"
 })
 public class TMapObject implements Map<String, Object> {
-	private Map<String, Object> map;
+    private Map<String, Object> map;
 
-	public TMapObject() {
-		this.map = new LinkedHashMap<>();
-	}
+    public TMapObject() {
+        this.map = new LinkedHashMap<>();
+    }
 
-	public Map<String, Object> getMap() {
-		return map;
-	}
+    public Map<String, Object> getMap() {
+        return map;
+    }
 
-	public void setMap(Map<String, Object> map) {
-		this.map = map;
-	}
+    public void setMap(Map<String, Object> map) {
+        this.map = map;
+    }
 
-	@Override
-	public int size() {
-		return this.map.size();
-	}
+    @Override
+    public int size() {
+        return this.map.size();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this.map.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.map.isEmpty();
+    }
 
-	@Override
-	public boolean containsKey(Object o) {
-		return this.map.containsKey(o);
-	}
+    @Override
+    public boolean containsKey(Object o) {
+        return this.map.containsKey(o);
+    }
 
-	@Override
-	public boolean containsValue(Object o) {
-		return this.map.containsValue(o);
-	}
+    @Override
+    public boolean containsValue(Object o) {
+        return this.map.containsValue(o);
+    }
 
-	@Override
-	public Object get(Object o) {
-		return this.map.get(o);
-	}
+    @Override
+    public Object get(Object o) {
+        return this.map.get(o);
+    }
 
-	@Override
-	public Object put(String s, Object object) {
-		return this.map.put(s, object);
-	}
+    @Override
+    public Object put(String s, Object object) {
+        return this.map.put(s, object);
+    }
 
-	@Override
-	public Object remove(Object o) {
-		return this.map.remove(o);
-	}
+    @Override
+    public Object remove(Object o) {
+        return this.map.remove(o);
+    }
 
-	@Override
-	public void putAll(Map<? extends String, ? extends Object> map) {
-		this.map.putAll(map);
-	}
+    @Override
+    public void putAll(Map<? extends String, ? extends Object> map) {
+        this.map.putAll(map);
+    }
 
-	@Override
-	public void clear() {
-		this.map.clear();
-	}
+    @Override
+    public void clear() {
+        this.map.clear();
+    }
 
-	@Override
-	public Set<String> keySet() {
-		return this.map.keySet();
-	}
+    @Override
+    public Set<String> keySet() {
+        return this.map.keySet();
+    }
 
-	@Override
-	public Collection<Object> values() {
-		return this.map.values();
-	}
+    @Override
+    public Collection<Object> values() {
+        return this.map.values();
+    }
 
-	@Override
-	public Set<Entry<String, Object>> entrySet() {
-		return this.map.entrySet();
-	}
+    @Override
+    public Set<Entry<String, Object>> entrySet() {
+        return this.map.entrySet();
+    }
 }

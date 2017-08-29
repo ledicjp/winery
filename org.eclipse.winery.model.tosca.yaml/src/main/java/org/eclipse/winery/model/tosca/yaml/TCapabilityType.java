@@ -30,95 +30,95 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"valid_source_types"
+    "valid_source_types"
 })
 public class TCapabilityType extends TEntityType {
-	private List<QName> valid_source_types;
+    private List<QName> valid_source_types;
 
-	public TCapabilityType() {
-	}
+    public TCapabilityType() {
+    }
 
-	public TCapabilityType(Builder builder) {
-		super(builder);
-		this.setValid_source_types(builder.valid_source_types);
-	}
+    public TCapabilityType(Builder builder) {
+        super(builder);
+        this.setValid_source_types(builder.valid_source_types);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TCapabilityType)) return false;
-		TCapabilityType that = (TCapabilityType) o;
-		return Objects.equals(valid_source_types, that.valid_source_types);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCapabilityType)) return false;
+        TCapabilityType that = (TCapabilityType) o;
+        return Objects.equals(valid_source_types, that.valid_source_types);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(valid_source_types);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(valid_source_types);
+    }
 
-	@NonNull
-	public List<QName> getValid_source_types() {
-		if (this.valid_source_types == null) {
-			this.valid_source_types = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getValid_source_types() {
+        if (this.valid_source_types == null) {
+            this.valid_source_types = new ArrayList<>();
+        }
 
-		return valid_source_types;
-	}
+        return valid_source_types;
+    }
 
-	public void setValid_source_types(List<QName> valid_source_types) {
-		this.valid_source_types = valid_source_types;
-	}
+    public void setValid_source_types(List<QName> valid_source_types) {
+        this.valid_source_types = valid_source_types;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private List<QName> valid_source_types;
+    public static class Builder extends TEntityType.Builder {
+        private List<QName> valid_source_types;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setValid_source_types(List<QName> valid_source_types) {
-			this.valid_source_types = valid_source_types;
-			return this;
-		}
+        public Builder setValid_source_types(List<QName> valid_source_types) {
+            this.valid_source_types = valid_source_types;
+            return this;
+        }
 
-		public Builder addValid_source_types(List<QName> valid_source_types) {
-			if (valid_source_types == null || valid_source_types.isEmpty()) {
-				return this;
-			}
+        public Builder addValid_source_types(List<QName> valid_source_types) {
+            if (valid_source_types == null || valid_source_types.isEmpty()) {
+                return this;
+            }
 
-			if (this.valid_source_types == null) {
-				this.valid_source_types = valid_source_types;
-			} else {
-				this.valid_source_types.addAll(valid_source_types);
-			}
+            if (this.valid_source_types == null) {
+                this.valid_source_types = valid_source_types;
+            } else {
+                this.valid_source_types.addAll(valid_source_types);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addValid_source_types(QName valid_source_type) {
-			if (valid_source_type == null) {
-				return this;
-			}
+        public Builder addValid_source_types(QName valid_source_type) {
+            if (valid_source_type == null) {
+                return this;
+            }
 
-			return addValid_source_types(Collections.singletonList(valid_source_type));
-		}
+            return addValid_source_types(Collections.singletonList(valid_source_type));
+        }
 
-		public TCapabilityType build() {
-			return new TCapabilityType(this);
-		}
-	}
+        public TCapabilityType build() {
+            return new TCapabilityType(this);
+        }
+    }
 }

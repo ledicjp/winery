@@ -30,114 +30,114 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicyType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"targets",
-		"triggers"
+    "targets",
+    "triggers"
 })
 public class TPolicyType extends TEntityType {
-	private List<QName> targets;
-	private Object triggers;
+    private List<QName> targets;
+    private Object triggers;
 
-	public TPolicyType() {
-	}
+    public TPolicyType() {
+    }
 
-	public TPolicyType(Builder builder) {
-		super(builder);
-		this.setTargets(builder.targets);
-		this.setTriggers(builder.triggers);
-	}
+    public TPolicyType(Builder builder) {
+        super(builder);
+        this.setTargets(builder.targets);
+        this.setTriggers(builder.triggers);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPolicyType)) return false;
-		if (!super.equals(o)) return false;
-		TPolicyType that = (TPolicyType) o;
-		return Objects.equals(targets, that.targets) &&
-				Objects.equals(triggers, that.triggers);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPolicyType)) return false;
+        if (!super.equals(o)) return false;
+        TPolicyType that = (TPolicyType) o;
+        return Objects.equals(targets, that.targets) &&
+            Objects.equals(triggers, that.triggers);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), targets, triggers);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), targets, triggers);
+    }
 
-	@NonNull
-	public List<QName> getTargets() {
-		if (this.targets == null) {
-			this.targets = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getTargets() {
+        if (this.targets == null) {
+            this.targets = new ArrayList<>();
+        }
 
-		return targets;
-	}
+        return targets;
+    }
 
-	public void setTargets(List<QName> targets) {
-		this.targets = targets;
-	}
+    public void setTargets(List<QName> targets) {
+        this.targets = targets;
+    }
 
-	public Object getTriggers() {
-		return triggers;
-	}
+    public Object getTriggers() {
+        return triggers;
+    }
 
-	public void setTriggers(Object triggers) {
-		this.triggers = triggers;
-	}
+    public void setTriggers(Object triggers) {
+        this.triggers = triggers;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private List<QName> targets;
-		private Object triggers;
+    public static class Builder extends TEntityType.Builder {
+        private List<QName> targets;
+        private Object triggers;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setTargets(List<QName> targets) {
-			this.targets = targets;
-			return this;
-		}
+        public Builder setTargets(List<QName> targets) {
+            this.targets = targets;
+            return this;
+        }
 
-		public Builder setTriggers(Object triggers) {
-			this.triggers = triggers;
-			return this;
-		}
+        public Builder setTriggers(Object triggers) {
+            this.triggers = triggers;
+            return this;
+        }
 
-		public Builder addTargets(List<QName> targets) {
-			if (targets == null || targets.isEmpty()) {
-				return this;
-			}
+        public Builder addTargets(List<QName> targets) {
+            if (targets == null || targets.isEmpty()) {
+                return this;
+            }
 
-			if (this.targets == null) {
-				this.targets = targets;
-			} else {
-				this.targets.addAll(targets);
-			}
+            if (this.targets == null) {
+                this.targets = targets;
+            } else {
+                this.targets.addAll(targets);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addTargets(QName target) {
-			if (target == null) {
-				return this;
-			}
+        public Builder addTargets(QName target) {
+            if (target == null) {
+                return this;
+            }
 
-			return addTargets(Collections.singletonList(target));
-		}
+            return addTargets(Collections.singletonList(target));
+        }
 
-		public TPolicyType build() {
-			return new TPolicyType(this);
-		}
-	}
+        public TPolicyType build() {
+            return new TPolicyType(this);
+        }
+    }
 }

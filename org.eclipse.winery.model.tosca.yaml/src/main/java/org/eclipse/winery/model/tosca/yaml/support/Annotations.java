@@ -18,10 +18,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public @interface Annotations {
-	@Documented
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.PACKAGE, ElementType.PARAMETER, ElementType.TYPE})
-	@interface StandardExtension {
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.PACKAGE, ElementType.PARAMETER, ElementType.TYPE})
+    @interface StandardExtension {
 
-	}
+    }
 }

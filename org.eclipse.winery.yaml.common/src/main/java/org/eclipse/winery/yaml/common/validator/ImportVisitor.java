@@ -22,46 +22,46 @@ import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class ImportVisitor extends AbstractVisitor<Result, Parameter> {
-	protected final String path;
-	protected String namespace;
+    protected final String path;
+    protected String namespace;
 
-	public ImportVisitor(String namespace, String path) {
-		this.path = path;
-		this.namespace = namespace;
-	}
+    public ImportVisitor(String namespace, String path) {
+        this.path = path;
+        this.namespace = namespace;
+    }
 
-	@Override
-	public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
-		Reader reader = new Reader();
-		if (!this.namespace.equals(Namespaces.TOSCA_NS)) {
-			TServiceTemplate serviceTemplate = reader.parseSkipTest(
-					this.getClass().getClassLoader().getResource(Defaults.TOSCA_NORMATIVE_TYPES).getFile(), Namespaces.TOSCA_NS);
-			String tmpNamespace = this.namespace;
-			this.namespace = Namespaces.TOSCA_NS;
-			this.visit(serviceTemplate, new Parameter());
-			this.namespace = tmpNamespace;
-		}
+    @Override
+    public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
+        Reader reader = new Reader();
+        if (!this.namespace.equals(Namespaces.TOSCA_NS)) {
+            TServiceTemplate serviceTemplate = reader.parseSkipTest(
+                this.getClass().getClassLoader().getResource(Defaults.TOSCA_NORMATIVE_TYPES).getFile(), Namespaces.TOSCA_NS);
+            String tmpNamespace = this.namespace;
+            this.namespace = Namespaces.TOSCA_NS;
+            this.visit(serviceTemplate, new Parameter());
+            this.namespace = tmpNamespace;
+        }
 
-		super.visit(node, parameter);
-		return null;
-	}
+        super.visit(node, parameter);
+        return null;
+    }
 
-	@Override
-	public Result visit(TImportDefinition node, Parameter parameter) throws IException {
-		Reader reader = new Reader();
-		String importNamespace = node.getNamespace_uri() == null ? this.namespace : node.getNamespace_uri();
-		TServiceTemplate serviceTemplate = reader.parse(node, path, importNamespace);
-		if (serviceTemplate != null) {
-			String tmpNamespace = this.namespace;
-			this.namespace = importNamespace;
-			this.visit(serviceTemplate, new Parameter());
-			this.namespace = tmpNamespace;
-		}
-		super.visit(node, parameter);
-		return null;
-	}
+    @Override
+    public Result visit(TImportDefinition node, Parameter parameter) throws IException {
+        Reader reader = new Reader();
+        String importNamespace = node.getNamespace_uri() == null ? this.namespace : node.getNamespace_uri();
+        TServiceTemplate serviceTemplate = reader.parse(node, path, importNamespace);
+        if (serviceTemplate != null) {
+            String tmpNamespace = this.namespace;
+            this.namespace = importNamespace;
+            this.visit(serviceTemplate, new Parameter());
+            this.namespace = tmpNamespace;
+        }
+        super.visit(node, parameter);
+        return null;
+    }
 
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 }

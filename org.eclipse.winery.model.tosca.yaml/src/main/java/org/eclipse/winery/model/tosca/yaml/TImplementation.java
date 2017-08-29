@@ -34,104 +34,104 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tImplementation", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"primary",
-		"dependencies"
+    "primary",
+    "dependencies"
 })
 public class TImplementation {
-	@XmlAttribute(name = "primary", required = true)
-	private QName primary;
-	private List<QName> dependencies;
+    @XmlAttribute(name = "primary", required = true)
+    private QName primary;
+    private List<QName> dependencies;
 
-	public TImplementation() {
+    public TImplementation() {
 
-	}
+    }
 
-	public TImplementation(QName primary) {
-		this.primary = primary;
-	}
+    public TImplementation(QName primary) {
+        this.primary = primary;
+    }
 
-	public TImplementation(Builder builder) {
-		this.setPrimary(builder.primary);
-		this.setDependencies(builder.dependencies);
-	}
+    public TImplementation(Builder builder) {
+        this.setPrimary(builder.primary);
+        this.setDependencies(builder.dependencies);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TImplementation)) return false;
-		TImplementation that = (TImplementation) o;
-		return Objects.equals(primary, that.primary) &&
-				Objects.equals(dependencies, that.dependencies);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TImplementation)) return false;
+        TImplementation that = (TImplementation) o;
+        return Objects.equals(primary, that.primary) &&
+            Objects.equals(dependencies, that.dependencies);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(primary, dependencies);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(primary, dependencies);
+    }
 
-	@NonNull
-	public QName getPrimary() {
-		return primary;
-	}
+    @NonNull
+    public QName getPrimary() {
+        return primary;
+    }
 
-	public void setPrimary(QName primary) {
-		this.primary = primary;
-	}
+    public void setPrimary(QName primary) {
+        this.primary = primary;
+    }
 
-	@NonNull
-	public List<QName> getDependencies() {
-		if (this.dependencies == null) {
-			this.dependencies = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getDependencies() {
+        if (this.dependencies == null) {
+            this.dependencies = new ArrayList<>();
+        }
 
-		return dependencies;
-	}
+        return dependencies;
+    }
 
-	public void setDependencies(List<QName> dependencies) {
-		this.dependencies = dependencies;
-	}
+    public void setDependencies(List<QName> dependencies) {
+        this.dependencies = dependencies;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName primary;
-		private List<QName> dependencies;
+    public static class Builder {
+        private final QName primary;
+        private List<QName> dependencies;
 
-		public Builder(QName primary) {
-			this.primary = primary;
-		}
+        public Builder(QName primary) {
+            this.primary = primary;
+        }
 
-		public Builder setDependencies(List<QName> dependencies) {
-			this.dependencies = dependencies;
-			return this;
-		}
+        public Builder setDependencies(List<QName> dependencies) {
+            this.dependencies = dependencies;
+            return this;
+        }
 
-		public Builder addDependencies(List<QName> dependencies) {
-			if (dependencies == null || dependencies.isEmpty()) {
-				return this;
-			}
+        public Builder addDependencies(List<QName> dependencies) {
+            if (dependencies == null || dependencies.isEmpty()) {
+                return this;
+            }
 
-			if (this.dependencies == null) {
-				this.dependencies = dependencies;
-			} else {
-				this.dependencies.addAll(dependencies);
-			}
+            if (this.dependencies == null) {
+                this.dependencies = dependencies;
+            } else {
+                this.dependencies.addAll(dependencies);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addDependencies(QName dependency) {
-			if (dependency == null) {
-				return this;
-			}
+        public Builder addDependencies(QName dependency) {
+            if (dependency == null) {
+                return this;
+            }
 
-			return addDependencies(Collections.singletonList(dependency));
-		}
+            return addDependencies(Collections.singletonList(dependency));
+        }
 
-		public TImplementation build() {
-			return new TImplementation(this);
-		}
-	}
+        public TImplementation build() {
+            return new TImplementation(this);
+        }
+    }
 }

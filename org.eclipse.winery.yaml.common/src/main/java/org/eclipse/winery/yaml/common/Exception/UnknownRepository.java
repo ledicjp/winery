@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class UnknownRepository extends YAMLParserException {
-	public UnknownRepository(String msg) {
-		super(msg);
-	}
+    public UnknownRepository(String msg) {
+        super(msg);
+    }
 }

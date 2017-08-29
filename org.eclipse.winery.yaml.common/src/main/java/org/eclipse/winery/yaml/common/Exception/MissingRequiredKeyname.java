@@ -12,12 +12,12 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class MissingRequiredKeyname extends YAMLParserException {
-	private final String keyname;
-	private final String context;
+    private final String keyname;
+    private final String context;
 
-	public MissingRequiredKeyname(String keyname, String context) {
-		super("The " + context + " is missing the required keyname \"" + keyname + "\".");
-		this.keyname = keyname;
-		this.context = context;
-	}
+    public MissingRequiredKeyname(String keyname, String context) {
+        super("The " + context + " is missing the required keyname \"" + keyname + "\".");
+        this.keyname = keyname;
+        this.context = context;
+    }
 }

@@ -23,14 +23,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 public class AnonymousPropertiesList {
-	@XmlAnyElement
-	private List<JAXBElement> entries = new ArrayList<>();
+    @XmlAnyElement
+    private List<JAXBElement> entries = new ArrayList<>();
 
-	public AnonymousPropertiesList() {
+    public AnonymousPropertiesList() {
 
-	}
+    }
 
-	public AnonymousPropertiesList(String name, List<JAXBElement> entries) {
-		this.entries = entries;
-	}
+    public AnonymousPropertiesList(String name, List<JAXBElement> entries) {
+        this.entries = entries;
+    }
 }

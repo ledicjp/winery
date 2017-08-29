@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TListString", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"list"
+	"list"
 })
 public class TListString implements List<String> {
 	private List<String> list;

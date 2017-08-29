@@ -26,42 +26,42 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tVersion", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"version"
+    "version"
 })
 public class TVersion {
-	private String version;
+    private String version;
 
-	public TVersion() {
+    public TVersion() {
 
-	}
+    }
 
-	public TVersion(String version) {
-		this.version = version;
-	}
+    public TVersion(String version) {
+        this.version = version;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TVersion)) return false;
-		TVersion tVersion = (TVersion) o;
-		return Objects.equals(version, tVersion.version);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TVersion)) return false;
+        TVersion tVersion = (TVersion) o;
+        return Objects.equals(version, tVersion.version);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(version);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(version);
+    }
 
-	@Nullable
-	public String getVersion() {
-		return version;
-	}
+    @Nullable
+    public String getVersion() {
+        return version;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 }

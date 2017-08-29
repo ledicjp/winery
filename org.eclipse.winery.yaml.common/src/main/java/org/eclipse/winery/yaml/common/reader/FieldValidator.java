@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 
 public class FieldValidator {
-	public void validateServiceTemplate(Map<String, Object> fields) {
-		Arrays.stream(TServiceTemplate.class.getDeclaredFields()).map(field -> field.getName()).collect(Collectors.toList());
-	}
+    public void validateServiceTemplate(Map<String, Object> fields) {
+        Arrays.stream(TServiceTemplate.class.getDeclaredFields()).map(field -> field.getName()).collect(Collectors.toList());
+    }
 }

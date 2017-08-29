@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class InvalidParentType extends YAMLParserException {
-	public InvalidParentType(String msg) {
-		super(msg);
-	}
+    public InvalidParentType(String msg) {
+        super(msg);
+    }
 }

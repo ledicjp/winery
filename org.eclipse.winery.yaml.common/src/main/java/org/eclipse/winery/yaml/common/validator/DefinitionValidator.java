@@ -26,31 +26,31 @@ import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
 public class DefinitionValidator extends AbstractVisitor<Result, Parameter> {
-	private DefinitionsVisitor definitionsVisitor;
+    private DefinitionsVisitor definitionsVisitor;
 
-	public DefinitionValidator(String path) {
-		definitionsVisitor = new DefinitionsVisitor(Namespaces.DEFAULT_NS, path);
-	}
+    public DefinitionValidator(String path) {
+        definitionsVisitor = new DefinitionsVisitor(Namespaces.DEFAULT_NS, path);
+    }
 
-	public void validate(TServiceTemplate serviceTemplate) throws IException {
-		definitionsVisitor.visit(serviceTemplate, new Parameter());
-	}
+    public void validate(TServiceTemplate serviceTemplate) throws IException {
+        definitionsVisitor.visit(serviceTemplate, new Parameter());
+    }
 
-	@Override
-	public Result visit(TImportDefinition node, Parameter parameter) throws IException {
-		if (!isDefined(node.getRepository(), definitionsVisitor.getRepositoryDefinitions())) {
-			String msg = "No Repository definition for property repository \"" +
-					node.getRepository() + "\" found! \n" + print(parameter.getContext());
-			throw new MissingRepositoryDefinition(msg);
-		}
-		return super.visit(node, parameter);
-	}
+    @Override
+    public Result visit(TImportDefinition node, Parameter parameter) throws IException {
+        if (!isDefined(node.getRepository(), definitionsVisitor.getRepositoryDefinitions())) {
+            String msg = "No Repository definition for property repository \"" +
+                node.getRepository() + "\" found! \n" + print(parameter.getContext());
+            throw new MissingRepositoryDefinition(msg);
+        }
+        return super.visit(node, parameter);
+    }
 
-	private Boolean isDefined(QName name, Map<String, List<String>> map) {
-		return name == null || map.containsKey(name.getNamespaceURI()) && map.get(name.getNamespaceURI()).contains(name.getLocalPart());
-	}
+    private Boolean isDefined(QName name, Map<String, List<String>> map) {
+        return name == null || map.containsKey(name.getNamespaceURI()) && map.get(name.getNamespaceURI()).contains(name.getLocalPart());
+    }
 
-	private String print(List<String> list) {
-		return "Context::INLINE = " + String.join(":", list);
-	}
+    private String print(List<String> list) {
+        return "Context::INLINE = " + String.join(":", list);
+    }
 }

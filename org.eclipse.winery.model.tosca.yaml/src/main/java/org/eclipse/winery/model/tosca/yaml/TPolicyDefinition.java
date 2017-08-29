@@ -35,183 +35,183 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPolicyDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"description",
-		"metadata",
-		"properties",
-		"targets"
+    "type",
+    "description",
+    "metadata",
+    "properties",
+    "targets"
 })
 public class TPolicyDefinition {
-	@XmlAttribute(name = "type", required = true)
-	private QName type;
-	private String description;
-	private Metadata metadata;
-	private Map<String, TPropertyAssignment> properties;
-	private List<QName> targets;
+    @XmlAttribute(name = "type", required = true)
+    private QName type;
+    private String description;
+    private Metadata metadata;
+    private Map<String, TPropertyAssignment> properties;
+    private List<QName> targets;
 
-	public TPolicyDefinition() {
-	}
+    public TPolicyDefinition() {
+    }
 
-	public TPolicyDefinition(Builder builder) {
-		this.setType(builder.type);
-		this.setDescription(builder.description);
-		this.setMetadata(builder.metadata);
-		this.setProperties(builder.properties);
-		this.setTargets(builder.targets);
-	}
+    public TPolicyDefinition(Builder builder) {
+        this.setType(builder.type);
+        this.setDescription(builder.description);
+        this.setMetadata(builder.metadata);
+        this.setProperties(builder.properties);
+        this.setTargets(builder.targets);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPolicyDefinition)) return false;
-		TPolicyDefinition that = (TPolicyDefinition) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(description, that.description) &&
-				Objects.equals(metadata, that.metadata) &&
-				Objects.equals(properties, that.properties) &&
-				Objects.equals(targets, that.targets);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPolicyDefinition)) return false;
+        TPolicyDefinition that = (TPolicyDefinition) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(metadata, that.metadata) &&
+            Objects.equals(properties, that.properties) &&
+            Objects.equals(targets, that.targets);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, description, metadata, properties, targets);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, description, metadata, properties, targets);
+    }
 
-	@NonNull
-	public QName getType() {
-		return type;
-	}
+    @NonNull
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Nullable
-	public Metadata getMetadata() {
-		return metadata;
-	}
+    @Nullable
+    public Metadata getMetadata() {
+        return metadata;
+    }
 
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
-	}
+    public void setMetadata(Metadata metadata) {
+        this.metadata = metadata;
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignment> getProperties() {
-		if (this.properties == null) {
-			this.properties = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignment> getProperties() {
+        if (this.properties == null) {
+            this.properties = new LinkedHashMap<>();
+        }
 
-		return properties;
-	}
+        return properties;
+    }
 
-	public void setProperties(Map<String, TPropertyAssignment> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, TPropertyAssignment> properties) {
+        this.properties = properties;
+    }
 
-	@NonNull
-	public List<QName> getTargets() {
-		if (this.targets == null) {
-			this.targets = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getTargets() {
+        if (this.targets == null) {
+            this.targets = new ArrayList<>();
+        }
 
-		return targets;
-	}
+        return targets;
+    }
 
-	public void setTargets(List<QName> targets) {
-		this.targets = targets;
-	}
+    public void setTargets(List<QName> targets) {
+        this.targets = targets;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private String description;
-		private Metadata metadata;
-		private Map<String, TPropertyAssignment> properties;
-		private List<QName> targets;
+    public static class Builder {
+        private final QName type;
+        private String description;
+        private Metadata metadata;
+        private Map<String, TPropertyAssignment> properties;
+        private List<QName> targets;
 
 
-		public Builder(QName type) {
-			this.type = type;
-		}
+        public Builder(QName type) {
+            this.type = type;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setMetadata(Metadata metadata) {
-			this.metadata = metadata;
-			return this;
-		}
+        public Builder setMetadata(Metadata metadata) {
+            this.metadata = metadata;
+            return this;
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			this.properties = properties;
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            this.properties = properties;
+            return this;
+        }
 
-		public Builder setTargets(List<QName> targets) {
-			this.targets = targets;
-			return this;
-		}
+        public Builder setTargets(List<QName> targets) {
+            this.targets = targets;
+            return this;
+        }
 
-		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
-			if (properties == null || properties.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+            if (properties == null || properties.isEmpty()) {
+                return this;
+            }
 
-			if (this.properties == null) {
-				this.properties = properties;
-			} else {
-				this.properties.putAll(properties);
-			}
+            if (this.properties == null) {
+                this.properties = properties;
+            } else {
+                this.properties.putAll(properties);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addProperties(String name, TPropertyAssignment property) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(String name, TPropertyAssignment property) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addProperties(Collections.singletonMap(name, property));
-		}
+            return addProperties(Collections.singletonMap(name, property));
+        }
 
-		public Builder addTargets(List<QName> targets) {
-			if (targets == null || targets.isEmpty()) {
-				return this;
-			}
+        public Builder addTargets(List<QName> targets) {
+            if (targets == null || targets.isEmpty()) {
+                return this;
+            }
 
-			if (this.targets == null) {
-				this.targets = targets;
-			} else {
-				this.targets.addAll(targets);
-			}
+            if (this.targets == null) {
+                this.targets = targets;
+            } else {
+                this.targets.addAll(targets);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addTargets(QName target) {
-			if (target == null) {
-				return this;
-			}
+        public Builder addTargets(QName target) {
+            if (target == null) {
+                return this;
+            }
 
-			return addTargets(Collections.singletonList(target));
-		}
+            return addTargets(Collections.singletonList(target));
+        }
 
-		public TPolicyDefinition build() {
-			return new TPolicyDefinition(this);
-		}
-	}
+        public TPolicyDefinition build() {
+            return new TPolicyDefinition(this);
+        }
+    }
 }

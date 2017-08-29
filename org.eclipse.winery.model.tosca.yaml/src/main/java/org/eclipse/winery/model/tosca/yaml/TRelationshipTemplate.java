@@ -33,246 +33,246 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"description",
-		"metadata",
-		"properties",
-		"attributes",
-		"interfaces",
-		"copy"
+    "type",
+    "description",
+    "metadata",
+    "properties",
+    "attributes",
+    "interfaces",
+    "copy"
 })
 public class TRelationshipTemplate {
-	@XmlAttribute(name = "type", required = true)
-	private QName type;
-	private String description;
-	private Metadata metadata;
-	private Map<String, TPropertyAssignment> properties;
-	private Map<String, TAttributeAssignment> attributes;
-	private Map<String, TInterfaceDefinition> interfaces;
-	private QName copy;
+    @XmlAttribute(name = "type", required = true)
+    private QName type;
+    private String description;
+    private Metadata metadata;
+    private Map<String, TPropertyAssignment> properties;
+    private Map<String, TAttributeAssignment> attributes;
+    private Map<String, TInterfaceDefinition> interfaces;
+    private QName copy;
 
-	public TRelationshipTemplate() {
-	}
+    public TRelationshipTemplate() {
+    }
 
-	public TRelationshipTemplate(Builder builder) {
-		this.setType(builder.type);
-		this.setDescription(builder.description);
-		this.setMetadata(builder.metadata);
-		this.setAttributes(builder.attributes);
-		this.setProperties(builder.properties);
-		this.setInterfaces(builder.interfaces);
-		this.setCopy(builder.copy);
-	}
+    public TRelationshipTemplate(Builder builder) {
+        this.setType(builder.type);
+        this.setDescription(builder.description);
+        this.setMetadata(builder.metadata);
+        this.setAttributes(builder.attributes);
+        this.setProperties(builder.properties);
+        this.setInterfaces(builder.interfaces);
+        this.setCopy(builder.copy);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRelationshipTemplate)) return false;
-		TRelationshipTemplate that = (TRelationshipTemplate) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(description, that.description) &&
-				Objects.equals(metadata, that.metadata) &&
-				Objects.equals(properties, that.properties) &&
-				Objects.equals(attributes, that.attributes) &&
-				Objects.equals(interfaces, that.interfaces) &&
-				Objects.equals(copy, that.copy);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRelationshipTemplate)) return false;
+        TRelationshipTemplate that = (TRelationshipTemplate) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(metadata, that.metadata) &&
+            Objects.equals(properties, that.properties) &&
+            Objects.equals(attributes, that.attributes) &&
+            Objects.equals(interfaces, that.interfaces) &&
+            Objects.equals(copy, that.copy);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, description, metadata, properties, attributes, interfaces, copy);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, description, metadata, properties, attributes, interfaces, copy);
+    }
 
-	@NonNull
-	public QName getType() {
-		return type;
-	}
+    @NonNull
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Nullable
-	public Metadata getMetadata() {
-		return metadata;
-	}
+    @Nullable
+    public Metadata getMetadata() {
+        return metadata;
+    }
 
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
-	}
+    public void setMetadata(Metadata metadata) {
+        this.metadata = metadata;
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignment> getProperties() {
-		if (this.properties == null) {
-			this.properties = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignment> getProperties() {
+        if (this.properties == null) {
+            this.properties = new LinkedHashMap<>();
+        }
 
-		return properties;
-	}
+        return properties;
+    }
 
-	public void setProperties(Map<String, TPropertyAssignment> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, TPropertyAssignment> properties) {
+        this.properties = properties;
+    }
 
-	@NonNull
-	public Map<String, TInterfaceDefinition> getInterfaces() {
-		if (this.interfaces == null) {
-			this.interfaces = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TInterfaceDefinition> getInterfaces() {
+        if (this.interfaces == null) {
+            this.interfaces = new LinkedHashMap<>();
+        }
 
-		return interfaces;
-	}
+        return interfaces;
+    }
 
-	public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-		this.interfaces = interfaces;
-	}
+    public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+        this.interfaces = interfaces;
+    }
 
-	@Nullable
-	public QName getCopy() {
-		return copy;
-	}
+    @Nullable
+    public QName getCopy() {
+        return copy;
+    }
 
-	public void setCopy(QName copy) {
-		this.copy = copy;
-	}
+    public void setCopy(QName copy) {
+        this.copy = copy;
+    }
 
-	@NonNull
-	public Map<String, TAttributeAssignment> getAttributes() {
-		if (this.attributes == null) {
-			this.attributes = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TAttributeAssignment> getAttributes() {
+        if (this.attributes == null) {
+            this.attributes = new LinkedHashMap<>();
+        }
 
-		return attributes;
-	}
+        return attributes;
+    }
 
-	public void setAttributes(Map<String, TAttributeAssignment> attributes) {
-		this.attributes = attributes;
-	}
+    public void setAttributes(Map<String, TAttributeAssignment> attributes) {
+        this.attributes = attributes;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private String description;
-		private Metadata metadata;
-		private Map<String, TAttributeAssignment> attributes;
-		private Map<String, TPropertyAssignment> properties;
-		private Map<String, TInterfaceDefinition> interfaces;
-		private QName copy;
+    public static class Builder {
+        private final QName type;
+        private String description;
+        private Metadata metadata;
+        private Map<String, TAttributeAssignment> attributes;
+        private Map<String, TPropertyAssignment> properties;
+        private Map<String, TInterfaceDefinition> interfaces;
+        private QName copy;
 
-		public Builder(QName type) {
-			this.type = type;
-		}
+        public Builder(QName type) {
+            this.type = type;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setMetadata(Metadata metadata) {
-			this.metadata = metadata;
-			return this;
-		}
+        public Builder setMetadata(Metadata metadata) {
+            this.metadata = metadata;
+            return this;
+        }
 
-		public Builder setAttributes(Map<String, TAttributeAssignment> attributes) {
-			this.attributes = attributes;
-			return this;
-		}
+        public Builder setAttributes(Map<String, TAttributeAssignment> attributes) {
+            this.attributes = attributes;
+            return this;
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			this.properties = properties;
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            this.properties = properties;
+            return this;
+        }
 
-		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}
+        public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
 
-		public Builder setCopy(QName copy) {
-			this.copy = copy;
-			return this;
-		}
+        public Builder setCopy(QName copy) {
+            this.copy = copy;
+            return this;
+        }
 
-		public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
-			if (attributes == null || attributes.isEmpty()) {
-				return this;
-			}
+        public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
+            if (attributes == null || attributes.isEmpty()) {
+                return this;
+            }
 
-			if (this.attributes == null) {
-				this.attributes = attributes;
-			} else {
-				this.attributes.putAll(attributes);
-			}
+            if (this.attributes == null) {
+                this.attributes = attributes;
+            } else {
+                this.attributes.putAll(attributes);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addAttribtues(String name, TAttributeAssignment attribute) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addAttribtues(String name, TAttributeAssignment attribute) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return this.addAttributes(Collections.singletonMap(name, attribute));
-		}
+            return this.addAttributes(Collections.singletonMap(name, attribute));
+        }
 
-		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
-			if (properties == null || properties.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+            if (properties == null || properties.isEmpty()) {
+                return this;
+            }
 
-			if (this.properties == null) {
-				this.properties = properties;
-			} else {
-				this.properties.putAll(properties);
-			}
+            if (this.properties == null) {
+                this.properties = properties;
+            } else {
+                this.properties.putAll(properties);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addProperties(String name, TPropertyAssignment property) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(String name, TPropertyAssignment property) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addProperties(Collections.singletonMap(name, property));
-		}
+            return addProperties(Collections.singletonMap(name, property));
+        }
 
-		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			if (interfaces == null || interfaces.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            if (interfaces == null || interfaces.isEmpty()) {
+                return this;
+            }
 
-			if (this.interfaces == null) {
-				this.interfaces = interfaces;
-			} else {
-				this.interfaces.putAll(interfaces);
-			}
+            if (this.interfaces == null) {
+                this.interfaces = interfaces;
+            } else {
+                this.interfaces.putAll(interfaces);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addInterfaces(Collections.singletonMap(name, _interface));
-		}
+            return addInterfaces(Collections.singletonMap(name, _interface));
+        }
 
-		public TRelationshipTemplate build() {
-			return new TRelationshipTemplate(this);
-		}
-	}
+        public TRelationshipTemplate build() {
+            return new TRelationshipTemplate(this);
+        }
+    }
 }

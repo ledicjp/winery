@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class ImplementationArtifactInvalidOnInterfaceType extends YAMLParserException {
-	public ImplementationArtifactInvalidOnInterfaceType(String msg) {
-		super(msg);
-	}
+    public ImplementationArtifactInvalidOnInterfaceType(String msg) {
+        super(msg);
+    }
 }

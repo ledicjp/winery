@@ -27,69 +27,69 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tParameterDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"value"
+    "value"
 })
 public class TParameterDefinition extends TPropertyDefinition {
-	private Object value;
+    private Object value;
 
-	public TParameterDefinition() {
-	}
+    public TParameterDefinition() {
+    }
 
-	public TParameterDefinition(Builder builder) {
-		super(builder);
-		this.setValue(builder.value);
-	}
+    public TParameterDefinition(Builder builder) {
+        super(builder);
+        this.setValue(builder.value);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TParameterDefinition)) return false;
-		TParameterDefinition that = (TParameterDefinition) o;
-		return Objects.equals(value, that.value);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TParameterDefinition)) return false;
+        TParameterDefinition that = (TParameterDefinition) o;
+        return Objects.equals(value, that.value);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(value);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 
-	@Nullable
-	public Object getValue() {
-		return value;
-	}
+    @Nullable
+    public Object getValue() {
+        return value;
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TPropertyDefinition.Builder {
-		private Object value;
+    public static class Builder extends TPropertyDefinition.Builder {
+        private Object value;
 
-		public Builder(QName type) {
-			super(type);
-		}
+        public Builder(QName type) {
+            super(type);
+        }
 
-		public Builder(TPropertyDefinition propertyDefinition) {
-			super(propertyDefinition);
-		}
+        public Builder(TPropertyDefinition propertyDefinition) {
+            super(propertyDefinition);
+        }
 
-		public Builder setValue(Object value) {
-			this.value = value;
-			return this;
-		}
+        public Builder setValue(Object value) {
+            this.value = value;
+            return this;
+        }
 
-		public TParameterDefinition build() {
-			return new TParameterDefinition(this);
-		}
-	}
+        public TParameterDefinition build() {
+            return new TParameterDefinition(this);
+        }
+    }
 }

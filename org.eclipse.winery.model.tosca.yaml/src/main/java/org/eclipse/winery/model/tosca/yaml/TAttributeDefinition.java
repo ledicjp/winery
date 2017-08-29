@@ -30,132 +30,132 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tAttributeDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"description",
-		"type",
-		"_default",
-		"status",
-		"entry_schema"
+    "description",
+    "type",
+    "_default",
+    "status",
+    "entry_schema"
 })
 public class TAttributeDefinition {
-	private String description;
-	@XmlAttribute(name = "type", required = true)
-	private QName type;
-	@XmlElement(name = "default")
-	private Object _default;
-	private TStatusValue status;
-	private TEntrySchema entry_schema;
+    private String description;
+    @XmlAttribute(name = "type", required = true)
+    private QName type;
+    @XmlElement(name = "default")
+    private Object _default;
+    private TStatusValue status;
+    private TEntrySchema entry_schema;
 
-	public TAttributeDefinition() {
-	}
+    public TAttributeDefinition() {
+    }
 
-	public TAttributeDefinition(Builder builder) {
-		this.setType(builder.type);
-		this.setDescription(builder.description);
-		this.setDefault(builder._default);
-		this.setStatus(builder.status);
-		this.setEntry_schema(builder.entry_schema);
-	}
+    public TAttributeDefinition(Builder builder) {
+        this.setType(builder.type);
+        this.setDescription(builder.description);
+        this.setDefault(builder._default);
+        this.setStatus(builder.status);
+        this.setEntry_schema(builder.entry_schema);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TAttributeDefinition)) return false;
-		TAttributeDefinition that = (TAttributeDefinition) o;
-		return Objects.equals(description, that.description) &&
-				Objects.equals(type, that.type) &&
-				Objects.equals(_default, that._default) &&
-				status == that.status &&
-				Objects.equals(entry_schema, that.entry_schema);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TAttributeDefinition)) return false;
+        TAttributeDefinition that = (TAttributeDefinition) o;
+        return Objects.equals(description, that.description) &&
+            Objects.equals(type, that.type) &&
+            Objects.equals(_default, that._default) &&
+            status == that.status &&
+            Objects.equals(entry_schema, that.entry_schema);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(description, type, _default, status, entry_schema);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, type, _default, status, entry_schema);
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@NonNull
-	public QName getType() {
-		return type;
-	}
+    @NonNull
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@Nullable
-	public Object getDefault() {
-		return _default;
-	}
+    @Nullable
+    public Object getDefault() {
+        return _default;
+    }
 
-	public void setDefault(Object _default) {
-		this._default = _default;
-	}
+    public void setDefault(Object _default) {
+        this._default = _default;
+    }
 
-	@Nullable
-	public TStatusValue getStatus() {
-		return status;
-	}
+    @Nullable
+    public TStatusValue getStatus() {
+        return status;
+    }
 
-	public void setStatus(TStatusValue status) {
-		this.status = status;
-	}
+    public void setStatus(TStatusValue status) {
+        this.status = status;
+    }
 
-	@Nullable
-	public TEntrySchema getEntry_schema() {
-		return entry_schema;
-	}
+    @Nullable
+    public TEntrySchema getEntry_schema() {
+        return entry_schema;
+    }
 
-	public void setEntry_schema(TEntrySchema entry_schema) {
-		this.entry_schema = entry_schema;
-	}
+    public void setEntry_schema(TEntrySchema entry_schema) {
+        this.entry_schema = entry_schema;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private String description;
-		private Object _default;
-		private TStatusValue status;
-		private TEntrySchema entry_schema;
+    public static class Builder {
+        private final QName type;
+        private String description;
+        private Object _default;
+        private TStatusValue status;
+        private TEntrySchema entry_schema;
 
-		public Builder(QName type) {
-			this.type = type;
-		}
+        public Builder(QName type) {
+            this.type = type;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder set_default(Object _default) {
-			this._default = _default;
-			return this;
-		}
+        public Builder set_default(Object _default) {
+            this._default = _default;
+            return this;
+        }
 
-		public Builder setStatus(TStatusValue status) {
-			this.status = status;
-			return this;
-		}
+        public Builder setStatus(TStatusValue status) {
+            this.status = status;
+            return this;
+        }
 
-		public Builder setEntry_schema(TEntrySchema entry_schema) {
-			this.entry_schema = entry_schema;
-			return this;
-		}
+        public Builder setEntry_schema(TEntrySchema entry_schema) {
+            this.entry_schema = entry_schema;
+            return this;
+        }
 
-		public TAttributeDefinition build() {
-			return new TAttributeDefinition(this);
-		}
-	}
+        public TAttributeDefinition build() {
+            return new TAttributeDefinition(this);
+        }
+    }
 }
 

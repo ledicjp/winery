@@ -24,80 +24,80 @@ import org.eclipse.winery.model.tosca.yaml.TImportDefinition;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tMapImportDefinition", namespace = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"map"
+    "map"
 })
 public class TMapImportDefinition implements Map<String, TImportDefinition> {
-	private Map<String, TImportDefinition> map;
+    private Map<String, TImportDefinition> map;
 
-	public TMapImportDefinition() {
-		this.map = new LinkedHashMap<>();
-	}
+    public TMapImportDefinition() {
+        this.map = new LinkedHashMap<>();
+    }
 
-	public Map<String, TImportDefinition> getMap() {
-		return map;
-	}
+    public Map<String, TImportDefinition> getMap() {
+        return map;
+    }
 
-	public void setMap(Map<String, TImportDefinition> map) {
-		this.map = map;
-	}
+    public void setMap(Map<String, TImportDefinition> map) {
+        this.map = map;
+    }
 
-	@Override
-	public int size() {
-		return this.map.size();
-	}
+    @Override
+    public int size() {
+        return this.map.size();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this.map.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.map.isEmpty();
+    }
 
-	@Override
-	public boolean containsKey(Object o) {
-		return this.map.containsKey(o);
-	}
+    @Override
+    public boolean containsKey(Object o) {
+        return this.map.containsKey(o);
+    }
 
-	@Override
-	public boolean containsValue(Object o) {
-		return this.map.containsValue(o);
-	}
+    @Override
+    public boolean containsValue(Object o) {
+        return this.map.containsValue(o);
+    }
 
-	@Override
-	public TImportDefinition get(Object o) {
-		return this.map.get(o);
-	}
+    @Override
+    public TImportDefinition get(Object o) {
+        return this.map.get(o);
+    }
 
-	@Override
-	public TImportDefinition put(String s, TImportDefinition importDefinition) {
-		return this.map.put(s, importDefinition);
-	}
+    @Override
+    public TImportDefinition put(String s, TImportDefinition importDefinition) {
+        return this.map.put(s, importDefinition);
+    }
 
-	@Override
-	public TImportDefinition remove(Object o) {
-		return this.map.remove(o);
-	}
+    @Override
+    public TImportDefinition remove(Object o) {
+        return this.map.remove(o);
+    }
 
-	@Override
-	public void putAll(Map<? extends String, ? extends TImportDefinition> map) {
-		this.map.putAll(map);
-	}
+    @Override
+    public void putAll(Map<? extends String, ? extends TImportDefinition> map) {
+        this.map.putAll(map);
+    }
 
-	@Override
-	public void clear() {
-		this.map.clear();
-	}
+    @Override
+    public void clear() {
+        this.map.clear();
+    }
 
-	@Override
-	public Set<String> keySet() {
-		return this.map.keySet();
-	}
+    @Override
+    public Set<String> keySet() {
+        return this.map.keySet();
+    }
 
-	@Override
-	public Collection<TImportDefinition> values() {
-		return this.map.values();
-	}
+    @Override
+    public Collection<TImportDefinition> values() {
+        return this.map.values();
+    }
 
-	@Override
-	public Set<Entry<String, TImportDefinition>> entrySet() {
-		return this.map.entrySet();
-	}
+    @Override
+    public Set<Entry<String, TImportDefinition>> entrySet() {
+        return this.map.entrySet();
+    }
 }

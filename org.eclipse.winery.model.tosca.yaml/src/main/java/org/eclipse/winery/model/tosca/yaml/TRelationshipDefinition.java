@@ -34,107 +34,107 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"interfaces"
+    "type",
+    "interfaces"
 })
 public class TRelationshipDefinition {
-	private QName type;
-	private Map<String, TInterfaceDefinition> interfaces;
+    private QName type;
+    private Map<String, TInterfaceDefinition> interfaces;
 
-	public TRelationshipDefinition() {
-	}
+    public TRelationshipDefinition() {
+    }
 
-	public TRelationshipDefinition(QName type) {
-		this.type = type;
-	}
+    public TRelationshipDefinition(QName type) {
+        this.type = type;
+    }
 
-	public TRelationshipDefinition(Builder builder) {
-		this.setType(builder.type);
-		this.setInterfaces(builder.interfaces);
-	}
+    public TRelationshipDefinition(Builder builder) {
+        this.setType(builder.type);
+        this.setInterfaces(builder.interfaces);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRelationshipDefinition)) return false;
-		TRelationshipDefinition that = (TRelationshipDefinition) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(interfaces, that.interfaces);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRelationshipDefinition)) return false;
+        TRelationshipDefinition that = (TRelationshipDefinition) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(interfaces, that.interfaces);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, interfaces);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, interfaces);
+    }
 
-	@Nullable
-	public QName getType() {
-		return type;
-	}
+    @Nullable
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@NonNull
-	public Map<String, TInterfaceDefinition> getInterfaces() {
-		if (this.interfaces == null) {
-			this.interfaces = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TInterfaceDefinition> getInterfaces() {
+        if (this.interfaces == null) {
+            this.interfaces = new LinkedHashMap<>();
+        }
 
-		return interfaces;
-	}
+        return interfaces;
+    }
 
-	public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-		this.interfaces = interfaces;
-	}
+    public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+        this.interfaces = interfaces;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private Map<String, TInterfaceDefinition> interfaces;
+    public static class Builder {
+        private final QName type;
+        private Map<String, TInterfaceDefinition> interfaces;
 
-		public Builder(QName type) {
-			this.type = type;
-		}
+        public Builder(QName type) {
+            this.type = type;
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            return this;
+        }
 
-		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}
+        public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
 
-		public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			if (interfaces == null || interfaces.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            if (interfaces == null || interfaces.isEmpty()) {
+                return this;
+            }
 
-			if (this.interfaces == null) {
-				this.interfaces = interfaces;
-			} else {
-				this.interfaces.putAll(interfaces);
-			}
+            if (this.interfaces == null) {
+                this.interfaces = interfaces;
+            } else {
+                this.interfaces.putAll(interfaces);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addInterfaces(Collections.singletonMap(name, _interface));
-		}
+            return addInterfaces(Collections.singletonMap(name, _interface));
+        }
 
-		public TRelationshipDefinition build() {
-			return new TRelationshipDefinition(this);
-		}
-	}
+        public TRelationshipDefinition build() {
+            return new TRelationshipDefinition(this);
+        }
+    }
 }
 

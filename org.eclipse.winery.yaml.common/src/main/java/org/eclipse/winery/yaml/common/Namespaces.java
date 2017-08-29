@@ -14,8 +14,8 @@ package org.eclipse.winery.yaml.common;
 import javax.xml.XMLConstants;
 
 public class Namespaces {
-	public static final String TOSCA_NS = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.1";
-	public static final String DEFAULT_NS = "http://www.eclipse.org/winery/ns/simple/yaml/1.1/default";
-	public static final String YAML_NS = "http://www.yaml.org/type";
-	public static final String XML_NS = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+    public static final String TOSCA_NS = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.1";
+    public static final String DEFAULT_NS = "http://www.eclipse.org/winery/ns/simple/yaml/1.1/default";
+    public static final String YAML_NS = "http://www.yaml.org/type";
+    public static final String XML_NS = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 }

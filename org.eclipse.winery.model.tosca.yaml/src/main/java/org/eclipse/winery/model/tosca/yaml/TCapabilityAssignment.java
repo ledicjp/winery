@@ -29,129 +29,129 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCapabilityAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"properties",
-		"attributes"
+    "properties",
+    "attributes"
 })
 public class TCapabilityAssignment {
-	Map<String, TPropertyAssignment> properties;
-	Map<String, TAttributeAssignment> attributes;
+    Map<String, TPropertyAssignment> properties;
+    Map<String, TAttributeAssignment> attributes;
 
-	public TCapabilityAssignment() {
-	}
+    public TCapabilityAssignment() {
+    }
 
-	public TCapabilityAssignment(Builder builder) {
-		this.setProperties(builder.properties);
-		this.setAttributes(builder.attributes);
-	}
+    public TCapabilityAssignment(Builder builder) {
+        this.setProperties(builder.properties);
+        this.setAttributes(builder.attributes);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TCapabilityAssignment)) return false;
-		TCapabilityAssignment that = (TCapabilityAssignment) o;
-		return Objects.equals(properties, that.properties) &&
-				Objects.equals(attributes, that.attributes);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCapabilityAssignment)) return false;
+        TCapabilityAssignment that = (TCapabilityAssignment) o;
+        return Objects.equals(properties, that.properties) &&
+            Objects.equals(attributes, that.attributes);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(properties, attributes);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(properties, attributes);
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignment> getProperties() {
-		if (this.properties == null) {
-			this.properties = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignment> getProperties() {
+        if (this.properties == null) {
+            this.properties = new LinkedHashMap<>();
+        }
 
-		return properties;
-	}
+        return properties;
+    }
 
-	public void setProperties(Map<String, TPropertyAssignment> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, TPropertyAssignment> properties) {
+        this.properties = properties;
+    }
 
-	@NonNull
-	public Map<String, TAttributeAssignment> getAttributes() {
-		if (this.attributes == null) {
-			this.attributes = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TAttributeAssignment> getAttributes() {
+        if (this.attributes == null) {
+            this.attributes = new LinkedHashMap<>();
+        }
 
-		return attributes;
-	}
+        return attributes;
+    }
 
-	public void setAttributes(Map<String, TAttributeAssignment> attributes) {
-		this.attributes = attributes;
-	}
+    public void setAttributes(Map<String, TAttributeAssignment> attributes) {
+        this.attributes = attributes;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private Map<String, TPropertyAssignment> properties;
-		private Map<String, TAttributeAssignment> attributes;
+    public static class Builder {
+        private Map<String, TPropertyAssignment> properties;
+        private Map<String, TAttributeAssignment> attributes;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			this.properties = properties;
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            this.properties = properties;
+            return this;
+        }
 
-		public Builder setAttributes(Map<String, TAttributeAssignment> attributes) {
-			this.attributes = attributes;
-			return this;
-		}
+        public Builder setAttributes(Map<String, TAttributeAssignment> attributes) {
+            this.attributes = attributes;
+            return this;
+        }
 
-		public Builder addProperties(Map<String, TPropertyAssignment> properties) {
-			if (properties == null || properties.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(Map<String, TPropertyAssignment> properties) {
+            if (properties == null || properties.isEmpty()) {
+                return this;
+            }
 
-			if (this.properties == null) {
-				this.properties = properties;
-			} else {
-				this.properties.putAll(properties);
-			}
+            if (this.properties == null) {
+                this.properties = properties;
+            } else {
+                this.properties.putAll(properties);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addProperties(String name, TPropertyAssignment property) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addProperties(String name, TPropertyAssignment property) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addProperties(Collections.singletonMap(name, property));
-		}
+            return addProperties(Collections.singletonMap(name, property));
+        }
 
-		public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
-			if (attributes == null || attributes.isEmpty()) {
-				return this;
-			}
+        public Builder addAttributes(Map<String, TAttributeAssignment> attributes) {
+            if (attributes == null || attributes.isEmpty()) {
+                return this;
+            }
 
-			if (this.attributes == null) {
-				this.attributes = attributes;
-			} else {
-				this.attributes.putAll(attributes);
-			}
+            if (this.attributes == null) {
+                this.attributes = attributes;
+            } else {
+                this.attributes.putAll(attributes);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addAttributes(String name, TAttributeAssignment attribute) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addAttributes(String name, TAttributeAssignment attribute) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addAttributes(Collections.singletonMap(name, attribute));
-		}
+            return addAttributes(Collections.singletonMap(name, attribute));
+        }
 
-		public TCapabilityAssignment build() {
-			return new TCapabilityAssignment(this);
-		}
-	}
+        public TCapabilityAssignment build() {
+            return new TCapabilityAssignment(this);
+        }
+    }
 }

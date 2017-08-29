@@ -32,119 +32,119 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"valid_target_types",
-		"interfaces"
+    "valid_target_types",
+    "interfaces"
 })
 public class TRelationshipType extends TEntityType {
-	private List<QName> valid_target_types;
-	private Map<String, TInterfaceDefinition> interfaces;
+    private List<QName> valid_target_types;
+    private Map<String, TInterfaceDefinition> interfaces;
 
-	public TRelationshipType() {
-	}
+    public TRelationshipType() {
+    }
 
-	public TRelationshipType(Builder builder) {
-		super(builder);
-		this.setValid_target_types(builder.valid_target_types);
-		this.setInterfaces(builder.interfaces);
-	}
+    public TRelationshipType(Builder builder) {
+        super(builder);
+        this.setValid_target_types(builder.valid_target_types);
+        this.setInterfaces(builder.interfaces);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRelationshipType)) return false;
-		if (!super.equals(o)) return false;
-		TRelationshipType that = (TRelationshipType) o;
-		return Objects.equals(valid_target_types, that.valid_target_types) &&
-				Objects.equals(interfaces, that.interfaces);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRelationshipType)) return false;
+        if (!super.equals(o)) return false;
+        TRelationshipType that = (TRelationshipType) o;
+        return Objects.equals(valid_target_types, that.valid_target_types) &&
+            Objects.equals(interfaces, that.interfaces);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), valid_target_types, interfaces);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), valid_target_types, interfaces);
+    }
 
-	@NonNull
-	public List<QName> getValid_target_types() {
-		if (this.valid_target_types == null) {
-			this.valid_target_types = new ArrayList<>();
-		}
+    @NonNull
+    public List<QName> getValid_target_types() {
+        if (this.valid_target_types == null) {
+            this.valid_target_types = new ArrayList<>();
+        }
 
-		return valid_target_types;
-	}
+        return valid_target_types;
+    }
 
-	public void setValid_target_types(List<QName> valid_target_types) {
-		this.valid_target_types = valid_target_types;
-	}
+    public void setValid_target_types(List<QName> valid_target_types) {
+        this.valid_target_types = valid_target_types;
+    }
 
-	@NonNull
-	public Map<String, TInterfaceDefinition> getInterfaces() {
-		if (this.interfaces == null) {
-			this.interfaces = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TInterfaceDefinition> getInterfaces() {
+        if (this.interfaces == null) {
+            this.interfaces = new LinkedHashMap<>();
+        }
 
-		return interfaces;
-	}
+        return interfaces;
+    }
 
-	public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-		this.interfaces = interfaces;
-	}
+    public void setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+        this.interfaces = interfaces;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private List<QName> valid_target_types;
-		private Map<String, TInterfaceDefinition> interfaces;
+    public static class Builder extends TEntityType.Builder {
+        private List<QName> valid_target_types;
+        private Map<String, TInterfaceDefinition> interfaces;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setValid_target_types(List<QName> valid_target_types) {
-			this.valid_target_types = valid_target_types;
-			return this;
-		}
+        public Builder setValid_target_types(List<QName> valid_target_types) {
+            this.valid_target_types = valid_target_types;
+            return this;
+        }
 
-		public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
-			this.interfaces = interfaces;
-			return this;
-		}
+        public Builder setInterfaces(Map<String, TInterfaceDefinition> interfaces) {
+            this.interfaces = interfaces;
+            return this;
+        }
 
-		public Builder addValid_target_types(List<QName> valid_target_types) {
-			if (valid_target_types == null || valid_target_types.isEmpty()) {
-				return this;
-			}
+        public Builder addValid_target_types(List<QName> valid_target_types) {
+            if (valid_target_types == null || valid_target_types.isEmpty()) {
+                return this;
+            }
 
-			if (this.valid_target_types == null) {
-				this.valid_target_types = valid_target_types;
-			} else {
-				this.valid_target_types.addAll(valid_target_types);
-			}
+            if (this.valid_target_types == null) {
+                this.valid_target_types = valid_target_types;
+            } else {
+                this.valid_target_types.addAll(valid_target_types);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addValid_target_types(QName valid_target_type) {
-			if (valid_target_type == null) {
-				return this;
-			}
+        public Builder addValid_target_types(QName valid_target_type) {
+            if (valid_target_type == null) {
+                return this;
+            }
 
-			return addValid_target_types(Collections.singletonList(valid_target_type));
-		}
+            return addValid_target_types(Collections.singletonList(valid_target_type));
+        }
 
-		public TRelationshipType build() {
-			return new TRelationshipType(this);
-		}
-	}
+        public TRelationshipType build() {
+            return new TRelationshipType(this);
+        }
+    }
 }

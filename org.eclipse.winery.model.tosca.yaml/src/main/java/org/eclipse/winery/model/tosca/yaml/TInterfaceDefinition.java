@@ -31,148 +31,148 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tInterfaceDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"type",
-		"inputs",
-		"operations"
+    "type",
+    "inputs",
+    "operations"
 })
 public class TInterfaceDefinition {
-	private QName type;
-	private Map<String, TPropertyAssignmentOrDefinition> inputs;
-	private Map<String, TOperationDefinition> operations;
+    private QName type;
+    private Map<String, TPropertyAssignmentOrDefinition> inputs;
+    private Map<String, TOperationDefinition> operations;
 
-	public TInterfaceDefinition() {
-	}
+    public TInterfaceDefinition() {
+    }
 
-	public TInterfaceDefinition(Builder builder) {
-		this.setType(builder.type);
-		this.setInputs(builder.inputs);
-		this.setOperations(builder.operations);
-	}
+    public TInterfaceDefinition(Builder builder) {
+        this.setType(builder.type);
+        this.setInputs(builder.inputs);
+        this.setOperations(builder.operations);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TInterfaceDefinition)) return false;
-		TInterfaceDefinition that = (TInterfaceDefinition) o;
-		return Objects.equals(type, that.type) &&
-				Objects.equals(inputs, that.inputs) &&
-				Objects.equals(operations, that.operations);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TInterfaceDefinition)) return false;
+        TInterfaceDefinition that = (TInterfaceDefinition) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(inputs, that.inputs) &&
+            Objects.equals(operations, that.operations);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, inputs, operations);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, inputs, operations);
+    }
 
-	@Nullable
-	public QName getType() {
-		return type;
-	}
+    @Nullable
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@NonNull
-	public Map<String, TPropertyAssignmentOrDefinition> getInputs() {
-		if (this.inputs == null) {
-			this.inputs = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TPropertyAssignmentOrDefinition> getInputs() {
+        if (this.inputs == null) {
+            this.inputs = new LinkedHashMap<>();
+        }
 
-		return inputs;
-	}
+        return inputs;
+    }
 
-	public void setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-		this.inputs = inputs;
-	}
+    public void setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+        this.inputs = inputs;
+    }
 
-	@NonNull
-	public Map<String, TOperationDefinition> getOperations() {
-		if (this.operations == null) {
-			this.operations = new LinkedHashMap<>();
-		}
+    @NonNull
+    public Map<String, TOperationDefinition> getOperations() {
+        if (this.operations == null) {
+            this.operations = new LinkedHashMap<>();
+        }
 
-		return operations;
-	}
+        return operations;
+    }
 
-	public void setOperations(Map<String, TOperationDefinition> operations) {
-		this.operations = operations;
-	}
+    public void setOperations(Map<String, TOperationDefinition> operations) {
+        this.operations = operations;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private QName type;
-		private Map<String, TPropertyAssignmentOrDefinition> inputs;
-		private Map<String, TOperationDefinition> operations;
+    public static class Builder {
+        private QName type;
+        private Map<String, TPropertyAssignmentOrDefinition> inputs;
+        private Map<String, TOperationDefinition> operations;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setType(QName type) {
-			this.type = type;
-			return this;
-		}
+        public Builder setType(QName type) {
+            this.type = type;
+            return this;
+        }
 
-		public Builder setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-			this.inputs = inputs;
-			return this;
-		}
+        public Builder setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+            this.inputs = inputs;
+            return this;
+        }
 
-		public Builder setOperations(Map<String, TOperationDefinition> operations) {
-			this.operations = operations;
-			return this;
-		}
+        public Builder setOperations(Map<String, TOperationDefinition> operations) {
+            this.operations = operations;
+            return this;
+        }
 
-		public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
-			if (inputs == null || inputs.isEmpty()) {
-				return this;
-			}
+        public Builder addInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
+            if (inputs == null || inputs.isEmpty()) {
+                return this;
+            }
 
-			if (this.inputs == null) {
-				this.inputs = inputs;
-			} else {
-				this.inputs.putAll(inputs);
-			}
+            if (this.inputs == null) {
+                this.inputs = inputs;
+            } else {
+                this.inputs.putAll(inputs);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addInputs(String name, TPropertyAssignmentOrDefinition input) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addInputs(Collections.singletonMap(name, input));
-		}
+            return addInputs(Collections.singletonMap(name, input));
+        }
 
-		public Builder addOperations(Map<String, TOperationDefinition> operations) {
-			if (operations == null || operations.isEmpty()) {
-				return this;
-			}
+        public Builder addOperations(Map<String, TOperationDefinition> operations) {
+            if (operations == null || operations.isEmpty()) {
+                return this;
+            }
 
-			if (this.operations == null) {
-				this.operations = operations;
-			} else {
-				this.operations.putAll(operations);
-			}
+            if (this.operations == null) {
+                this.operations = operations;
+            } else {
+                this.operations.putAll(operations);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addOperations(String name, TOperationDefinition operation) {
-			if (name == null || name.isEmpty()) {
-				return this;
-			}
+        public Builder addOperations(String name, TOperationDefinition operation) {
+            if (name == null || name.isEmpty()) {
+                return this;
+            }
 
-			return addOperations(Collections.singletonMap(name, operation));
-		}
+            return addOperations(Collections.singletonMap(name, operation));
+        }
 
-		public TInterfaceDefinition build() {
-			return new TInterfaceDefinition(this);
-		}
-	}
+        public TInterfaceDefinition build() {
+            return new TInterfaceDefinition(this);
+        }
+    }
 }

@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class InvalidTOSCAVersion extends YAMLParserException {
-	public InvalidTOSCAVersion(String msg) {
-		super(msg);
-	}
+    public InvalidTOSCAVersion(String msg) {
+        super(msg);
+    }
 }

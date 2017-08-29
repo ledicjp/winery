@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class MissingNodeType extends YAMLParserException {
-	public MissingNodeType(String name) {
-		super("Node Type \"" + name + "\" is undefined.");
-	}
+    public MissingNodeType(String name) {
+        super("Node Type \"" + name + "\" is undefined.");
+    }
 }

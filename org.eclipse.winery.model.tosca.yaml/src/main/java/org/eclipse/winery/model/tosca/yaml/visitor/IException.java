@@ -12,7 +12,7 @@
 package org.eclipse.winery.model.tosca.yaml.visitor;
 
 public class IException extends Exception {
-	public IException(String msg) {
-		super(msg);
-	}
+    public IException(String msg) {
+        super(msg);
+    }
 }

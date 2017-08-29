@@ -29,84 +29,84 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyFilterDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"constraints"
+    "constraints"
 })
 public class TPropertyFilterDefinition {
-	private List<TConstraintClause> constraints;
+    private List<TConstraintClause> constraints;
 
-	public TPropertyFilterDefinition() {
-	}
+    public TPropertyFilterDefinition() {
+    }
 
-	public TPropertyFilterDefinition(Builder builder) {
-		this.setConstraints(builder.constraints);
-	}
+    public TPropertyFilterDefinition(Builder builder) {
+        this.setConstraints(builder.constraints);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPropertyFilterDefinition)) return false;
-		TPropertyFilterDefinition that = (TPropertyFilterDefinition) o;
-		return Objects.equals(constraints, that.constraints);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPropertyFilterDefinition)) return false;
+        TPropertyFilterDefinition that = (TPropertyFilterDefinition) o;
+        return Objects.equals(constraints, that.constraints);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(constraints);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(constraints);
+    }
 
-	@NonNull
-	public List<TConstraintClause> getConstraints() {
-		if (this.constraints == null) {
-			this.constraints = new ArrayList<>();
-		}
+    @NonNull
+    public List<TConstraintClause> getConstraints() {
+        if (this.constraints == null) {
+            this.constraints = new ArrayList<>();
+        }
 
-		return constraints;
-	}
+        return constraints;
+    }
 
-	public void setConstraints(List<TConstraintClause> constraints) {
-		this.constraints = constraints;
-	}
+    public void setConstraints(List<TConstraintClause> constraints) {
+        this.constraints = constraints;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private List<TConstraintClause> constraints;
+    public static class Builder {
+        private List<TConstraintClause> constraints;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setConstraints(List<TConstraintClause> constraints) {
-			this.constraints = constraints;
-			return this;
-		}
+        public Builder setConstraints(List<TConstraintClause> constraints) {
+            this.constraints = constraints;
+            return this;
+        }
 
-		public Builder addConstraints(List<TConstraintClause> constraints) {
-			if (constraints == null || constraints.isEmpty()) {
-				return this;
-			}
+        public Builder addConstraints(List<TConstraintClause> constraints) {
+            if (constraints == null || constraints.isEmpty()) {
+                return this;
+            }
 
-			if (this.constraints == null) {
-				this.constraints = constraints;
-			} else {
-				this.constraints.addAll(constraints);
-			}
+            if (this.constraints == null) {
+                this.constraints = constraints;
+            } else {
+                this.constraints.addAll(constraints);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addConstraints(TConstraintClause constraint) {
-			if (constraint == null) {
-				return this;
-			}
+        public Builder addConstraints(TConstraintClause constraint) {
+            if (constraint == null) {
+                return this;
+            }
 
-			return addConstraints(Collections.singletonList(constraint));
-		}
+            return addConstraints(Collections.singletonList(constraint));
+        }
 
-		public TPropertyFilterDefinition build() {
-			return new TPropertyFilterDefinition(this);
-		}
-	}
+        public TPropertyFilterDefinition build() {
+            return new TPropertyFilterDefinition(this);
+        }
+    }
 }

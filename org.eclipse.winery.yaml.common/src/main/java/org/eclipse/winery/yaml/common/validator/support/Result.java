@@ -15,8 +15,8 @@ import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
 
 public class Result extends AbstractResult<Result> {
 
-	@Override
-	public Result add(Result result) {
-		return result;
-	}
+    @Override
+    public Result add(Result result) {
+        return result;
+    }
 }

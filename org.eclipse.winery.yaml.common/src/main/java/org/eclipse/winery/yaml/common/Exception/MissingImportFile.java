@@ -12,7 +12,7 @@
 package org.eclipse.winery.yaml.common.Exception;
 
 public class MissingImportFile extends YAMLParserException {
-	public MissingImportFile(String msg) {
-		super(msg);
-	}
+    public MissingImportFile(String msg) {
+        super(msg);
+    }
 }

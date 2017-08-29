@@ -30,144 +30,144 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"capability",
-		"node",
-		"relationship",
-		"node_filter",
-		"occurrences"
+    "capability",
+    "node",
+    "relationship",
+    "node_filter",
+    "occurrences"
 })
 public class TRequirementAssignment {
-	private QName node;
-	private TRelationshipAssignment relationship;
-	private QName capability;
+    private QName node;
+    private TRelationshipAssignment relationship;
+    private QName capability;
 
-	private TNodeFilterDefinition node_filter;
-	private List<String> occurrences;
+    private TNodeFilterDefinition node_filter;
+    private List<String> occurrences;
 
-	public TRequirementAssignment() {
+    public TRequirementAssignment() {
 
-	}
+    }
 
-	public TRequirementAssignment(QName node) {
-		this.node = node;
-	}
+    public TRequirementAssignment(QName node) {
+        this.node = node;
+    }
 
-	public TRequirementAssignment(Builder builder) {
-		this.setCapability(builder.capability);
-		this.setNode(builder.node);
-		this.setRelationship(builder.relationship);
-		this.setNode_filter(builder.node_filter);
-		this.setOccurrences(builder.occurrences);
-	}
+    public TRequirementAssignment(Builder builder) {
+        this.setCapability(builder.capability);
+        this.setNode(builder.node);
+        this.setRelationship(builder.relationship);
+        this.setNode_filter(builder.node_filter);
+        this.setOccurrences(builder.occurrences);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRequirementAssignment)) return false;
-		TRequirementAssignment that = (TRequirementAssignment) o;
-		return Objects.equals(node, that.node) &&
-				Objects.equals(relationship, that.relationship) &&
-				Objects.equals(capability, that.capability) &&
-				Objects.equals(node_filter, that.node_filter) &&
-				Objects.equals(occurrences, that.occurrences);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRequirementAssignment)) return false;
+        TRequirementAssignment that = (TRequirementAssignment) o;
+        return Objects.equals(node, that.node) &&
+            Objects.equals(relationship, that.relationship) &&
+            Objects.equals(capability, that.capability) &&
+            Objects.equals(node_filter, that.node_filter) &&
+            Objects.equals(occurrences, that.occurrences);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(node, relationship, capability, node_filter, occurrences);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(node, relationship, capability, node_filter, occurrences);
+    }
 
-	@Nullable
-	public QName getCapability() {
-		return capability;
-	}
+    @Nullable
+    public QName getCapability() {
+        return capability;
+    }
 
-	public void setCapability(QName capability) {
-		this.capability = capability;
-	}
+    public void setCapability(QName capability) {
+        this.capability = capability;
+    }
 
-	@Nullable
-	public QName getNode() {
-		return node;
-	}
+    @Nullable
+    public QName getNode() {
+        return node;
+    }
 
-	public void setNode(QName node) {
-		this.node = node;
-	}
+    public void setNode(QName node) {
+        this.node = node;
+    }
 
-	@Nullable
-	public TRelationshipAssignment getRelationship() {
-		return relationship;
-	}
+    @Nullable
+    public TRelationshipAssignment getRelationship() {
+        return relationship;
+    }
 
-	public void setRelationship(TRelationshipAssignment relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(TRelationshipAssignment relationship) {
+        this.relationship = relationship;
+    }
 
-	@Nullable
-	public TNodeFilterDefinition getNode_filter() {
-		return node_filter;
-	}
+    @Nullable
+    public TNodeFilterDefinition getNode_filter() {
+        return node_filter;
+    }
 
-	public void setNode_filter(TNodeFilterDefinition node_filter) {
-		this.node_filter = node_filter;
-	}
+    public void setNode_filter(TNodeFilterDefinition node_filter) {
+        this.node_filter = node_filter;
+    }
 
-	@NonNull
-	public List<String> getOccurrences() {
-		if (this.occurrences == null) {
-			this.occurrences = new ArrayList<>();
-		}
+    @NonNull
+    public List<String> getOccurrences() {
+        if (this.occurrences == null) {
+            this.occurrences = new ArrayList<>();
+        }
 
-		return occurrences;
-	}
+        return occurrences;
+    }
 
-	public void setOccurrences(List<String> occurrences) {
-		this.occurrences = occurrences;
-	}
+    public void setOccurrences(List<String> occurrences) {
+        this.occurrences = occurrences;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private QName capability;
-		private QName node;
-		private TRelationshipAssignment relationship;
-		private TNodeFilterDefinition node_filter;
-		private List<String> occurrences;
+    public static class Builder {
+        private QName capability;
+        private QName node;
+        private TRelationshipAssignment relationship;
+        private TNodeFilterDefinition node_filter;
+        private List<String> occurrences;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setCapability(QName capability) {
-			this.capability = capability;
-			return this;
-		}
+        public Builder setCapability(QName capability) {
+            this.capability = capability;
+            return this;
+        }
 
-		public Builder setNode(QName node) {
-			this.node = node;
-			return this;
-		}
+        public Builder setNode(QName node) {
+            this.node = node;
+            return this;
+        }
 
-		public Builder setRelationship(TRelationshipAssignment relationship) {
-			this.relationship = relationship;
-			return this;
-		}
+        public Builder setRelationship(TRelationshipAssignment relationship) {
+            this.relationship = relationship;
+            return this;
+        }
 
-		public Builder setNode_filter(TNodeFilterDefinition node_filter) {
-			this.node_filter = node_filter;
-			return this;
-		}
+        public Builder setNode_filter(TNodeFilterDefinition node_filter) {
+            this.node_filter = node_filter;
+            return this;
+        }
 
-		public Builder setOccurrences(List<String> occurrences) {
-			this.occurrences = occurrences;
-			return this;
-		}
+        public Builder setOccurrences(List<String> occurrences) {
+            this.occurrences = occurrences;
+            return this;
+        }
 
-		public TRequirementAssignment build() {
-			return new TRequirementAssignment(this);
-		}
-	}
+        public TRequirementAssignment build() {
+            return new TRequirementAssignment(this);
+        }
+    }
 }

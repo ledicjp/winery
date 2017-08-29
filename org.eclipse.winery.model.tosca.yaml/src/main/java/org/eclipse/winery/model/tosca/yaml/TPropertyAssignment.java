@@ -26,80 +26,80 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tPropertyAssignment", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-		"value"
+    "value"
 })
 public class TPropertyAssignment extends TPropertyAssignmentOrDefinition {
-	private Object value;
+    private Object value;
 
-	public TPropertyAssignment() {
-	}
+    public TPropertyAssignment() {
+    }
 
-	public TPropertyAssignment(Object value) {
-		this.value = value;
-	}
+    public TPropertyAssignment(Object value) {
+        this.value = value;
+    }
 
-	public TPropertyAssignment(Builder builder) {
-		this.setValue(builder.value);
-	}
+    public TPropertyAssignment(Builder builder) {
+        this.setValue(builder.value);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TPropertyAssignment)) return false;
-		TPropertyAssignment that = (TPropertyAssignment) o;
-		return Objects.equals(value, that.value);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TPropertyAssignment)) return false;
+        TPropertyAssignment that = (TPropertyAssignment) o;
+        return Objects.equals(value, that.value);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(value);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 
-	@Nullable
-	public Object getValue() {
-		return this.value;
-	}
+    @Nullable
+    public Object getValue() {
+        return this.value;
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	@Nullable
-	public Object getGet_input() {
-		return this.value;
-	}
+    @Nullable
+    public Object getGet_input() {
+        return this.value;
+    }
 
-	public void setGet_input(Object get_input) {
-		this.value = get_input;
-	}
+    public void setGet_input(Object get_input) {
+        this.value = get_input;
+    }
 
-	@Nullable
-	public Object getGet_property() {
-		return this.value;
-	}
+    @Nullable
+    public Object getGet_property() {
+        return this.value;
+    }
 
-	public void setGet_property(Object get_property) {
-		this.value = get_property;
-	}
+    public void setGet_property(Object get_property) {
+        this.value = get_property;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private Object value;
+    public static class Builder {
+        private Object value;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder setValue(Object value) {
-			this.value = value;
-			return this;
-		}
+        public Builder setValue(Object value) {
+            this.value = value;
+            return this;
+        }
 
-		public TPropertyAssignment build() {
-			return new TPropertyAssignment(this);
-		}
-	}
+        public TPropertyAssignment build() {
+            return new TPropertyAssignment(this);
+        }
+    }
 }
