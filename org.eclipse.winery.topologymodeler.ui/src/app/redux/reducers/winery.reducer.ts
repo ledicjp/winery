@@ -11,10 +11,13 @@
  */
 import { Action } from 'redux';
 import {
-  WineryActions, SaveNodeTemplateAction, SaveRelationshipAction,
-  SendPaletteOpenedAction, OpenSidebar,
+  OpenSidebar,
+  SaveNodeTemplateAction,
+  SaveRelationshipAction,
+  SendPaletteOpenedAction,
+  WineryActions
 } from '../actions/winery.actions';
-import {TNodeTemplate, TRelationshipTemplate, TTopologyTemplate} from 'app/ttopology-template';
+import { TNodeTemplate, TRelationshipTemplate, TTopologyTemplate } from 'app/ttopology-template';
 
 export interface WineryState {
   currentPaletteOpenedState: boolean;
@@ -38,10 +41,22 @@ export const WineryReducer =
           currentPaletteOpenedState: paletteOpened
         };
       case WineryActions.OPEN_SIDEBAR:
-        const sidebarVisible: boolean = (<OpenSidebar>action).sidebarVisible;
+        const newSidebarData: any = (<OpenSidebar>action).sidebarContents;
+        console.log('newSidebarData: ' + JSON.stringify(newSidebarData, null, 2));
+        console.log('changedSidebarData: ' + JSON.stringify({
+          ...lastState,
+          sidebarContents: {
+            sidebarVisible: lastState.sidebarVisible,
+            nodeId: newSidebarData.nodeId,
+            nameTextFieldValue: newSidebarData.nameTextFieldValue
+          }}, null, 2));
         return {
           ...lastState,
-          sidebarVisible: sidebarVisible
+          sidebarContents: {
+            sidebarVisible: newSidebarData.sidebarContents.sidebarVisible,
+            nodeId: newSidebarData.sidebarContents.nodeId,
+            nameTextFieldValue: newSidebarData.sidebarContents.nameTextFieldValue
+          }
         };
       case WineryActions.SAVE_NODE_TEMPLATE:
         const newNode: TNodeTemplate = (<SaveNodeTemplateAction>action).nodeTemplate;
@@ -64,4 +79,4 @@ export const WineryReducer =
       default:
         return lastState;
     }
-    };
+  };

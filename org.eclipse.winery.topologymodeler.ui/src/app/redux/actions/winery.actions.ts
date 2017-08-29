@@ -18,7 +18,11 @@ export interface SendPaletteOpenedAction extends Action {
 }
 
 export interface OpenSidebar extends Action {
-  sidebarVisible: boolean;
+  sidebarContents: {
+    sidebarVisible: boolean,
+    nodeId: string,
+    nameTextFieldValue: string
+  };
 }
 
 export interface SaveNodeTemplateAction extends Action {
@@ -42,9 +46,9 @@ export class WineryActions {
       paletteOpened: paletteOpened
     }));
   openSidebar: ActionCreator<OpenSidebar> =
-    ((value) => ({
+    ((newSidebarData) => ({
       type: WineryActions.OPEN_SIDEBAR,
-      sidebarVisible: value
+      sidebarContents: newSidebarData
     }));
   saveNodeTemplate: ActionCreator<SaveNodeTemplateAction> =
     ((newNode) => ({

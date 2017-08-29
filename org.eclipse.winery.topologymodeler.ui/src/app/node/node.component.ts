@@ -10,17 +10,8 @@
  *     Josip Ledic - initial API and implementation, Refactoring to use Redux instead
  *     Thommy Zelenik - implementation, Refactoring
  */
-import {
-  AfterViewInit,
-  Component,
-  DoCheck,
-  EventEmitter,
-  Input,
-  IterableDiffers,
-  OnInit,
-  Output
-} from '@angular/core';
-import {ButtonsStateModel} from '../models/buttonsState.model';
+import { AfterViewInit, Component, DoCheck, EventEmitter, Input, IterableDiffers, OnInit, Output } from '@angular/core';
+import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
 import { NgRedux } from '@angular-redux/store';
 import { IWineryState } from '../redux/store/winery.store';
@@ -128,6 +119,12 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   openSidebar($event): void {
     $event.stopPropagation();
     this.toggle = !this.toggle;
-    this.$ngRedux.dispatch(this.actions.openSidebar(this.toggle));
+    this.$ngRedux.dispatch(this.actions.openSidebar({
+      sidebarContents: {
+        sidebarVisible: true,
+        nodeId: Math.random() + 'abc',
+        nameTextFieldValue: 'pipi'
+      }
+    }));
   }
 }
