@@ -72,21 +72,26 @@ import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
 import org.eclipse.winery.model.tosca.yaml.tosca.datatypes.Credential;
 import org.eclipse.winery.yaml.common.Defaults;
+import org.eclipse.winery.yaml.common.Exception.UnrecognizedFieldException;
+import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 public class Builder {
     private final String namespace;
-
+    private List<String> exceptionMessages;
     private Map<String, String> prefix2Namespace;
+    private FieldValidator validator;
 
     public Builder(String namespace) {
         this.namespace = namespace;
+        this.validator = new FieldValidator();
+        this.exceptionMessages = new ArrayList<>();
     }
 
     private void initPrefix2Namespace(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return;
         }
 
@@ -111,9 +116,24 @@ public class Builder {
         }
     }
 
+    private <T> boolean validate(Class<T> clazz, Object object) {
+        if (object instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> fields = (Map<String, Object>) object;
+            if (!clazz.equals(TInterfaceType.class)) {
+                this.exceptionMessages.addAll(validator.validate(clazz, fields));
+            }
+
+            return true;
+        } else {
+            // TODO exception msg: Because instance (=object) is nonNull and not a map
+            return false;
+        }
+    }
+
     @Nullable
-    public TServiceTemplate buildServiceTemplate(Object object) {
-        if (object == null) {
+    public TServiceTemplate buildServiceTemplate(Object object) throws YAMLParserException {
+        if (!Objects.nonNull(object) || !validate(TServiceTemplate.class, object)) {
             return null;
         }
 
@@ -142,12 +162,15 @@ public class Builder {
         builder.setPolicy_types(buildPolicy_types(map.get("policy_types")));
         builder.setTopology_template(buildTopology_template(map.get("topology_template")));
 
+        if (!this.exceptionMessages.isEmpty()) {
+            throw new UnrecognizedFieldException(this.exceptionMessages);
+        }
         return builder.build();
     }
 
     @Nullable
     public TTopologyTemplateDefinition buildTopology_template(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TTopologyTemplateDefinition.class, object)) {
             return null;
         }
 
@@ -169,7 +192,7 @@ public class Builder {
 
     @Nullable
     public Metadata buildMetadata(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -184,7 +207,7 @@ public class Builder {
 
     @Nullable
     public String buildDescription(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -193,7 +216,7 @@ public class Builder {
 
     @Nullable
     public Map<String, Object> buildDsl_definitions(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -210,7 +233,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TRepositoryDefinition> buildRepositories(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -227,12 +250,16 @@ public class Builder {
 
     @Nullable
     public TRepositoryDefinition buildRepositoryDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TRepositoryDefinition.Builder((String) object).build();
+        }
+
+        if (!validate(TRepositoryDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -248,7 +275,7 @@ public class Builder {
 
     @Nullable
     public Credential buildCredential(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(Credential.class, object)) {
             return null;
         }
 
@@ -268,7 +295,7 @@ public class Builder {
 
     @Nullable
     public List<TMapImportDefinition> buildImports(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -287,7 +314,7 @@ public class Builder {
 
     @Nullable
     public TMapImportDefinition buildMapImportDefinition(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -299,12 +326,16 @@ public class Builder {
 
     @Nullable
     public TImportDefinition buildImportDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TImportDefinition.Builder((String) object).build();
+        }
+
+        if (!validate(TImportDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -341,7 +372,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TArtifactType> buildArtifact_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -358,14 +389,14 @@ public class Builder {
 
     @Nullable
     public TArtifactType buildArtifactType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TArtifactType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TArtifactType.Builder builder = new TArtifactType.Builder(buildEntityType(object));
+        TArtifactType.Builder builder = new TArtifactType.Builder(buildEntityType(object, TArtifactType.class));
         builder.setMime_type((String) map.get("mime_type"));
         builder.setFile_ext(buildListString(map.get("file_ext")));
 
@@ -373,8 +404,8 @@ public class Builder {
     }
 
     @Nullable
-    public TEntityType buildEntityType(Object object) {
-        if (object == null) {
+    public TEntityType buildEntityType(Object object, Class child) {
+        if (!Objects.nonNull(object) || !validate(child, object)) {
             return null;
         }
 
@@ -394,7 +425,7 @@ public class Builder {
 
     @Nullable
     public TVersion buildVersion(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -403,7 +434,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TPropertyDefinition> buildProperties(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -412,15 +443,15 @@ public class Builder {
 
         Map<String, TPropertyDefinition> properties = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            properties.put(entry.getKey(), buildPropertyDefinition(entry.getValue()));
+            properties.put(entry.getKey(), buildPropertyDefinition(entry.getValue(), TPropertyDefinition.class));
         }
 
         return properties;
     }
 
     @Nullable
-    public TPropertyDefinition buildPropertyDefinition(Object object) {
-        if (object == null) {
+    public TPropertyDefinition buildPropertyDefinition(Object object, Class child) {
+        if (!Objects.nonNull(object) || !validate(child, object)) {
             return null;
         }
 
@@ -441,7 +472,7 @@ public class Builder {
 
     @Nullable
     public Boolean buildRequired(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -458,7 +489,7 @@ public class Builder {
 
     @Nullable
     public TStatusValue buildStatus(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -484,7 +515,7 @@ public class Builder {
 
     @Nullable
     public List<TConstraintClause> buildConstraints(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -503,7 +534,7 @@ public class Builder {
 
     @Nullable
     public TConstraintClause buildConstraintClause(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -551,7 +582,7 @@ public class Builder {
 
     @Nullable
     public List<Object> buildListObject(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -562,7 +593,7 @@ public class Builder {
 
     @Nullable
     public TEntrySchema buildEntrySchema(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -579,7 +610,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TAttributeDefinition> buildAttributes(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -596,7 +627,7 @@ public class Builder {
 
     @Nullable
     public TAttributeDefinition buildAttributeDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TAttributeDefinition.class, object)) {
             return null;
         }
 
@@ -615,7 +646,7 @@ public class Builder {
 
     @Nullable
     public List<String> buildListString(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -627,7 +658,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TDataType> buildData_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -644,14 +675,14 @@ public class Builder {
 
     @Nullable
     public TDataType buildDataType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TDataType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TDataType.Builder builder = new TDataType.Builder(buildEntityType(object));
+        TDataType.Builder builder = new TDataType.Builder(buildEntityType(object, TDataType.class));
         builder.setConstraints(buildConstraints(map.get("constraints")));
 
         return builder.build();
@@ -659,7 +690,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TCapabilityType> buildCapability_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -676,14 +707,14 @@ public class Builder {
 
     @Nullable
     public TCapabilityType buildCapabilityType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TCapabilityType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TCapabilityType.Builder builder = new TCapabilityType.Builder(buildEntityType(object));
+        TCapabilityType.Builder builder = new TCapabilityType.Builder(buildEntityType(object, TCapabilityType.class));
         builder.setValid_source_types(buildListQName(buildListString(map.get("valid_source_types"))));
         builder.setAttributes(buildAttributes(map.get("attributes")));
 
@@ -701,7 +732,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TInterfaceType> buildInterface_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -718,7 +749,7 @@ public class Builder {
 
     @Nullable
     public TInterfaceType buildInterfaceType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TInterfaceType.class, object)) {
             return null;
         }
 
@@ -727,7 +758,7 @@ public class Builder {
 
         List<String> INTERFACE_KEYS = new ArrayList<>(Arrays.asList("inputs", "description", "version", "derived_from", "properties", "attributes", "metadata"));
 
-        TInterfaceType.Builder builder = new TInterfaceType.Builder(buildEntityType(object));
+        TInterfaceType.Builder builder = new TInterfaceType.Builder(buildEntityType(object, TInterfaceType.class));
         builder.setInputs(buildProperties(map.get("inputs")));
 
         Map<String, TOperationDefinition> operations = new LinkedHashMap<>();
@@ -745,7 +776,7 @@ public class Builder {
 
     @Nullable
     public TOperationDefinition buildOperationDefinition(Object object, String context) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TOperationDefinition.class, object)) {
             return null;
         }
 
@@ -763,7 +794,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TPropertyAssignmentOrDefinition> buildPropertyAssignmentOrDefinition(Object object, String context) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -788,7 +819,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TPropertyAssignment> buildMapPropertyAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -805,7 +836,7 @@ public class Builder {
 
     @Nullable
     public TPropertyAssignment buildPropertyAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -817,12 +848,16 @@ public class Builder {
 
     @Nullable
     public TImplementation buildImplementation(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TImplementation(buildQName((String) object));
+        }
+
+        if (!validate(TImplementation.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -837,7 +872,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TRelationshipType> buildRelationship_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -854,14 +889,14 @@ public class Builder {
 
     @Nullable
     public TRelationshipType buildRelationshipType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TRelationshipType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TRelationshipType.Builder builder = new TRelationshipType.Builder(buildEntityType(object));
+        TRelationshipType.Builder builder = new TRelationshipType.Builder(buildEntityType(object, TRelationshipType.class));
         builder.setValid_target_types(buildListQName(buildListString(map.get("valid_target_types"))));
         builder.setAttributes(buildAttributes(map.get("attributes")));
         builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TRelationshipType"));
@@ -871,7 +906,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TInterfaceDefinition> buildMapInterfaceDefinition(Object object, String context) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -888,7 +923,7 @@ public class Builder {
 
     @Nullable
     public TInterfaceDefinition buildInterfaceDefinition(Object object, String context) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TInterfaceType.class, object)) {
             return null;
         }
 
@@ -916,7 +951,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TNodeType> buildNode_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -933,14 +968,14 @@ public class Builder {
 
     @Nullable
     public TNodeType buildNodeType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TNodeType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TNodeType.Builder builder = new TNodeType.Builder(buildEntityType(object));
+        TNodeType.Builder builder = new TNodeType.Builder(buildEntityType(object, TNodeType.class));
         builder.setAttributes(buildAttributes(map.get("attributes")));
         builder.setRequirements(buildListMapRequirementDefinition(map.get("requirements")));
         builder.setCapabilities(buildMapCapabilityDefinition(map.get("capabilities")));
@@ -952,7 +987,7 @@ public class Builder {
 
     @Nullable
     public List<TMapRequirementDefinition> buildListMapRequirementDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -971,7 +1006,7 @@ public class Builder {
 
     @Nullable
     public TMapRequirementDefinition buildMapRequirementDefinition(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -983,12 +1018,16 @@ public class Builder {
 
     @Nullable
     public TRequirementDefinition buildRequirementDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TRequirementDefinition.Builder(buildQName((String) object)).build();
+        }
+
+        if (!validate(TRequirementDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -1005,12 +1044,16 @@ public class Builder {
 
     @Nullable
     public TRelationshipDefinition buildRelationshipDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TRelationshipDefinition.Builder(buildQName((String) object)).build();
+        }
+
+        if (!validate(TRequirementDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -1025,7 +1068,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TCapabilityDefinition> buildMapCapabilityDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1042,12 +1085,16 @@ public class Builder {
 
     @Nullable
     public TCapabilityDefinition buildCapabilityDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TCapabilityDefinition.Builder(buildQName((String) object)).build();
+        }
+
+        if (!validate(TCapabilityDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -1066,7 +1113,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TArtifactDefinition> buildMapArtifactDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1083,7 +1130,7 @@ public class Builder {
 
     @Nullable
     public TArtifactDefinition buildArtifactDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1092,6 +1139,10 @@ public class Builder {
             // TODO infer artifact type and mime type from file URI
             String type = file.substring(file.lastIndexOf("."), file.length());
             return new TArtifactDefinition.Builder(buildQName(type), new ArrayList<>(Collections.singleton(file))).build();
+        }
+
+        if (!validate(TArtifactDefinition.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -1115,7 +1166,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TGroupType> buildGroup_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1132,14 +1183,14 @@ public class Builder {
 
     @Nullable
     public TGroupType buildGroupType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TGroupType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TGroupType.Builder builder = new TGroupType.Builder(buildEntityType(object));
+        TGroupType.Builder builder = new TGroupType.Builder(buildEntityType(object, TGroupType.class));
         builder.setMembers(buildListQName(buildListString(map.get("members"))));
         builder.setRequirements(buildListMapRequirementDefinition(map.get("requirements")));
         builder.setCapabilities(buildMapCapabilityDefinition(map.get("capabilities")));
@@ -1150,7 +1201,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TPolicyType> buildPolicy_types(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1167,14 +1218,14 @@ public class Builder {
 
     @Nullable
     public TPolicyType buildPolicyType(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TPolicyType.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TPolicyType.Builder builder = new TPolicyType.Builder(buildEntityType(object));
+        TPolicyType.Builder builder = new TPolicyType.Builder(buildEntityType(object, TPolicyType.class));
         builder.setTargets(buildListQName(buildListString(map.get("targets"))));
         builder.setTriggers(map.get("triggers"));
 
@@ -1183,7 +1234,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TParameterDefinition> buildMapParameterDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1200,14 +1251,14 @@ public class Builder {
 
     @Nullable
     public TParameterDefinition buildParameterDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TParameterDefinition.class, object)) {
             return null;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        TParameterDefinition.Builder builder = new TParameterDefinition.Builder(buildPropertyDefinition(object));
+        TParameterDefinition.Builder builder = new TParameterDefinition.Builder(buildPropertyDefinition(object, TParameterDefinition.class));
         builder.setValue(map.get("value"));
 
         return builder.build();
@@ -1215,7 +1266,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TNodeTemplate> buildNode_templates(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1232,7 +1283,7 @@ public class Builder {
 
     @Nullable
     public TNodeTemplate buildNodeTemplate(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TNodeTemplate.class, object)) {
             return null;
         }
 
@@ -1258,7 +1309,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TAttributeAssignment> buildMapAttributeAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1275,7 +1326,7 @@ public class Builder {
 
     @Nullable
     public TAttributeAssignment buildAttributeAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TAttributeAssignment.class, object)) {
             return null;
         }
 
@@ -1291,7 +1342,7 @@ public class Builder {
 
     @Nullable
     public List<TMapRequirementAssignment> buildListMapRequirementAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1310,7 +1361,7 @@ public class Builder {
 
     @Nullable
     public TMapRequirementAssignment buildMapRequirementAssignment(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1322,7 +1373,7 @@ public class Builder {
 
     @Nullable
     public TRequirementAssignment buildRequirementAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TRequirementAssignment.class, object)) {
             return null;
         }
 
@@ -1341,12 +1392,16 @@ public class Builder {
 
     @Nullable
     public TRelationshipAssignment buildRelationshipAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
         if (object instanceof String) {
             return new TRelationshipAssignment.Builder(buildQName((String) object)).build();
+        }
+
+        if (!validate(TRelationshipAssignment.class, object)) {
+            return null;
         }
 
         @SuppressWarnings("unchecked")
@@ -1362,7 +1417,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TInterfaceAssignment> buildMapInterfaceAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1379,7 +1434,7 @@ public class Builder {
 
     @Nullable
     public TInterfaceAssignment buildInterfaceAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TInterfaceAssignment.class, object)) {
             return null;
         }
 
@@ -1407,7 +1462,7 @@ public class Builder {
 
     @Nullable
     public TNodeFilterDefinition buildNodeFilterDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TNodeFilterDefinition.class, object)) {
             return null;
         }
 
@@ -1423,7 +1478,7 @@ public class Builder {
 
     @Nullable
     public List<TMapPropertyFilterDefinition> buildListMapPropertyFilterDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1442,7 +1497,7 @@ public class Builder {
 
     @Nullable
     public TMapPropertyFilterDefinition buildMapPropertyDefinition(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1454,7 +1509,7 @@ public class Builder {
 
     @Nullable
     public TPropertyFilterDefinition buildPropertyFilterDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TPropertyFilterDefinition.class, object)) {
             return null;
         }
 
@@ -1469,7 +1524,7 @@ public class Builder {
 
     @Nullable
     public List<TMapObject> buildListMapObjectValue(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1488,7 +1543,7 @@ public class Builder {
 
     @Nullable
     public TMapObject buildMapObjectValue(String key, Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1500,7 +1555,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TCapabilityAssignment> buildMapCapabilityAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1517,7 +1572,7 @@ public class Builder {
 
     @Nullable
     public TCapabilityAssignment buildCapabilityAssignment(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TCapabilityAssignment.class, object)) {
             return null;
         }
 
@@ -1533,7 +1588,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TRelationshipTemplate> buildRelationship_templates(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1550,7 +1605,7 @@ public class Builder {
 
     @Nullable
     public TRelationshipTemplate buildRelationshipTemplate(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TRelationshipTemplate.class, object)) {
             return null;
         }
 
@@ -1571,7 +1626,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TGroupDefinition> buildGroupDefinitions(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1588,7 +1643,7 @@ public class Builder {
 
     @Nullable
     public TGroupDefinition buildGroupDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TGroupDefinition.class, object)) {
             return null;
         }
 
@@ -1608,7 +1663,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TPolicyDefinition> buildMapPolicyDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1625,7 +1680,7 @@ public class Builder {
 
     @Nullable
     public TPolicyDefinition buildPolicyDefinition(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TPolicyDefinition.class, object)) {
             return null;
         }
 
@@ -1644,7 +1699,7 @@ public class Builder {
 
     @Nullable
     public TSubstitutionMappings buildSubstitutionMappings(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object) || !validate(TSubstitutionMappings.class, object)) {
             return null;
         }
 
@@ -1661,7 +1716,7 @@ public class Builder {
 
     @Nullable
     public Map<String, TListString> buildMapStringList(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 
@@ -1678,7 +1733,7 @@ public class Builder {
 
     @Nullable
     public TListString buildStringList(Object object) {
-        if (object == null) {
+        if (!Objects.nonNull(object)) {
             return null;
         }
 

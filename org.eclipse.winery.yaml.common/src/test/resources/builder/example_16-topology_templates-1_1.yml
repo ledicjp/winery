@@ -10,7 +10,7 @@ topology_template:
       type: string
   
   substitution_mappings:
-    node_Type: tosca.nodes.Database
+    node_type: tosca.nodes.Database
     capabilities: 
       database_endpoint: [ database, database_endpoint ]
       

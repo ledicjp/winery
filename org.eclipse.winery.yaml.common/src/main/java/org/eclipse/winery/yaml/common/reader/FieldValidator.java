@@ -11,14 +11,51 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.common.reader;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-
 public class FieldValidator {
-    public void validateServiceTemplate(Map<String, Object> fields) {
-        Arrays.stream(TServiceTemplate.class.getDeclaredFields()).map(field -> field.getName()).collect(Collectors.toList());
+    private Map<Class, Set<String>> declaredFields;
+
+    public FieldValidator() {
+        this.declaredFields = new LinkedHashMap<>();
+    }
+
+    private void setDeclaredFields(Class base, Class parent) {
+        if (!this.declaredFields.containsKey(base)) {
+            this.declaredFields.put(base, new HashSet<>());
+        }
+
+        if (!parent.equals(Object.class)) {
+            this.declaredFields.get(base).addAll(Arrays.stream(parent.getDeclaredFields()).map(Field::getName).collect(Collectors.toList()));
+            setDeclaredFields(base, parent.getSuperclass());
+        }
+    }
+
+    public <T> List<String> validate(Class<T> t, Map<String, Object> fields) {
+        List<String> msg = new ArrayList<>();
+
+        if (!fields.isEmpty() && !this.declaredFields.containsKey(t)) {
+            setDeclaredFields(t, t);
+        }
+
+        Set<String> declaredFields = this.declaredFields.get(t);
+        fields.forEach((key, value) -> {
+            if (key.equals("default")) {
+                key = "_" + key;
+            }
+
+            if (!declaredFields.contains(key)) {
+                msg.add(t.getName() + " does not have a field with the name " + key);
+            }
+        });
+        return msg;
     }
 }

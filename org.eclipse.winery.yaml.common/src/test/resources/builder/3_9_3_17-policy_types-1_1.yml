@@ -4,4 +4,4 @@ policy_types:
   test.ScalingPolicy:
     derived_from: tosca.policies.Scaling
     description: test policy
-    members: [ tosca.nodes.Compute ]
+    targets: [ tosca.nodes.Compute ]
