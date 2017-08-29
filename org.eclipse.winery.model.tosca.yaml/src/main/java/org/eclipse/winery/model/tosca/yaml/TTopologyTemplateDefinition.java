@@ -194,10 +194,6 @@ public class TTopologyTemplateDefinition {
         private Map<String, TParameterDefinition> outputs;
         private TSubstitutionMappings substitution_mappings;
 
-        public Builder() {
-
-        }
-
         public Builder setDescription(String description) {
             this.description = description;
             return this;

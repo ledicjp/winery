@@ -74,10 +74,6 @@ public class TPropertyFilterDefinition {
     public static class Builder {
         private List<TConstraintClause> constraints;
 
-        public Builder() {
-
-        }
-
         public Builder setConstraints(List<TConstraintClause> constraints) {
             this.constraints = constraints;
             return this;

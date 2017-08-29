@@ -42,9 +42,6 @@ public class TInterfaceAssignment extends TInterfaceDefinition {
     }
 
     public static class Builder extends TInterfaceDefinition.Builder {
-        public Builder() {
-
-        }
 
         public TInterfaceAssignment build() {
             return new TInterfaceAssignment(this);

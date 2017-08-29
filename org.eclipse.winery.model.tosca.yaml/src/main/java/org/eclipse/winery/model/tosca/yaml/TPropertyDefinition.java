@@ -120,13 +120,13 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
         return _default;
     }
 
+    public void setDefault(Object _default) {
+        this._default = _default;
+    }
+
     public void setDefault(String _default) {
         Object tmp = _default;
         setDefault(tmp);
-    }
-
-    public void setDefault(Object _default) {
-        this._default = _default;
     }
 
     @NonNull
@@ -135,10 +135,6 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             status = TStatusValue.supported;
         }
         return status;
-    }
-
-    public void setStatus(TStatusValue status) {
-        this.status = status;
     }
 
     public void setStatus(String status) {
@@ -157,6 +153,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
                 break;
             default:
         }
+    }
+
+    public void setStatus(TStatusValue status) {
+        this.status = status;
     }
 
     @NonNull
@@ -217,7 +217,7 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             return this;
         }
 
-        public Builder set_default(Object _default) {
+        public Builder setDefault(Object _default) {
             this._default = _default;
             return this;
         }

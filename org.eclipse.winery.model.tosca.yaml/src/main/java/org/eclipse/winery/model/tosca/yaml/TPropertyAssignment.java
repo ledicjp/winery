@@ -88,11 +88,7 @@ public class TPropertyAssignment extends TPropertyAssignmentOrDefinition {
 
     public static class Builder {
         private Object value;
-
-        public Builder() {
-
-        }
-
+        
         public Builder setValue(Object value) {
             this.value = value;
             return this;

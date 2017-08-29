@@ -108,10 +108,6 @@ public class TInterfaceDefinition {
         private Map<String, TPropertyAssignmentOrDefinition> inputs;
         private Map<String, TOperationDefinition> operations;
 
-        public Builder() {
-
-        }
-
         public Builder setType(QName type) {
             this.type = type;
             return this;

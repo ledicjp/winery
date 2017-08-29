@@ -28,9 +28,6 @@ import org.eclipse.winery.model.tosca.yaml.TPropertyFilterDefinition;
 public class TMapPropertyFilterDefinition implements Map<String, TPropertyFilterDefinition> {
     private Map<String, TPropertyFilterDefinition> map;
 
-    public TMapPropertyFilterDefinition() {
-    }
-
     public Map<String, TPropertyFilterDefinition> getMap() {
         return map;
     }

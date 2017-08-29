@@ -128,10 +128,6 @@ public class TOperationDefinition {
         private Map<String, TPropertyAssignmentOrDefinition> outputs;
         private TImplementation implementation;
 
-        public Builder() {
-
-        }
-
         public Builder setDescription(String description) {
             this.description = description;
             return this;

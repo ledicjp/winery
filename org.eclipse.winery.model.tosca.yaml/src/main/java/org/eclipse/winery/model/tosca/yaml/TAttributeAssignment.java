@@ -90,10 +90,6 @@ public class TAttributeAssignment {
         private String description;
         private Object value;
 
-        public Builder() {
-
-        }
-
         public Builder setDescription(String description) {
             this.description = description;
             return this;

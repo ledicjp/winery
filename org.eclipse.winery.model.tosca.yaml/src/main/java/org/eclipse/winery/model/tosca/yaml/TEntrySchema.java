@@ -104,9 +104,6 @@ public class TEntrySchema {
         private String description;
         private List<TConstraintClause> constraints;
 
-        public Builder() {
-        }
-
         public Builder setType(QName type) {
             this.type = type;
             return this;

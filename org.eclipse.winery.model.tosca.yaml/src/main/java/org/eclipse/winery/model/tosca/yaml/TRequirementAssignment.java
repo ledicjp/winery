@@ -137,10 +137,6 @@ public class TRequirementAssignment {
         private TNodeFilterDefinition node_filter;
         private List<String> occurrences;
 
-        public Builder() {
-
-        }
-
         public Builder setCapability(QName capability) {
             this.capability = capability;
             return this;

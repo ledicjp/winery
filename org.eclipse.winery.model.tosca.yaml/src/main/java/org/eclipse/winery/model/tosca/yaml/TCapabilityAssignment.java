@@ -33,8 +33,8 @@ import org.eclipse.jdt.annotation.NonNull;
     "attributes"
 })
 public class TCapabilityAssignment {
-    Map<String, TPropertyAssignment> properties;
-    Map<String, TAttributeAssignment> attributes;
+    private Map<String, TPropertyAssignment> properties;
+    private Map<String, TAttributeAssignment> attributes;
 
     public TCapabilityAssignment() {
     }
@@ -91,10 +91,6 @@ public class TCapabilityAssignment {
     public static class Builder {
         private Map<String, TPropertyAssignment> properties;
         private Map<String, TAttributeAssignment> attributes;
-
-        public Builder() {
-
-        }
 
         public Builder setProperties(Map<String, TPropertyAssignment> properties) {
             this.properties = properties;

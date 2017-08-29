@@ -111,11 +111,7 @@ public class TSubstitutionMappings {
         private QName node_type;
         private Map<String, TListString> capabilities;
         private Map<String, TListString> requirements;
-
-        public Builder() {
-
-        }
-
+        
         public Builder setNode_type(QName node_type) {
             this.node_type = node_type;
             return this;

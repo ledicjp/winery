@@ -95,11 +95,6 @@ public class TNodeFilterDefinition {
         private List<TMapPropertyFilterDefinition> properties;
         private List<TMapObject> capabilities;
 
-
-        public Builder() {
-
-        }
-
         public Builder setProperties(List<TMapPropertyFilterDefinition> properties) {
             this.properties = properties;
             return this;
