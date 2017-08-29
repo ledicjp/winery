@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.winery.model.tosca.yaml.TArtifactDefinition;
+
 public class FieldValidator {
     private Map<Class, Set<String>> declaredFields;
 
@@ -31,6 +33,10 @@ public class FieldValidator {
     private void setDeclaredFields(Class base, Class parent) {
         if (!this.declaredFields.containsKey(base)) {
             this.declaredFields.put(base, new HashSet<>());
+        }
+
+        if (parent.equals(TArtifactDefinition.class)) {
+            this.declaredFields.get(base).add("filea");
         }
 
         if (!parent.equals(Object.class)) {

@@ -19,7 +19,7 @@ node_types:
     artifacts:
       DockerEngine_InterfaceDockerEngine_IA:
         type: atype:WAR
-        file: 
+        files: 
           - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_InterfaceDockerEngine_IA/files/org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEngine.war
           - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_InterfaceDockerEngine_IA/files/org_opentosca_NodeTypes_DockerEngine__InterfaceDockerEngine.zip
         properties:
@@ -28,11 +28,11 @@ node_types:
           InvocationType: SOAP/HTTP
       DockerEngine_Install_IA:
         type: atype:ScriptArtifact
-        file:
+        files:
           - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fartifacttemplates/DockerEngine_Install_IA_AT/files/install.sh
       DockerEngine_http___www.example.com_interfaces_lifecycle_IA:
         type: atype:WAR
-        file: 
+        files: 
           - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_http___www.example.com_interfaces_lifecycle_IA/files/org_opentosca_NodeTypes_DockerEngine__com_example_www_interfaces_lifecycle.war
           - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fnodetypes/DockerEngine_http___www.example.com_interfaces_lifecycle_IA/files/org_opentosca_NodeTypes_DockerEngine__com_example_www_interfaces_lifecycle.zip
     interfaces:

@@ -101,7 +101,7 @@ public class TGroupDefinition {
 
     @NonNull
     public Metadata getMetadata() {
-        if (this.metadata == null) {
+        if (!Objects.nonNull(members)) {
             this.metadata = new Metadata();
         }
 

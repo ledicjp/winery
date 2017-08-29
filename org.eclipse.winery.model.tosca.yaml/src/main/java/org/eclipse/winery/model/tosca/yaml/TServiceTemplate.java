@@ -131,9 +131,10 @@ public class TServiceTemplate {
 
     @NonNull
     public Metadata getMetadata() {
-        if (this.metadata == null) {
+        if (!Objects.nonNull(metadata)) {
             this.metadata = new Metadata();
         }
+
         return metadata;
     }
 

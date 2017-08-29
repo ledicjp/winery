@@ -132,6 +132,7 @@ public class TNodeTemplate {
         if (this.metadata == null) {
             this.metadata = new Metadata();
         }
+
         return metadata;
     }
 

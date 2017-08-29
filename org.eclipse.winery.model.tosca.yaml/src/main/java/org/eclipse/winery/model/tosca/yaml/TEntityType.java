@@ -91,13 +91,13 @@ public class TEntityType {
         return version;
     }
 
-    public void setVersion(TVersion version) {
-        this.version = version;
-    }
-
     public void setVersion(String version) {
         TVersion tmp = new TVersion(version);
         setVersion(tmp);
+    }
+
+    public void setVersion(TVersion version) {
+        this.version = version;
     }
 
     @Nullable
@@ -137,9 +137,10 @@ public class TEntityType {
 
     @NonNull
     public Metadata getMetadata() {
-        if (this.metadata == null) {
+        if (!Objects.nonNull(metadata)) {
             this.metadata = new Metadata();
         }
+
         return metadata;
     }
 

@@ -26,8 +26,10 @@ topology_template:
       artifacts:
         MyTinyToDo_DA:
           type: DockerContainerArtifact
-          file:
-            - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fartifacttemplates/MyTinyToDo_DA/files/tinytodo.zip            
+          files:
+            - artifacttemplates/http%253A%252F%252Fopentosca.org%252Fartifacttemplates/MyTinyToDo_DA/files/tinytodo.zip  
+      requirements:
+        - engine: DockerEngine
     DockerEngine:
       type: DockerEngine
       properties:
@@ -37,5 +39,3 @@ topology_template:
   relationship_templates:
     con_17:
       type: rtype:HostedOn
-      source: MyTinyToDoDockerContainer
-      target: DockerEngine

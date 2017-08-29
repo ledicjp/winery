@@ -101,8 +101,12 @@ public class TRelationshipTemplate {
         this.description = description;
     }
 
-    @Nullable
+    @NonNull
     public Metadata getMetadata() {
+        if (!Objects.nonNull(metadata)) {
+            this.metadata = new Metadata();
+        }
+        
         return metadata;
     }
 

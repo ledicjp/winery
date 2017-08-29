@@ -1152,8 +1152,11 @@ public class Builder {
         List<String> files;
         if (map.get("file") instanceof String) {
             files = new ArrayList<>(Collections.singleton((String) map.get("file")));
+        } else if (map.get("files") instanceof List) {
+            files = buildListString(map.get("files"));
         } else {
-            files = buildListString(map.get("file"));
+            files = null;
+            assert false;
         }
         TArtifactDefinition.Builder builder = new TArtifactDefinition.Builder(type, files);
         builder.setRepository((String) map.get("repository"));
@@ -1373,7 +1376,15 @@ public class Builder {
 
     @Nullable
     public TRequirementAssignment buildRequirementAssignment(Object object) {
-        if (!Objects.nonNull(object) || !validate(TRequirementAssignment.class, object)) {
+        if (!Objects.nonNull(object)) {
+            return null;
+        }
+
+        if (object instanceof String) {
+            return new TRequirementAssignment(buildQName((String) object));
+        }
+
+        if (!validate(TRequirementAssignment.class, object)) {
             return null;
         }
 
