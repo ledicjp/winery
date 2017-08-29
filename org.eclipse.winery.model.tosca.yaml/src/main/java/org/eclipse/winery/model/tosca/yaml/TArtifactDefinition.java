@@ -35,7 +35,7 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
 		"type",
-		"file",
+		"files",
 		"repository",
 		"description",
 		"deploy_path"
@@ -43,12 +43,13 @@ import org.eclipse.jdt.annotation.Nullable;
 public class TArtifactDefinition {
 	@XmlAttribute(name = "type", required = true)
 	private QName type;
-	@XmlAttribute(name = "file", required = true)
-	private List<String> file;
 	private String repository;
 	private String description;
 	private String deploy_path;
 
+	@Annotations.StandardExtension
+	@XmlAttribute(name = "files", required = true)
+	private List<String> files;
 	@Annotations.StandardExtension
 	private Map<String, TPropertyAssignment> properties;
 
@@ -57,7 +58,7 @@ public class TArtifactDefinition {
 
 	public TArtifactDefinition(Builder builder) {
 		this.setType(builder.type);
-		this.setFiles(builder.file);
+		this.setFiles(builder.files);
 		this.setRepository(builder.repository);
 		this.setDescription(builder.description);
 		this.setDeploy_path(builder.deploy_path);
@@ -70,7 +71,7 @@ public class TArtifactDefinition {
 		if (!(o instanceof TArtifactDefinition)) return false;
 		TArtifactDefinition that = (TArtifactDefinition) o;
 		return Objects.equals(type, that.type) &&
-				Objects.equals(file, that.file) &&
+				Objects.equals(files, that.files) &&
 				Objects.equals(repository, that.repository) &&
 				Objects.equals(description, that.description) &&
 				Objects.equals(deploy_path, that.deploy_path) &&
@@ -79,7 +80,7 @@ public class TArtifactDefinition {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(type, file, repository, description, deploy_path, properties);
+		return Objects.hash(type, files, repository, description, deploy_path, properties);
 	}
 
 	@NonNull
@@ -91,30 +92,24 @@ public class TArtifactDefinition {
 		this.type = type;
 	}
 
-	@Annotations.StandardExtension
 	@NonNull
 	public List<String> getFiles() {
-		return file;
+		return files;
 	}
-
-	@Annotations.StandardExtension
-	public void setFiles(List<String> file) {
-		this.file = file;
+	
+	public void setFiles(List<String> files) {
+		this.files = files;
 	}
 
 	@Deprecated
 	@NonNull
 	public String getFile() {
-		return this.file.get(0);
+		return this.getFiles().get(0);
 	}
 
 	@Deprecated
 	public void setFile(String file) {
-		this.file = new ArrayList<>(Collections.singleton(file));
-	}
-
-	public void setFile(List<String> file) {
-		this.file = file;
+		this.files = new ArrayList<>(Collections.singleton(file));
 	}
 
 	@Nullable
@@ -158,23 +153,21 @@ public class TArtifactDefinition {
 
 	public static class Builder {
 		private final QName type;
-		private final List<String> file;
+		private final List<String> files;
 
 		private String repository;
 		private String description;
 		private String deploy_path;
-
-		@Annotations.StandardExtension
 		private Map<String, TPropertyAssignment> properties;
 
-		public Builder(QName type, List<String> file) {
+		public Builder(QName type, List<String> files) {
 			this.type = type;
-			this.file = file;
+			this.files = files;
 		}
 
 		public Builder(TArtifactDefinition artifactDefinition) {
 			this.type = artifactDefinition.getType();
-			this.file = artifactDefinition.getFiles();
+			this.files = artifactDefinition.getFiles();
 			this.repository = artifactDefinition.getRepository();
 			this.description = artifactDefinition.getDescription();
 			this.deploy_path = artifactDefinition.getDeploy_path();

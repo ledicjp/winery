@@ -41,6 +41,7 @@ public class TOperationDefinition {
 	private Map<String, TPropertyAssignmentOrDefinition> inputs;
 	@Annotations.StandardExtension
 	private Map<String, TPropertyAssignmentOrDefinition> outputs;
+	@Annotations.StandardExtension
 	private TImplementation implementation;
 
 	public TOperationDefinition() {
@@ -94,8 +95,7 @@ public class TOperationDefinition {
 	public void setInputs(Map<String, TPropertyAssignmentOrDefinition> inputs) {
 		this.inputs = inputs;
 	}
-
-	@Annotations.StandardExtension
+	
 	@NonNull
 	public Map<String, TPropertyAssignmentOrDefinition> getOutputs() {
 		if (this.outputs == null) {
@@ -103,8 +103,7 @@ public class TOperationDefinition {
 		}
 		return outputs;
 	}
-
-	@Annotations.StandardExtension
+	
 	public TOperationDefinition setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
 		this.outputs = outputs;
 		return this;
@@ -126,7 +125,6 @@ public class TOperationDefinition {
 	public static class Builder {
 		private String description;
 		private Map<String, TPropertyAssignmentOrDefinition> inputs;
-		@Annotations.StandardExtension
 		private Map<String, TPropertyAssignmentOrDefinition> outputs;
 		private TImplementation implementation;
 
@@ -143,8 +141,7 @@ public class TOperationDefinition {
 			this.inputs = inputs;
 			return this;
 		}
-
-		@Annotations.StandardExtension
+		
 		public Builder setOutputs(Map<String, TPropertyAssignmentOrDefinition> outputs) {
 			this.outputs = outputs;
 			return this;
