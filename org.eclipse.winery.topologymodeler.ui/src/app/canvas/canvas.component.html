@@ -3,7 +3,9 @@
        (mousedown)="trackTimeOfMouseDown($event)"
        (mouseup)="trackTimeOfMouseUp($event)"
        [class.crosshair]="this.crosshair"
-       [style.marginLeft.px]="marginLeft">
+       [style.marginLeft.px]="marginLeft"
+       [style.width.%]="gridWidth"
+       [style.height.%]="gridHeight">
     <div class="selection" id="selection"
          [class.selection-active]="selectionActive"
          [style.left.px]="pageX"

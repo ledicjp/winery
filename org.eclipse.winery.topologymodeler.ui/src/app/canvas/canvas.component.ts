@@ -9,7 +9,7 @@
  * Contributors:
  *     Thommy Zelenik - initial API and implementation
  */
-import {Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
+import {Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
 import {JsPlumbService} from '../jsPlumbService';
 import {JsonService} from '../jsonService/json.service';
 import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
@@ -19,6 +19,7 @@ import {NgRedux} from '@angular-redux/store';
 import {IWIneryState} from '../redux/store/winery.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'winery-canvas',
@@ -62,13 +63,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
   dragSourceActive = false;
   endpointContainer: string;
   toggleOpen = false;
+  gridWidth = 100;
+  gridHeight = 100;
 
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
               differsPressedNavBarButton: KeyValueDiffers,
               private ngRedux: NgRedux<IWIneryState>,
               private actions: WineryActions,
-              private topologyRendererActions: TopologyRendererActions) {
+              private topologyRendererActions: TopologyRendererActions,
+              @Inject(DOCUMENT) private document: Document) {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
@@ -229,6 +233,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.selectionWidth = 0;
       this.selectionHeight = 0;
     }
+  }
+
+  @HostListener('window:scroll', ['event'])
+  adjustGrid($event) {
+    this.gridWidth = document.documentElement.scrollWidth;
+    this.gridHeight = document.documentElement.scrollHeight + 10;
   }
 
   private getOffset(el) {
