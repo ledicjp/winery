@@ -18,7 +18,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.JAXBException;
+
 import org.eclipse.winery.common.Util;
+import org.eclipse.winery.model.tosca.Definitions;
 import org.eclipse.winery.model.tosca.TDocumentation;
 import org.eclipse.winery.model.tosca.TImport;
 import org.eclipse.winery.model.tosca.yaml.TArtifactDefinition;
@@ -37,11 +40,13 @@ import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.Defaults;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
+import org.eclipse.winery.yaml.common.reader.XmlReader;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 public class X2YConverter {
 	private String PATH;
+	private XmlReader reader;
 
 	private Map<String, String> metadata;
 	private Map<String, TServiceTemplate> service_templates;
@@ -62,6 +67,10 @@ public class X2YConverter {
 	private Map<String, List<Map.Entry<String, TArtifactDefinition>>> artifactDefinitionNodeTypeMap;
 	private Map<String, TArtifactDefinition> artifactDefinitions;
 
+	private void init() {
+		this.reader = new XmlReader();
+	}
+
 	/**
 	 * Converts TOSCA XML Definitions to TOSCA YAML ServiceTemplates
 	 */
@@ -71,6 +80,7 @@ public class X2YConverter {
 		}
 
 		this.PATH = PATH;
+		this.init();
 
 		TServiceTemplate.Builder builder = new TServiceTemplate.Builder(Defaults.TOSCA_DEFINITIONS_VERSION);
 		builder.setDescription(convertDocumentation(node.getDocumentation()));
@@ -104,8 +114,21 @@ public class X2YConverter {
 	 * Imports TOSCA XML Import and converts them to TOSCA YAML ServiceTemplates including import statements
 	 */
 	public void convert(TImport node) {
-		
-		TImportDefinition.Builder builder = new TImportDefinition.Builder(getOutputFileFromImport(node.getNamespace(), node.getLocation()));
+		// TODO rewrite file parser (not only relative file position)
+		try {
+			Definitions impt = this.reader.parse(this.PATH + "/" + node.getLocation());
+			X2YConverter converter = new X2YConverter();
+
+			Map<String, TServiceTemplate> imports = converter.convert(impt, this.PATH);
+			TImportDefinition.Builder builder = new TImportDefinition.Builder(getOutputFileFromImport(node.getNamespace(), node.getLocation()));
+
+			imports.forEach((key, value) -> {
+				//Writer
+				TImportDefinition.Builder iBuilder = new TImportDefinition.Builder("");
+			});
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private <T> void convert(List<T> nodes) {

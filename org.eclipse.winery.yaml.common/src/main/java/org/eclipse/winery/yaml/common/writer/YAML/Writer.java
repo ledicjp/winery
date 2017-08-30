@@ -11,5 +11,30 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.common.writer.YAML;
 
-public class Writer {
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
+import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
+
+public class Writer extends AbstractVisitor<Writer.Result, Writer.Parameter> {
+
+    public static class Result extends AbstractResult<Result> {
+
+        @Override
+        public Result add(Result result) {
+            return result;
+        }
+    }
+
+    public static class Parameter extends AbstractParameter<Parameter> {
+
+        @Override
+        public Parameter copy() {
+            return new Parameter().addContext(this.getContext());
+        }
+
+        @Override
+        public Parameter self() {
+            return this;
+        }
+    }
 }

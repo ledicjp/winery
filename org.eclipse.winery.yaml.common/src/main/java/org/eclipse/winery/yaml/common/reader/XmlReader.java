@@ -20,14 +20,23 @@ import javax.xml.bind.Unmarshaller;
 import org.eclipse.winery.model.tosca.Definitions;
 
 public class XmlReader {
-    private final Unmarshaller unmarshaller;
+    private Unmarshaller unmarshaller;
 
-    public XmlReader() throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Definitions.class);
-        unmarshaller = jaxbContext.createUnmarshaller();
+    public XmlReader() {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Definitions.class);
+            unmarshaller = jaxbContext.createUnmarshaller();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     public Definitions parse(File file) throws JAXBException {
         return (Definitions) unmarshaller.unmarshal(file);
+    }
+
+    public Definitions parse(String fileName) throws JAXBException {
+        File file = new File(fileName);
+        return parse(file);
     }
 }

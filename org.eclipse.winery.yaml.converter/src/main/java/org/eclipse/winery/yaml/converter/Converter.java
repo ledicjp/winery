@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.converter;
 
+import java.util.Map;
+
 import org.eclipse.winery.model.tosca.Definitions;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 
@@ -25,5 +27,9 @@ public class Converter {
 
 	public Definitions convertY2X(TServiceTemplate serviceTemplate, String name, String namespace, String path) {
 		return this.y2XConverter.convert(serviceTemplate, name, namespace, path);
+	}
+
+	public Map<String, TServiceTemplate> convertX2Y(Definitions definitions, String path) {
+		return this.x2YConverter.convert(definitions, path);
 	}
 }
