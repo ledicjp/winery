@@ -3,7 +3,7 @@
        (mousedown)="trackTimeOfMouseDown($event)"
        (mouseup)="trackTimeOfMouseUp($event)"
        [class.crosshair]="this.crosshair"
-       [style.marginLeft.px]="enhanceGrid">
+       [style.marginLeft.px]="marginLeft">
     <div class="selection" id="selection"
          [class.selection-active]="selectionActive"
          [style.left.px]="pageX"
@@ -23,7 +23,11 @@
                [navbarButtonsState]="navbarButtonsState"
                (addNodeToDragSelection)="addNodeToDragSelection($event)"
                (checkIfNodeInSelection)="checkIfNodeInSelection($event)"
-               (askForRepaint)="repaintJsPlumb()"
-               [selectedNodes]="selectedNodes">
+               (askForRepaint)="repaintJsPlumb($event)"
+               [selectedNodes]="selectedNodes"
+               (setDragSource)="setDragSource($event)"
+               (closedEndpoint)="closedEndpoint($event)"
+               [dragSource]="node.id + 'Endpoint'"
+               [endpointContainer]="endpointContainer">
   </winery-node>
 </div>

@@ -51,11 +51,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
   longPress: boolean;
   crosshair = false;
   differPressedNavBarButton: any;
-  enhanceGrid: number;
+  marginLeft: number;
+  dragSourceInfos: any;
+  allNodesIds: Array<string> = [];
   nodeTemplatesSubscription;
   gridSubscription;
   relationshipTemplatesSubscription;
   navBarButtonsStateSubscription;
+  marginTop: number;
+  dragSourceActive = false;
+  endpointContainer: string;
+  toggleOpen = false;
 
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
@@ -66,7 +72,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
-      .subscribe(currentRelationships => this.addNewRelationship(currentRelationships));
+      .subscribe(currentRelationships => this.addNewRelationships(currentRelationships));
     this.gridSubscription = this.ngRedux.select(state => state.wineryState.currentPaletteOpenedState)
       .subscribe(currentPaletteOpened => this.updateGridState(currentPaletteOpened));
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
@@ -75,30 +81,36 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   addNewNode(currentNodes: Array<TNodeTemplate>): void{
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1])
+      const newNode = currentNodes[currentNodes.length - 1];
+      this.allNodeTemplates.push(newNode);
+      this.allNodesIds.push(newNode.id);
     }
   }
-  addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
-    const newRelationship = currentRelationships[currentRelationships.length - 1];
-    if (currentRelationships.length > 0) {
-      this.allRelationshipTemplates.push(newRelationship);
-      setTimeout(() => this.displayRelationships(newRelationship), 1);
-    }
+  addNewRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
+      const newRelationship = currentRelationships[currentRelationships.length - 1];
+      if (newRelationship) {
+        if (currentRelationships.length > 0) {
+          this.allRelationshipTemplates.push(newRelationship);
+          const sourceElement = newRelationship.sourceElement;
+          const targetElement = newRelationship.targetElement;
+          setTimeout(() => this.displayRelationships(sourceElement, targetElement), 1);
+        }
+      }
   }
 
   updateGridState(currentPaletteOpenedState: boolean) {
     if (currentPaletteOpenedState !== true) {
-      this.enhanceGrid = 0;
+      this.marginLeft = 0;
       this.offsetX = 0;
     } else {
       this.offsetX = -200;
-      this.enhanceGrid = 200;
+      this.marginLeft = 200;
     }
   }
 
   setButtonsState(currentButtonsState: ButtonsStateModel): void {
       this.navbarButtonsState = currentButtonsState;
-      setTimeout(() => this.repaintJsPlumb(), 1);
+      setTimeout(() => this.newJsPlumbInstance.repaintEverything(), 1);
       const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
       const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
       const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
@@ -114,12 +126,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
       }
   }
 
-  displayRelationships(newRelationship: TRelationshipTemplate): void {
-    const sourceElement = newRelationship.sourceElement;
-    const targetElement = newRelationship.targetElement;
+  displayRelationships(sourceId: string, targetId: string): void {
     this.newJsPlumbInstance.connect({
-      source: sourceElement,
-      target: targetElement,
+      source: sourceId,
+      target: targetId,
       overlays: [['Arrow', {width: 15, length: 15, location: 1, id: 'arrow', direction: 1}],
         ['Label', {
           label: '(Hosted On)',
@@ -128,6 +138,32 @@ export class CanvasComponent implements OnInit, OnDestroy {
         }]
       ],
     });
+    if (this.dragSourceInfos) {
+      this.newJsPlumbInstance.unmakeSource(this.dragSourceInfos.dragSource);
+      this.newJsPlumbInstance.removeAllEndpoints(this.dragSourceInfos.dragSource);
+      this.dragSourceActive = false;
+      this.toggleOpen = !this.toggleOpen;
+      this.dragSourceInfos.open = this.toggleOpen;
+      console.log(this.dragSourceInfos.open);
+      this.endpointContainer = this.dragSourceInfos;
+    }
+  }
+
+  closedEndpoint($event): void {
+    this.dragSourceActive = false;
+  }
+
+  setDragSource($event): void {
+    if (!this.dragSourceActive) {
+      this.newJsPlumbInstance.makeSource($event.dragSource, {
+        connectorOverlays: [
+          ['Arrow', {location: 1}],
+        ],
+      });
+      this.dragSourceInfos = $event;
+      this.newJsPlumbInstance.makeTarget(this.allNodesIds);
+      this.dragSourceActive = true;
+    }
   }
 
   @HostListener('click', ['$event'])
@@ -220,15 +256,24 @@ export class CanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  repaintJsPlumb() {
+  repaintJsPlumb($event) {
     this.newJsPlumbInstance.repaintEverything();
   }
 
   ngOnInit() {
-    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
-    this.newJsPlumbInstance.setContainer('container');
     this.visuals = this.jsonService.getVisuals();
     this.assignVisuals();
+    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
+    this.newJsPlumbInstance.setContainer('container');
+    this.newJsPlumbInstance.bind('connection', info => {
+      const sourceElement = info.source.offsetParent.offsetParent.id;
+      const targetElement = info.targetId;
+      const newRelationship = new TRelationshipTemplate(
+        sourceElement,
+        targetElement
+      );
+      this.ngRedux.dispatch(this.actions.saveRelationship(newRelationship));
+    });
   }
 
   assignVisuals() {
@@ -291,11 +336,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.enhanceDragSelection($event);
   }
 
-  trackTimeOfMouseDown(e: Event): void {
+  trackTimeOfMouseDown($event): void {
     this.startTime = new Date().getTime();
   }
 
-  trackTimeOfMouseUp(e: Event): void {
+  trackTimeOfMouseUp($event): void {
     this.endTime = new Date().getTime();
     this.testTimeDifference();
   }

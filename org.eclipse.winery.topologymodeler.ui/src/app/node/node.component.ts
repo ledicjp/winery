@@ -16,7 +16,7 @@ import {
   DoCheck,
   EventEmitter,
   Input,
-  IterableDiffers,
+  IterableDiffers, KeyValueDiffers,
   OnInit,
   Output
 } from '@angular/core';
@@ -31,7 +31,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   public items: string[] = ['Item 1', 'Item 2', 'Item 3'];
   public accordionGroupPanel = 'accordionGroupPanel';
   public customClass = 'customClass';
-  connectorEndpointVisible = false;
+  @Input() connectorEndpointVisible;
   startTime;
   endTime;
   longpress = false;
@@ -43,22 +43,30 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   @Output() askForRepaint: EventEmitter<string>;
   @Input() nodeColor: string;
   @Input() nodeImageUrl: string;
+  @Input() dragSource: string;
   @Output() addNodeToDragSelection: EventEmitter<string>;
   @Output() checkIfNodeInSelection: EventEmitter<string>;
   @Input() selectedNodes: string[] = [];
   @Input() navbarButtonsState: ButtonsStateModel;
+  @Input() endpointContainer: any;
+  @Output() setDragSource: EventEmitter<any>;
+  @Output() closedEndpoint: EventEmitter<string>;
   differSelectedNodes: any;
+  differDragSource: any;
 
   public addItem(): void {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-  constructor(differsSelectedNodes: IterableDiffers) {
+  constructor(differsSelectedNodes: IterableDiffers, differsDragSource: KeyValueDiffers) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();
     this.checkIfNodeInSelection = new EventEmitter();
+    this.setDragSource = new EventEmitter();
+    this.closedEndpoint = new EventEmitter();
     this.differSelectedNodes = differsSelectedNodes.find([]).create(null);
+    this.differDragSource = differsDragSource.find([]).create(null);
   }
 
   ngOnInit() {
@@ -70,6 +78,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngDoCheck(): void {
     const selectedNodes = this.differSelectedNodes.diff(this.selectedNodes);
+    const dragSourceChanges = this.differDragSource.diff(this.endpointContainer);
 
     if (selectedNodes) {
       selectedNodes.forEachAddedItem(r => {
@@ -84,10 +93,16 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
           }
         }
       );
+    } else if (dragSourceChanges){
+      if (dragSourceChanges._appendAfter.currentValue === this.title) {
+        this.connectorEndpointVisible = false;
+        console.log(dragSourceChanges);
+      }
     }
   }
 
-  private repaint() {
+  private repaint($event) {
+    $event.stopPropagation();
     setTimeout(() => this.askForRepaint.emit(), 1);
   }
 
@@ -95,27 +110,52 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.startTime = new Date().getTime();
   }
 
-  trackTimeOfMouseUp(): void {
+  trackTimeOfMouseUp($event): void {
     this.endTime = new Date().getTime();
-    this.testTimeDifference();
+    this.testTimeDifference($event);
   }
 
-  private testTimeDifference(): void {
+  private testTimeDifference($event): void {
     if ((this.endTime - this.startTime) < 250) {
       this.longpress = false;
     } else if (this.endTime - this.startTime >= 300) {
       this.longpress = true;
+      const srcElement = $event.srcElement.className;
+      /*
+      if (srcElement !== 'connectorLabel' && srcElement !== 'connectorBox' &&
+        srcElement !== 'connectorEndpoint' && srcElement !== 'endpointContainer') {
+        this.connectorEndpointVisible = false;
+      }
+      */
     }
+  }
+
+  makeSource($event): void {
+    const dragSourceInfo = {
+      open: true,
+      dragSource: this.dragSource,
+      nodeId: this.title
+    };
+    this.setDragSource.emit(dragSourceInfo);
   }
 
   showConnectorEndpoint($event): void {
     $event.stopPropagation();
-    if ($event.ctrlKey) {
-      this.addNodeToDragSelection.emit(this.title);
-      this.makeSelectionVisible = !this.makeSelectionVisible;
-    } else {
-      (this.longpress) ? $event.preventDefault() : this.connectorEndpointVisible = !this.connectorEndpointVisible;
-      this.checkIfNodeInSelection.emit(this.title);
+    const srcElement = $event.srcElement.className;
+    if (srcElement !== 'connectorLabel' && srcElement !== 'connectorBox' &&
+      srcElement !== 'connectorEndpoint' && srcElement !== 'endpointContainer') {
+      if ($event.ctrlKey) {
+        this.addNodeToDragSelection.emit(this.title);
+        this.makeSelectionVisible = !this.makeSelectionVisible;
+      } else {
+        if (!this.longpress) {
+          this.connectorEndpointVisible = !this.connectorEndpointVisible;
+          if (this.connectorEndpointVisible === true) {
+            this.closedEndpoint.emit('set no more drag sources');
+          }
+        }
+        this.checkIfNodeInSelection.emit(this.title);
+      }
     }
   }
 }

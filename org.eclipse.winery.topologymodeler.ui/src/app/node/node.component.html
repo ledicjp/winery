@@ -1,7 +1,7 @@
 <div class="container rounded" style="padding: 3px; position: absolute;" [style.top]="top" [style.left]="left"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
-     (mousedown)="trackTimeOfMouseDown()"
-     (mouseup)="trackTimeOfMouseUp()"
+     (mousedown)="trackTimeOfMouseDown($event)"
+     (mouseup)="trackTimeOfMouseUp($event)"
      (click)="showConnectorEndpoint($event)">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
@@ -29,8 +29,8 @@
       </table>
     </div>
   </div>
-  <div class="endpointContainer" *ngIf="connectorEndpointVisible">
-    <div class="connectorEndpoint">
+  <div class="endpointContainer" *ngIf="connectorEndpointVisible" (mouseover)="makeSource($event)">
+    <div class="connectorEndpoint" id={{dragSource}}>
       <div class="connectorBox">
       </div>
       <div class="connectorLabel">
@@ -41,7 +41,7 @@
   <!-- Repaint jsPlumb on every accordion click -->
 
   <accordion #accordion
-             (click)="repaint()">
+             (click)="repaint($event)">
 
 
     <!-- PROPERTIES -->
