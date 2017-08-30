@@ -108,6 +108,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
 
   trackTimeOfMouseDown(): void {
     this.startTime = new Date().getTime();
+    this.checkIfNodeInSelection.emit(this.title);
   }
 
   trackTimeOfMouseUp($event): void {
@@ -154,7 +155,6 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
             this.closedEndpoint.emit('set no more drag sources');
           }
         }
-        this.checkIfNodeInSelection.emit(this.title);
       }
     }
   }

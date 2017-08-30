@@ -173,7 +173,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @HostListener('click', ['$event'])
   onClick($event) {
     if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
       this.clearArray(this.selectedNodes);
       if ($event.clientX > 200) {
         this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
@@ -182,6 +181,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   clearArray(array: any[]): void {
+    this.newJsPlumbInstance.removeFromAllPosses(array);
     array.length = 0;
   }
 
@@ -202,6 +202,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   openSelector($event) {
     if (this.callOpenSelector) {
+      this.clearArray(this.selectedNodes);
       this.selectionWidth = Math.abs(this.initialW - $event.pageX);
       this.selectionHeight = Math.abs(this.initialH - $event.pageY);
       if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
@@ -313,7 +314,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       }
     }
     if (this.nodeSelected === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
       this.clearArray(this.selectedNodes);
     }
   }
