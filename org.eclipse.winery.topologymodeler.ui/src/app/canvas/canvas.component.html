@@ -25,12 +25,10 @@
                [nodeImageUrl]="node.imageUrl"
                [navbarButtonsState]="navbarButtonsState"
                (addNodeToDragSelection)="addNodeToDragSelection($event)"
-               (checkIfNodeInSelection)="checkIfNodeInSelection($event)"
                (askForRepaint)="repaintJsPlumb($event)"
-               [selectedNodes]="selectedNodes"
                (setDragSource)="setDragSource($event)"
                (closedEndpoint)="closedEndpoint($event)"
                [dragSource]="node.id + 'Endpoint'"
-               [endpointContainer]="endpointContainer">
+               (checkFocusNode)="checkFocusNode($event)">
   </winery-node>
 </div>

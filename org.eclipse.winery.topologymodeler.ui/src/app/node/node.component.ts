@@ -16,9 +16,9 @@ import {
   DoCheck,
   EventEmitter,
   Input,
-  IterableDiffers, KeyValueDiffers,
+  IterableDiffers, NgZone,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 
@@ -27,15 +27,15 @@ import {ButtonsStateModel} from '../models/buttonsState.model';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.css'],
 })
-export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
+export class NodeComponent implements OnInit, AfterViewInit {
   public items: string[] = ['Item 1', 'Item 2', 'Item 3'];
   public accordionGroupPanel = 'accordionGroupPanel';
   public customClass = 'customClass';
-  @Input() connectorEndpointVisible;
+  connectorEndpointVisible;
   startTime;
   endTime;
   longpress = false;
-  makeSelectionVisible = false;
+  @Input() makeSelectionVisible = false;
   @Input() title: string;
   @Input() left: number;
   @Input() top: number;
@@ -45,28 +45,22 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() nodeImageUrl: string;
   @Input() dragSource: string;
   @Output() addNodeToDragSelection: EventEmitter<string>;
-  @Output() checkIfNodeInSelection: EventEmitter<string>;
-  @Input() selectedNodes: string[] = [];
   @Input() navbarButtonsState: ButtonsStateModel;
-  @Input() endpointContainer: any;
   @Output() setDragSource: EventEmitter<any>;
   @Output() closedEndpoint: EventEmitter<string>;
-  differSelectedNodes: any;
-  differDragSource: any;
+  @Output() checkFocusNode: EventEmitter<string>;
 
   public addItem(): void {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-  constructor(differsSelectedNodes: IterableDiffers, differsDragSource: KeyValueDiffers) {
+  constructor(private zone: NgZone) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();
-    this.checkIfNodeInSelection = new EventEmitter();
     this.setDragSource = new EventEmitter();
     this.closedEndpoint = new EventEmitter();
-    this.differSelectedNodes = differsSelectedNodes.find([]).create(null);
-    this.differDragSource = differsDragSource.find([]).create(null);
+    this.checkFocusNode = new EventEmitter();
   }
 
   ngOnInit() {
@@ -76,44 +70,37 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.sendId.emit(this.title);
   }
 
-  ngDoCheck(): void {
-    const selectedNodes = this.differSelectedNodes.diff(this.selectedNodes);
-    const dragSourceChanges = this.differDragSource.diff(this.endpointContainer);
-
-    if (selectedNodes) {
-      selectedNodes.forEachAddedItem(r => {
-          if (this.title === r.item) {
-            this.makeSelectionVisible = true;
-          }
-        }
-      );
-      selectedNodes.forEachRemovedItem(r => {
-          if (this.title === r.item) {
-            this.makeSelectionVisible = false;
-          }
-        }
-      );
-    } else if (dragSourceChanges){
-      if (dragSourceChanges._appendAfter.currentValue === this.title) {
-        this.connectorEndpointVisible = false;
-        console.log(dragSourceChanges);
-      }
-    }
-  }
-
   private repaint($event) {
     $event.stopPropagation();
     setTimeout(() => this.askForRepaint.emit(), 1);
   }
 
-  trackTimeOfMouseDown(): void {
-    this.startTime = new Date().getTime();
-    this.checkIfNodeInSelection.emit(this.title);
+  bindMouseMove = (ev) => {
+    this.mouseMove(ev);
+  }
+
+  trackTimeOfMouseDown($event): void {
+    if (!$event.ctrlKey) {
+      this.startTime = new Date().getTime();
+      this.makeSelectionVisible = true;
+      this.checkFocusNode.emit(this.title);
+      this.connectorEndpointVisible = !this.connectorEndpointVisible;
+      this.zone.runOutsideAngular(() => {
+        document.getElementById(this.title).addEventListener('mousemove', this.bindMouseMove);
+      });
+    }
+  }
+
+  mouseMove($event): void {
+    this.connectorEndpointVisible = false;
   }
 
   trackTimeOfMouseUp($event): void {
-    this.endTime = new Date().getTime();
-    this.testTimeDifference($event);
+    document.getElementById(this.title).removeEventListener('mousemove', this.bindMouseMove);
+    if (!$event.ctrlKey) {
+      this.endTime = new Date().getTime();
+      this.testTimeDifference($event);
+    }
   }
 
   private testTimeDifference($event): void {
@@ -121,19 +108,11 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       this.longpress = false;
     } else if (this.endTime - this.startTime >= 300) {
       this.longpress = true;
-      const srcElement = $event.srcElement.className;
-      /*
-      if (srcElement !== 'connectorLabel' && srcElement !== 'connectorBox' &&
-        srcElement !== 'connectorEndpoint' && srcElement !== 'endpointContainer') {
-        this.connectorEndpointVisible = false;
-      }
-      */
     }
   }
 
   makeSource($event): void {
     const dragSourceInfo = {
-      open: true,
       dragSource: this.dragSource,
       nodeId: this.title
     };
@@ -150,7 +129,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
         this.makeSelectionVisible = !this.makeSelectionVisible;
       } else {
         if (!this.longpress) {
-          this.connectorEndpointVisible = !this.connectorEndpointVisible;
+          // this.connectorEndpointVisible = !this.connectorEndpointVisible;
           if (this.connectorEndpointVisible === true) {
             this.closedEndpoint.emit('set no more drag sources');
           }
