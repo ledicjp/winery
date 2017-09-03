@@ -11,7 +11,7 @@
  */
 import { Action } from 'redux';
 import {
-  OpenSidebar,
+  SidebarStateAction,
   SaveNodeTemplateAction,
   SaveRelationshipAction,
   SendPaletteOpenedAction,
@@ -21,13 +21,17 @@ import { TNodeTemplate, TRelationshipTemplate, TTopologyTemplate } from 'app/tto
 
 export interface WineryState {
   currentPaletteOpenedState: boolean;
-  sidebarVisible: boolean;
+  sidebarContents: any;
   currentJsonTopology: TTopologyTemplate;
 }
 
 export const INITIAL_WINERY_STATE: WineryState = {
   currentPaletteOpenedState: false,
-  sidebarVisible: false,
+  sidebarContents: {
+    sidebarVisible: false,
+    nodeId: '',
+    nameTextFieldValue: ''
+  },
   currentJsonTopology: new TTopologyTemplate
 };
 
@@ -41,22 +45,14 @@ export const WineryReducer =
           currentPaletteOpenedState: paletteOpened
         };
       case WineryActions.OPEN_SIDEBAR:
-        const newSidebarData: any = (<OpenSidebar>action).sidebarContents;
-        console.log('newSidebarData: ' + JSON.stringify(newSidebarData, null, 2));
-        console.log('changedSidebarData: ' + JSON.stringify({
+        const newSidebarData: any = (<SidebarStateAction>action).sidebarContents;
+        console.log({
           ...lastState,
-          sidebarContents: {
-            sidebarVisible: lastState.sidebarVisible,
-            nodeId: newSidebarData.nodeId,
-            nameTextFieldValue: newSidebarData.nameTextFieldValue
-          }}, null, 2));
+          sidebarContents: newSidebarData
+        });
         return {
           ...lastState,
-          sidebarContents: {
-            sidebarVisible: newSidebarData.sidebarContents.sidebarVisible,
-            nodeId: newSidebarData.sidebarContents.nodeId,
-            nameTextFieldValue: newSidebarData.sidebarContents.nameTextFieldValue
-          }
+          sidebarContents: newSidebarData
         };
       case WineryActions.SAVE_NODE_TEMPLATE:
         const newNode: TNodeTemplate = (<SaveNodeTemplateAction>action).nodeTemplate;

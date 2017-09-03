@@ -253,6 +253,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.newJsPlumbInstance.repaintEverything();
   }
 
+  hideSidebar() {
+    this.ngRedux.dispatch(this.actions.openSidebar({
+      sidebarContents: {
+        sidebarVisible: false,
+        nodeId: '',
+        nameTextFieldValue: ''
+      }
+    }));
+  }
+
   ngOnInit() {
     this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
     this.newJsPlumbInstance.setContainer('container');

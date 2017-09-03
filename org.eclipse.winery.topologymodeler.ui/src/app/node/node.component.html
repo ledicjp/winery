@@ -3,10 +3,11 @@
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
      (mousedown)="trackTimeOfMouseDown()"
      (mouseup)="trackTimeOfMouseUp()"
-     (click)="showConnectorEndpoint($event); openSidebar($event);">
+     (click)="showConnectorEndpoint($event);">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
-       [class.unselected]="!makeSelectionVisible">
+       [class.unselected]="!makeSelectionVisible"
+       (click)="testTimeDifference(); openSidebar($event);">
     <div class="col-sm-3">
       <img *ngIf="!nodeImageUrl" src="https://api.adorable.io/avatars/50/{{title}}"
            style="border-radius: 10%; margin-top: 1px">

@@ -115,16 +115,26 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       this.checkIfNodeInSelection.emit(this.title);
     }
   }
-
+  
+  // Only display the sidebar if the click is no longpress
   openSidebar($event): void {
     $event.stopPropagation();
-    this.toggle = !this.toggle;
-    this.$ngRedux.dispatch(this.actions.openSidebar({
-      sidebarContents: {
-        sidebarVisible: true,
-        nodeId: Math.random() + 'abc',
-        nameTextFieldValue: 'pipi'
-      }
-    }));
+    if (this.longpress) {
+      this.$ngRedux.dispatch(this.actions.openSidebar({
+        sidebarContents: {
+          sidebarVisible: false,
+          nodeId: '',
+          nameTextFieldValue: ''
+        }
+      }));
+    } else {
+      this.$ngRedux.dispatch(this.actions.openSidebar({
+        sidebarContents: {
+          sidebarVisible: true,
+          nodeId: this.title,
+          nameTextFieldValue: this.title
+        }
+      }));
+    }
   }
 }
