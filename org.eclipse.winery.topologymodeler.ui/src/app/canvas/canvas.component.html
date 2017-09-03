@@ -1,4 +1,5 @@
-<div id="container" style="height: auto;">
+<div id="container" style="height: auto;"
+     (mousedown)="showSelectionRange($event)">
   <div id="grid"
        (mousedown)="trackTimeOfMouseDown($event)"
        (mouseup)="trackTimeOfMouseUp($event)"

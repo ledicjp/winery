@@ -9,7 +9,7 @@
  * Contributors:
  *     Thommy Zelenik - initial API and implementation
  */
-import {Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
+import {Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit, NgZone,} from '@angular/core';
 import {JsPlumbService} from '../jsPlumbService';
 import {JsonService} from '../jsonService/json.service';
 import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
@@ -19,7 +19,6 @@ import {NgRedux} from '@angular-redux/store';
 import {IWIneryState} from '../redux/store/winery.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
-import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'winery-canvas',
@@ -43,8 +42,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   initialH: number;
   selectionWidth: number;
   selectionHeight: number;
-  callOpenSelector: boolean;
-  callSelectItems: boolean;
   offsetY = 0;
   offsetX = 102;
   startTime: number;
@@ -72,7 +69,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
               private ngRedux: NgRedux<IWIneryState>,
               private actions: WineryActions,
               private topologyRendererActions: TopologyRendererActions,
-              @Inject(DOCUMENT) private document: Document) {
+              private zone: NgZone) {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
@@ -148,7 +145,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.dragSourceActive = false;
       this.toggleOpen = !this.toggleOpen;
       this.dragSourceInfos.open = this.toggleOpen;
-      console.log(this.dragSourceInfos.open);
       this.endpointContainer = this.dragSourceInfos;
     }
   }
@@ -185,24 +181,25 @@ export class CanvasComponent implements OnInit, OnDestroy {
     array.length = 0;
   }
 
-  @HostListener('mousedown', ['$event'])
   showSelectionRange($event) {
+    console.log('mousedown');
     if (($event.pageY - this.offsetY) > 0) {
+      this.clearArray(this.selectedNodes);
       this.selectionActive = true;
       this.pageX = $event.pageX + this.offsetX;
       this.pageY = $event.pageY - this.offsetY;
       this.initialW = $event.pageX;
       this.initialH = $event.pageY;
-      this.callOpenSelector = true;
-      this.callSelectItems = true;
+      this.zone.runOutsideAngular(() => {
+        document.getElementById('container').addEventListener('mousemove', this.bindOpenSelector);
+        document.getElementById('container').addEventListener('mouseup', this.bindSelectElements);
+      });
     }
     this.crosshair = true;
   }
 
-  @HostListener('mousemove', ['$event'])
   openSelector($event) {
-    if (this.callOpenSelector) {
-      this.clearArray(this.selectedNodes);
+    console.log('mouseMove');
       this.selectionWidth = Math.abs(this.initialW - $event.pageX);
       this.selectionHeight = Math.abs(this.initialH - $event.pageY);
       if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
@@ -213,27 +210,32 @@ export class CanvasComponent implements OnInit, OnDestroy {
         this.pageX = $event.pageX + this.offsetX;
         this.pageY = $event.pageY - this.offsetY;
       }
-    }
   }
 
-  @HostListener('mouseup', ['$event'])
+  bindOpenSelector = (ev) => {
+    this.openSelector(ev);
+  }
+
+  bindSelectElements = (ev) => {
+    this.selectElements(ev);
+  }
+
   selectElements($event) {
-    if (this.callSelectItems) {
-      this.callOpenSelector = false;
-      this.callSelectItems = false;
-      for (const node of this.allNodeTemplates) {
-        const aElem = document.getElementById('selection');
-        const bElem = document.getElementById(node.id);
-        const result = this.doObjectsCollide(aElem, bElem);
-        if (result === true) {
-          this.enhanceDragSelection(node.id);
-        }
+    console.log('mouseUp');
+    for (const node of this.allNodeTemplates) {
+      const aElem = document.getElementById('selection');
+      const bElem = document.getElementById(node.id);
+      const result = this.doObjectsCollide(aElem, bElem);
+      if (result === true) {
+        this.enhanceDragSelection(node.id);
       }
-      this.crosshair = false;
-      this.selectionActive = false;
-      this.selectionWidth = 0;
-      this.selectionHeight = 0;
     }
+    document.getElementById('container').removeEventListener('mousemove', this.bindOpenSelector);
+    document.getElementById('container').removeEventListener('mouseup', this.bindSelectElements);
+    this.crosshair = false;
+    this.selectionActive = false;
+    this.selectionWidth = 0;
+    this.selectionHeight = 0;
   }
 
   @HostListener('window:scroll', ['event'])
