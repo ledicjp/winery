@@ -368,7 +368,7 @@ public class TOSCAExportUtil {
 	 *
 	 * @param id the id to search its children for referenced elements
 	 */
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(TOSCAComponentId id) throws RepositoryCorruptException {
+	public static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(TOSCAComponentId id) throws RepositoryCorruptException {
 		Collection<TOSCAComponentId> referencedTOSCAComponentIds;
 
 		// first of all, handle the concrete elements
