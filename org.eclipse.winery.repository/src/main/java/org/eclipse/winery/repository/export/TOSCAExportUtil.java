@@ -120,7 +120,7 @@ public class TOSCAExportUtil {
 	// collects the references to be put in the CSAR and the assigned path in
 	// the CSAR MANIFEST
 	// this allows to use other paths in the CSAR than on the local storage
-	private Map<RepositoryFileReference, String> referencesToPathInCSARMap = null;
+	private static Map<RepositoryFileReference, String> referencesToPathInCSARMap = null;
 
 	/**
 	 * Currently a very simple approach to configure the export
@@ -319,8 +319,8 @@ public class TOSCAExportUtil {
 		return referencedTOSCAComponentIds;
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(EntityTypeId id) {
-		return this.getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(id);
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(EntityTypeId id) {
+		return getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(id);
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class TOSCAExportUtil {
 	 * therefore we take the super type and hope that the caller knows what he
 	 * does.
 	 */
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(TOSCAComponentId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(TOSCAComponentId id) {
 		AbstractComponentInstanceResourceWithNameDerivedFromAbstractFinal res = (AbstractComponentInstanceResourceWithNameDerivedFromAbstractFinal) AbstractComponentsResource.getComponentInstaceResource(id);
 		String derivedFrom = res.getInheritanceManagement().getDerivedFrom();
 		if (StringUtils.isEmpty(derivedFrom)) {
@@ -373,27 +373,27 @@ public class TOSCAExportUtil {
 
 		// first of all, handle the concrete elements
 		if (id instanceof ServiceTemplateId) {
-			referencedTOSCAComponentIds = this.prepareForExport((ServiceTemplateId) id);
+			referencedTOSCAComponentIds = prepareForExport((ServiceTemplateId) id);
 		} else if (id instanceof NodeTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((NodeTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((NodeTypeId) id);
 		} else if (id instanceof NodeTypeImplementationId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((NodeTypeImplementationId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((NodeTypeImplementationId) id);
 		} else if (id instanceof RelationshipTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((RelationshipTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((RelationshipTypeId) id);
 		} else if (id instanceof RelationshipTypeImplementationId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((RelationshipTypeImplementationId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((RelationshipTypeImplementationId) id);
 		} else if (id instanceof RequirementTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((RequirementTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((RequirementTypeId) id);
 		} else if (id instanceof CapabilityTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((CapabilityTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((CapabilityTypeId) id);
 		} else if (id instanceof ArtifactTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((ArtifactTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((ArtifactTypeId) id);
 		} else if (id instanceof ArtifactTemplateId) {
-			referencedTOSCAComponentIds = this.prepareForExport((ArtifactTemplateId) id);
+			referencedTOSCAComponentIds = prepareForExport((ArtifactTemplateId) id);
 		} else if (id instanceof PolicyTypeId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((PolicyTypeId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((PolicyTypeId) id);
 		} else if (id instanceof PolicyTemplateId) {
-			referencedTOSCAComponentIds = this.getReferencedTOSCAComponentIds((PolicyTemplateId) id);
+			referencedTOSCAComponentIds = getReferencedTOSCAComponentIds((PolicyTemplateId) id);
 		} else if (id instanceof GenericImportId) {
 			// in case of imports, there are no other ids referenced
 			referencedTOSCAComponentIds = Collections.emptyList();
@@ -405,7 +405,7 @@ public class TOSCAExportUtil {
 		// Currently, it is EntityType and EntityTypeImplementation only
 		// Since the latter does not exist in the TOSCA MetaModel, we just handle EntityType here
 		if (id instanceof EntityTypeId) {
-			Collection<TOSCAComponentId> additionalRefs = this.getReferencedTOSCAComponentIds((EntityTypeId) id);
+			Collection<TOSCAComponentId> additionalRefs = getReferencedTOSCAComponentIds((EntityTypeId) id);
 			// the original referenceTOSCAComponentIds could be unmodifiable
 			// we just create a new one...
 			referencedTOSCAComponentIds = new ArrayList<>(referencedTOSCAComponentIds);
@@ -450,7 +450,7 @@ public class TOSCAExportUtil {
 		// Possibly the current solution, just lazily adding all dependent elements is the better solution.
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(NodeTypeImplementationId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(NodeTypeImplementationId id) {
 		// We have to use a HashSet to ensure that no duplicate ids are added
 		// There may be multiple DAs/IAs referencing the same type
 		Collection<TOSCAComponentId> ids = new HashSet<>();
@@ -470,10 +470,10 @@ public class TOSCAExportUtil {
 		}
 
 		// IAs
-		return this.getReferencedTOSCAComponentImplementationArtifactIds(ids, res.getNTI().getImplementationArtifacts(), id);
+		return getReferencedTOSCAComponentImplementationArtifactIds(ids, res.getNTI().getImplementationArtifacts(), id);
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RelationshipTypeImplementationId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RelationshipTypeImplementationId id) {
 		// We have to use a HashSet to ensure that no duplicate ids are added
 		// There may be multiple IAs referencing the same type
 		Collection<TOSCAComponentId> ids = new HashSet<>();
@@ -481,10 +481,10 @@ public class TOSCAExportUtil {
 		RelationshipTypeImplementationResource res = new RelationshipTypeImplementationResource(id);
 
 		// IAs
-		return this.getReferencedTOSCAComponentImplementationArtifactIds(ids, res.getRTI().getImplementationArtifacts(), id);
+		return getReferencedTOSCAComponentImplementationArtifactIds(ids, res.getRTI().getImplementationArtifacts(), id);
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentImplementationArtifactIds(Collection<TOSCAComponentId> ids, TImplementationArtifacts implementationArtifacts, TOSCAComponentId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentImplementationArtifactIds(Collection<TOSCAComponentId> ids, TImplementationArtifacts implementationArtifacts, TOSCAComponentId id) {
 		if (implementationArtifacts != null) {
 			for (TImplementationArtifact ia : implementationArtifacts.getImplementationArtifact()) {
 				QName qname;
@@ -496,12 +496,12 @@ public class TOSCAExportUtil {
 		}
 
 		// inheritance
-		ids.addAll(this.getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(id));
+		ids.addAll(getReferencedTOSCAComponentIdOfParentForAnAbstractComponentsWithTypeReferenceResource(id));
 
 		return ids;
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RequirementTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RequirementTypeId id) {
 		Collection<TOSCAComponentId> ids = new ArrayList<>(1);
 
 		RequirementTypeResource res = new RequirementTypeResource(id);
@@ -513,15 +513,15 @@ public class TOSCAExportUtil {
 		return ids;
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(CapabilityTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(CapabilityTypeId id) {
 		return Collections.emptyList();
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(PolicyTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(PolicyTypeId id) {
 		return Collections.emptyList();
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(PolicyTemplateId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(PolicyTemplateId id) {
 		Collection<TOSCAComponentId> ids = new ArrayList<>();
 		PolicyTemplateResource res = new PolicyTemplateResource(id);
 		ids.add(new PolicyTypeId(res.getType()));
@@ -532,7 +532,7 @@ public class TOSCAExportUtil {
 	 * Synchronizes the plan model references and returns the referenced TOSCA
 	 * Component Ids.
 	 */
-	private Collection<TOSCAComponentId> prepareForExport(ServiceTemplateId id) {
+	private static Collection<TOSCAComponentId> prepareForExport(ServiceTemplateId id) {
 		// We have to use a HashSet to ensure that no duplicate ids are added
 		// E.g., there may be multiple relationship templates having the same type
 		Collection<TOSCAComponentId> ids = new HashSet<>();
@@ -550,7 +550,7 @@ public class TOSCAExportUtil {
 			SortedSet<RepositoryFileReference> containedFiles = Repository.INSTANCE.getContainedFiles(planId);
 			// even if we currently support only one file in the directory, we just add everything
 			for (RepositoryFileReference ref : containedFiles) {
-				this.putRefAsReferencedItemInCSAR(ref);
+				putRefAsReferencedItemInCSAR(ref);
 			}
 		}
 
@@ -627,7 +627,7 @@ public class TOSCAExportUtil {
 		return ids;
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(ArtifactTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(ArtifactTypeId id) {
 		// no recursive crawling needed
 		return Collections.emptyList();
 	}
@@ -638,7 +638,7 @@ public class TOSCAExportUtil {
 	 *
 	 * @return a collection of referenced TOCSA Component Ids
 	 */
-	private Collection<TOSCAComponentId> prepareForExport(ArtifactTemplateId id) throws RepositoryCorruptException {
+	private static Collection<TOSCAComponentId> prepareForExport(ArtifactTemplateId id) throws RepositoryCorruptException {
 		Collection<TOSCAComponentId> ids = new ArrayList<>();
 
 		ArtifactTemplateResource res = new ArtifactTemplateResource(id);
@@ -666,7 +666,7 @@ public class TOSCAExportUtil {
 			// The old implementation had absolutePath.toUri().toString();
 			// there, but this does not work when using a cloud blob store.
 
-			this.putRefAsReferencedItemInCSAR(ref);
+			putRefAsReferencedItemInCSAR(ref);
 		}
 
 		return ids;
@@ -677,16 +677,16 @@ public class TOSCAExportUtil {
 	 *
 	 * Thereby, it uses the global variable referencesToPathInCSARMap
 	 */
-	private void putRefAsReferencedItemInCSAR(RepositoryFileReference ref) {
+	private static void putRefAsReferencedItemInCSAR(RepositoryFileReference ref) {
 		// Determine path
 		String path = BackendUtils.getPathInsideRepo(ref);
 
 		// put mapping reference to path into global map
 		// the path is the same as put in "synchronizeReferences"
-		this.referencesToPathInCSARMap.put(ref, path);
+		referencesToPathInCSARMap.put(ref, path);
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RelationshipTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(RelationshipTypeId id) {
 		Collection<TOSCAComponentId> ids = new ArrayList<>();
 
 		// add all implementations
@@ -728,12 +728,12 @@ public class TOSCAExportUtil {
 			}
 		}
 
-		this.addVisualAppearanceToCSAR(id);
+		addVisualAppearanceToCSAR(id);
 
 		return ids;
 	}
 
-	private Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(NodeTypeId id) {
+	private static Collection<TOSCAComponentId> getReferencedTOSCAComponentIds(NodeTypeId id) {
 		Collection<TOSCAComponentId> ids = new ArrayList<>();
 		Collection<NodeTypeImplementationId> allNodeTypeImplementations = BackendUtils.getAllElementsRelatedWithATypeAttribute(NodeTypeImplementationId.class, id.getQName());
 		for (NodeTypeImplementationId ntiId : allNodeTypeImplementations) {
@@ -763,24 +763,24 @@ public class TOSCAExportUtil {
 			}
 		}
 
-		this.addVisualAppearanceToCSAR(id);
+		addVisualAppearanceToCSAR(id);
 
 		return ids;
 	}
 
-	private void addVisualAppearanceToCSAR(TopologyGraphElementEntityTypeId id) {
+	private static void addVisualAppearanceToCSAR(TopologyGraphElementEntityTypeId id) {
 		VisualAppearanceId visId = new VisualAppearanceId(id);
 		if (Repository.INSTANCE.exists(visId)) {
 			// we do NOT check for the id, but simply check for bigIcon.png (only exists in NodeType) and smallIcon.png (exists in NodeType and RelationshipType)
 
 			RepositoryFileReference ref = new RepositoryFileReference(visId, Filename.FILENAME_BIG_ICON);
 			if (Repository.INSTANCE.exists(ref)) {
-				this.referencesToPathInCSARMap.put(ref, BackendUtils.getPathInsideRepo(ref));
+				referencesToPathInCSARMap.put(ref, BackendUtils.getPathInsideRepo(ref));
 			}
 
 			ref = new RepositoryFileReference(visId, Filename.FILENAME_SMALL_ICON);
 			if (Repository.INSTANCE.exists(ref)) {
-				this.referencesToPathInCSARMap.put(ref, BackendUtils.getPathInsideRepo(ref));
+				referencesToPathInCSARMap.put(ref, BackendUtils.getPathInsideRepo(ref));
 			}
 		}
 	}
