@@ -150,7 +150,7 @@ public class Writer extends AbstractVisitor<Printer, Writer.Parameter> {
             printer.printKey("credential")
                 .indent(INDENT_SIZE)
                 .printKeyValue("protocol", credential.getProtocol())
-                .printKeyValue("token_type", credential.getToken_type())
+                .printKeyValue("token_type", credential.getTokenType())
                 .printKeyValue("token", credential.getToken())
                 .printKeyObject("keys", credential.getKeys())
                 .printKeyValue("user", credential.getUser())

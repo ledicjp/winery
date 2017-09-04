@@ -22,8 +22,8 @@ public class Credential {
     @XmlElement
     private String protocol;
 
-    @XmlElement(required = true, defaultValue = "password")
-    private String token_type;
+    @XmlElement(name = "token_type", required = true, defaultValue = "password")
+    private String tokenType;
 
     @XmlElement(required = true)
     private String token;
@@ -35,7 +35,7 @@ public class Credential {
     private String user;
 
     public Credential() {
-        this.token_type = "password";
+        this.tokenType = "password";
     }
 
     public String getProtocol() {
@@ -46,12 +46,12 @@ public class Credential {
         this.protocol = protocol;
     }
 
-    public String getToken_type() {
-        return token_type;
+    public String getTokenType() {
+        return tokenType;
     }
 
-    public void setToken_type(String token_type) {
-        this.token_type = token_type;
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 
     public String getToken() {

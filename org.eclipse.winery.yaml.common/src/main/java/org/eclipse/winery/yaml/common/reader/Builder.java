@@ -293,7 +293,7 @@ public class Builder {
 
         Credential credential = new Credential();
         credential.setProtocol((String) map.get("protocol"));
-        credential.setToken_type((String) map.get("token_type"));
+        credential.setTokenType((String) map.get("token_type"));
         credential.setToken((String) map.get("token"));
         credential.setKeys(keys);
 

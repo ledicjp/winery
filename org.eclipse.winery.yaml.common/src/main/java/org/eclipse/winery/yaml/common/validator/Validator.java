@@ -110,7 +110,7 @@ public class Validator extends ExceptionVisitor<Result, Parameter> {
                 String keyname = "credential.token";
                 setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
             }
-            if (credential.getToken_type() == null || credential.getToken_type().isEmpty()) {
+            if (credential.getTokenType() == null || credential.getTokenType().isEmpty()) {
                 String keyname = "credential.token_type";
                 setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
             }
