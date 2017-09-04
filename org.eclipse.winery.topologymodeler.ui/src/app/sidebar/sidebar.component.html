@@ -11,11 +11,12 @@
     <fieldset>
       <div class="form-group">
         <label for="nodetemplateid">Id</label>
-        <input id="nodetemplateid" disabled="disabled" class="form-control" placeholder="{{sidebarState.nameTextFieldValue}}">
+        <input id="nodetemplateid" disabled="disabled" class="form-control" value="{{sidebarState.nodeId}}">
       </div>
       <div class="form-group">
         <label for="nodetemplatename" class="control-label">Name</label>
-        <input id="nodetemplatename" name="name" class="form-control" placeholder="{{sidebarState.nameTextFieldValue}}">
+        <input id="nodetemplatename" name="name" class="form-control" value="{{sidebarState.nameTextFieldValue}}"
+               (keyup)="nodeNameKeyUp.next($event.target.value)">
       </div>
       <div class="form-group">
         <label for="nodetemplateType">Type</label>
@@ -23,7 +24,7 @@
            target="_blank"
            href="http://dev.winery.opentosca.org/winery/nodetypes/http%253A%252F%252Fopentosca.org%252Fnodetypes/Babel/"
            class="form-control">
-          {{sidebarState.nameTextFieldValue}}
+          {{sidebarState.nodeId}}
         </a>
       </div>
       <div class="form-group">

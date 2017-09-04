@@ -15,20 +15,18 @@
     </div>
     <div id="specifierDiv" class="col-sm-9">
       <table class="table table-active table-border--grey table-sm header-table">
-
-        <tr>
+        <tr [class.flashit]="ngOnChanges()">
           <td class="td-key">name:</td>
-          <td class="td-value">{{title}}</td>
+          <td class="td-value">{{name}}</td>
         </tr>
         <tr *ngIf="navbarButtonsState.buttonsState.idsButton">
           <td class="td-key">id:</td>
           <td class="td-value" style="color: crimson">{{title}}</td>
         </tr>
         <tr *ngIf="navbarButtonsState.buttonsState.typesButton">
-          <td class="td-key">link:</td>
+          <td class="td-key">type:</td>
           <td class="btn-link td-value">{{title}}</td>
         </tr>
-
       </table>
     </div>
   </div>

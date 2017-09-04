@@ -18,6 +18,16 @@ body{
   color: white;
 }
 
+.flashit {
+  animation: flash ease-in 400ms 1;
+}
+
+@keyframes flash {
+  0%  { background-color: rgba(255,255,255,0.2); }
+  20% { background-color: rgba(249, 246, 246,0.9); }
+  100% { background-color: rgba(229, 226, 247,0.1); }
+}
+
 .card-header {
   background-color: rgba(5,5,5,0.4);
 }

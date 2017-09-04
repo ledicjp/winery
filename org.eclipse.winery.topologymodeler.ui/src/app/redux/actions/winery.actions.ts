@@ -25,6 +25,13 @@ export interface SidebarStateAction extends Action {
   };
 }
 
+export interface SidebarNodeNamechange extends Action {
+  nodeNames: {
+    newNodeName: string,
+    oldNodeName: string
+  };
+}
+
 export interface SaveNodeTemplateAction extends Action {
   nodeTemplate: TNodeTemplate;
 }
@@ -39,6 +46,7 @@ export class WineryActions {
   static OPEN_SIDEBAR = 'OPEN_SIDEBAR';
   static SAVE_NODE_TEMPLATE = 'SAVE_NODE_TEMPLATE';
   static SAVE_RELATIONSHIP = 'SAVE_RELATIONSHIP';
+  static CHANGE_NODE_NAME = 'CHANGE_NODE_NAME';
 
   sendPaletteOpened: ActionCreator<SendPaletteOpenedAction> =
     ((paletteOpened) => ({
@@ -49,6 +57,11 @@ export class WineryActions {
     ((newSidebarData) => ({
       type: WineryActions.OPEN_SIDEBAR,
       sidebarContents: newSidebarData.sidebarContents
+    }));
+  changeNodeName: ActionCreator<SidebarNodeNamechange> =
+    ((nodeNames) => ({
+      type: WineryActions.CHANGE_NODE_NAME,
+      nodeNames: nodeNames.nodeNames
     }));
   saveNodeTemplate: ActionCreator<SaveNodeTemplateAction> =
     ((newNode) => ({

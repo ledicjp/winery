@@ -37,7 +37,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
-
   pageX: Number;
   pageY: Number;
   selectionActive: boolean;
@@ -78,7 +77,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1]);
+      this.allNodeTemplates = currentNodes;
     }
   }
 

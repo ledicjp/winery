@@ -1,14 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { IWineryState } from '../redux/store/winery.store';
 import { WineryActions } from '../redux/actions/winery.actions';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'winery-sidebar',
@@ -31,10 +29,13 @@ import {
   ]
 })
 export class SidebarComponent implements OnInit {
-  // ngRedux subscription
-  subscription;
+  // ngRedux sidebarSubscription
+  sidebarSubscription;
+  nodeTemplateSubscription;
   sidebarState: any;
   sidebarAnimationStatus: string;
+
+  private nodeNameKeyUp: Subject<string> = new Subject<string>();
 
   constructor(private $ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions) {
@@ -51,15 +52,35 @@ export class SidebarComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.subscription = this.$ngRedux.select(state => state.wineryState.sidebarContents)
+    this.sidebarSubscription = this.$ngRedux.select(state => state.wineryState.sidebarContents)
       .subscribe(newValue => {
           this.sidebarState = newValue;
-          if (newValue.sidebarVisible) { this.sidebarAnimationStatus = 'in'; }
+          if (newValue.sidebarVisible) {
+            this.sidebarAnimationStatus = 'in';
+          }
         }
       );
+    this.nodeTemplateSubscription = this.$ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
+      .subscribe(nodeTemplates => {
+
+      })
+    // apply changes to the node name <input> field with a debounceTime of 400ms
+    const nodeNameKeyupObservable = this.nodeNameKeyUp
+      .debounceTime(400)
+      .distinctUntilChanged()
+      .subscribe(data => {
+        this.$ngRedux.dispatch(this.actions.changeNodeName({
+          nodeNames: {
+            oldNodeName: this.sidebarState.nameTextFieldValue,
+            newNodeName: data
+          }
+        }));
+      });
   }
 
-  minInstancesChanged() {}
+  minInstancesChanged() {
+  }
 
-  maxInstancesChanged() {}
+  maxInstancesChanged() {
+  }
 }

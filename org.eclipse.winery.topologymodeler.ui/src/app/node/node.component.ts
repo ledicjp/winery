@@ -10,7 +10,10 @@
  *     Josip Ledic - initial API and implementation, Refactoring to use Redux instead
  *     Thommy Zelenik - implementation, Refactoring
  */
-import { AfterViewInit, Component, DoCheck, EventEmitter, Input, IterableDiffers, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit, Component, DoCheck, EventEmitter, HostBinding, Input, IterableDiffers, OnChanges, OnInit,
+  Output
+} from '@angular/core';
 import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
 import { NgRedux } from '@angular-redux/store';
@@ -22,17 +25,18 @@ import { WineryActions } from '../redux/actions/winery.actions';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.css'],
 })
-export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
+export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   public items: string[] = ['Item 1', 'Item 2', 'Item 3'];
   public accordionGroupPanel = 'accordionGroupPanel';
   public customClass = 'customClass';
   connectorEndpointVisible = false;
   startTime;
   endTime;
-  toggle = false;
+  @Input() needsToBeFlashed: boolean;
   longpress = false;
   makeSelectionVisible = false;
   @Input() title: string;
+  @Input() name: string;
   @Input() left: number;
   @Input() top: number;
   @Output() sendId: EventEmitter<string>;
@@ -97,6 +101,10 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.testTimeDifference();
   }
 
+  ngOnChanges() {
+    return true;
+  }
+
   private testTimeDifference(): void {
     if ((this.endTime - this.startTime) < 250) {
       this.longpress = false;
@@ -115,7 +123,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
       this.checkIfNodeInSelection.emit(this.title);
     }
   }
-  
+
   // Only display the sidebar if the click is no longpress
   openSidebar($event): void {
     $event.stopPropagation();
@@ -128,11 +136,12 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
         }
       }));
     } else {
+      // close sidebar when longpressing a node template
       this.$ngRedux.dispatch(this.actions.openSidebar({
         sidebarContents: {
           sidebarVisible: true,
           nodeId: this.title,
-          nameTextFieldValue: this.title
+          nameTextFieldValue: this.name
         }
       }));
     }
