@@ -64,15 +64,23 @@ export class SidebarComponent implements OnInit {
       .subscribe(nodeTemplates => {
 
       })
-    // apply changes to the node name <input> field with a debounceTime of 400ms
+    // apply changes to the node name <input> field with a debounceTime of 300ms
     const nodeNameKeyupObservable = this.nodeNameKeyUp
-      .debounceTime(400)
+      .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(data => {
         this.$ngRedux.dispatch(this.actions.changeNodeName({
           nodeNames: {
             oldNodeName: this.sidebarState.nameTextFieldValue,
             newNodeName: data
+          }
+        }));
+        // refresh
+        this.$ngRedux.dispatch(this.actions.openSidebar({
+          sidebarContents: {
+            sidebarVisible: true,
+            nodeId: this.sidebarState.nodeId,
+            nameTextFieldValue: data
           }
         }));
       });

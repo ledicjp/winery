@@ -57,14 +57,14 @@ export const WineryReducer =
         };
       case WineryActions.CHANGE_NODE_NAME:
         const nodeNames: any = (<SidebarNodeNamechange>action).nodeNames;
-        const index = lastState.currentJsonTopology.nodeTemplates.map(el => el.id).indexOf(nodeNames.oldNodeName);
+        const index = lastState.currentJsonTopology.nodeTemplates.map(el => el.name).indexOf(nodeNames.oldNodeName);
         console.log(index);
         console.log(nodeNames);
         console.log({
           ...lastState,
           currentJsonTopology: {
             ...lastState.currentJsonTopology,
-            nodeTemplates: lastState.currentJsonTopology.nodeTemplates.map(nodeTemplate => nodeTemplate.id === nodeNames.oldNodeName ?
+            nodeTemplates: lastState.currentJsonTopology.nodeTemplates.map(nodeTemplate => nodeTemplate.name === nodeNames.oldNodeName ?
               nodeTemplate = new TNodeTemplate(
                 lastState.currentJsonTopology.nodeTemplates[index].properties,
                 // id
@@ -88,7 +88,7 @@ export const WineryReducer =
           ...lastState,
           currentJsonTopology: {
             ...lastState.currentJsonTopology,
-            nodeTemplates: lastState.currentJsonTopology.nodeTemplates.map(nodeTemplate => nodeTemplate.id === nodeNames.oldNodeName ?
+            nodeTemplates: lastState.currentJsonTopology.nodeTemplates.map(nodeTemplate => nodeTemplate.name === nodeNames.oldNodeName ?
               new TNodeTemplate(
                 lastState.currentJsonTopology.nodeTemplates[index].properties,
                 // id

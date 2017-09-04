@@ -127,6 +127,7 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnChanges 
   // Only display the sidebar if the click is no longpress
   openSidebar($event): void {
     $event.stopPropagation();
+    // close sidebar when longpressing a node template
     if (this.longpress) {
       this.$ngRedux.dispatch(this.actions.openSidebar({
         sidebarContents: {
@@ -136,7 +137,6 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnChanges 
         }
       }));
     } else {
-      // close sidebar when longpressing a node template
       this.$ngRedux.dispatch(this.actions.openSidebar({
         sidebarContents: {
           sidebarVisible: true,
