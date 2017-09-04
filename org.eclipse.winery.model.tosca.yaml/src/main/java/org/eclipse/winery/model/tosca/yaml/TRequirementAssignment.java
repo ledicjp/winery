@@ -17,13 +17,14 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -33,19 +34,18 @@ import org.eclipse.jdt.annotation.Nullable;
     "capability",
     "node",
     "relationship",
-    "node_filter",
+    "nodeFilter",
     "occurrences"
 })
-public class TRequirementAssignment {
+public class TRequirementAssignment implements VisitorNode {
     private QName node;
     private TRelationshipAssignment relationship;
     private QName capability;
-
-    private TNodeFilterDefinition node_filter;
+    @XmlAttribute(name = "node_filter")
+    private TNodeFilterDefinition nodeFilter;
     private List<String> occurrences;
 
     public TRequirementAssignment() {
-
     }
 
     public TRequirementAssignment(QName node) {
@@ -56,7 +56,7 @@ public class TRequirementAssignment {
         this.setCapability(builder.capability);
         this.setNode(builder.node);
         this.setRelationship(builder.relationship);
-        this.setNode_filter(builder.node_filter);
+        this.setNodeFilter(builder.nodeFilter);
         this.setOccurrences(builder.occurrences);
     }
 
@@ -68,13 +68,13 @@ public class TRequirementAssignment {
         return Objects.equals(node, that.node) &&
             Objects.equals(relationship, that.relationship) &&
             Objects.equals(capability, that.capability) &&
-            Objects.equals(node_filter, that.node_filter) &&
+            Objects.equals(nodeFilter, that.nodeFilter) &&
             Objects.equals(occurrences, that.occurrences);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(node, relationship, capability, node_filter, occurrences);
+        return Objects.hash(node, relationship, capability, nodeFilter, occurrences);
     }
 
     @Nullable
@@ -105,12 +105,12 @@ public class TRequirementAssignment {
     }
 
     @Nullable
-    public TNodeFilterDefinition getNode_filter() {
-        return node_filter;
+    public TNodeFilterDefinition getNodeFilter() {
+        return nodeFilter;
     }
 
-    public void setNode_filter(TNodeFilterDefinition node_filter) {
-        this.node_filter = node_filter;
+    public void setNodeFilter(TNodeFilterDefinition nodeFilter) {
+        this.nodeFilter = nodeFilter;
     }
 
     @NonNull
@@ -126,7 +126,7 @@ public class TRequirementAssignment {
         this.occurrences = occurrences;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
@@ -134,7 +134,7 @@ public class TRequirementAssignment {
         private QName capability;
         private QName node;
         private TRelationshipAssignment relationship;
-        private TNodeFilterDefinition node_filter;
+        private TNodeFilterDefinition nodeFilter;
         private List<String> occurrences;
 
         public Builder setCapability(QName capability) {
@@ -152,8 +152,8 @@ public class TRequirementAssignment {
             return this;
         }
 
-        public Builder setNode_filter(TNodeFilterDefinition node_filter) {
-            this.node_filter = node_filter;
+        public Builder setNodeFilter(TNodeFilterDefinition nodeFilter) {
+            this.nodeFilter = nodeFilter;
             return this;
         }
 

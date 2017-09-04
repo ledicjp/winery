@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.eclipse.winery.model.tosca.yaml.tosca.datatypes.Credential;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -34,7 +34,7 @@ import org.eclipse.jdt.annotation.Nullable;
     "url",
     "credential"
 })
-public class TRepositoryDefinition {
+public class TRepositoryDefinition implements VisitorNode {
     private String description;
     @XmlAttribute(name = "url", required = true)
     private String url;
@@ -97,7 +97,7 @@ public class TRepositoryDefinition {
         this.credential = credential;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 

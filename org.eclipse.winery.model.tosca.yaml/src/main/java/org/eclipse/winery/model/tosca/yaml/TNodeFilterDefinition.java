@@ -25,8 +25,8 @@ import org.eclipse.winery.model.tosca.yaml.support.TMapObject;
 import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -35,7 +35,7 @@ import org.eclipse.jdt.annotation.NonNull;
     "properties",
     "capabilities"
 })
-public class TNodeFilterDefinition {
+public class TNodeFilterDefinition implements VisitorNode {
     private List<TMapPropertyFilterDefinition> properties;
     private List<TMapObject> capabilities;
 
@@ -87,7 +87,7 @@ public class TNodeFilterDefinition {
         this.capabilities = capabilities;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 

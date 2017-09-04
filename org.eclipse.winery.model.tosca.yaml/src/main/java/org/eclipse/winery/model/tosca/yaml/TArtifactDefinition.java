@@ -26,176 +26,177 @@ import javax.xml.namespace.QName;
 import org.eclipse.winery.model.tosca.yaml.support.Annotations;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-	"type",
-	"files",
-	"repository",
-	"description",
-	"deploy_path"
+    "type",
+    "files",
+    "repository",
+    "description",
+    "deployPath"
 })
-public class TArtifactDefinition {
-	@XmlAttribute(name = "type", required = true)
-	private QName type;
-	private String repository;
-	private String description;
-	private String deploy_path;
+public class TArtifactDefinition implements VisitorNode {
+    @XmlAttribute(name = "type", required = true)
+    private QName type;
+    private String repository;
+    private String description;
+    @XmlAttribute(name = "deploy_path")
+    private String deployPath;
 
-	@Annotations.StandardExtension
-	@XmlAttribute(name = "files", required = true)
-	private List<String> files;
-	@Annotations.StandardExtension
-	private Map<String, TPropertyAssignment> properties;
+    @Annotations.StandardExtension
+    @XmlAttribute(name = "files", required = true)
+    private List<String> files;
+    @Annotations.StandardExtension
+    private Map<String, TPropertyAssignment> properties;
 
-	public TArtifactDefinition() {
-	}
+    public TArtifactDefinition() {
+    }
 
-	public TArtifactDefinition(Builder builder) {
-		this.setType(builder.type);
-		this.setFiles(builder.files);
-		this.setRepository(builder.repository);
-		this.setDescription(builder.description);
-		this.setDeploy_path(builder.deploy_path);
-		this.setProperties(builder.properties);
-	}
+    public TArtifactDefinition(Builder builder) {
+        this.setType(builder.type);
+        this.setFiles(builder.files);
+        this.setRepository(builder.repository);
+        this.setDescription(builder.description);
+        this.setDeployPath(builder.deployPath);
+        this.setProperties(builder.properties);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TArtifactDefinition)) return false;
-		TArtifactDefinition that = (TArtifactDefinition) o;
-		return Objects.equals(type, that.type) &&
-			Objects.equals(files, that.files) &&
-			Objects.equals(repository, that.repository) &&
-			Objects.equals(description, that.description) &&
-			Objects.equals(deploy_path, that.deploy_path) &&
-			Objects.equals(properties, that.properties);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TArtifactDefinition)) return false;
+        TArtifactDefinition that = (TArtifactDefinition) o;
+        return Objects.equals(type, that.type) &&
+            Objects.equals(files, that.files) &&
+            Objects.equals(repository, that.repository) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(deployPath, that.deployPath) &&
+            Objects.equals(properties, that.properties);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(type, files, repository, description, deploy_path, properties);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, files, repository, description, deployPath, properties);
+    }
 
-	@NonNull
-	public QName getType() {
-		return type;
-	}
+    @NonNull
+    public QName getType() {
+        return type;
+    }
 
-	public void setType(QName type) {
-		this.type = type;
-	}
+    public void setType(QName type) {
+        this.type = type;
+    }
 
-	@NonNull
-	public List<String> getFiles() {
-		return files;
-	}
+    @NonNull
+    public List<String> getFiles() {
+        return files;
+    }
 
-	public void setFiles(List<String> files) {
-		this.files = files;
-	}
+    public void setFiles(List<String> files) {
+        this.files = files;
+    }
 
-	@Deprecated
-	@NonNull
-	public String getFile() {
-		return this.getFiles().get(0);
-	}
+    @Deprecated
+    @NonNull
+    public String getFile() {
+        return this.getFiles().get(0);
+    }
 
-	@Deprecated
-	public void setFile(String file) {
-		this.files = new ArrayList<>(Collections.singleton(file));
-	}
+    @Deprecated
+    public void setFile(String file) {
+        this.files = new ArrayList<>(Collections.singleton(file));
+    }
 
-	@Nullable
-	public String getRepository() {
-		return repository;
-	}
+    @Nullable
+    public String getRepository() {
+        return repository;
+    }
 
-	public void setRepository(String repository) {
-		this.repository = repository;
-	}
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Nullable
-	public String getDeploy_path() {
-		return deploy_path;
-	}
+    @Nullable
+    public String getDeployPath() {
+        return deployPath;
+    }
 
-	public void setDeploy_path(String deploy_path) {
-		this.deploy_path = deploy_path;
-	}
+    public void setDeployPath(String deployPath) {
+        this.deployPath = deployPath;
+    }
 
-	public Map<String, TPropertyAssignment> getProperties() {
-		return properties;
-	}
+    public Map<String, TPropertyAssignment> getProperties() {
+        return properties;
+    }
 
-	public void setProperties(Map<String, TPropertyAssignment> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, TPropertyAssignment> properties) {
+        this.properties = properties;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName type;
-		private final List<String> files;
+    public static class Builder {
+        private final QName type;
+        private final List<String> files;
 
-		private String repository;
-		private String description;
-		private String deploy_path;
-		private Map<String, TPropertyAssignment> properties;
+        private String repository;
+        private String description;
+        private String deployPath;
+        private Map<String, TPropertyAssignment> properties;
 
-		public Builder(QName type, List<String> files) {
-			this.type = type;
-			this.files = files;
-		}
+        public Builder(QName type, List<String> files) {
+            this.type = type;
+            this.files = files;
+        }
 
-		public Builder(TArtifactDefinition artifactDefinition) {
-			this.type = artifactDefinition.getType();
-			this.files = artifactDefinition.getFiles();
-			this.repository = artifactDefinition.getRepository();
-			this.description = artifactDefinition.getDescription();
-			this.deploy_path = artifactDefinition.getDeploy_path();
-			this.properties = artifactDefinition.getProperties();
-		}
+        public Builder(TArtifactDefinition artifactDefinition) {
+            this.type = artifactDefinition.getType();
+            this.files = artifactDefinition.getFiles();
+            this.repository = artifactDefinition.getRepository();
+            this.description = artifactDefinition.getDescription();
+            this.deployPath = artifactDefinition.getDeployPath();
+            this.properties = artifactDefinition.getProperties();
+        }
 
-		public Builder setRepository(String repository) {
-			this.repository = repository;
-			return this;
-		}
+        public Builder setRepository(String repository) {
+            this.repository = repository;
+            return this;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setDeploy_path(String deploy_path) {
-			this.deploy_path = deploy_path;
-			return this;
-		}
+        public Builder setDeployPath(String deployPath) {
+            this.deployPath = deployPath;
+            return this;
+        }
 
-		public Builder setProperties(Map<String, TPropertyAssignment> properties) {
-			this.properties = properties;
-			return this;
-		}
+        public Builder setProperties(Map<String, TPropertyAssignment> properties) {
+            this.properties = properties;
+            return this;
+        }
 
-		public TArtifactDefinition build() {
-			return new TArtifactDefinition(this);
-		}
-	}
+        public TArtifactDefinition build() {
+            return new TArtifactDefinition(this);
+        }
+    }
 }

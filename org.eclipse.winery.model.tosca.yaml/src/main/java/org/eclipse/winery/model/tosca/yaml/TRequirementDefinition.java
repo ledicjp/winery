@@ -25,164 +25,164 @@ import javax.xml.namespace.QName;
 import org.eclipse.winery.model.tosca.yaml.support.Annotations;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRequirementDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-	"occurrences",
-	"capability",
-	"node",
-	"relationship"
+    "occurrences",
+    "capability",
+    "node",
+    "relationship"
 })
-public class TRequirementDefinition {
-	@XmlAttribute(name = "capability", required = true)
-	private QName capability;
-	private QName node;
-	private TRelationshipDefinition relationship;
-	private List<String> occurrences;
+public class TRequirementDefinition implements VisitorNode {
+    @XmlAttribute(name = "capability", required = true)
+    private QName capability;
+    private QName node;
+    private TRelationshipDefinition relationship;
+    private List<String> occurrences;
 
-	@Annotations.StandardExtension
-	private String description;
+    @Annotations.StandardExtension
+    private String description;
 
-	public TRequirementDefinition() {
+    public TRequirementDefinition() {
 
-	}
+    }
 
-	public TRequirementDefinition(Builder builder) {
-		this.setCapability(builder.capability);
-		this.setOccurrences(builder.occurrences);
-		this.setNode(builder.node);
-		this.setRelationship(builder.relationship);
-		this.setDescription(builder.description);
-	}
+    public TRequirementDefinition(Builder builder) {
+        this.setCapability(builder.capability);
+        this.setOccurrences(builder.occurrences);
+        this.setNode(builder.node);
+        this.setRelationship(builder.relationship);
+        this.setDescription(builder.description);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TRequirementDefinition)) return false;
-		TRequirementDefinition that = (TRequirementDefinition) o;
-		return Objects.equals(capability, that.capability) &&
-			Objects.equals(node, that.node) &&
-			Objects.equals(relationship, that.relationship) &&
-			Objects.equals(occurrences, that.occurrences) &&
-			Objects.equals(description, that.description);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TRequirementDefinition)) return false;
+        TRequirementDefinition that = (TRequirementDefinition) o;
+        return Objects.equals(capability, that.capability) &&
+            Objects.equals(node, that.node) &&
+            Objects.equals(relationship, that.relationship) &&
+            Objects.equals(occurrences, that.occurrences) &&
+            Objects.equals(description, that.description);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(capability, node, relationship, occurrences, description);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(capability, node, relationship, occurrences, description);
+    }
 
-	@NonNull
-	public List<String> getOccurrences() {
-		if (this.occurrences == null) {
-			this.occurrences = new ArrayList<>(Arrays.asList("1", "1"));
-		}
+    @NonNull
+    public List<String> getOccurrences() {
+        if (this.occurrences == null) {
+            this.occurrences = new ArrayList<>(Arrays.asList("1", "1"));
+        }
 
-		// set default lower bound
-		if (this.occurrences.size() < 1) {
-			this.occurrences.add("1");
-		}
+        // set default lower bound
+        if (this.occurrences.size() < 1) {
+            this.occurrences.add("1");
+        }
 
-		// set default upper bound
-		if (this.occurrences.size() < 2) {
-			this.occurrences.add("1");
-		}
+        // set default upper bound
+        if (this.occurrences.size() < 2) {
+            this.occurrences.add("1");
+        }
 
-		return occurrences;
-	}
+        return occurrences;
+    }
 
-	public void setOccurrences(List<String> occurrences) {
-		this.occurrences = occurrences;
-	}
+    public void setOccurrences(List<String> occurrences) {
+        this.occurrences = occurrences;
+    }
 
-	@NonNull
-	public QName getCapability() {
-		return capability;
-	}
+    @NonNull
+    public QName getCapability() {
+        return capability;
+    }
 
-	public void setCapability(QName capability) {
-		this.capability = capability;
-	}
+    public void setCapability(QName capability) {
+        this.capability = capability;
+    }
 
-	@Nullable
-	public QName getNode() {
-		return node;
-	}
+    @Nullable
+    public QName getNode() {
+        return node;
+    }
 
-	public void setNode(QName node) {
-		this.node = node;
-	}
+    public void setNode(QName node) {
+        this.node = node;
+    }
 
-	@Nullable
-	public TRelationshipDefinition getRelationship() {
-		return relationship;
-	}
+    @Nullable
+    public TRelationshipDefinition getRelationship() {
+        return relationship;
+    }
 
-	public void setRelationship(TRelationshipDefinition relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(TRelationshipDefinition relationship) {
+        this.relationship = relationship;
+    }
 
-	@Nullable
-	public String getDescription() {
-		return description;
-	}
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@NonNull
-	public String getUpperBound() {
-		return this.getOccurrences().get(1);
-	}
+    @NonNull
+    public String getUpperBound() {
+        return this.getOccurrences().get(1);
+    }
 
-	@NonNull
-	public Integer getLowerBound() {
-		return Integer.valueOf(this.getOccurrences().get(0));
-	}
+    @NonNull
+    public Integer getLowerBound() {
+        return Integer.valueOf(this.getOccurrences().get(0));
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		return visitor.visit(this, parameter);
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
+        return visitor.visit(this, parameter);
+    }
 
-	public static class Builder {
-		private final QName capability;
-		private String description;
-		private List<String> occurrences;
-		private QName node;
-		private TRelationshipDefinition relationship;
+    public static class Builder {
+        private final QName capability;
+        private String description;
+        private List<String> occurrences;
+        private QName node;
+        private TRelationshipDefinition relationship;
 
-		public Builder(QName capability) {
-			this.capability = capability;
-		}
+        public Builder(QName capability) {
+            this.capability = capability;
+        }
 
-		public Builder setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
 
-		public Builder setOccurrences(List<String> occurrences) {
-			this.occurrences = occurrences;
-			return this;
-		}
+        public Builder setOccurrences(List<String> occurrences) {
+            this.occurrences = occurrences;
+            return this;
+        }
 
-		public Builder setNode(QName node) {
-			this.node = node;
-			return this;
-		}
+        public Builder setNode(QName node) {
+            this.node = node;
+            return this;
+        }
 
-		public Builder setRelationship(TRelationshipDefinition relationship) {
-			this.relationship = relationship;
-			return this;
-		}
+        public Builder setRelationship(TRelationshipDefinition relationship) {
+            this.relationship = relationship;
+            return this;
+        }
 
-		public TRequirementDefinition build() {
-			return new TRequirementDefinition(this);
-		}
-	}
+        public TRequirementDefinition build() {
+            return new TRequirementDefinition(this);
+        }
+    }
 }

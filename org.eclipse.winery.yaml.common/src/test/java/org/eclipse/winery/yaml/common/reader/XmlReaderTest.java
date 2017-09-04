@@ -16,6 +16,7 @@ import java.io.File;
 import javax.xml.bind.JAXBException;
 
 import org.eclipse.winery.model.tosca.Definitions;
+import org.eclipse.winery.yaml.common.reader.XML.XmlReader;
 
 import org.junit.Test;
 

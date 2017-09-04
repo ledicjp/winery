@@ -18,14 +18,15 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -34,15 +35,16 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlType(name = "tEntityType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "description",
     "version",
-    "derived_from",
+    "derivedFrom",
     "properties",
     "attributes",
     "metadata"
 })
-public class TEntityType {
+public class TEntityType implements VisitorNode {
     private String description;
     private TVersion version;
-    private QName derived_from;
+    @XmlAttribute(name = "derived_from")
+    private QName derivedFrom;
     private Map<String, TPropertyDefinition> properties;
     private Map<String, TAttributeDefinition> attributes;
     private Metadata metadata;
@@ -53,7 +55,7 @@ public class TEntityType {
     public TEntityType(Builder builder) {
         this.setDescription(builder.description);
         this.setVersion(builder.version);
-        this.setDerived_from(builder.derived_from);
+        this.setDerivedFrom(builder.derivedFrom);
         this.setProperties(builder.properties);
         this.setAttributes(builder.attributes);
         this.setMetadata(builder.metadata);
@@ -66,7 +68,7 @@ public class TEntityType {
         TEntityType that = (TEntityType) o;
         return Objects.equals(description, that.description) &&
             Objects.equals(version, that.version) &&
-            Objects.equals(derived_from, that.derived_from) &&
+            Objects.equals(derivedFrom, that.derivedFrom) &&
             Objects.equals(properties, that.properties) &&
             Objects.equals(attributes, that.attributes) &&
             Objects.equals(metadata, that.metadata);
@@ -74,7 +76,7 @@ public class TEntityType {
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, version, derived_from, properties, attributes, metadata);
+        return Objects.hash(description, version, derivedFrom, properties, attributes, metadata);
     }
 
     @Nullable
@@ -101,12 +103,12 @@ public class TEntityType {
     }
 
     @Nullable
-    public QName getDerived_from() {
-        return derived_from;
+    public QName getDerivedFrom() {
+        return derivedFrom;
     }
 
-    public void setDerived_from(QName derived_from) {
-        this.derived_from = derived_from;
+    public void setDerivedFrom(QName derivedFrom) {
+        this.derivedFrom = derivedFrom;
     }
 
     @NonNull
@@ -148,14 +150,14 @@ public class TEntityType {
         this.metadata = metadata;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
     public static class Builder {
         private String description;
         private TVersion version;
-        private QName derived_from;
+        private QName derivedFrom;
         private Map<String, TPropertyDefinition> properties;
         private Map<String, TAttributeDefinition> attributes;
         private Metadata metadata;
@@ -167,7 +169,7 @@ public class TEntityType {
         public Builder(TEntityType entityType) {
             this.description = entityType.getDescription();
             this.version = entityType.getVersion();
-            this.derived_from = entityType.getDerived_from();
+            this.derivedFrom = entityType.getDerivedFrom();
             this.properties = entityType.getProperties();
             this.attributes = entityType.getAttributes();
             this.metadata = entityType.getMetadata();
@@ -183,8 +185,8 @@ public class TEntityType {
             return this;
         }
 
-        public Builder setDerived_from(QName derived_from) {
-            this.derived_from = derived_from;
+        public Builder setDerivedFrom(QName derivedFrom) {
+            this.derivedFrom = derivedFrom;
             return this;
         }
 

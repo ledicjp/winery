@@ -9,7 +9,7 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.yaml.common.reader;
+package org.eclipse.winery.yaml.common.reader.XML;
 
 import java.io.File;
 

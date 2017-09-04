@@ -20,25 +20,25 @@ import org.eclipse.winery.model.tosca.yaml.TRepositoryDefinition;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.tosca.datatypes.Credential;
-import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Exception.ImplementationArtifactInvalidOnInterfaceType;
 import org.eclipse.winery.yaml.common.Exception.InvalidTOSCAVersion;
 import org.eclipse.winery.yaml.common.Exception.MissingRequiredKeyname;
 import org.eclipse.winery.yaml.common.Exception.MissingTOSCAVersion;
 import org.eclipse.winery.yaml.common.Exception.ValueTypeMismatch;
+import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
+import org.eclipse.winery.yaml.common.validator.support.ExceptionVisitor;
 import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
-public class Validator extends AbstractVisitor<Result, Parameter> {
+public class Validator extends ExceptionVisitor<Result, Parameter> {
     private final String path;
 
     public Validator(String path) {
         this.path = path;
     }
 
-    public void validate(TServiceTemplate serviceTemplate, String namespace) throws IException {
+    public void validate(TServiceTemplate serviceTemplate, String namespace) throws YAMLParserException {
         TypeValidator typeValidator = new TypeValidator(path, namespace);
         typeValidator.validate(serviceTemplate);
 
@@ -46,14 +46,18 @@ public class Validator extends AbstractVisitor<Result, Parameter> {
         definitionValidator.validate(serviceTemplate);
 
         visit(serviceTemplate, new Parameter());
+
+        if (this.hasExceptions()) {
+            throw this.getException();
+        }
     }
 
     @Override
-    public Result visit(TInterfaceType node, Parameter parameter) throws IException {
+    public Result visit(TInterfaceType node, Parameter parameter) {
         if (node.getOperations() != null) {
             for (Map.Entry<String, TOperationDefinition> entry : node.getOperations().entrySet()) {
                 if (entry.getValue().getImplementation() != null) {
-                    throw new ImplementationArtifactInvalidOnInterfaceType("The InterfaceType \"" + parameter.getKey() + "\" MUST NOT include any implementations for defined operations");
+                    setException(new ImplementationArtifactInvalidOnInterfaceType("The InterfaceType \"" + parameter.getKey() + "\" MUST NOT include any implementations for defined operations"));
                 }
             }
         }
@@ -61,33 +65,33 @@ public class Validator extends AbstractVisitor<Result, Parameter> {
     }
 
     @Override
-    public Result visit(TImportDefinition node, Parameter parameter) throws IException {
+    public Result visit(TImportDefinition node, Parameter parameter) {
         if (node.getFile() == null || node.getFile().isEmpty()) {
             String context = "Import Definition \"" + parameter.getKey() + "\"";
             String keyname = "file";
-            throw new MissingRequiredKeyname(keyname, context);
+            setException(new MissingRequiredKeyname(keyname, context));
         }
         return super.visit(node, parameter);
     }
 
     @Override
-    public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
-        if (node.getTosca_definitions_version() == null) {
+    public Result visit(TServiceTemplate node, Parameter parameter) {
+        if (node.getToscaDefinitionsVersion() == null) {
             String msg = "tosca_definition_version is missing";
-            throw new MissingTOSCAVersion(msg);
+            setException(new MissingTOSCAVersion(msg));
         }
 
-        if (!node.getTosca_definitions_version().matches(Defaults.TOSCA_DEFINITIONS_VERSION_PATTERN)) {
-            String msg = "\"" + node.getTosca_definitions_version()
+        if (!node.getToscaDefinitionsVersion().matches(Defaults.TOSCA_DEFINITIONS_VERSION_PATTERN)) {
+            String msg = "\"" + node.getToscaDefinitionsVersion()
                 + "\" is an invalid tosca_definition_version, which does not follow the pattern: \""
                 + Defaults.TOSCA_DEFINITIONS_VERSION_PATTERN + "\"";
-            throw new InvalidTOSCAVersion(msg);
+            setException(new InvalidTOSCAVersion(msg));
         }
         return super.visit(node, parameter);
     }
 
     @Override
-    public Result visit(TRepositoryDefinition node, Parameter parameter) throws IException {
+    public Result visit(TRepositoryDefinition node, Parameter parameter) {
         if (node == null) {
             return null;
         }
@@ -97,25 +101,25 @@ public class Validator extends AbstractVisitor<Result, Parameter> {
 
         if (node.getUrl() == null || node.getUrl().isEmpty()) {
             String keyname = "url";
-            throw new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix);
+            setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
         }
 
         if (node.getCredential() != null) {
             Credential credential = node.getCredential();
             if (credential.getToken() == null || credential.getToken().isEmpty()) {
                 String keyname = "credential.token";
-                throw new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix);
+                setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
             }
             if (credential.getToken_type() == null || credential.getToken_type().isEmpty()) {
                 String keyname = "credential.token_type";
-                throw new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix);
+                setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
             }
         }
         return super.visit(node, parameter);
     }
 
     @Override
-    public Result visit(Metadata node, Parameter parameter) throws IException {
+    public Result visit(Metadata node, Parameter parameter) {
         if (node == null) {
             return null;
         }
@@ -126,7 +130,7 @@ public class Validator extends AbstractVisitor<Result, Parameter> {
 
             if (!template_version.matches(template_version_match)) {
                 String msg = "The value of the metadata field template_version is invalid";
-                throw new ValueTypeMismatch(msg);
+                setException(new ValueTypeMismatch(msg));
             }
         }
         return super.visit(node, parameter);

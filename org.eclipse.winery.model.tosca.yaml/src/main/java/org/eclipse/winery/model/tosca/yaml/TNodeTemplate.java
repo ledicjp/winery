@@ -28,8 +28,8 @@ import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -45,14 +45,11 @@ import org.eclipse.jdt.annotation.Nullable;
     "capabilities",
     "interfaces",
     "artifacts",
-    "node_filter",
+    "nodeFilter",
     "copy",
     "metadata"
 })
-public class TNodeTemplate {
-    /**
-     * Name of a {@link TNodeType}
-     */
+public class TNodeTemplate implements VisitorNode {
     @XmlAttribute(name = "type", required = true)
     private QName type;
     private String description;
@@ -64,7 +61,8 @@ public class TNodeTemplate {
     private Map<String, TCapabilityAssignment> capabilities;
     private Map<String, TInterfaceDefinition> interfaces;
     private Map<String, TArtifactDefinition> artifacts;
-    private TNodeFilterDefinition node_filter;
+    @XmlAttribute(name = "node_filter")
+    private TNodeFilterDefinition nodeFilter;
     private QName copy;
 
     public TNodeTemplate() {
@@ -81,7 +79,7 @@ public class TNodeTemplate {
         this.setCapabilities(builder.capabilities);
         this.setInterfaces(builder.interfaces);
         this.setArtifacts(builder.artifacts);
-        this.setNode_filter(builder.node_filter);
+        this.setNodeFilter(builder.nodeFilter);
         this.setCopy(builder.copy);
     }
 
@@ -100,13 +98,13 @@ public class TNodeTemplate {
             Objects.equals(capabilities, that.capabilities) &&
             Objects.equals(interfaces, that.interfaces) &&
             Objects.equals(artifacts, that.artifacts) &&
-            Objects.equals(node_filter, that.node_filter) &&
+            Objects.equals(nodeFilter, that.nodeFilter) &&
             Objects.equals(copy, that.copy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, description, metadata, directives, properties, attributes, requirements, capabilities, interfaces, artifacts, node_filter, copy);
+        return Objects.hash(type, description, metadata, directives, properties, attributes, requirements, capabilities, interfaces, artifacts, nodeFilter, copy);
     }
 
     @NonNull
@@ -233,12 +231,12 @@ public class TNodeTemplate {
     }
 
     @Nullable
-    public TNodeFilterDefinition getNode_filter() {
-        return node_filter;
+    public TNodeFilterDefinition getNodeFilter() {
+        return nodeFilter;
     }
 
-    public void setNode_filter(TNodeFilterDefinition node_filter) {
-        this.node_filter = node_filter;
+    public void setNodeFilter(TNodeFilterDefinition nodeFilter) {
+        this.nodeFilter = nodeFilter;
     }
 
     @Nullable
@@ -250,7 +248,7 @@ public class TNodeTemplate {
         this.copy = copy;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
@@ -265,7 +263,7 @@ public class TNodeTemplate {
         private Map<String, TCapabilityAssignment> capabilities;
         private Map<String, TInterfaceDefinition> interfaces;
         private Map<String, TArtifactDefinition> artifacts;
-        private TNodeFilterDefinition node_filter;
+        private TNodeFilterDefinition nodeFilter;
         private QName copy;
 
         public Builder(QName type) {
@@ -317,8 +315,8 @@ public class TNodeTemplate {
             return this;
         }
 
-        public Builder setNode_filter(TNodeFilterDefinition node_filter) {
-            this.node_filter = node_filter;
+        public Builder setNodeFilter(TNodeFilterDefinition nodeFilter) {
+            this.nodeFilter = nodeFilter;
             return this;
         }
 
@@ -473,12 +471,12 @@ public class TNodeTemplate {
             return this;
         }
 
-        public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+        public Builder addInterfaces(String name, TInterfaceDefinition interfaceDefinition) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addInterfaces(Collections.singletonMap(name, _interface));
+            return addInterfaces(Collections.singletonMap(name, interfaceDefinition));
         }
 
         public Builder addArtifacts(Map<String, TArtifactDefinition> artifacts) {

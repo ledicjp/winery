@@ -18,30 +18,33 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.TImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.yaml.common.Exception.MissingRepositoryDefinition;
+import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
+import org.eclipse.winery.yaml.common.validator.support.ExceptionVisitor;
 import org.eclipse.winery.yaml.common.validator.support.Parameter;
 import org.eclipse.winery.yaml.common.validator.support.Result;
 
-public class DefinitionValidator extends AbstractVisitor<Result, Parameter> {
+public class DefinitionValidator extends ExceptionVisitor<Result, Parameter> {
     private DefinitionsVisitor definitionsVisitor;
 
     public DefinitionValidator(String path) {
         definitionsVisitor = new DefinitionsVisitor(Namespaces.DEFAULT_NS, path);
     }
 
-    public void validate(TServiceTemplate serviceTemplate) throws IException {
+    public void validate(TServiceTemplate serviceTemplate) throws YAMLParserException {
         definitionsVisitor.visit(serviceTemplate, new Parameter());
+        if (hasExceptions()) {
+            throw getException();
+        }
     }
 
     @Override
-    public Result visit(TImportDefinition node, Parameter parameter) throws IException {
+    public Result visit(TImportDefinition node, Parameter parameter) {
         if (!isDefined(node.getRepository(), definitionsVisitor.getRepositoryDefinitions())) {
             String msg = "No Repository definition for property repository \"" +
                 node.getRepository() + "\" found! \n" + print(parameter.getContext());
-            throw new MissingRepositoryDefinition(msg);
+            setException(new MissingRepositoryDefinition(msg));
         }
         return super.visit(node, parameter);
     }

@@ -23,7 +23,6 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -82,7 +81,7 @@ public class TPolicyType extends TEntityType {
         this.triggers = triggers;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         R ir1 = super.accept(visitor, parameter);
         R ir2 = visitor.visit(this, parameter);
         if (ir1 == null) {

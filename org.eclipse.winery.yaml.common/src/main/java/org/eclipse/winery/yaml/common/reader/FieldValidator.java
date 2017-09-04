@@ -11,15 +11,18 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.common.reader;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.winery.model.tosca.yaml.TArtifactDefinition;
 
@@ -36,11 +39,23 @@ public class FieldValidator {
         }
 
         if (parent.equals(TArtifactDefinition.class)) {
-            this.declaredFields.get(base).add("filea");
+            this.declaredFields.get(base).add("file");
         }
 
         if (!parent.equals(Object.class)) {
-            this.declaredFields.get(base).addAll(Arrays.stream(parent.getDeclaredFields()).map(Field::getName).collect(Collectors.toList()));
+            this.declaredFields.get(base)
+                .addAll(Arrays.stream(parent.getDeclaredFields()).map(field -> {
+                        XmlAttribute xmlAttribute = field.getAnnotation(XmlAttribute.class);
+                        XmlElement xmlElement = field.getAnnotation(XmlElement.class);
+                        if (Objects.nonNull(xmlAttribute) && !xmlAttribute.name().equals("##default")) {
+                            return xmlAttribute.name();
+                        } else if (Objects.nonNull(xmlElement) && !xmlElement.name().equals("##default")) {
+                            return xmlElement.name();
+                        } else {
+                            return field.getName();
+                        }
+                    }
+                ).collect(Collectors.toList()));
             setDeclaredFields(base, parent.getSuperclass());
         }
     }
@@ -54,10 +69,6 @@ public class FieldValidator {
 
         Set<String> declaredFields = this.declaredFields.get(t);
         fields.forEach((key, value) -> {
-            if (key.equals("default")) {
-                key = "_" + key;
-            }
-
             if (!declaredFields.contains(key)) {
                 msg.add(t.getName() + " does not have a field with the name " + key);
             }

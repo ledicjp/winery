@@ -22,6 +22,6 @@ node_types:
         description: test port number
     requirements:
       - test_database:
-          capability: EndPoint.Database
+          capability: Endpoint.Database
           node: Database
           relationship: ConnectsTo  

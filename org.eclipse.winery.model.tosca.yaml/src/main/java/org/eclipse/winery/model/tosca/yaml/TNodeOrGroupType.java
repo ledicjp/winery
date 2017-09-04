@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -33,7 +32,7 @@ public class TNodeOrGroupType extends TEntityType {
         super(builder);
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return super.accept(visitor, parameter);
     }
 }

@@ -26,7 +26,6 @@ import javax.xml.namespace.QName;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -124,7 +123,7 @@ public class TGroupType extends TNodeOrGroupType {
         this.interfaces = interfaces;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         R ir1 = super.accept(visitor, parameter);
         R ir2 = visitor.visit(this, parameter);
         if (ir1 == null) {
@@ -271,12 +270,12 @@ public class TGroupType extends TNodeOrGroupType {
             return this;
         }
 
-        public Builder addInterfaces(String name, TInterfaceDefinition _interface) {
+        public Builder addInterfaces(String name, TInterfaceDefinition interfaceDefinition) {
             if (name == null) {
                 return this;
             }
 
-            return addInterfaces(Collections.singletonMap(name, _interface));
+            return addInterfaces(Collections.singletonMap(name, interfaceDefinition));
         }
 
         public TGroupType build() {

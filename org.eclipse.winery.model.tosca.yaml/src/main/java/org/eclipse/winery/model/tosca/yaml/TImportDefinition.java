@@ -22,8 +22,8 @@ import javax.xml.namespace.QName;
 import org.eclipse.winery.model.tosca.yaml.support.Defaults;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -32,15 +32,17 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlType(name = "tImportDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "file",
     "repository",
-    "namespace_uri",
-    "namespace_prefix"
+    "namespaceUri",
+    "namespacePrefix"
 })
-public class TImportDefinition {
+public class TImportDefinition implements VisitorNode {
     @XmlAttribute(name = "file", required = true)
     private String file;
     private QName repository;
-    private String namespace_uri;
-    private String namespace_prefix;
+    @XmlAttribute(name = "namespace_uri")
+    private String namespaceUri;
+    @XmlAttribute(name = "namespace_prefix")
+    private String namespacePrefix;
 
     public TImportDefinition() {
 
@@ -53,8 +55,8 @@ public class TImportDefinition {
     public TImportDefinition(Builder builder) {
         this.setFile(builder.file);
         this.setRepository(builder.repository);
-        this.setNamespace_uri(builder.namespace_uri);
-        this.setNamespace_prefix(builder.namespace_prefix);
+        this.setNamespaceUri(builder.namespaceUri);
+        this.setNamespacePrefix(builder.namespacePrefix);
     }
 
     @Override
@@ -64,13 +66,13 @@ public class TImportDefinition {
         TImportDefinition that = (TImportDefinition) o;
         return Objects.equals(file, that.file) &&
             Objects.equals(repository, that.repository) &&
-            Objects.equals(namespace_uri, that.namespace_uri) &&
-            Objects.equals(namespace_prefix, that.namespace_prefix);
+            Objects.equals(namespaceUri, that.namespaceUri) &&
+            Objects.equals(namespacePrefix, that.namespacePrefix);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(file, repository, namespace_uri, namespace_prefix);
+        return Objects.hash(file, repository, namespaceUri, namespacePrefix);
     }
 
     @NonNull
@@ -92,35 +94,35 @@ public class TImportDefinition {
     }
 
     @NonNull
-    public String getNamespace_uri() {
-        if (namespace_uri == null || namespace_uri.isEmpty()) {
-            this.namespace_uri = Defaults.DEFAULT_NS;
+    public String getNamespaceUri() {
+        if (namespaceUri == null || namespaceUri.isEmpty()) {
+            this.namespaceUri = Defaults.DEFAULT_NS;
         }
-        return namespace_uri;
+        return namespaceUri;
     }
 
-    public void setNamespace_uri(String namespace_uri) {
-        this.namespace_uri = namespace_uri;
+    public void setNamespaceUri(String namespaceUri) {
+        this.namespaceUri = namespaceUri;
     }
 
     @Nullable
-    public String getNamespace_prefix() {
-        return namespace_prefix;
+    public String getNamespacePrefix() {
+        return namespacePrefix;
     }
 
-    public void setNamespace_prefix(String namespace_prefix) {
-        this.namespace_prefix = namespace_prefix;
+    public void setNamespacePrefix(String namespacePrefix) {
+        this.namespacePrefix = namespacePrefix;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
     public static class Builder {
         private final String file;
         private QName repository;
-        private String namespace_uri;
-        private String namespace_prefix;
+        private String namespaceUri;
+        private String namespacePrefix;
 
         public Builder(String file) {
             this.file = file;
@@ -131,13 +133,13 @@ public class TImportDefinition {
             return this;
         }
 
-        public Builder setNamespace_uri(String namespace_uri) {
-            this.namespace_uri = namespace_uri;
+        public Builder setNamespaceUri(String namespaceUri) {
+            this.namespaceUri = namespaceUri;
             return this;
         }
 
-        public Builder setNamespace_prefix(String namespace_prefix) {
-            this.namespace_prefix = namespace_prefix;
+        public Builder setNamespacePrefix(String namespacePrefix) {
+            this.namespacePrefix = namespacePrefix;
             return this;
         }
 

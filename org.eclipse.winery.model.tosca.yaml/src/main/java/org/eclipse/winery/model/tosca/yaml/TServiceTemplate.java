@@ -28,8 +28,8 @@ import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,60 +37,70 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tServiceTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-    "tosca_definitions_version",
+    "toscaDefinitionsVersion",
     "metadata",
     "description",
-    "dsl_definitions",
+    "dslDefinitions",
     "repositories",
     "imports",
-    "artifact_types",
-    "data_types",
-    "capability_types",
-    "interface_types",
-    "relationship_types",
-    "node_types",
-    "group_types",
-    "policy_types",
-    "topology_template"
+    "artifactTypes",
+    "dataTypes",
+    "capabilityTypes",
+    "interfaceTypes",
+    "relationshipTypes",
+    "nodeTypes",
+    "groupTypes",
+    "policyTypes",
+    "topologyTemplate"
 })
-public class TServiceTemplate {
+public class TServiceTemplate implements VisitorNode {
     @XmlAttribute(name = "tosca_definitions_version", required = true)
-    private String tosca_definitions_version;
+    private String toscaDefinitionsVersion;
     private Metadata metadata;
     private String description;
-    private Map<String, Object> dsl_definitions;
+    @XmlAttribute(name = "dsl_definitions")
+    private Map<String, Object> dslDefinitions;
     private Map<String, TRepositoryDefinition> repositories;
     private List<TMapImportDefinition> imports;
-    private Map<String, TArtifactType> artifact_types;
-    private Map<String, TDataType> data_types;
-    private Map<String, TCapabilityType> capability_types;
-    private Map<String, TInterfaceType> interface_types;
-    private Map<String, TRelationshipType> relationship_types;
-    private Map<String, TNodeType> node_types;
-    private Map<String, TGroupType> group_types;
-    private Map<String, TPolicyType> policy_types;
-    private TTopologyTemplateDefinition topology_template;
+    @XmlAttribute(name = "artifact_types")
+    private Map<String, TArtifactType> artifactTypes;
+    @XmlAttribute(name = "data_types")
+    private Map<String, TDataType> dataTypes;
+    @XmlAttribute(name = "capability_types")
+    private Map<String, TCapabilityType> capabilityTypes;
+    @XmlAttribute(name = "interface_types")
+    private Map<String, TInterfaceType> interfaceTypes;
+    @XmlAttribute(name = "relationship_types")
+    private Map<String, TRelationshipType> relationshipTypes;
+    @XmlAttribute(name = "node_types")
+    private Map<String, TNodeType> nodeTypes;
+    @XmlAttribute(name = "group_types")
+    private Map<String, TGroupType> groupTypes;
+    @XmlAttribute(name = "policy_types")
+    private Map<String, TPolicyType> policyTypes;
+    @XmlAttribute(name = "topology_template")
+    private TTopologyTemplateDefinition topologyTemplate;
 
     public TServiceTemplate() {
 
     }
 
     public TServiceTemplate(Builder builder) {
-        this.setTosca_definitions_version(builder.tosca_definitions_version);
+        this.setToscaDefinitionsVersion(builder.toscaDefinitionsVersion);
         this.setMetadata(builder.metadata);
         this.setDescription(builder.description);
-        this.setDsl_definitions(builder.dsl_definitions);
+        this.setDslDefinitions(builder.dslDefinitions);
         this.setRepositories(builder.repositories);
         this.setImports(builder.imports);
-        this.setArtifact_types(builder.artifact_types);
-        this.setData_types(builder.data_types);
-        this.setCapability_types(builder.capability_types);
-        this.setInterface_types(builder.interface_types);
-        this.setRelationship_types(builder.relationship_types);
-        this.setNode_types(builder.node_types);
-        this.setGroup_types(builder.group_types);
-        this.setPolicy_types(builder.policy_types);
-        this.setTopology_template(builder.topology_template);
+        this.setArtifactTypes(builder.artifactTypes);
+        this.setDataTypes(builder.dataTypes);
+        this.setCapabilityTypes(builder.capabilityTypes);
+        this.setInterfaceTypes(builder.interfaceTypes);
+        this.setRelationshipTypes(builder.relationshipTypes);
+        this.setNodeTypes(builder.nodeTypes);
+        this.setGroupTypes(builder.groupTypes);
+        this.setPolicyTypes(builder.policyTypes);
+        this.setTopologyTemplate(builder.topologyTemplate);
     }
 
     @Override
@@ -98,35 +108,35 @@ public class TServiceTemplate {
         if (this == o) return true;
         if (!(o instanceof TServiceTemplate)) return false;
         TServiceTemplate that = (TServiceTemplate) o;
-        return Objects.equals(tosca_definitions_version, that.tosca_definitions_version) &&
+        return Objects.equals(toscaDefinitionsVersion, that.toscaDefinitionsVersion) &&
             Objects.equals(metadata, that.metadata) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(dsl_definitions, that.dsl_definitions) &&
+            Objects.equals(dslDefinitions, that.dslDefinitions) &&
             Objects.equals(repositories, that.repositories) &&
             Objects.equals(imports, that.imports) &&
-            Objects.equals(artifact_types, that.artifact_types) &&
-            Objects.equals(data_types, that.data_types) &&
-            Objects.equals(capability_types, that.capability_types) &&
-            Objects.equals(interface_types, that.interface_types) &&
-            Objects.equals(relationship_types, that.relationship_types) &&
-            Objects.equals(node_types, that.node_types) &&
-            Objects.equals(group_types, that.group_types) &&
-            Objects.equals(policy_types, that.policy_types) &&
-            Objects.equals(topology_template, that.topology_template);
+            Objects.equals(artifactTypes, that.artifactTypes) &&
+            Objects.equals(dataTypes, that.dataTypes) &&
+            Objects.equals(capabilityTypes, that.capabilityTypes) &&
+            Objects.equals(interfaceTypes, that.interfaceTypes) &&
+            Objects.equals(relationshipTypes, that.relationshipTypes) &&
+            Objects.equals(nodeTypes, that.nodeTypes) &&
+            Objects.equals(groupTypes, that.groupTypes) &&
+            Objects.equals(policyTypes, that.policyTypes) &&
+            Objects.equals(topologyTemplate, that.topologyTemplate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tosca_definitions_version, metadata, description, dsl_definitions, repositories, imports, artifact_types, data_types, capability_types, interface_types, relationship_types, node_types, group_types, policy_types, topology_template);
+        return Objects.hash(toscaDefinitionsVersion, metadata, description, dslDefinitions, repositories, imports, artifactTypes, dataTypes, capabilityTypes, interfaceTypes, relationshipTypes, nodeTypes, groupTypes, policyTypes, topologyTemplate);
     }
 
     @NonNull
-    public String getTosca_definitions_version() {
-        return tosca_definitions_version;
+    public String getToscaDefinitionsVersion() {
+        return toscaDefinitionsVersion;
     }
 
-    public void setTosca_definitions_version(String tosca_definitions_version) {
-        this.tosca_definitions_version = tosca_definitions_version;
+    public void setToscaDefinitionsVersion(String toscaDefinitionsVersion) {
+        this.toscaDefinitionsVersion = toscaDefinitionsVersion;
     }
 
     @NonNull
@@ -143,16 +153,16 @@ public class TServiceTemplate {
     }
 
     @NonNull
-    public Map<String, Object> getDsl_definitions() {
-        if (this.dsl_definitions == null) {
-            this.dsl_definitions = new LinkedHashMap<>();
+    public Map<String, Object> getDslDefinitions() {
+        if (this.dslDefinitions == null) {
+            this.dslDefinitions = new LinkedHashMap<>();
         }
 
-        return dsl_definitions;
+        return dslDefinitions;
     }
 
-    public void setDsl_definitions(Map<String, Object> dsl_definitions) {
-        this.dsl_definitions = dsl_definitions;
+    public void setDslDefinitions(Map<String, Object> dslDefinitions) {
+        this.dslDefinitions = dslDefinitions;
     }
 
     @Nullable
@@ -191,141 +201,141 @@ public class TServiceTemplate {
     }
 
     @NonNull
-    public Map<String, TArtifactType> getArtifact_types() {
-        if (this.artifact_types == null) {
-            this.artifact_types = new LinkedHashMap<>();
+    public Map<String, TArtifactType> getArtifactTypes() {
+        if (this.artifactTypes == null) {
+            this.artifactTypes = new LinkedHashMap<>();
         }
 
-        return artifact_types;
+        return artifactTypes;
     }
 
-    public void setArtifact_types(Map<String, TArtifactType> artifact_types) {
-        this.artifact_types = artifact_types;
+    public void setArtifactTypes(Map<String, TArtifactType> artifactTypes) {
+        this.artifactTypes = artifactTypes;
     }
 
     @NonNull
-    public Map<String, TDataType> getData_types() {
-        if (this.data_types == null) {
-            this.data_types = new LinkedHashMap<>();
+    public Map<String, TDataType> getDataTypes() {
+        if (this.dataTypes == null) {
+            this.dataTypes = new LinkedHashMap<>();
         }
 
-        return data_types;
+        return dataTypes;
     }
 
-    public void setData_types(Map<String, TDataType> data_types) {
-        this.data_types = data_types;
+    public void setDataTypes(Map<String, TDataType> dataTypes) {
+        this.dataTypes = dataTypes;
     }
 
     @NonNull
-    public Map<String, TCapabilityType> getCapability_types() {
-        if (this.capability_types == null) {
-            this.capability_types = new LinkedHashMap<>();
+    public Map<String, TCapabilityType> getCapabilityTypes() {
+        if (this.capabilityTypes == null) {
+            this.capabilityTypes = new LinkedHashMap<>();
         }
 
-        return capability_types;
+        return capabilityTypes;
     }
 
-    public void setCapability_types(Map<String, TCapabilityType> capability_types) {
-        this.capability_types = capability_types;
+    public void setCapabilityTypes(Map<String, TCapabilityType> capabilityTypes) {
+        this.capabilityTypes = capabilityTypes;
     }
 
     @NonNull
-    public Map<String, TInterfaceType> getInterface_types() {
-        if (this.interface_types == null) {
-            this.interface_types = new LinkedHashMap<>();
+    public Map<String, TInterfaceType> getInterfaceTypes() {
+        if (this.interfaceTypes == null) {
+            this.interfaceTypes = new LinkedHashMap<>();
         }
 
-        return interface_types;
+        return interfaceTypes;
     }
 
-    public void setInterface_types(Map<String, TInterfaceType> interface_types) {
-        this.interface_types = interface_types;
+    public void setInterfaceTypes(Map<String, TInterfaceType> interfaceTypes) {
+        this.interfaceTypes = interfaceTypes;
     }
 
     @NonNull
-    public Map<String, TRelationshipType> getRelationship_types() {
-        if (this.relationship_types == null) {
-            this.relationship_types = new LinkedHashMap<>();
+    public Map<String, TRelationshipType> getRelationshipTypes() {
+        if (this.relationshipTypes == null) {
+            this.relationshipTypes = new LinkedHashMap<>();
         }
 
-        return relationship_types;
+        return relationshipTypes;
     }
 
-    public void setRelationship_types(Map<String, TRelationshipType> relationship_types) {
-        this.relationship_types = relationship_types;
+    public void setRelationshipTypes(Map<String, TRelationshipType> relationshipTypes) {
+        this.relationshipTypes = relationshipTypes;
     }
 
     @NonNull
-    public Map<String, TNodeType> getNode_types() {
-        if (this.node_types == null) {
-            this.node_types = new LinkedHashMap<>();
+    public Map<String, TNodeType> getNodeTypes() {
+        if (this.nodeTypes == null) {
+            this.nodeTypes = new LinkedHashMap<>();
         }
 
-        return node_types;
+        return nodeTypes;
     }
 
-    public void setNode_types(Map<String, TNodeType> node_types) {
-        this.node_types = node_types;
+    public void setNodeTypes(Map<String, TNodeType> nodeTypes) {
+        this.nodeTypes = nodeTypes;
     }
 
     @NonNull
-    public Map<String, TGroupType> getGroup_types() {
-        if (this.group_types == null) {
-            this.group_types = new LinkedHashMap<>();
+    public Map<String, TGroupType> getGroupTypes() {
+        if (this.groupTypes == null) {
+            this.groupTypes = new LinkedHashMap<>();
         }
 
-        return group_types;
+        return groupTypes;
     }
 
-    public void setGroup_types(Map<String, TGroupType> group_types) {
-        this.group_types = group_types;
+    public void setGroupTypes(Map<String, TGroupType> groupTypes) {
+        this.groupTypes = groupTypes;
     }
 
     @NonNull
-    public Map<String, TPolicyType> getPolicy_types() {
-        if (this.policy_types == null) {
-            this.policy_types = new LinkedHashMap<>();
+    public Map<String, TPolicyType> getPolicyTypes() {
+        if (this.policyTypes == null) {
+            this.policyTypes = new LinkedHashMap<>();
         }
 
-        return policy_types;
+        return policyTypes;
     }
 
-    public void setPolicy_types(Map<String, TPolicyType> policy_types) {
-        this.policy_types = policy_types;
+    public void setPolicyTypes(Map<String, TPolicyType> policyTypes) {
+        this.policyTypes = policyTypes;
     }
 
     @Nullable
-    public TTopologyTemplateDefinition getTopology_template() {
-        return topology_template;
+    public TTopologyTemplateDefinition getTopologyTemplate() {
+        return topologyTemplate;
     }
 
-    public void setTopology_template(TTopologyTemplateDefinition topology_template) {
-        this.topology_template = topology_template;
+    public void setTopologyTemplate(TTopologyTemplateDefinition topologyTemplate) {
+        this.topologyTemplate = topologyTemplate;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
     public static class Builder {
-        private final String tosca_definitions_version;
+        private final String toscaDefinitionsVersion;
         private Metadata metadata;
         private String description;
-        private Map<String, Object> dsl_definitions;
+        private Map<String, Object> dslDefinitions;
         private Map<String, TRepositoryDefinition> repositories;
         private List<TMapImportDefinition> imports;
-        private Map<String, TArtifactType> artifact_types;
-        private Map<String, TDataType> data_types;
-        private Map<String, TCapabilityType> capability_types;
-        private Map<String, TInterfaceType> interface_types;
-        private Map<String, TRelationshipType> relationship_types;
-        private Map<String, TNodeType> node_types;
-        private Map<String, TGroupType> group_types;
-        private Map<String, TPolicyType> policy_types;
-        private TTopologyTemplateDefinition topology_template;
+        private Map<String, TArtifactType> artifactTypes;
+        private Map<String, TDataType> dataTypes;
+        private Map<String, TCapabilityType> capabilityTypes;
+        private Map<String, TInterfaceType> interfaceTypes;
+        private Map<String, TRelationshipType> relationshipTypes;
+        private Map<String, TNodeType> nodeTypes;
+        private Map<String, TGroupType> groupTypes;
+        private Map<String, TPolicyType> policyTypes;
+        private TTopologyTemplateDefinition topologyTemplate;
 
-        public Builder(String tosca_definitions_version) {
-            this.tosca_definitions_version = tosca_definitions_version;
+        public Builder(String toscaDefinitionsVersion) {
+            this.toscaDefinitionsVersion = toscaDefinitionsVersion;
         }
 
         public Builder setMetadata(Metadata metadata) {
@@ -338,8 +348,8 @@ public class TServiceTemplate {
             return this;
         }
 
-        public Builder setDsl_definitions(Map<String, Object> dsl_definitions) {
-            this.dsl_definitions = dsl_definitions;
+        public Builder setDslDefinitions(Map<String, Object> dslDefinitions) {
+            this.dslDefinitions = dslDefinitions;
             return this;
         }
 
@@ -353,79 +363,79 @@ public class TServiceTemplate {
             return this;
         }
 
-        public Builder setArtifact_types(Map<String, TArtifactType> artifact_types) {
-            this.artifact_types = artifact_types;
+        public Builder setArtifactTypes(Map<String, TArtifactType> artifactTypes) {
+            this.artifactTypes = artifactTypes;
             return this;
         }
 
-        public Builder setData_types(Map<String, TDataType> data_types) {
-            this.data_types = data_types;
+        public Builder setDataTypes(Map<String, TDataType> dataTypes) {
+            this.dataTypes = dataTypes;
             return this;
         }
 
-        public Builder setCapability_types(Map<String, TCapabilityType> capability_types) {
-            this.capability_types = capability_types;
+        public Builder setCapabilityTypes(Map<String, TCapabilityType> capabilityTypes) {
+            this.capabilityTypes = capabilityTypes;
             return this;
         }
 
-        public Builder setInterface_types(Map<String, TInterfaceType> interface_types) {
-            this.interface_types = interface_types;
+        public Builder setInterfaceTypes(Map<String, TInterfaceType> interfaceTypes) {
+            this.interfaceTypes = interfaceTypes;
             return this;
         }
 
-        public Builder setRelationship_types(Map<String, TRelationshipType> relationship_types) {
-            this.relationship_types = relationship_types;
+        public Builder setRelationshipTypes(Map<String, TRelationshipType> relationshipTypes) {
+            this.relationshipTypes = relationshipTypes;
             return this;
         }
 
-        public Builder setNode_types(Map<String, TNodeType> node_types) {
-            this.node_types = node_types;
+        public Builder setNodeTypes(Map<String, TNodeType> nodeTypes) {
+            this.nodeTypes = nodeTypes;
             return this;
         }
 
-        public Builder setNode_type(String key, TNodeType node_type) {
-            if (this.node_types == null) {
-                this.node_types = new LinkedHashMap<>();
+        public Builder setNodeType(String key, TNodeType nodeType) {
+            if (this.nodeTypes == null) {
+                this.nodeTypes = new LinkedHashMap<>();
             }
-            this.node_types.put(key, node_type);
+            this.nodeTypes.put(key, nodeType);
             return this;
         }
 
-        public Builder setGroup_types(Map<String, TGroupType> group_types) {
-            this.group_types = group_types;
+        public Builder setGroupTypes(Map<String, TGroupType> groupTypes) {
+            this.groupTypes = groupTypes;
             return this;
         }
 
-        public Builder setPolicy_types(Map<String, TPolicyType> policy_types) {
-            this.policy_types = policy_types;
+        public Builder setPolicyTypes(Map<String, TPolicyType> policyTypes) {
+            this.policyTypes = policyTypes;
             return this;
         }
 
-        public Builder setTopology_template(TTopologyTemplateDefinition topology_template) {
-            this.topology_template = topology_template;
+        public Builder setTopologyTemplate(TTopologyTemplateDefinition topologyTemplate) {
+            this.topologyTemplate = topologyTemplate;
             return this;
         }
 
-        public Builder addDsl_definitions(Map<String, Object> dsl_definitions) {
-            if (dsl_definitions == null || dsl_definitions.isEmpty()) {
+        public Builder addDslDefinitions(Map<String, Object> dslDefinitions) {
+            if (dslDefinitions == null || dslDefinitions.isEmpty()) {
                 return this;
             }
 
-            if (this.dsl_definitions == null) {
-                this.dsl_definitions = dsl_definitions;
+            if (this.dslDefinitions == null) {
+                this.dslDefinitions = dslDefinitions;
             } else {
-                this.dsl_definitions.putAll(dsl_definitions);
+                this.dslDefinitions.putAll(dslDefinitions);
             }
 
             return this;
         }
 
-        public Builder addDsl_definitions(String name, Object dsl_definition) {
+        public Builder addDslDefinitions(String name, Object dslDefinition) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addDsl_definitions(Collections.singletonMap(name, dsl_definition));
+            return addDslDefinitions(Collections.singletonMap(name, dslDefinition));
         }
 
         public Builder addRepositories(Map<String, TRepositoryDefinition> repositories) {
@@ -464,12 +474,12 @@ public class TServiceTemplate {
             return this;
         }
 
-        public Builder addImports(TMapImportDefinition _import) {
-            if (_import == null | _import.isEmpty()) {
+        public Builder addImports(TMapImportDefinition importDefinition) {
+            if (importDefinition == null | importDefinition.isEmpty()) {
                 return this;
             }
 
-            return addImports(Collections.singletonList(_import));
+            return addImports(Collections.singletonList(importDefinition));
         }
 
         public Builder addImports(Map<String, TImportDefinition> imports) {
@@ -486,188 +496,188 @@ public class TServiceTemplate {
             return this;
         }
 
-        public Builder addImports(String name, TImportDefinition _import) {
+        public Builder addImports(String name, TImportDefinition importDefinition) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addImports(Collections.singletonMap(name, _import));
+            return addImports(Collections.singletonMap(name, importDefinition));
         }
 
-        public Builder addArtifact_types(Map<String, TArtifactType> artifact_types) {
-            if (artifact_types == null || artifact_types.isEmpty()) {
+        public Builder addArtifactTypes(Map<String, TArtifactType> artifactTypes) {
+            if (artifactTypes == null || artifactTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.artifact_types == null) {
-                this.artifact_types = artifact_types;
+            if (this.artifactTypes == null) {
+                this.artifactTypes = artifactTypes;
             } else {
-                this.artifact_types.putAll(artifact_types);
+                this.artifactTypes.putAll(artifactTypes);
             }
 
             return this;
         }
 
-        public Builder addArtifact_types(String name, TArtifactType artifact_type) {
+        public Builder addArtifactTypes(String name, TArtifactType artifactType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addArtifact_types(Collections.singletonMap(name, artifact_type));
+            return addArtifactTypes(Collections.singletonMap(name, artifactType));
         }
 
-        public Builder addData_types(Map<String, TDataType> data_types) {
-            if (data_types == null || data_types.isEmpty()) {
+        public Builder addDataTypes(Map<String, TDataType> dataTypes) {
+            if (dataTypes == null || dataTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.data_types == null) {
-                this.data_types = data_types;
+            if (this.dataTypes == null) {
+                this.dataTypes = dataTypes;
             } else {
-                this.data_types.putAll(data_types);
+                this.dataTypes.putAll(dataTypes);
             }
 
             return this;
         }
 
-        public Builder addData_types(String name, TDataType data_type) {
+        public Builder addDataTypes(String name, TDataType dataType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addData_types(Collections.singletonMap(name, data_type));
+            return addDataTypes(Collections.singletonMap(name, dataType));
         }
 
-        public Builder addCapability_types(Map<String, TCapabilityType> capability_types) {
-            if (capability_types == null || capability_types.isEmpty()) {
+        public Builder addCapabilityTypes(Map<String, TCapabilityType> capabilityTypes) {
+            if (capabilityTypes == null || capabilityTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.capability_types == null) {
-                this.capability_types = capability_types;
+            if (this.capabilityTypes == null) {
+                this.capabilityTypes = capabilityTypes;
             } else {
-                this.capability_types.putAll(capability_types);
+                this.capabilityTypes.putAll(capabilityTypes);
             }
 
             return this;
         }
 
-        public Builder addCapability_types(String name, TCapabilityType capability_type) {
+        public Builder addCapabilityTypes(String name, TCapabilityType capabilityType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addCapability_types(Collections.singletonMap(name, capability_type));
+            return addCapabilityTypes(Collections.singletonMap(name, capabilityType));
         }
 
-        public Builder addInterface_types(Map<String, TInterfaceType> interface_types) {
-            if (interface_types == null || interface_types.isEmpty()) {
+        public Builder addInterfaceTypes(Map<String, TInterfaceType> interfaceTypes) {
+            if (interfaceTypes == null || interfaceTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.interface_types == null) {
-                this.interface_types = interface_types;
+            if (this.interfaceTypes == null) {
+                this.interfaceTypes = interfaceTypes;
             } else {
-                this.interface_types.putAll(interface_types);
+                this.interfaceTypes.putAll(interfaceTypes);
             }
 
             return this;
         }
 
-        public Builder addInterface_types(String name, TInterfaceType interface_type) {
+        public Builder addInterfaceTypes(String name, TInterfaceType tInterfaceType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addInterface_types(Collections.singletonMap(name, interface_type));
+            return addInterfaceTypes(Collections.singletonMap(name, tInterfaceType));
         }
 
-        public Builder addRelationship_types(Map<String, TRelationshipType> relationship_types) {
-            if (relationship_types == null || relationship_types.isEmpty()) {
+        public Builder addRelationshipTypes(Map<String, TRelationshipType> relationshipTypes) {
+            if (relationshipTypes == null || relationshipTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.relationship_types == null) {
-                this.relationship_types = relationship_types;
+            if (this.relationshipTypes == null) {
+                this.relationshipTypes = relationshipTypes;
             } else {
-                this.relationship_types.putAll(relationship_types);
+                this.relationshipTypes.putAll(relationshipTypes);
             }
 
             return this;
         }
 
-        public Builder addRelationship_types(String name, TRelationshipType relationship_type) {
+        public Builder addRelationshipTypes(String name, TRelationshipType relationshipType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addRelationship_types(Collections.singletonMap(name, relationship_type));
+            return addRelationshipTypes(Collections.singletonMap(name, relationshipType));
         }
 
-        public Builder addNode_types(Map<String, TNodeType> node_types) {
-            if (node_types == null || node_types.isEmpty()) {
+        public Builder addNodeTypes(Map<String, TNodeType> nodeTypes) {
+            if (nodeTypes == null || nodeTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.node_types == null) {
-                this.node_types = node_types;
+            if (this.nodeTypes == null) {
+                this.nodeTypes = nodeTypes;
             } else {
-                this.node_types.putAll(node_types);
+                this.nodeTypes.putAll(nodeTypes);
             }
 
             return this;
         }
 
-        public Builder addNode_types(String name, TNodeType node_type) {
+        public Builder addNodeTypes(String name, TNodeType nodeType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addNode_types(Collections.singletonMap(name, node_type));
+            return addNodeTypes(Collections.singletonMap(name, nodeType));
         }
 
-        public Builder addGroup_types(Map<String, TGroupType> group_types) {
-            if (group_types == null || group_types.isEmpty()) {
+        public Builder addGroupTypes(Map<String, TGroupType> groupTypes) {
+            if (groupTypes == null || groupTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.group_types == null) {
-                this.group_types = group_types;
+            if (this.groupTypes == null) {
+                this.groupTypes = groupTypes;
             } else {
-                this.group_types.putAll(group_types);
+                this.groupTypes.putAll(groupTypes);
             }
 
             return this;
         }
 
-        public Builder addGroup_types(String name, TGroupType group_type) {
+        public Builder addGroupTypes(String name, TGroupType groupType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addGroup_types(Collections.singletonMap(name, group_type));
+            return addGroupTypes(Collections.singletonMap(name, groupType));
         }
 
-        public Builder addPolicy_types(Map<String, TPolicyType> policy_types) {
-            if (policy_types == null || policy_types.isEmpty()) {
+        public Builder addPolicyTypes(Map<String, TPolicyType> policyTypes) {
+            if (policyTypes == null || policyTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.policy_types == null) {
-                this.policy_types = policy_types;
+            if (this.policyTypes == null) {
+                this.policyTypes = policyTypes;
             } else {
-                this.policy_types.putAll(policy_types);
+                this.policyTypes.putAll(policyTypes);
             }
 
             return this;
         }
 
-        public Builder addPolicy_types(String name, TPolicyType policy_type) {
+        public Builder addPolicyTypes(String name, TPolicyType policyType) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addPolicy_types(Collections.singletonMap(name, policy_type));
+            return addPolicyTypes(Collections.singletonMap(name, policyType));
         }
 
         public TServiceTemplate build() {

@@ -27,8 +27,8 @@ import javax.xml.namespace.QName;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -41,7 +41,7 @@ import org.eclipse.jdt.annotation.Nullable;
     "properties",
     "targets"
 })
-public class TPolicyDefinition {
+public class TPolicyDefinition implements VisitorNode {
     @XmlAttribute(name = "type", required = true)
     private QName type;
     private String description;
@@ -100,7 +100,7 @@ public class TPolicyDefinition {
         if (!Objects.nonNull(metadata)) {
             this.metadata = new Metadata();
         }
-        
+
         return metadata;
     }
 
@@ -134,7 +134,7 @@ public class TPolicyDefinition {
         this.targets = targets;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 

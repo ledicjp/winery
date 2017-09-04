@@ -25,12 +25,12 @@ import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.AbstractVisitor;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
+import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
 import org.eclipse.winery.yaml.common.reader.Reader;
+import org.eclipse.winery.yaml.common.validator.support.ExceptionVisitor;
 
-public class ReferenceVisitor extends AbstractVisitor<ReferenceVisitor.Result, ReferenceVisitor.Parameter> {
+public class ReferenceVisitor extends ExceptionVisitor<ReferenceVisitor.Result, ReferenceVisitor.Parameter> {
 	private final TServiceTemplate serviceTemplate;
 	private final String namespace;
 	private final Reader reader;
@@ -49,23 +49,22 @@ public class ReferenceVisitor extends AbstractVisitor<ReferenceVisitor.Result, R
 	}
 
 	public Result getTypes(QName reference, String entityClassName) {
-		try {
-			return visit(serviceTemplate, new Parameter(reference, entityClassName));
-		} catch (IException e) {
-			e.printStackTrace();
-			return new Result(null);
-		}
+		return visit(serviceTemplate, new Parameter(reference, entityClassName));
 	}
 
 	@Override
-	public Result visit(TImportDefinition node, Parameter parameter) throws IException {
-		if (node.getNamespace_uri() == null && !parameter.reference.getNamespaceURI().equals(Namespaces.DEFAULT_NS)) {
+	public Result visit(TImportDefinition node, Parameter parameter) {
+		if (node.getNamespaceUri() == null && !parameter.reference.getNamespaceURI().equals(Namespaces.DEFAULT_NS)) {
 			return null;
 		}
 
-		String namespace = node.getNamespace_uri() == null ? Namespaces.DEFAULT_NS : node.getNamespace_uri();
+		String namespace = node.getNamespaceUri() == null ? Namespaces.DEFAULT_NS : node.getNamespaceUri();
 		if (!this.visitors.containsKey(node)) {
-			this.serviceTemplates.put(node, reader.readImportDefinition(node, PATH, namespace));
+			try {
+				this.serviceTemplates.put(node, reader.readImportDefinition(node, PATH, namespace));
+			} catch (YAMLParserException e) {
+				setException(e);
+			}
 			this.visitors.put(node, new ReferenceVisitor(this.serviceTemplates.get(node), namespace, PATH));
 		}
 
@@ -73,21 +72,21 @@ public class ReferenceVisitor extends AbstractVisitor<ReferenceVisitor.Result, R
 	}
 
 	@Override
-	public Result visit(TEntityType node, Parameter parameter) throws IException {
-		if (node.getDerived_from() != null) {
-			return serviceTemplate.accept(this, new Parameter(node.getDerived_from(), parameter.entityClass)).copy(node, node.getDerived_from());
+	public Result visit(TEntityType node, Parameter parameter) {
+		if (node.getDerivedFrom() != null) {
+			return serviceTemplate.accept(this, new Parameter(node.getDerivedFrom(), parameter.entityClass)).copy(node, node.getDerivedFrom());
 		}
 		return new Result(node);
 	}
 
 	@Override
-	public Result visit(TServiceTemplate node, Parameter parameter) throws IException {
+	public Result visit(TServiceTemplate node, Parameter parameter) {
 		Result result;
 		if (parameter.reference.getNamespaceURI().equals(this.namespace)) {
 			switch (parameter.entityClass) {
 				case "TArtifactType":
-					if (node.getArtifact_types().containsKey(parameter.reference.getLocalPart())) {
-						return node.getArtifact_types().get(parameter.reference.getLocalPart()).accept(this, parameter.copy());
+					if (node.getArtifactTypes().containsKey(parameter.reference.getLocalPart())) {
+						return node.getArtifactTypes().get(parameter.reference.getLocalPart()).accept(this, parameter.copy());
 					}
 			}
 		}
@@ -105,7 +104,7 @@ public class ReferenceVisitor extends AbstractVisitor<ReferenceVisitor.Result, R
 	}
 
 	@Override
-	public Result visit(TArtifactType node, Parameter parameter) throws IException {
+	public Result visit(TArtifactType node, Parameter parameter) {
 		return null;
 	}
 

@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -32,7 +32,7 @@ import org.eclipse.jdt.annotation.NonNull;
     "properties",
     "attributes"
 })
-public class TCapabilityAssignment {
+public class TCapabilityAssignment implements VisitorNode {
     private Map<String, TPropertyAssignment> properties;
     private Map<String, TAttributeAssignment> attributes;
 
@@ -84,7 +84,7 @@ public class TCapabilityAssignment {
         this.attributes = attributes;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 

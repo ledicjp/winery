@@ -26,8 +26,8 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -36,15 +36,16 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlType(name = "tCapabilityDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "description",
     "occurrences",
-    "valid_source_types",
+    "validSourceTypes",
     "type",
     "properties",
     "attributes"
 })
-public class TCapabilityDefinition {
+public class TCapabilityDefinition implements VisitorNode {
     private String description;
     private List<String> occurrences;
-    private List<QName> valid_source_types;
+    @XmlAttribute(name = "valid_source_types")
+    private List<QName> validSourceTypes;
     @XmlAttribute(name = "type", required = true)
     private QName type;
     private Map<String, TPropertyDefinition> properties;
@@ -62,7 +63,7 @@ public class TCapabilityDefinition {
         this.setType(builder.type);
         this.setDescription(builder.description);
         this.setOccurrences(builder.occurrences);
-        this.setValid_source_types(builder.valid_source_types);
+        this.setValidSourceTypes(builder.validSourceTypes);
         this.setProperties(builder.properties);
         this.setAttributes(builder.attributes);
     }
@@ -74,7 +75,7 @@ public class TCapabilityDefinition {
         TCapabilityDefinition that = (TCapabilityDefinition) o;
         return Objects.equals(description, that.description) &&
             Objects.equals(occurrences, that.occurrences) &&
-            Objects.equals(valid_source_types, that.valid_source_types) &&
+            Objects.equals(validSourceTypes, that.validSourceTypes) &&
             Objects.equals(type, that.type) &&
             Objects.equals(properties, that.properties) &&
             Objects.equals(attributes, that.attributes);
@@ -82,7 +83,7 @@ public class TCapabilityDefinition {
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, occurrences, valid_source_types, type, properties, attributes);
+        return Objects.hash(description, occurrences, validSourceTypes, type, properties, attributes);
     }
 
     @Nullable
@@ -113,12 +114,12 @@ public class TCapabilityDefinition {
         this.occurrences = occurrences;
     }
 
-    public List<QName> getValid_source_types() {
-        return valid_source_types;
+    public List<QName> getValidSourceTypes() {
+        return validSourceTypes;
     }
 
-    public void setValid_source_types(List<QName> valid_source_types) {
-        this.valid_source_types = valid_source_types;
+    public void setValidSourceTypes(List<QName> validSourceTypes) {
+        this.validSourceTypes = validSourceTypes;
     }
 
     @NonNull
@@ -174,7 +175,7 @@ public class TCapabilityDefinition {
         }
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
@@ -182,7 +183,7 @@ public class TCapabilityDefinition {
         private final QName type;
         private String description;
         private List<String> occurrences;
-        private List<QName> valid_source_types;
+        private List<QName> validSourceTypes;
         private Map<String, TPropertyDefinition> properties;
         private Map<String, TAttributeDefinition> attributes;
 
@@ -200,8 +201,8 @@ public class TCapabilityDefinition {
             return this;
         }
 
-        public Builder setValid_source_types(List<QName> valid_source_types) {
-            this.valid_source_types = valid_source_types;
+        public Builder setValidSourceTypes(List<QName> validSourceTypes) {
+            this.validSourceTypes = validSourceTypes;
             return this;
         }
 
@@ -237,26 +238,26 @@ public class TCapabilityDefinition {
             return addOccurrences(Collections.singletonList(occurrence));
         }
 
-        public Builder addValid_source_types(List<QName> valid_source_types) {
-            if (valid_source_types == null || valid_source_types.isEmpty()) {
+        public Builder addValidSourceTypes(List<QName> validSourceTypes) {
+            if (validSourceTypes == null || validSourceTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.valid_source_types == null) {
-                this.valid_source_types = valid_source_types;
+            if (this.validSourceTypes == null) {
+                this.validSourceTypes = validSourceTypes;
             } else {
-                this.valid_source_types.addAll(valid_source_types);
+                this.validSourceTypes.addAll(validSourceTypes);
             }
 
             return this;
         }
 
-        public Builder addValid_source_types(QName valid_source_type) {
-            if (valid_source_type == null) {
+        public Builder addValidSourceTypes(QName validSourceType) {
+            if (validSourceType == null) {
                 return this;
             }
 
-            return addValid_source_types(Collections.singletonList(valid_source_type));
+            return addValidSourceTypes(Collections.singletonList(validSourceType));
         }
 
         public Builder addProperties(Map<String, TPropertyDefinition> properties) {

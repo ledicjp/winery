@@ -99,6 +99,10 @@ Types references and other references are defined as `strings` in the TOSCA Simp
 References to elements in the same ServiceTemplate have the `namespace_uri` of the ServiceTemplate, which is specified by the user when parsing the document or set to the default namespace (`http://www.eclipse.org/winery/ns/simple/yaml/1.1/default`).
   
 References to elements specified in imported ServiceTemplate will use the namespace and prefix of the the ImportDefinition, if defined, or the namespace of the importing ServiceTemplate.
+
+The serialization of references with namespaces depends on `namespace_uri` and `namespace_prefix`:
+1. `namespace_prefix` is defined for a QName: (serialization) `prefix:localName`
+1. Only `namespace_uri` is defined: (serialization) `{https://example.org/ns}localName`
  
 ### TOSCA YAML Simple Profile Normative Types
 References to normative types MUST NOT have a prefix and the normative types will be imported automatically.
@@ -121,7 +125,9 @@ Java Builders defined for the data model classes do not change the model languag
 ## Visitor Interface
 Each model class has a generic visitor function.
 ```java
- R accept(IVisitor visitor, P parameter) throws IException 
+interface NodeVisitor<P, R> {
+  R accept(NodeVisitor visitor, P parameter);
+}
  ```
 Those functions and the abstract class and interfaces defined in the `visitor` package allows to create visitor design pattern for traversing the ServiceTemplate.
  
@@ -149,7 +155,7 @@ public class VisitorExample extends AbstractVisitor<Result, Parameter> {
     }
     
     @Override
-    public Result visit(TNodeType node, Parameter parameter) throws IException {
+    public Result visit(TNodeType node, Parameter parameter) {
         List<TNodeType> list = new ArrayList<>();
         list.add(node);
         return new Result().addNodeTypes(list);

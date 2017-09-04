@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -31,7 +31,7 @@ import org.eclipse.jdt.annotation.NonNull;
 @XmlType(name = "tPropertyFilterDefinition", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "constraints"
 })
-public class TPropertyFilterDefinition {
+public class TPropertyFilterDefinition implements VisitorNode {
     private List<TConstraintClause> constraints;
 
     public TPropertyFilterDefinition() {
@@ -67,7 +67,7 @@ public class TPropertyFilterDefinition {
         this.constraints = constraints;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 

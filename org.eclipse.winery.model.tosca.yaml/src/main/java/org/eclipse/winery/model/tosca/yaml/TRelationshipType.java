@@ -20,23 +20,24 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRelationshipType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-    "valid_target_types",
+    "validTargetTypes",
     "interfaces"
 })
 public class TRelationshipType extends TEntityType {
-    private List<QName> valid_target_types;
+    @XmlAttribute(name = "valid_target_types")
+    private List<QName> validTargetTypes;
     private Map<String, TInterfaceDefinition> interfaces;
 
     public TRelationshipType() {
@@ -44,7 +45,7 @@ public class TRelationshipType extends TEntityType {
 
     public TRelationshipType(Builder builder) {
         super(builder);
-        this.setValid_target_types(builder.valid_target_types);
+        this.setValidTargetTypes(builder.validTargetTypes);
         this.setInterfaces(builder.interfaces);
     }
 
@@ -54,26 +55,26 @@ public class TRelationshipType extends TEntityType {
         if (!(o instanceof TRelationshipType)) return false;
         if (!super.equals(o)) return false;
         TRelationshipType that = (TRelationshipType) o;
-        return Objects.equals(valid_target_types, that.valid_target_types) &&
+        return Objects.equals(validTargetTypes, that.validTargetTypes) &&
             Objects.equals(interfaces, that.interfaces);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), valid_target_types, interfaces);
+        return Objects.hash(super.hashCode(), validTargetTypes, interfaces);
     }
 
     @NonNull
-    public List<QName> getValid_target_types() {
-        if (this.valid_target_types == null) {
-            this.valid_target_types = new ArrayList<>();
+    public List<QName> getValidTargetTypes() {
+        if (this.validTargetTypes == null) {
+            this.validTargetTypes = new ArrayList<>();
         }
 
-        return valid_target_types;
+        return validTargetTypes;
     }
 
-    public void setValid_target_types(List<QName> valid_target_types) {
-        this.valid_target_types = valid_target_types;
+    public void setValidTargetTypes(List<QName> validTargetTypes) {
+        this.validTargetTypes = validTargetTypes;
     }
 
     @NonNull
@@ -89,7 +90,7 @@ public class TRelationshipType extends TEntityType {
         this.interfaces = interfaces;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         R ir1 = super.accept(visitor, parameter);
         R ir2 = visitor.visit(this, parameter);
         if (ir1 == null) {
@@ -100,7 +101,7 @@ public class TRelationshipType extends TEntityType {
     }
 
     public static class Builder extends TEntityType.Builder {
-        private List<QName> valid_target_types;
+        private List<QName> validTargetTypes;
         private Map<String, TInterfaceDefinition> interfaces;
 
         public Builder() {
@@ -111,8 +112,8 @@ public class TRelationshipType extends TEntityType {
             super(entityType);
         }
 
-        public Builder setValid_target_types(List<QName> valid_target_types) {
-            this.valid_target_types = valid_target_types;
+        public Builder setValidTargetTypes(List<QName> validTargetTypes) {
+            this.validTargetTypes = validTargetTypes;
             return this;
         }
 
@@ -121,26 +122,26 @@ public class TRelationshipType extends TEntityType {
             return this;
         }
 
-        public Builder addValid_target_types(List<QName> valid_target_types) {
-            if (valid_target_types == null || valid_target_types.isEmpty()) {
+        public Builder addValidTargetTypes(List<QName> validTargetTypes) {
+            if (validTargetTypes == null || validTargetTypes.isEmpty()) {
                 return this;
             }
 
-            if (this.valid_target_types == null) {
-                this.valid_target_types = valid_target_types;
+            if (this.validTargetTypes == null) {
+                this.validTargetTypes = validTargetTypes;
             } else {
-                this.valid_target_types.addAll(valid_target_types);
+                this.validTargetTypes.addAll(validTargetTypes);
             }
 
             return this;
         }
 
-        public Builder addValid_target_types(QName valid_target_type) {
-            if (valid_target_type == null) {
+        public Builder addValidTargetTypes(QName validTargetType) {
+            if (validTargetType == null) {
                 return this;
             }
 
-            return addValid_target_types(Collections.singletonList(valid_target_type));
+            return addValidTargetTypes(Collections.singletonList(validTargetType));
         }
 
         public TRelationshipType build() {

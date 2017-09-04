@@ -18,11 +18,11 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,114 +30,116 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tArtifactType", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-	"mime_type",
-	"file_ext"
+    "mimeType",
+    "fileExt"
 })
 public class TArtifactType extends TEntityType {
-	private String mime_type;
-	private List<String> file_ext;
+    @XmlAttribute(name = "mime_type")
+    private String mimeType;
+    @XmlAttribute(name = "file_ext")
+    private List<String> fileExt;
 
-	public TArtifactType() {
-	}
+    public TArtifactType() {
+    }
 
-	public TArtifactType(Builder builder) {
-		super(builder);
-		this.setMime_type(builder.mime_type);
-		this.setFile_ext(builder.file_ext);
-	}
+    public TArtifactType(Builder builder) {
+        super(builder);
+        this.setMimeType(builder.mimeType);
+        this.setFileExt(builder.fileExt);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof TArtifactType)) return false;
-		TArtifactType that = (TArtifactType) o;
-		return Objects.equals(mime_type, that.mime_type) &&
-			Objects.equals(file_ext, that.file_ext);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TArtifactType)) return false;
+        TArtifactType that = (TArtifactType) o;
+        return Objects.equals(mimeType, that.mimeType) &&
+            Objects.equals(fileExt, that.fileExt);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(mime_type, file_ext);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(mimeType, fileExt);
+    }
 
-	@Nullable
-	public String getMime_type() {
-		return mime_type;
-	}
+    @Nullable
+    public String getMimeType() {
+        return mimeType;
+    }
 
-	public void setMime_type(String mime_type) {
-		this.mime_type = mime_type;
-	}
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
 
-	@NonNull
-	public List<String> getFile_ext() {
-		if (this.file_ext == null) {
-			this.file_ext = new ArrayList<>();
-		}
+    @NonNull
+    public List<String> getFileExt() {
+        if (this.fileExt == null) {
+            this.fileExt = new ArrayList<>();
+        }
 
-		return file_ext;
-	}
+        return fileExt;
+    }
 
-	public void setFile_ext(List<String> file_ext) {
-		this.file_ext = file_ext;
-	}
+    public void setFileExt(List<String> fileExt) {
+        this.fileExt = fileExt;
+    }
 
-	public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
-		R ir1 = super.accept(visitor, parameter);
-		R ir2 = visitor.visit(this, parameter);
-		if (ir1 == null) {
-			return ir2;
-		} else {
-			return ir1.add(ir2);
-		}
-	}
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
+        R ir1 = super.accept(visitor, parameter);
+        R ir2 = visitor.visit(this, parameter);
+        if (ir1 == null) {
+            return ir2;
+        } else {
+            return ir1.add(ir2);
+        }
+    }
 
-	public static class Builder extends TEntityType.Builder {
-		private String mime_type;
-		private List<String> file_ext;
+    public static class Builder extends TEntityType.Builder {
+        private String mimeType;
+        private List<String> fileExt;
 
-		public Builder() {
+        public Builder() {
 
-		}
+        }
 
-		public Builder(TEntityType entityType) {
-			super(entityType);
-		}
+        public Builder(TEntityType entityType) {
+            super(entityType);
+        }
 
-		public Builder setMime_type(String mime_type) {
-			this.mime_type = mime_type;
-			return this;
-		}
+        public Builder setMimeType(String mimeType) {
+            this.mimeType = mimeType;
+            return this;
+        }
 
-		public Builder setFile_ext(List<String> file_ext) {
-			this.file_ext = file_ext;
-			return this;
-		}
+        public Builder setFileExt(List<String> fileExt) {
+            this.fileExt = fileExt;
+            return this;
+        }
 
-		public Builder addFile_ext(List<String> file_ext) {
-			if (file_ext == null || file_ext.isEmpty()) {
-				return this;
-			}
+        public Builder addFileExt(List<String> fileExt) {
+            if (fileExt == null || fileExt.isEmpty()) {
+                return this;
+            }
 
-			if (this.file_ext == null) {
-				this.file_ext = file_ext;
-			} else {
-				this.file_ext.addAll(file_ext);
-			}
+            if (this.fileExt == null) {
+                this.fileExt = fileExt;
+            } else {
+                this.fileExt.addAll(fileExt);
+            }
 
-			return this;
-		}
+            return this;
+        }
 
-		public Builder addFile_ext(String file_ext) {
-			if (file_ext == null || file_ext.isEmpty()) {
-				return this;
-			}
+        public Builder addFileExt(String fileExt) {
+            if (fileExt == null || fileExt.isEmpty()) {
+                return this;
+            }
 
-			return addFile_ext(Collections.singletonList(file_ext));
-		}
+            return addFileExt(Collections.singletonList(fileExt));
+        }
 
-		public TArtifactType build() {
-			return new TArtifactType(this);
-		}
-	}
+        public TArtifactType build() {
+            return new TArtifactType(this);
+        }
+    }
 }

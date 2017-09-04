@@ -40,7 +40,7 @@ import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.Defaults;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
-import org.eclipse.winery.yaml.common.reader.XmlReader;
+import org.eclipse.winery.yaml.common.reader.XML.XmlReader;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -86,14 +86,14 @@ public class X2YConverter {
 		builder.setDescription(convertDocumentation(node.getDocumentation()));
 		convert(node.getServiceTemplateOrNodeTypeOrNodeTypeImplementation());
 		builder.setImports(imports);
-		builder.setArtifact_types(artifact_types);
-		builder.setData_types(data_types);
-		builder.setCapability_types(capability_types);
-		builder.setInterface_types(interface_types);
-		builder.setRelationship_types(relationship_types);
-		builder.setNode_types(node_types);
-		builder.setGroup_types(group_types);
-		builder.setPolicy_types(policy_types);
+		builder.setArtifactTypes(artifact_types);
+		builder.setDataTypes(data_types);
+		builder.setCapabilityTypes(capability_types);
+		builder.setInterfaceTypes(interface_types);
+		builder.setRelationshipTypes(relationship_types);
+		builder.setNodeTypes(node_types);
+		builder.setGroupTypes(group_types);
+		builder.setPolicyTypes(policy_types);
 
 		if (service_templates == null) {
 			service_templates = new LinkedHashMap<>();

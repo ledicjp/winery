@@ -9,7 +9,7 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.yaml.common.validator;
+package org.eclipse.winery.yaml.common.validator.support;
 
 import org.eclipse.winery.yaml.common.Exception.InvalidSyntax;
 import org.eclipse.winery.yaml.common.Exception.InvalidType;

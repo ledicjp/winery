@@ -18,12 +18,13 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -32,36 +33,38 @@ import org.eclipse.jdt.annotation.Nullable;
 @XmlType(name = "tTopologyTemplate", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "description",
     "inputs",
-    "node_templates",
-    "relationship_templates",
+    "nodeTemplates",
+    "relationshipTemplates",
     "groups",
     "policies",
     "outputs",
-    "substitution_mappings"
+    "substitutionMappings"
 })
-public class TTopologyTemplateDefinition {
+public class TTopologyTemplateDefinition implements VisitorNode {
     private String description;
     private Map<String, TParameterDefinition> inputs;
-    private Map<String, TNodeTemplate> node_templates;
-    private Map<String, TRelationshipTemplate> relationship_templates;
+    @XmlAttribute(name = "node_templates")
+    private Map<String, TNodeTemplate> nodeTemplates;
+    @XmlAttribute(name = "relationship_templates")
+    private Map<String, TRelationshipTemplate> relationshipTemplates;
     private Map<String, TGroupDefinition> groups;
     private Map<String, TPolicyDefinition> policies;
     private Map<String, TParameterDefinition> outputs;
-    private TSubstitutionMappings substitution_mappings;
+    @XmlAttribute(name = "substitution_mappings")
+    private TSubstitutionMappings substitutionMappings;
 
     public TTopologyTemplateDefinition() {
-
     }
 
     public TTopologyTemplateDefinition(Builder builder) {
         this.setDescription(builder.description);
         this.setInputs(builder.inputs);
-        this.setNode_templates(builder.node_templates);
-        this.setRelationship_templates(builder.relationship_templates);
+        this.setNodeTemplates(builder.nodeTemplates);
+        this.setRelationshipTemplates(builder.relationshipTemplates);
         this.setGroups(builder.groups);
         this.setPolicies(builder.policies);
         this.setOutputs(builder.outputs);
-        this.setSubstitution_mappings(builder.substitution_mappings);
+        this.setSubstitutionMappings(builder.substitutionMappings);
     }
 
     @Override
@@ -71,17 +74,17 @@ public class TTopologyTemplateDefinition {
         TTopologyTemplateDefinition that = (TTopologyTemplateDefinition) o;
         return Objects.equals(description, that.description) &&
             Objects.equals(inputs, that.inputs) &&
-            Objects.equals(node_templates, that.node_templates) &&
-            Objects.equals(relationship_templates, that.relationship_templates) &&
+            Objects.equals(nodeTemplates, that.nodeTemplates) &&
+            Objects.equals(relationshipTemplates, that.relationshipTemplates) &&
             Objects.equals(groups, that.groups) &&
             Objects.equals(policies, that.policies) &&
             Objects.equals(outputs, that.outputs) &&
-            Objects.equals(substitution_mappings, that.substitution_mappings);
+            Objects.equals(substitutionMappings, that.substitutionMappings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, inputs, node_templates, relationship_templates, groups, policies, outputs, substitution_mappings);
+        return Objects.hash(description, inputs, nodeTemplates, relationshipTemplates, groups, policies, outputs, substitutionMappings);
     }
 
     @Nullable
@@ -107,29 +110,29 @@ public class TTopologyTemplateDefinition {
     }
 
     @NonNull
-    public Map<String, TNodeTemplate> getNode_templates() {
-        if (this.node_templates == null) {
-            this.node_templates = new LinkedHashMap<>();
+    public Map<String, TNodeTemplate> getNodeTemplates() {
+        if (this.nodeTemplates == null) {
+            this.nodeTemplates = new LinkedHashMap<>();
         }
 
-        return node_templates;
+        return nodeTemplates;
     }
 
-    public void setNode_templates(Map<String, TNodeTemplate> node_templates) {
-        this.node_templates = node_templates;
+    public void setNodeTemplates(Map<String, TNodeTemplate> nodeTemplates) {
+        this.nodeTemplates = nodeTemplates;
     }
 
     @NonNull
-    public Map<String, TRelationshipTemplate> getRelationship_templates() {
-        if (this.relationship_templates == null) {
-            this.relationship_templates = new LinkedHashMap<>();
+    public Map<String, TRelationshipTemplate> getRelationshipTemplates() {
+        if (this.relationshipTemplates == null) {
+            this.relationshipTemplates = new LinkedHashMap<>();
         }
 
-        return relationship_templates;
+        return relationshipTemplates;
     }
 
-    public void setRelationship_templates(Map<String, TRelationshipTemplate> relationship_templates) {
-        this.relationship_templates = relationship_templates;
+    public void setRelationshipTemplates(Map<String, TRelationshipTemplate> relationshipTemplates) {
+        this.relationshipTemplates = relationshipTemplates;
     }
 
     @NonNull
@@ -172,27 +175,27 @@ public class TTopologyTemplateDefinition {
     }
 
     @Nullable
-    public TSubstitutionMappings getSubstitution_mappings() {
-        return substitution_mappings;
+    public TSubstitutionMappings getSubstitutionMappings() {
+        return substitutionMappings;
     }
 
-    public void setSubstitution_mappings(TSubstitutionMappings substitution_mappings) {
-        this.substitution_mappings = substitution_mappings;
+    public void setSubstitutionMappings(TSubstitutionMappings substitutionMappings) {
+        this.substitutionMappings = substitutionMappings;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
     public static class Builder {
         private String description;
         private Map<String, TParameterDefinition> inputs;
-        private Map<String, TNodeTemplate> node_templates;
-        private Map<String, TRelationshipTemplate> relationship_templates;
+        private Map<String, TNodeTemplate> nodeTemplates;
+        private Map<String, TRelationshipTemplate> relationshipTemplates;
         private Map<String, TGroupDefinition> groups;
         private Map<String, TPolicyDefinition> policies;
         private Map<String, TParameterDefinition> outputs;
-        private TSubstitutionMappings substitution_mappings;
+        private TSubstitutionMappings substitutionMappings;
 
         public Builder setDescription(String description) {
             this.description = description;
@@ -204,13 +207,13 @@ public class TTopologyTemplateDefinition {
             return this;
         }
 
-        public Builder setNode_templates(Map<String, TNodeTemplate> node_templates) {
-            this.node_templates = node_templates;
+        public Builder setNodeTemplates(Map<String, TNodeTemplate> nodeTemplates) {
+            this.nodeTemplates = nodeTemplates;
             return this;
         }
 
-        public Builder setRelationship_templates(Map<String, TRelationshipTemplate> relationship_templates) {
-            this.relationship_templates = relationship_templates;
+        public Builder setRelationshipTemplates(Map<String, TRelationshipTemplate> relationshipTemplates) {
+            this.relationshipTemplates = relationshipTemplates;
             return this;
         }
 
@@ -229,8 +232,8 @@ public class TTopologyTemplateDefinition {
             return this;
         }
 
-        public Builder setSubstitution_mappings(TSubstitutionMappings substitution_mappings) {
-            this.substitution_mappings = substitution_mappings;
+        public Builder setSubstitutionMappings(TSubstitutionMappings substitutionMappings) {
+            this.substitutionMappings = substitutionMappings;
             return this;
         }
 
@@ -256,48 +259,48 @@ public class TTopologyTemplateDefinition {
             return addInputs(Collections.singletonMap(name, input));
         }
 
-        public Builder addNode_templates(Map<String, TNodeTemplate> node_templates) {
-            if (node_templates == null || node_templates.isEmpty()) {
+        public Builder addNodeTemplates(Map<String, TNodeTemplate> nodeTemplates) {
+            if (nodeTemplates == null || nodeTemplates.isEmpty()) {
                 return this;
             }
 
-            if (this.node_templates == null) {
-                this.node_templates = node_templates;
+            if (this.nodeTemplates == null) {
+                this.nodeTemplates = nodeTemplates;
             } else {
-                this.node_templates.putAll(node_templates);
+                this.nodeTemplates.putAll(nodeTemplates);
             }
 
             return this;
         }
 
-        public Builder addNode_templates(String name, TNodeTemplate node_template) {
+        public Builder addNodeTemplates(String name, TNodeTemplate nodeTemplate) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addNode_templates(Collections.singletonMap(name, node_template));
+            return addNodeTemplates(Collections.singletonMap(name, nodeTemplate));
         }
 
-        public Builder addRelationship_templates(Map<String, TRelationshipTemplate> relationship_templates) {
-            if (relationship_templates == null || relationship_templates.isEmpty()) {
+        public Builder addRelationshipTemplates(Map<String, TRelationshipTemplate> relationshipTemplates) {
+            if (relationshipTemplates == null || relationshipTemplates.isEmpty()) {
                 return this;
             }
 
-            if (this.relationship_templates == null) {
-                this.relationship_templates = relationship_templates;
+            if (this.relationshipTemplates == null) {
+                this.relationshipTemplates = relationshipTemplates;
             } else {
-                this.relationship_templates.putAll(relationship_templates);
+                this.relationshipTemplates.putAll(relationshipTemplates);
             }
 
             return this;
         }
 
-        public Builder addRelationship_templates(String name, TRelationshipTemplate relationship_template) {
+        public Builder addRelationshipTemplates(String name, TRelationshipTemplate relationshipTemplate) {
             if (name == null || name.isEmpty()) {
                 return this;
             }
 
-            return addRelationship_templates(Collections.singletonMap(name, relationship_template));
+            return addRelationshipTemplates(Collections.singletonMap(name, relationshipTemplate));
         }
 
         public Builder addGroups(Map<String, TGroupDefinition> groups) {

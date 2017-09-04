@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.common.reader;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,18 +151,18 @@ public class Builder {
 
         builder.setMetadata(buildMetadata(map.get("metadata")));
         builder.setDescription(buildDescription(map.get("description")));
-        builder.setDsl_definitions(buildDsl_definitions(map.get("dsl_definitions")));
+        builder.setDslDefinitions(buildDsl_definitions(map.get("dsl_definitions")));
         builder.setRepositories(buildRepositories(map.get("repositories")));
         builder.setImports(buildImports(map.get("imports")));
-        builder.setArtifact_types(buildArtifact_types(map.get("artifact_types")));
-        builder.setData_types(buildData_types(map.get("data_types")));
-        builder.setCapability_types(buildCapability_types(map.get("capability_types")));
-        builder.setInterface_types(buildInterface_types(map.get("interface_types")));
-        builder.setRelationship_types(buildRelationship_types(map.get("relationships")));
-        builder.setNode_types(buildNode_types(map.get("node_types")));
-        builder.setGroup_types(buildGroup_types(map.get("group_types")));
-        builder.setPolicy_types(buildPolicy_types(map.get("policy_types")));
-        builder.setTopology_template(buildTopology_template(map.get("topology_template")));
+        builder.setArtifactTypes(buildArtifact_types(map.get("artifact_types")));
+        builder.setDataTypes(buildData_types(map.get("data_types")));
+        builder.setCapabilityTypes(buildCapability_types(map.get("capability_types")));
+        builder.setInterfaceTypes(buildInterface_types(map.get("interface_types")));
+        builder.setRelationshipTypes(buildRelationship_types(map.get("relationship_types")));
+        builder.setNodeTypes(buildNode_types(map.get("node_types")));
+        builder.setGroupTypes(buildGroup_types(map.get("group_types")));
+        builder.setPolicyTypes(buildPolicy_types(map.get("policy_types")));
+        builder.setTopologyTemplate(buildTopology_template(map.get("topology_template")));
 
         if (!this.exceptionMessages.isEmpty()) {
             throw new UnrecognizedFieldException(this.exceptionMessages);
@@ -180,12 +182,12 @@ public class Builder {
         TTopologyTemplateDefinition.Builder builder = new TTopologyTemplateDefinition.Builder();
         builder.setDescription(buildDescription(map.get("description")));
         builder.setInputs(buildMapParameterDefinition(map.get("inputs")));
-        builder.setNode_templates((buildNode_templates(map.get("node_templates"))));
-        builder.setRelationship_templates(buildRelationship_templates(map.get("relationship_templates")));
+        builder.setNodeTemplates((buildNode_templates(map.get("node_templates"))));
+        builder.setRelationshipTemplates(buildRelationship_templates(map.get("relationship_templates")));
         builder.setGroups(buildGroupDefinitions(map.get("groups")));
         builder.setPolicies(buildMapPolicyDefinition(map.get("policies")));
         builder.setOutputs(buildMapParameterDefinition(map.get("outputs")));
-        builder.setSubstitution_mappings(buildSubstitutionMappings(map.get("substitution_mappings")));
+        builder.setSubstitutionMappings(buildSubstitutionMappings(map.get("substitution_mappings")));
 
         return builder.build();
     }
@@ -197,10 +199,15 @@ public class Builder {
         }
 
         @SuppressWarnings("unchecked")
-        Map<String, String> tmp = (Map<String, String>) object;
+        Map<String, Object> tmp = (Map<String, Object>) object;
 
         Metadata metadata = new Metadata();
-        metadata.putAll(tmp);
+        tmp.forEach((key, value) -> {
+            metadata.put(key, value.toString());
+            if (value instanceof Date) {
+                metadata.put(key, new SimpleDateFormat("yyyy-MM-dd").format(value));
+            }
+        });
 
         return metadata;
     }
@@ -344,8 +351,8 @@ public class Builder {
 
         TImportDefinition.Builder builder = new TImportDefinition.Builder(url);
         builder.setRepository(buildQName((String) map.get("repository")));
-        builder.setNamespace_uri((String) map.get("namespace_uri"));
-        builder.setNamespace_prefix((String) map.get("namespace_prefix"));
+        builder.setNamespaceUri((String) map.get("namespace_uri"));
+        builder.setNamespacePrefix((String) map.get("namespace_prefix"));
 
         return builder.build();
     }
@@ -397,8 +404,8 @@ public class Builder {
         Map<String, Object> map = (Map<String, Object>) object;
 
         TArtifactType.Builder builder = new TArtifactType.Builder(buildEntityType(object, TArtifactType.class));
-        builder.setMime_type((String) map.get("mime_type"));
-        builder.setFile_ext(buildListString(map.get("file_ext")));
+        builder.setMimeType((String) map.get("mime_type"));
+        builder.setFileExt(buildListString(map.get("file_ext")));
 
         return builder.build();
     }
@@ -415,7 +422,7 @@ public class Builder {
         TEntityType.Builder builder = new TEntityType.Builder();
         builder.setDescription(buildDescription(map.get("description")));
         builder.setVersion(buildVersion(map.get("version")));
-        builder.setDerived_from(buildQName((String) map.get("derived_from")));
+        builder.setDerivedFrom(buildQName((String) map.get("derived_from")));
         builder.setProperties(buildProperties(map.get("properties")));
         builder.setAttributes(buildAttributes(map.get("attributes")));
         builder.setMetadata(buildMetadata(map.get("metadata")));
@@ -462,10 +469,10 @@ public class Builder {
         TPropertyDefinition.Builder builder = new TPropertyDefinition.Builder(type);
         builder.setDescription(buildDescription(map.get("description")));
         builder.setRequired(buildRequired(map.get("required")));
-        builder.set_default(map.get("default"));
+        builder.setDefault(map.get("default"));
         builder.setStatus(buildStatus(map.get("status")));
         builder.setConstraints(buildConstraints(map.get("constraints")));
-        builder.setEntry_schema(buildEntrySchema(map.get("entry_schema")));
+        builder.setEntrySchema(buildEntrySchema(map.get("entry_schema")));
 
         return builder.build();
     }
@@ -545,31 +552,31 @@ public class Builder {
                 constraintClause.setEqual(object);
                 break;
             case "greater_than":
-                constraintClause.setGreater_or_equal(object);
+                constraintClause.setGreaterOrEqual(object);
                 break;
             case "greater_or_equal":
-                constraintClause.setGreater_or_equal(object);
+                constraintClause.setGreaterOrEqual(object);
                 break;
             case "less_than":
-                constraintClause.setLess_than(object);
+                constraintClause.setLessThan(object);
                 break;
             case "less_or_equal":
-                constraintClause.setLess_or_equal(object);
+                constraintClause.setLessOrEqual(object);
                 break;
             case "in_range":
-                constraintClause.setIn_range(buildListObject(object));
+                constraintClause.setInRange(buildListObject(object));
                 break;
             case "valid_values":
-                constraintClause.setValid_values(buildListObject(object));
+                constraintClause.setValidValues(buildListObject(object));
                 break;
             case "length":
                 constraintClause.setLength(object);
                 break;
             case "min_length":
-                constraintClause.setMin_length(object);
+                constraintClause.setMinLength(object);
                 break;
             case "max_length":
-                constraintClause.setMax_length(object);
+                constraintClause.setMaxLength(object);
                 break;
             case "pattern":
                 constraintClause.setPattern(object);
@@ -637,9 +644,9 @@ public class Builder {
         QName type = buildQName((String) map.get("type"));
         TAttributeDefinition.Builder builder = new TAttributeDefinition.Builder(type);
         builder.setDescription(buildDescription(map.get("description")));
-        builder.set_default(map.get("default"));
+        builder.setDefault(map.get("default"));
         builder.setStatus(buildStatus(map.get("status")));
-        builder.setEntry_schema(buildEntrySchema(map.get("entry_schema")));
+        builder.setEntrySchema(buildEntrySchema(map.get("entry_schema")));
 
         return builder.build();
     }
@@ -715,7 +722,7 @@ public class Builder {
         Map<String, Object> map = (Map<String, Object>) object;
 
         TCapabilityType.Builder builder = new TCapabilityType.Builder(buildEntityType(object, TCapabilityType.class));
-        builder.setValid_source_types(buildListQName(buildListString(map.get("valid_source_types"))));
+        builder.setValidSourceTypes(buildListQName(buildListString(map.get("valid_source_types"))));
         builder.setAttributes(buildAttributes(map.get("attributes")));
 
         return builder.build();
@@ -805,13 +812,13 @@ public class Builder {
             context.equals("TInterfaceType")) {
             Map<String, TPropertyDefinition> propertyDefinitionMap = buildProperties(object);
             for (Map.Entry<String, TPropertyDefinition> entry : propertyDefinitionMap.entrySet()) {
-                result.put(entry.getKey(), entry.getValue());
+                put(result, entry.getKey(), entry.getValue());
             }
             return result;
         } else {
             Map<String, TPropertyAssignment> propertyAssignmentMap = buildMapPropertyAssignment(object);
             for (Map.Entry<String, TPropertyAssignment> entry : propertyAssignmentMap.entrySet()) {
-                result.put(entry.getKey(), entry.getValue());
+                put(result, entry.getKey(), entry.getValue());
             }
             return result;
         }
@@ -881,7 +888,7 @@ public class Builder {
 
         Map<String, TRelationshipType> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildRelationshipType(entry.getValue()));
+            put(result, entry.getKey(), buildRelationshipType(entry.getValue()));
         }
 
         return result;
@@ -897,7 +904,7 @@ public class Builder {
         Map<String, Object> map = (Map<String, Object>) object;
 
         TRelationshipType.Builder builder = new TRelationshipType.Builder(buildEntityType(object, TRelationshipType.class));
-        builder.setValid_target_types(buildListQName(buildListString(map.get("valid_target_types"))));
+        builder.setValidTargetTypes(buildListQName(buildListString(map.get("valid_target_types"))));
         builder.setAttributes(buildAttributes(map.get("attributes")));
         builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TRelationshipType"));
 
@@ -915,7 +922,7 @@ public class Builder {
 
         Map<String, TInterfaceDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildInterfaceDefinition(entry.getValue(), context));
+            put(result, entry.getKey(), buildInterfaceDefinition(entry.getValue(), context));
         }
 
         return result;
@@ -960,7 +967,7 @@ public class Builder {
 
         Map<String, TNodeType> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildNodeType(entry.getValue()));
+            put(result, entry.getKey(), buildNodeType(entry.getValue()));
         }
 
         return result;
@@ -1011,7 +1018,7 @@ public class Builder {
         }
 
         TMapRequirementDefinition result = new TMapRequirementDefinition();
-        result.put(key, buildRequirementDefinition(object));
+        put(result, key, buildRequirementDefinition(object));
 
         return result;
     }
@@ -1077,10 +1084,16 @@ public class Builder {
 
         Map<String, TCapabilityDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildCapabilityDefinition(entry.getValue()));
+            put(result, entry.getKey(), buildCapabilityDefinition(entry.getValue()));
         }
 
         return result;
+    }
+
+    private <T> void put(Map<String, T> map, String key, T value) {
+        if (Objects.nonNull(map) && Objects.nonNull(key) && Objects.nonNull(value)) {
+            map.put(key, value);
+        }
     }
 
     @Nullable
@@ -1104,7 +1117,7 @@ public class Builder {
         TCapabilityDefinition.Builder builder = new TCapabilityDefinition.Builder(buildQName(type));
         builder.setDescription(buildDescription(map.get("description")));
         builder.setOccurrences(buildListString(map.get("occurrences")));
-        builder.setValid_source_types(buildListQName(buildListString(map.get("valid_source_types"))));
+        builder.setValidSourceTypes(buildListQName(buildListString(map.get("valid_source_types"))));
         builder.setProperties(buildProperties(map.get("properties")));
         builder.setAttributes(buildAttributes(map.get("attributes")));
 
@@ -1122,7 +1135,7 @@ public class Builder {
 
         Map<String, TArtifactDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildArtifactDefinition(entry.getValue()));
+            put(result, entry.getKey(), buildArtifactDefinition(entry.getValue()));
         }
 
         return result;
@@ -1161,7 +1174,7 @@ public class Builder {
         TArtifactDefinition.Builder builder = new TArtifactDefinition.Builder(type, files);
         builder.setRepository((String) map.get("repository"));
         builder.setDescription(buildDescription(map.get("description")));
-        builder.setDeploy_path((String) map.get("deploy_path"));
+        builder.setDeployPath((String) map.get("deploy_path"));
         builder.setProperties(buildMapPropertyAssignment(map.get("properties")));
 
         return builder.build();
@@ -1178,7 +1191,7 @@ public class Builder {
 
         Map<String, TGroupType> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildGroupType(entry.getValue()));
+            put(result, entry.getKey(), buildGroupType(entry.getValue()));
         }
 
         return result;
@@ -1213,7 +1226,7 @@ public class Builder {
 
         Map<String, TPolicyType> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildPolicyType(entry.getValue()));
+            put(result, entry.getKey(), buildPolicyType(entry.getValue()));
         }
 
         return result;
@@ -1246,7 +1259,7 @@ public class Builder {
 
         Map<String, TParameterDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildParameterDefinition(entry.getValue()));
+            put(result, entry.getKey(), buildParameterDefinition(entry.getValue()));
         }
 
         return result;
@@ -1278,7 +1291,7 @@ public class Builder {
 
         Map<String, TNodeTemplate> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildNodeTemplate(entry.getValue()));
+            put(result, entry.getKey(), buildNodeTemplate(entry.getValue()));
         }
 
         return result;
@@ -1304,7 +1317,7 @@ public class Builder {
         builder.setCapabilities(buildMapCapabilityAssignment(map.get("capabilities")));
         builder.setInterfaces(buildMapInterfaceDefinition(map.get("interfaces"), "TNodeTemplate"));
         builder.setArtifacts(buildMapArtifactDefinition(map.get("artifacts")));
-        builder.setNode_filter(buildNodeFilterDefinition(map.get("node_filter")));
+        builder.setNodeFilter(buildNodeFilterDefinition(map.get("node_filter")));
         builder.setCopy(buildQName((String) map.get("copy")));
 
         return builder.build();
@@ -1321,7 +1334,7 @@ public class Builder {
 
         Map<String, TAttributeAssignment> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildAttributeAssignment(entry.getValue()));
+            put(result, entry.getKey(), buildAttributeAssignment(entry.getValue()));
         }
 
         return result;
@@ -1369,7 +1382,7 @@ public class Builder {
         }
 
         TMapRequirementAssignment result = new TMapRequirementAssignment();
-        result.put(key, buildRequirementAssignment(object));
+        put(result, key, buildRequirementAssignment(object));
 
         return result;
     }
@@ -1395,7 +1408,7 @@ public class Builder {
         builder.setCapability(buildQName((String) map.get("capability")));
         builder.setNode(buildQName((String) map.get("node")));
         builder.setRelationship(buildRelationshipAssignment(map.get("relationship")));
-        builder.setNode_filter(buildNodeFilterDefinition(map.get("node_filter")));
+        builder.setNodeFilter(buildNodeFilterDefinition(map.get("node_filter")));
         builder.setOccurrences(buildListString(map.get("occurrences")));
 
         return builder.build();
@@ -1437,7 +1450,7 @@ public class Builder {
 
         Map<String, TInterfaceAssignment> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildInterfaceAssignment(entry.getValue()));
+            put(result, entry.getKey(), buildInterfaceAssignment(entry.getValue()));
         }
 
         return result;
@@ -1513,7 +1526,7 @@ public class Builder {
         }
 
         TMapPropertyFilterDefinition result = new TMapPropertyFilterDefinition();
-        result.put(key, buildPropertyFilterDefinition(object));
+        put(result, key, buildPropertyFilterDefinition(object));
 
         return result;
     }
@@ -1559,7 +1572,7 @@ public class Builder {
         }
 
         TMapObject result = new TMapObject();
-        result.put(key, object);
+        put(result, key, object);
 
         return result;
     }
@@ -1575,7 +1588,7 @@ public class Builder {
 
         Map<String, TCapabilityAssignment> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildCapabilityAssignment(entry.getValue()));
+            put(result, entry.getKey(), buildCapabilityAssignment(entry.getValue()));
         }
 
         return result;
@@ -1608,7 +1621,7 @@ public class Builder {
 
         Map<String, TRelationshipTemplate> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildRelationshipTemplate(entry.getValue()));
+            put(result, entry.getKey(), buildRelationshipTemplate(entry.getValue()));
         }
 
         return result;
@@ -1646,7 +1659,7 @@ public class Builder {
 
         Map<String, TGroupDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildGroupDefinition(entry.getValue()));
+            put(result, entry.getKey(), buildGroupDefinition(entry.getValue()));
         }
 
         return result;
@@ -1683,7 +1696,7 @@ public class Builder {
 
         Map<String, TPolicyDefinition> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildPolicyDefinition(entry.getValue()));
+            put(result, entry.getKey(), buildPolicyDefinition(entry.getValue()));
         }
 
         return result;
@@ -1718,7 +1731,7 @@ public class Builder {
         Map<String, Object> map = (Map<String, Object>) object;
 
         TSubstitutionMappings.Builder builder = new TSubstitutionMappings.Builder();
-        builder.setNode_type(buildQName((String) map.get("node_type")));
+        builder.setNodeType(buildQName((String) map.get("node_type")));
         builder.setCapabilities(buildMapStringList(map.get("capabilities")));
         builder.setRequirements(buildMapStringList(map.get("requirements")));
 
@@ -1736,7 +1749,7 @@ public class Builder {
 
         Map<String, TListString> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            result.put(entry.getKey(), buildStringList(entry.getValue()));
+            put(result, entry.getKey(), buildStringList(entry.getValue()));
         }
 
         return result;

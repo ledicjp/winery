@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.winery.model.tosca.yaml.visitor;
 
-public class IException extends Exception {
-    public IException(String msg) {
-        super(msg);
-    }
+public interface VisitorNode {
+    <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter);
 }

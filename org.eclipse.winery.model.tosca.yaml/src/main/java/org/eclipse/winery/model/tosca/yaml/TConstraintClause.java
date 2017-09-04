@@ -16,37 +16,46 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tConstraintClause", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
     "equal",
-    "greater_than",
-    "greater_or_equal",
-    "less_than",
-    "in_range",
-    "valid_values",
+    "greaterThan",
+    "greaterOrEqual",
+    "lessThan",
+    "inRange",
+    "validValues",
     "length",
-    "min_length",
-    "max_length",
+    "minLength",
+    "maxLength",
     "pattern"
 })
-public class TConstraintClause {
+public class TConstraintClause implements VisitorNode {
     private Object equal;
-    private Object greater_than;
-    private Object greater_or_equal;
-    private Object less_than;
-    private Object less_or_equal;
-    private List<Object> in_range;
-    private List<Object> valid_values;
+    @XmlAttribute(name = "greater_than")
+    private Object greaterThan;
+    @XmlAttribute(name = "greater_or_equal")
+    private Object greaterOrEqual;
+    @XmlAttribute(name = "less_than")
+    private Object lessThan;
+    @XmlAttribute(name = "less_or_equal")
+    private Object lessOrEqual;
+    @XmlAttribute(name = "in_range")
+    private List<Object> inRange;
+    @XmlAttribute(name = "valid_values")
+    private List<Object> validValues;
     private Object length;
-    private Object min_length;
-    private Object max_length;
+    @XmlAttribute(name = "min_length")
+    private Object minLength;
+    @XmlAttribute(name = "max_length")
+    private Object maxLength;
     private Object pattern;
 
     @Override
@@ -55,21 +64,21 @@ public class TConstraintClause {
         if (!(o instanceof TConstraintClause)) return false;
         TConstraintClause that = (TConstraintClause) o;
         return Objects.equals(equal, that.equal) &&
-            Objects.equals(greater_than, that.greater_than) &&
-            Objects.equals(greater_or_equal, that.greater_or_equal) &&
-            Objects.equals(less_than, that.less_than) &&
-            Objects.equals(less_or_equal, that.less_or_equal) &&
-            Objects.equals(in_range, that.in_range) &&
-            Objects.equals(valid_values, that.valid_values) &&
+            Objects.equals(greaterThan, that.greaterThan) &&
+            Objects.equals(greaterOrEqual, that.greaterOrEqual) &&
+            Objects.equals(lessThan, that.lessThan) &&
+            Objects.equals(lessOrEqual, that.lessOrEqual) &&
+            Objects.equals(inRange, that.inRange) &&
+            Objects.equals(validValues, that.validValues) &&
             Objects.equals(length, that.length) &&
-            Objects.equals(min_length, that.min_length) &&
-            Objects.equals(max_length, that.max_length) &&
+            Objects.equals(minLength, that.minLength) &&
+            Objects.equals(maxLength, that.maxLength) &&
             Objects.equals(pattern, that.pattern);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(equal, greater_than, greater_or_equal, less_than, less_or_equal, in_range, valid_values, length, min_length, max_length, pattern);
+        return Objects.hash(equal, greaterThan, greaterOrEqual, lessThan, lessOrEqual, inRange, validValues, length, minLength, maxLength, pattern);
     }
 
     public Object getEqual() {
@@ -80,52 +89,52 @@ public class TConstraintClause {
         this.equal = equal;
     }
 
-    public Object getGreater_than() {
-        return greater_than;
+    public Object getGreaterThan() {
+        return greaterThan;
     }
 
-    public void setGreater_than(Object greater_than) {
-        this.greater_than = greater_than;
+    public void setGreaterThan(Object greaterThan) {
+        this.greaterThan = greaterThan;
     }
 
-    public Object getGreater_or_equal() {
-        return greater_or_equal;
+    public Object getGreaterOrEqual() {
+        return greaterOrEqual;
     }
 
-    public void setGreater_or_equal(Object greater_or_equal) {
-        this.greater_or_equal = greater_or_equal;
+    public void setGreaterOrEqual(Object greaterOrEqual) {
+        this.greaterOrEqual = greaterOrEqual;
     }
 
-    public Object getLess_than() {
-        return less_than;
+    public Object getLessThan() {
+        return lessThan;
     }
 
-    public void setLess_than(Object less_than) {
-        this.less_than = less_than;
+    public void setLessThan(Object lessThan) {
+        this.lessThan = lessThan;
     }
 
-    public Object getLess_or_equal() {
-        return less_or_equal;
+    public Object getLessOrEqual() {
+        return lessOrEqual;
     }
 
-    public void setLess_or_equal(Object less_or_equal) {
-        this.less_or_equal = less_or_equal;
+    public void setLessOrEqual(Object lessOrEqual) {
+        this.lessOrEqual = lessOrEqual;
     }
 
-    public List<Object> getIn_range() {
-        return in_range;
+    public List<Object> getInRange() {
+        return inRange;
     }
 
-    public void setIn_range(List<Object> in_range) {
-        this.in_range = in_range;
+    public void setInRange(List<Object> inRange) {
+        this.inRange = inRange;
     }
 
-    public List<Object> getValid_values() {
-        return valid_values;
+    public List<Object> getValidValues() {
+        return validValues;
     }
 
-    public void setValid_values(List<Object> valid_values) {
-        this.valid_values = valid_values;
+    public void setValidValues(List<Object> validValues) {
+        this.validValues = validValues;
     }
 
     public Object getLength() {
@@ -136,20 +145,20 @@ public class TConstraintClause {
         this.length = length;
     }
 
-    public Object getMin_length() {
-        return min_length;
+    public Object getMinLength() {
+        return minLength;
     }
 
-    public void setMin_length(Object min_length) {
-        this.min_length = min_length;
+    public void setMinLength(Object minLength) {
+        this.minLength = minLength;
     }
 
-    public Object getMax_length() {
-        return max_length;
+    public Object getMaxLength() {
+        return maxLength;
     }
 
-    public void setMax_length(Object max_length) {
-        this.max_length = max_length;
+    public void setMaxLength(Object maxLength) {
+        this.maxLength = maxLength;
     }
 
     public Object getPattern() {
@@ -160,7 +169,7 @@ public class TConstraintClause {
         this.pattern = pattern;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 }

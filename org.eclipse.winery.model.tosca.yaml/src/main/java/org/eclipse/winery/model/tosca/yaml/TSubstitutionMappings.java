@@ -18,14 +18,15 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.support.TListString;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
+import org.eclipse.winery.model.tosca.yaml.visitor.VisitorNode;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -35,12 +36,13 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tSubstitutionMapping", namespace = " http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", propOrder = {
-    "node_type",
+    "nodeType",
     "capabilities",
     "requirements"
 })
-public class TSubstitutionMappings {
-    private QName node_type;
+public class TSubstitutionMappings implements VisitorNode {
+    @XmlAttribute(name = "node_type")
+    private QName nodeType;
     private Map<String, TListString> capabilities;
     private Map<String, TListString> requirements;
 
@@ -48,7 +50,7 @@ public class TSubstitutionMappings {
     }
 
     public TSubstitutionMappings(Builder builder) {
-        this.setNode_type(builder.node_type);
+        this.setNodeType(builder.nodeType);
         this.setCapabilities(builder.capabilities);
         this.setRequirements(builder.requirements);
     }
@@ -58,23 +60,23 @@ public class TSubstitutionMappings {
         if (this == o) return true;
         if (!(o instanceof TSubstitutionMappings)) return false;
         TSubstitutionMappings that = (TSubstitutionMappings) o;
-        return Objects.equals(node_type, that.node_type) &&
+        return Objects.equals(nodeType, that.nodeType) &&
             Objects.equals(capabilities, that.capabilities) &&
             Objects.equals(requirements, that.requirements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(node_type, capabilities, requirements);
+        return Objects.hash(nodeType, capabilities, requirements);
     }
 
     @Nullable
-    public QName getNode_type() {
-        return node_type;
+    public QName getNodeType() {
+        return nodeType;
     }
 
-    public void setNode_type(QName node_type) {
-        this.node_type = node_type;
+    public void setNodeType(QName nodeType) {
+        this.nodeType = nodeType;
     }
 
     @NonNull
@@ -103,17 +105,17 @@ public class TSubstitutionMappings {
         this.requirements = requirements;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
     public static class Builder {
-        private QName node_type;
+        private QName nodeType;
         private Map<String, TListString> capabilities;
         private Map<String, TListString> requirements;
-        
-        public Builder setNode_type(QName node_type) {
-            this.node_type = node_type;
+
+        public Builder setNodeType(QName nodeType) {
+            this.nodeType = nodeType;
             return this;
         }
 

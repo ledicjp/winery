@@ -25,7 +25,6 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractParameter;
 import org.eclipse.winery.model.tosca.yaml.visitor.AbstractResult;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.model.tosca.yaml.visitor.IVisitor;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -36,10 +35,10 @@ import org.eclipse.jdt.annotation.Nullable;
     "type",
     "description",
     "required",
-    "_default",
+    "defaultValue",
     "status",
     "constraints",
-    "entry_schema"
+    "entrySchema"
 })
 public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
     @XmlAttribute(name = "type", required = true)
@@ -47,11 +46,12 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
     private String description;
     private Boolean required;
     @XmlElement(name = "default")
-    private Object _default;
+    private Object defaultValue;
     private TStatusValue status;
     @XmlElement
     private List<TConstraintClause> constraints;
-    private TEntrySchema entry_schema;
+    @XmlAttribute(name = "entry_schema")
+    private TEntrySchema entrySchema;
 
     public TPropertyDefinition() {
     }
@@ -60,10 +60,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
         this.setType(builder.type);
         this.setDescription(builder.description);
         this.setRequired(builder.required);
-        this.setDefault(builder._default);
+        this.setDefault(builder.defaultValue);
         this.setStatus(builder.status);
         this.setConstraints(builder.constraints);
-        this.setEntry_schema(builder.entry_schema);
+        this.setEntrySchema(builder.entrySchema);
     }
 
     @Override
@@ -74,15 +74,15 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
         return Objects.equals(type, that.type) &&
             Objects.equals(description, that.description) &&
             Objects.equals(required, that.required) &&
-            Objects.equals(_default, that._default) &&
+            Objects.equals(defaultValue, that.defaultValue) &&
             status == that.status &&
             Objects.equals(constraints, that.constraints) &&
-            Objects.equals(entry_schema, that.entry_schema);
+            Objects.equals(entrySchema, that.entrySchema);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, description, required, _default, status, constraints, entry_schema);
+        return Objects.hash(type, description, required, defaultValue, status, constraints, entrySchema);
     }
 
     @NonNull
@@ -117,16 +117,16 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
 
     @Nullable
     public Object getDefault() {
-        return _default;
+        return defaultValue;
     }
 
-    public void setDefault(Object _default) {
-        this._default = _default;
-    }
-
-    public void setDefault(String _default) {
-        Object tmp = _default;
+    public void setDefault(String defaultValue) {
+        Object tmp = defaultValue;
         setDefault(tmp);
+    }
+
+    public void setDefault(Object defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     @NonNull
@@ -135,6 +135,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             status = TStatusValue.supported;
         }
         return status;
+    }
+
+    public void setStatus(TStatusValue status) {
+        this.status = status;
     }
 
     public void setStatus(String status) {
@@ -155,10 +159,6 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
         }
     }
 
-    public void setStatus(TStatusValue status) {
-        this.status = status;
-    }
-
     @NonNull
     public List<TConstraintClause> getConstraints() {
         if (constraints == null) {
@@ -172,15 +172,15 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
     }
 
     @Nullable
-    public TEntrySchema getEntry_schema() {
-        return entry_schema;
+    public TEntrySchema getEntrySchema() {
+        return entrySchema;
     }
 
-    public void setEntry_schema(TEntrySchema entry_schema) {
-        this.entry_schema = entry_schema;
+    public void setEntrySchema(TEntrySchema entrySchema) {
+        this.entrySchema = entrySchema;
     }
 
-    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) throws IException {
+    public <R extends AbstractResult<R>, P extends AbstractParameter<P>> R accept(IVisitor<R, P> visitor, P parameter) {
         return visitor.visit(this, parameter);
     }
 
@@ -188,10 +188,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
         private final QName type;
         private String description;
         private Boolean required;
-        private Object _default;
+        private Object defaultValue;
         private TStatusValue status;
         private List<TConstraintClause> constraints;
-        private TEntrySchema entry_schema;
+        private TEntrySchema entrySchema;
 
         public Builder(QName type) {
             this.type = type;
@@ -201,10 +201,10 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             this.type = propertyDefinition.type;
             this.description = propertyDefinition.description;
             this.required = propertyDefinition.required;
-            this._default = propertyDefinition._default;
+            this.defaultValue = propertyDefinition.defaultValue;
             this.status = propertyDefinition.status;
             this.constraints = propertyDefinition.constraints;
-            this.entry_schema = propertyDefinition.entry_schema;
+            this.entrySchema = propertyDefinition.entrySchema;
         }
 
         public Builder setDescription(String description) {
@@ -217,8 +217,8 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             return this;
         }
 
-        public Builder setDefault(Object _default) {
-            this._default = _default;
+        public Builder setDefault(Object defaultValue) {
+            this.defaultValue = defaultValue;
             return this;
         }
 
@@ -232,8 +232,8 @@ public class TPropertyDefinition extends TPropertyAssignmentOrDefinition {
             return this;
         }
 
-        public Builder setEntry_schema(TEntrySchema entry_schema) {
-            this.entry_schema = entry_schema;
+        public Builder setEntrySchema(TEntrySchema entrySchema) {
+            this.entrySchema = entrySchema;
             return this;
         }
 

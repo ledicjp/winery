@@ -19,7 +19,7 @@ import org.eclipse.winery.common.Util;
 import org.eclipse.winery.model.tosca.Definitions;
 import org.eclipse.winery.model.tosca.TDefinitions;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-import org.eclipse.winery.yaml.common.reader.XmlReader;
+import org.eclipse.winery.yaml.common.reader.XML.XmlReader;
 import org.eclipse.winery.yaml.common.writer.XML.Writer;
 
 public abstract class AbstractTestX2Y {

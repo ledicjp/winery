@@ -18,14 +18,13 @@ import java.io.InputStream;
 
 import org.eclipse.winery.model.tosca.yaml.TImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-import org.eclipse.winery.model.tosca.yaml.visitor.IException;
 import org.eclipse.winery.yaml.common.Exception.MissingFile;
 import org.eclipse.winery.yaml.common.Exception.MissingImportFile;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
-import org.eclipse.winery.yaml.common.validator.ExceptionInterpreter;
 import org.eclipse.winery.yaml.common.validator.ObjectValidator;
 import org.eclipse.winery.yaml.common.validator.Validator;
+import org.eclipse.winery.yaml.common.validator.support.ExceptionInterpreter;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.ConstructorException;
@@ -128,8 +127,6 @@ public class Reader {
         } catch (YAMLParserException e) {
             e.setFile_context(uri);
             throw e;
-        } catch (IException e) {
-            assert false;
         }
 
         return result;
@@ -140,7 +137,7 @@ public class Reader {
             return null;
         }
 
-        String importNamespace = definition.getNamespace_uri() == null ? namespace : definition.getNamespace_uri();
+        String importNamespace = definition.getNamespaceUri() == null ? namespace : definition.getNamespaceUri();
         if (definition.getRepository() == null) {
             return readURI(definition.getFile(), context, importNamespace);
         } else {
