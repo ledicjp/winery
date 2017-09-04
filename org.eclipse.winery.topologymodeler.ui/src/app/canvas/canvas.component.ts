@@ -110,14 +110,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
       this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
     } else if (alignmentButtonAlignH) {
-      if (this.selectedNodes.length > 1) {
+      if (this.selectedNodes.length >= 1) {
         this._layoutDirective.alignHorizontal(this.selectedNodes, this.newJsPlumbInstance);
       } else {
         this._layoutDirective.alignHorizontal(this.allNodeTemplates, this.newJsPlumbInstance);
       }
       this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
     } else if (alignmentButtonAlignV) {
-      if (this.selectedNodes.length > 1) {
+      if (this.selectedNodes.length >= 1) {
         this._layoutDirective.alignVertical(this.selectedNodes, this.newJsPlumbInstance);
       } else {
         this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);

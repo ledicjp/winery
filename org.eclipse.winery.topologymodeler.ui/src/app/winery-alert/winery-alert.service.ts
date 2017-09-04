@@ -9,9 +9,9 @@
  * Contributors:
  *     Yannic Sowoidnich - initial API and implementation
  */
-import {Injectable, ViewContainerRef} from '@angular/core';
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
-import {DatePipe} from '@angular/common';
+import { Injectable, ViewContainerRef } from '@angular/core';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class WineryAlertService {
@@ -40,9 +40,20 @@ export class WineryAlertService {
    * @param message
    * @param title
    */
-  success(message: string, title = 'success') {
+  success(message: string, title = 'Success') {
     this.toastr.success(message, title);
     this.alerts.push({title: title, message: message, type: 'success', createdOn: this.getCurrentDate()});
+
+  }
+
+  /**
+   *
+   * @param message
+   * @param title
+   */
+  info(message: string, title = 'Information') {
+    this.toastr.info(message, title);
+    this.alerts.push({title: title, message: message, type: 'info', createdOn: this.getCurrentDate()});
 
   }
 
