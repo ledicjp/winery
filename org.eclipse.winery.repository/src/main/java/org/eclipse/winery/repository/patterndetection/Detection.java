@@ -90,17 +90,25 @@ public class Detection {
 	private String patternPublicCloud;
 	private String patternKeyValueStorage;
 
+	// intially both boolean values are set to false, isIaas is set to true if any virtual hardware is detected, isPaaS is set to true if anything on top of the virtual hardware level (such as: server, application, etc.) is detected
 	private boolean isPaaS;
 	private boolean isIaaS;
 
+	// list with pattern names, which are detected
 	private List<String> detectedPattern = new ArrayList<>();
 	private List<String> impossiblePattern = new ArrayList<>();
 
+	// this list contains all keywords detected any name of a node template
 	private List<String> matchedKeywords = new ArrayList<>();
+
+	// lists with pattern probablilities
 	private List<String> patternProbabilityHigh = new ArrayList<>();
 	private List<String> patternProbabilityMedium = new ArrayList<>();
 	private List<String> patternProbabilityLow = new ArrayList<>();
+
+	// this list contains all NodeTemplates, which are identified via keywords
 	private List<TNodeTemplateExtended> labeledNodeTemplates = new ArrayList<>();
+
 	private PaaSTaxonomy paas = new PaaSTaxonomy();
 	private IaaSTaxonomy iaas = new IaaSTaxonomy();
 	private SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> paasGraph;
@@ -110,6 +118,7 @@ public class Detection {
 
 	private ServiceTemplateId serviceTemplateId;
 
+	// this list holds the information about the patterns and their correspondent nodes in a topology graph
 	private List<PatternPosition> patternPositions;
 
 	public Detection(ServiceTemplateId serviceTemplateId) {
@@ -179,7 +188,7 @@ public class Detection {
 	}
 
 	/**
-	 * search for keywords using predefined keywords in enums
+	 * 1. step: search for keywords using predefined keywords in enums
 	 */
 	private void searchForKeywords(TTopologyTemplate tTopologyTemplate) {
 		List<TNodeTemplate> tNodeTemplateList = ModelUtilities.getAllNodeTemplates(tTopologyTemplate);
@@ -193,8 +202,11 @@ public class Detection {
 		for (TNodeTemplate tNodeTemplate : tNodeTemplateList) {
 			for (Server server : serverList) {
 				if (tNodeTemplate.getName().toLowerCase().contains(server.toString().toLowerCase())) {
+					// add the matching keyword
 					matchedKeywords.add(server.toString());
+					// create a new TNodeTemplateExtended with the detected keyword and set the according label
 					TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, labelServer, server.toString());
+					// add this object to the list with labeled NodeTemplates
 					labeledNodeTemplates.add(temp);
 					isPaaS = true;
 				}
@@ -245,8 +257,9 @@ public class Detection {
 		paasGraph = paas.getPaasTaxonomie();
 		iaasGraph = iaas.getIaasTaxonomie();
 
-		// set propabilities for possible patterns according to detected keywords
+		// set propabilities for possible patterns according to detected keywords only if any keywords matched the node template names
 		if (!matchedKeywords.isEmpty()) {
+			// for each specific keyowrds like beanstalk or mysql, probabilities are set in the pattern taxonomy graph
 			for (String keyword : matchedKeywords) {
 				DefaultWeightedEdge tempEdge;
 				if (keyword.equals(keywordBeanstalk)) {
@@ -277,13 +290,14 @@ public class Detection {
 				}
 			}
 
+			// this case indicates only IaaS keywords and no detected PaaS keywords -> IaaS is assumed, therefore PaaS is added to impossible patterns
 			if (isIaaS && !isPaaS) {
 				detectedPattern.add(patternIaaS);
 				impossiblePattern.add(patternPaaS);
 				impossiblePattern.add(patternElasticPlatform);
-				Set<DefaultWeightedEdge> edgeSet;
-				edgeSet = iaasGraph.edgeSet();
+				Set<DefaultWeightedEdge> edgeSet = iaasGraph.edgeSet();
 				Iterator iterator2 = edgeSet.iterator();
+				// iterate through the IaaS taxonomy and check the weight of each edge -> add the target nodes to the according pattern list
 				while (iterator2.hasNext()) {
 					DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator2.next();
 					double weight = iaasGraph.getEdgeWeight(edge);
@@ -298,10 +312,12 @@ public class Detection {
 					} else if (weight == 0.0) {
 						impossiblePattern.add(iaasGraph.getEdgeTarget(edge));
 					} else if (weight == 1.0) {
-						//for all other patterns add low probability
+						//for all other patterns add low probability, 1.0 is default edge value
 						patternProbabilityLow.add(iaasGraph.getEdgeTarget(edge));
 					}
 				}
+
+			// this case occurs if IaaS and PaaS keywords are detected or just PaaS keywords -> PaaS is assumed and excludes IaaS
 			} else {
 				detectedPattern.add(patternPaaS);
 				impossiblePattern.add(patternIaaS);
@@ -309,6 +325,7 @@ public class Detection {
 				Set<DefaultWeightedEdge> edgeSet;
 				edgeSet = paasGraph.edgeSet();
 				Iterator iterator = edgeSet.iterator();
+				// iterate through the IaaS taxonomy and check the weight of each edge -> add the target nodes to the according pattern list
 				while (iterator.hasNext()) {
 					DefaultWeightedEdge edge = (DefaultWeightedEdge) iterator.next();
 					double weight = paasGraph.getEdgeWeight(edge);
@@ -323,7 +340,7 @@ public class Detection {
 					} else if (weight == 0.0) {
 						impossiblePattern.add(paasGraph.getEdgeTarget(edge));
 					} else if (weight == 1.0) {
-						//for all other patterns add low probability
+						//for all other patterns add low probability, 1.0 is default edge value
 						patternProbabilityLow.add(paasGraph.getEdgeTarget(edge));
 					}
 				}
@@ -332,8 +349,8 @@ public class Detection {
 	}
 
 	/**
-	 * Create all subgraphs of the topology graph and test for isomorphism with pattern graphs
-	 * @param tTopologyTemplate the TOSCA topology will be labeled
+	 * 2. step: Create all subgraphs of the topology graph and test for isomorphism with pattern graphs
+	 * @param tTopologyTemplate: the TOSCA topology will be labeled
 	 */
 	private void detectPattern(TTopologyTemplate tTopologyTemplate) {
 		abstractTopology = new AbstractTopology(tTopologyTemplate, labeledNodeTemplates);
@@ -345,6 +362,7 @@ public class Detection {
 		Set<TNodeTemplateExtended> allNodes = abstractTopology.getGraph().vertexSet();
 		TNodeTemplateExtended baseNodeExtended = new TNodeTemplateExtended();
 		Iterator iterator = allNodes.iterator();
+		// search for the lowest node in the abstract topology graph, this is used to copy the lowest node from the original Topology to the AbstractTopology
 		while (iterator.hasNext()) {
 			TNodeTemplateExtended temp = (TNodeTemplateExtended) iterator.next();
 			if (temp.getNodeTemplate().getId().equals(basisNodeTemplate.getId())) {
@@ -352,11 +370,14 @@ public class Detection {
 				break;
 			}
 		}
+		// map the topology outgoing from the given base node
 		abstractTopology.map(baseNodeExtended);
-		//List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> subgraphList = abstractTopology.createSubgraphs(abstractTopology.getGraph(), baseNodeExtended);
+
+		// in the patternList all graphs of the pattern objects are added
 		List<DirectedGraph<PatternComponent, RelationshipEdge>> patternList = new ArrayList<>();
 		HashMap<Integer, String> patternNames = new HashMap<>();
 
+		// create objects of all known patterns
 		ExecutionEnvironmentPattern executionEnvironmentPattern = new ExecutionEnvironmentPattern();
 		NodeBasedAvailabilityPattern nodeBasedAvailabilityPattern = new NodeBasedAvailabilityPattern();
 		ElasticityManagerPattern elasticityManagerPattern = new ElasticityManagerPattern();
@@ -368,6 +389,7 @@ public class Detection {
 		KeyValueStoragePattern keyValueStoragePattern = new KeyValueStoragePattern();
 		ExecutionEnvironmentPattern2 executionEnvironmentPattern2 = new ExecutionEnvironmentPattern2();
 
+		// to receive the right pattern name for the current counter, pattern names are associated with numbers
 		patternNames.put(0, patternExecEnv);
 		patternNames.put(1, patternNodeBasedAvail);
 		patternNames.put(2, patternElasticityManager);
@@ -379,6 +401,7 @@ public class Detection {
 		patternNames.put(8, patternKeyValueStorage);
 		patternNames.put(9, patternExecEnv);
 
+		// pattern are added in order
 		patternList.add(executionEnvironmentPattern.getPatternGraph());
 		patternList.add(nodeBasedAvailabilityPattern.getPatternGraph());
 		patternList.add(elasticityManagerPattern.getPatternGraph());
@@ -391,17 +414,26 @@ public class Detection {
 		patternList.add(executionEnvironmentPattern2.getPatternGraph());
 
 		int countIndex = 0;
+		// abstractTopology represents the base graph, for each pattern graph search for a subgraph isomorphism between base graph & pattern graph
 		for (DirectedGraph<PatternComponent, RelationshipEdge> pattern : patternList) {
 			VF2SubgraphIsomorphismInspector<TNodeTemplateExtended, RelationshipEdge> inspector = new VF2SubgraphIsomorphismInspector(abstractTopology.getGraph(), pattern);
 			if (inspector.isomorphismExists()) {
 				Iterator it = inspector.getMappings();
 				while (it.hasNext()) {
 					IsomorphicGraphMapping mapping = (IsomorphicGraphMapping) it.next();
+
+					// list for counting all matches between pattern nodes and base graph nodes, must be true for all
 					List<Boolean> matched = new ArrayList<>();
+
+					// this graph holds the nodes of the base graph in which the pattern occurs
 					DirectedGraph<TNodeTemplateExtended, RelationshipEdge> originGraph = new SimpleDirectedGraph<>(RelationshipEdge.class);
+
+					// each node of the pattern graph is compared to the according node in the GraphMapping
 					for (PatternComponent p : pattern.vertexSet()) {
-						//check if matched subgraph and topology have the same components
+						//check if matched subgraph and topology have the same components, get the correspondent vertex in the mapping for a node
 						TNodeTemplateExtended v = (TNodeTemplateExtended) mapping.getVertexCorrespondence(p, false);
+
+						// if the names equal, the node is added to the originGraph and a boolean with value true is added to the matched list
 						if (p.getName().equals(v.getLabel())) {
 							matched.add(true);
 							originGraph.addVertex(v);
@@ -411,10 +443,14 @@ public class Detection {
 						}
 					}
 
+					// correspondent to the countIndex, the pattern name is retrieved
 					if (!matched.contains(false) && !impossiblePattern.contains(patternNames.get(countIndex))) {
+						// add a new pattern position: the pattern name & the subgraph in which it occurs, this graph was built up in the previous step
 						PatternPosition temp = new PatternPosition(patternNames.get(countIndex), originGraph);
 						patternPositions.add(temp);
 						detectedPattern.add(patternNames.get(countIndex));
+
+						// sett some additional probabilities
 						if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {
 							patternProbabilityHigh.add(patternPublicCloud);
 						} else if (patternNames.get(countIndex).equals(patternEnvBasedAvail)) {
@@ -445,6 +481,7 @@ public class Detection {
 			}
 		}
 		if (outgoing.isEmpty()) {
+			// lowestNode is set
 			basisNodeTemplate = baseNodeTemplate;
 		}
 	}

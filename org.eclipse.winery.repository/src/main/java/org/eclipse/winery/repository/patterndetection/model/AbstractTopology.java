@@ -19,6 +19,7 @@ import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  * Created by marvin.wohlfarth on 14.05.2017.
+ * this class creates a topology on base of the original TopologyTemplate and the labeled node templates
  */
 public class AbstractTopology {
 
@@ -39,8 +40,6 @@ public class AbstractTopology {
 
 	private DirectedGraph<TNodeTemplateExtended, RelationshipEdge> abstractTopology;
 	private List<TNodeTemplateExtended> allNodes;
-	private List<DirectedSubgraph<TNodeTemplateExtended, RelationshipEdge>> subgraphList;
-	private List<TNodeTemplateExtended > visitedNodes;
 
 	private Properties properties;
 
@@ -67,28 +66,32 @@ public class AbstractTopology {
 		relationConnectsTo = properties.getProperty("relationConnectsTo");
 
 		abstractTopology = new DefaultDirectedGraph<>((RelationshipEdge.class));
-		subgraphList = new ArrayList<>();
+
+		// necessary list to avoid duplicate adding of node templates
 		allNodes = new ArrayList<>();
-		visitedNodes = new ArrayList<>();
 
 		List<TNodeTemplate> tNodeTemplateList = ModelUtilities.getAllNodeTemplates(tTopologyTemplate);
 		List<TRelationshipTemplate> tRelationshipTemplateList = ModelUtilities.getAllRelationshipTemplates(tTopologyTemplate);
 
+		// check for each NodeTemplate if it occurs in the list of labeled NodeTemplates
 		all:
 		for (TNodeTemplate tNodeTemplate: tNodeTemplateList) {
 			if (!labeled.isEmpty()) {
 				label:
 				for (TNodeTemplateExtended tNodeTemplateExtended : labeled) {
-					// if this node is already labeled
+					// if this node is already labeled, add the correspondent, already created NodeTemplateExtended to the AbstractTopology
 					if (tNodeTemplateExtended.getNodeTemplate().getId().equals(tNodeTemplate.getId()) && !allNodes.contains(tNodeTemplateExtended)) {
 						abstractTopology.addVertex(tNodeTemplateExtended);
 						allNodes.add(tNodeTemplateExtended);
 						continue all;
 					}
 				}
+				// if it is not already labeled, create a new TNodeTemplateExtended with empty values for keyword + label
 				TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "", "");
 				abstractTopology.addVertex(temp);
 				allNodes.add(temp);
+
+			// if any node template is labeled
 			} else {
 				TNodeTemplateExtended temp = new TNodeTemplateExtended(tNodeTemplate, "", "");
 				abstractTopology.addVertex(temp);
@@ -96,6 +99,7 @@ public class AbstractTopology {
 			}
 		}
 
+		// add the according relationship templates
 		for (TRelationshipTemplate tRelationshipTemplate: tRelationshipTemplateList) {
 			TNodeTemplate target = (TNodeTemplate) tRelationshipTemplate.getTargetElement().getRef();
 			TNodeTemplate source = (TNodeTemplate) tRelationshipTemplate.getSourceElement().getRef();

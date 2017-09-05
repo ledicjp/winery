@@ -4,6 +4,7 @@ import org.eclipse.winery.model.tosca.TNodeTemplate;
 
 /**
  * Created by marvin.wohlfarth on 13.05.2017.
+ * objects of this class hold an original NodeTemplate, a label and the keyword belonging to this
  */
 public class TNodeTemplateExtended {
 
