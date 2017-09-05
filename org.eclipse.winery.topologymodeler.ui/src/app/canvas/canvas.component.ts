@@ -171,33 +171,40 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick($event) {
-    if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
-      this.clearArray(this.selectedNodes);
-      for (const node of this.nodeChildrenArray) {
-        node.makeSelectionVisible = false;
-      }
-      if ($event.clientX > 200) {
-        this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+  @HostListener('document:keydown.delete', ['$event'])
+  handleDeleteKeyEvent(event: KeyboardEvent) {
+    console.log(event.key);
+    for (const node of this.nodeChildrenArray) {
+      if (node.makeSelectionVisible === true) {
+        console.log(node.title);
       }
     }
   }
 
-  clearArray(array: any[]): void {
+  @HostListener('click', ['$event'])
+  onClick($event) {
+    if (this._eref.nativeElement.contains($event.target) && this.longPress === false && $event.clientX > 200) {
+      this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+    }
+  }
+
+  clearSelectedNodes(): void {
     for (const node of this.nodeChildrenArray) {
       if (this.selectedNodes.find(nodeId => nodeId === node.title)) {
         node.makeSelectionVisible = false;
       }
     }
-    this.newJsPlumbInstance.removeFromAllPosses(array);
-    array.length = 0;
+    this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
+    this.selectedNodes.length = 0;
   }
 
   showSelectionRange($event) {
     console.log('mousedown');
     if (($event.pageY - this.offsetY) > 0) {
-      this.clearArray(this.selectedNodes);
+      this.clearSelectedNodes();
+      for (const node of this.nodeChildrenArray) {
+        node.makeSelectionVisible = false;
+      }
       this.selectionActive = true;
       this.pageX = $event.pageX + this.offsetX;
       this.pageY = $event.pageY - this.offsetY;
@@ -282,43 +289,35 @@ export class CanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  repaintJsPlumb($event) {
-    this.newJsPlumbInstance.repaintEverything();
-  }
-
-  ngOnInit() {
-    this.visuals = this.jsonService.getVisuals();
-    this.assignVisuals();
-    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
-    this.newJsPlumbInstance.setContainer('container');
-    this.newJsPlumbInstance.bind('connection', info => {
-      const sourceElement = info.source.offsetParent.offsetParent.id;
-      const targetElement = info.targetId;
-      const newRelationship = new TRelationshipTemplate(
-        sourceElement,
-        targetElement
-      );
-      this.ngRedux.dispatch(this.actions.saveRelationship(newRelationship));
-    });
-  }
-
-  assignVisuals() {
-    for (const node of this.allNodeTemplates) {
-      for (const visual of this.visuals) {
-        // console.log('node.id = ' + node.id);
-        // console.log('visual = ' + JSON.stringify(visual));
-        if (node.id === visual.localName || node.id.startsWith(visual.localName + '_')) {
-          node.color = visual.color;
-          if (visual.hasOwnProperty('imageUrl')) {
-            node.imageUrl = visual.imageUrl;
+  checkFocusNode($event): void {
+    if ($event.ctrlKey) {
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.enhanceDragSelection($event.id);
+        for (const node of this.nodeChildrenArray) {
+          const nodeIndex = this.selectedNodes.indexOf(node.title);
+          if (this.selectedNodes[nodeIndex] === undefined) {
+            node.makeSelectionVisible = false;
           }
         }
+      } else {
+        this.newJsPlumbInstance.removeFromAllPosses($event.id);
+        const nodeIndex = this.nodeChildrenArray.map(node => node.title).indexOf($event.id);
+        this.nodeChildrenArray[nodeIndex].makeSelectionVisible = false;
+        const selectedNodeIndex = this.selectedNodes.indexOf($event.id);
+        this.selectedNodes.splice(selectedNodeIndex, 1);
+      }
+    } else {
+      for (const node of this.nodeChildrenArray) {
+        if (node.title === $event.id) {
+          node.makeSelectionVisible = true;
+        } else if (!this.arrayContainsNode(this.selectedNodes, node.title)) {
+          node.makeSelectionVisible = false;
+        }
+      }
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.clearSelectedNodes();
       }
     }
-  }
-
-  makeDraggable($event): void {
-    this.newJsPlumbInstance.draggable($event);
   }
 
   arrayContainsNode(arrayOfNodes: any[], id: string): boolean {
@@ -346,35 +345,43 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkFocusNode($event): void {
-    if ($event.ctrlKey) {
-      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
-        this.enhanceDragSelection($event.id);
-        for (const node of this.nodeChildrenArray) {
-          const nodeIndex = this.selectedNodes.indexOf(node.title);
-          if (this.selectedNodes[nodeIndex] === undefined) {
-            node.makeSelectionVisible = false;
+  assignVisuals() {
+    for (const node of this.allNodeTemplates) {
+      for (const visual of this.visuals) {
+        // console.log('node.id = ' + node.id);
+        // console.log('visual = ' + JSON.stringify(visual));
+        if (node.id === visual.localName || node.id.startsWith(visual.localName + '_')) {
+          node.color = visual.color;
+          if (visual.hasOwnProperty('imageUrl')) {
+            node.imageUrl = visual.imageUrl;
           }
         }
-      } else {
-        this.newJsPlumbInstance.removeFromAllPosses($event.id);
-        const nodeIndex = this.nodeChildrenArray.map(node => node.title).indexOf($event.id);
-        this.nodeChildrenArray[nodeIndex].makeSelectionVisible = false;
-        const selectedNodeIndex = this.selectedNodes.indexOf($event.id);
-        this.selectedNodes.splice(selectedNodeIndex, 1);
-      }
-    } else {
-      for (const node of this.nodeChildrenArray) {
-        if (node.title === $event.id) {
-          node.makeSelectionVisible = true;
-        } else if (!this.arrayContainsNode(this.selectedNodes, node.title)) {
-          node.makeSelectionVisible = false;
-        }
-      }
-      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
-        this.clearArray(this.selectedNodes);
       }
     }
+  }
+
+  ngOnInit() {
+    this.visuals = this.jsonService.getVisuals();
+    this.assignVisuals();
+    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
+    this.newJsPlumbInstance.setContainer('container');
+    this.newJsPlumbInstance.bind('connection', info => {
+      const sourceElement = info.source.offsetParent.offsetParent.id;
+      const targetElement = info.targetId;
+      const newRelationship = new TRelationshipTemplate(
+        sourceElement,
+        targetElement
+      );
+      this.ngRedux.dispatch(this.actions.saveRelationship(newRelationship));
+    });
+  }
+
+  repaintJsPlumb($event) {
+    this.newJsPlumbInstance.repaintEverything();
+  }
+
+  makeDraggable($event): void {
+    this.newJsPlumbInstance.draggable($event);
   }
 
   trackTimeOfMouseDown($event): void {
