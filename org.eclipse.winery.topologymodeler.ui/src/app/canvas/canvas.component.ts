@@ -65,6 +65,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   gridHeight = 100;
   nodeChildrenIdArray: Array<string>;
   nodeChildrenArray: Array<NodeComponent>;
+  newRelationshipArray: Array<TRelationshipTemplate> = [];
 
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
@@ -74,30 +75,32 @@ export class CanvasComponent implements OnInit, OnDestroy {
               private topologyRendererActions: TopologyRendererActions,
               private zone: NgZone) {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
-      .subscribe(currentNodes => this.addNewNode(currentNodes));
+      .subscribe(currentNodes => this.updateNodes(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
-      .subscribe(currentRelationships => this.addNewRelationships(currentRelationships));
+      .subscribe(currentRelationships => this.updateRelationships(currentRelationships));
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void {
-    if (currentNodes.length > 0) {
-      const newNode = currentNodes[currentNodes.length - 1];
-      this.allNodeTemplates.push(newNode);
-      this.allNodesIds.push(newNode.id);
-    }
+  updateNodes(currentNodes: Array<TNodeTemplate>): void {
+    this.allNodeTemplates = currentNodes;
+    this.allNodesIds = this.allNodeTemplates.map(node => node.id);
   }
-  addNewRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
-      const newRelationship = currentRelationships[currentRelationships.length - 1];
-      if (newRelationship) {
-        if (currentRelationships.length > 0) {
-          this.allRelationshipTemplates.push(newRelationship);
-          const sourceElement = newRelationship.sourceElement;
-          const targetElement = newRelationship.targetElement;
-          setTimeout(() => this.displayRelationships(sourceElement, targetElement), 1);
+
+  updateRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
+    if (currentRelationships.length > 0) {
+      if (currentRelationships.length > this.allRelationshipTemplates.length) {
+        const newRelationship = currentRelationships[currentRelationships.length - 1];
+        this.allRelationshipTemplates.push(newRelationship);
+        setTimeout(() => this.displayRelationships(newRelationship), 1);
+      } else if (currentRelationships.length <= this.allRelationshipTemplates.length) {
+        this.allRelationshipTemplates = currentRelationships;
+        if (this.allRelationshipTemplates.length === 1) {
+          const newRelationship = currentRelationships[currentRelationships.length - 1];
+          setTimeout(() => this.displayRelationships(newRelationship), 1);
         }
       }
+    }
   }
 
   setButtonsState(currentButtonsState: ButtonsStateModel): void {
@@ -126,10 +129,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayRelationships(sourceId: string, targetId: string): void {
+  displayRelationships(newRelationship: TRelationshipTemplate): void {
     this.newJsPlumbInstance.connect({
-      source: sourceId,
-      target: targetId,
+      source: newRelationship.sourceElement,
+      target: newRelationship.targetElement,
       overlays: [['Arrow', {width: 15, length: 15, location: 1, id: 'arrow', direction: 1}],
         ['Label', {
           label: '(Hosted On)',
@@ -139,11 +142,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
       ],
     });
     if (this.dragSourceInfos) {
-      this.newJsPlumbInstance.unmakeSource(this.dragSourceInfos.dragSource);
+      if (this.newJsPlumbInstance.isSource(this.dragSourceInfos.dragSource)) {
+        this.newJsPlumbInstance.unmakeSource(this.dragSourceInfos.dragSource);
+      }
       this.newJsPlumbInstance.removeAllEndpoints(this.dragSourceInfos.dragSource);
       this.dragSourceActive = false;
       const indexOfNode = this.nodeChildrenIdArray.indexOf(this.dragSourceInfos.nodeId);
       this.nodeChildrenArray[indexOfNode].connectorEndpointVisible = false;
+      this.dragSourceInfos = null;
     }
   }
 
@@ -152,7 +158,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   setDragSource($event): void {
-    if (!this.dragSourceActive) {
+   if (!this.dragSourceActive) {
       this.newJsPlumbInstance.makeSource($event.dragSource, {
         connectorOverlays: [
           ['Arrow', {location: 1}],
@@ -166,18 +172,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown.delete', ['$event'])
   handleDeleteKeyEvent(event: KeyboardEvent) {
-    console.log(event.key);
     for (const node of this.nodeChildrenArray) {
       if (node.makeSelectionVisible === true) {
-        console.log(node.title);
+        this.newJsPlumbInstance.removeAllEndpoints(node.title);
+        if (this.newJsPlumbInstance.isSource(node.dragSource)) {
+          this.newJsPlumbInstance.unmakeSource(node.dragSource)
+        }
+        this.ngRedux.dispatch(this.actions.deleteNodeTemplate(node.title));
       }
-    }
-  }
-
-  @HostListener('click', ['$event'])
-  onClick($event) {
-    if (this._eref.nativeElement.contains($event.target) && this.longPress === false && $event.clientX > 200) {
-      this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
     }
   }
 
@@ -193,21 +195,20 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   showSelectionRange($event) {
     console.log('mousedown');
-    if (($event.pageY) > 0) {
-      this.clearSelectedNodes();
-      for (const node of this.nodeChildrenArray) {
-        node.makeSelectionVisible = false;
-      }
-      this.selectionActive = true;
-      this.pageX = $event.pageX;
-      this.pageY = $event.pageY;
-      this.initialW = $event.pageX;
-      this.initialH = $event.pageY;
-      this.zone.runOutsideAngular(() => {
-        document.getElementById('container').addEventListener('mousemove', this.bindOpenSelector);
-        document.getElementById('container').addEventListener('mouseup', this.bindSelectElements);
-      });
+    this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+    this.clearSelectedNodes();
+    for (const node of this.nodeChildrenArray) {
+      node.makeSelectionVisible = false;
     }
+    this.selectionActive = true;
+    this.pageX = $event.pageX;
+    this.pageY = $event.pageY;
+    this.initialW = $event.pageX;
+    this.initialH = $event.pageY;
+    this.zone.runOutsideAngular(() => {
+      document.getElementById('container').addEventListener('mousemove', this.bindOpenSelector);
+      document.getElementById('container').addEventListener('mouseup', this.bindSelectElements);
+    });
     this.crosshair = true;
   }
 

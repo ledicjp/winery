@@ -30,11 +30,7 @@ export class JsPlumbService {
         ['Arrow', {location: 1}],
       ],
       ConnectionsDetachable: false,
-      Anchor: 'Continuous',
-      Anchors: [
-        ['Perimeter', {shape: 'Rectangle'}],
-        [ 'Perimeter', { shape: 'Rectangle'} ]
-      ],
+      Anchor: ['Perimeter', { shape: 'Rectangle'}]
     });
   }
 }

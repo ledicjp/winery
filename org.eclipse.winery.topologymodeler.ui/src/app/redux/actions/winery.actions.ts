@@ -25,11 +25,16 @@ export interface SaveRelationshipAction extends Action {
   relationshipTemplate: TRelationshipTemplate;
 }
 
+export interface DeleteNodeAction extends Action {
+  nodeTemplateId: string;
+}
+
 @Injectable()
 export class WineryActions {
     static SEND_PALETTE_OPENED = 'SEND_PALETTE_OPENED';
     static SAVE_NODE_TEMPLATE = 'SAVE_NODE_TEMPLATE';
     static SAVE_RELATIONSHIP = 'SAVE_RELATIONSHIP';
+    static DELETE_NODE_TEMPLATE = 'DELETE_NODE_TEMPLATE';
 
     sendPaletteOpened: ActionCreator<SendPaletteOpenedAction> =
       ((paletteOpened) => ({
@@ -45,5 +50,10 @@ export class WineryActions {
       ((newRelationship) => ({
         type: WineryActions.SAVE_RELATIONSHIP,
         relationshipTemplate: newRelationship
+      }));
+    deleteNodeTemplate: ActionCreator<DeleteNodeAction> =
+      ((deletedNodeId) => ({
+        type: WineryActions.DELETE_NODE_TEMPLATE,
+        nodeTemplateId: deletedNodeId
       }));
 }
