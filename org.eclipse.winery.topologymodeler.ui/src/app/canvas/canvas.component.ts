@@ -149,8 +149,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.newJsPlumbInstance.unmakeSource(this.dragSourceInfos.dragSource);
       this.newJsPlumbInstance.removeAllEndpoints(this.dragSourceInfos.dragSource);
       this.dragSourceActive = false;
-      // this.dragSourceInfos.open = this.toggleOpen;
-      // this.endpointContainer = this.dragSourceInfos;
       const indexOfNode = this.nodeChildrenIdArray.indexOf(this.dragSourceInfos.nodeId);
       this.nodeChildrenArray[indexOfNode].connectorEndpointVisible = false;
     }
@@ -177,6 +175,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
   onClick($event) {
     if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
       this.clearArray(this.selectedNodes);
+      for (const node of this.nodeChildrenArray) {
+        node.makeSelectionVisible = false;
+      }
       if ($event.clientX > 200) {
         this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
       }
@@ -345,8 +346,35 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  addNodeToDragSelection($event): void {
-    this.enhanceDragSelection($event);
+  checkFocusNode($event): void {
+    if ($event.ctrlKey) {
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.enhanceDragSelection($event.id);
+        for (const node of this.nodeChildrenArray) {
+          const nodeIndex = this.selectedNodes.indexOf(node.title);
+          if (this.selectedNodes[nodeIndex] === undefined) {
+            node.makeSelectionVisible = false;
+          }
+        }
+      } else {
+        this.newJsPlumbInstance.removeFromAllPosses($event.id);
+        const nodeIndex = this.nodeChildrenArray.map(node => node.title).indexOf($event.id);
+        this.nodeChildrenArray[nodeIndex].makeSelectionVisible = false;
+        const selectedNodeIndex = this.selectedNodes.indexOf($event.id);
+        this.selectedNodes.splice(selectedNodeIndex, 1);
+      }
+    } else {
+      for (const node of this.nodeChildrenArray) {
+        if (node.title === $event.id) {
+          node.makeSelectionVisible = true;
+        } else if (!this.arrayContainsNode(this.selectedNodes, node.title)) {
+          node.makeSelectionVisible = false;
+        }
+      }
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.clearArray(this.selectedNodes);
+      }
+    }
   }
 
   trackTimeOfMouseDown($event): void {
@@ -363,16 +391,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.longPress = false;
     } else if (this.endTime - this.startTime >= 300) {
       this.longPress = true;
-    }
-  }
-
-  checkFocusNode($event): void {
-    const nodeIndex = this.nodeChildrenIdArray.indexOf($event);
-    for (const node of this.nodeChildrenArray) {
-      if (node.title !== $event && !this.selectedNodes.find(nodeId => nodeId === $event)) {
-        node.makeSelectionVisible = false;
-        this.clearArray(this.selectedNodes);
-      }
     }
   }
 

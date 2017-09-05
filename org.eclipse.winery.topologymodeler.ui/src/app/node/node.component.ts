@@ -35,7 +35,7 @@ export class NodeComponent implements OnInit, AfterViewInit {
   startTime;
   endTime;
   longpress = false;
-  @Input() makeSelectionVisible = false;
+  makeSelectionVisible = false;
   @Input() title: string;
   @Input() left: number;
   @Input() top: number;
@@ -44,11 +44,10 @@ export class NodeComponent implements OnInit, AfterViewInit {
   @Input() nodeColor: string;
   @Input() nodeImageUrl: string;
   @Input() dragSource: string;
-  @Output() addNodeToDragSelection: EventEmitter<string>;
   @Input() navbarButtonsState: ButtonsStateModel;
   @Output() setDragSource: EventEmitter<any>;
   @Output() closedEndpoint: EventEmitter<string>;
-  @Output() checkFocusNode: EventEmitter<string>;
+  @Output() checkFocusNode: EventEmitter<any>;
 
   public addItem(): void {
     this.items.push(`Items ${this.items.length + 1}`);
@@ -57,7 +56,6 @@ export class NodeComponent implements OnInit, AfterViewInit {
   constructor(private zone: NgZone) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
-    this.addNodeToDragSelection = new EventEmitter();
     this.setDragSource = new EventEmitter();
     this.closedEndpoint = new EventEmitter();
     this.checkFocusNode = new EventEmitter();
@@ -80,11 +78,16 @@ export class NodeComponent implements OnInit, AfterViewInit {
   }
 
   trackTimeOfMouseDown($event): void {
-    if (!$event.ctrlKey) {
-      this.startTime = new Date().getTime();
-      this.makeSelectionVisible = true;
-      this.checkFocusNode.emit(this.title);
-      this.connectorEndpointVisible = !this.connectorEndpointVisible;
+    this.startTime = new Date().getTime();
+    const focusNodeData = {
+      id: this.title,
+      ctrlKey: $event.ctrlKey
+    };
+    this.checkFocusNode.emit(focusNodeData);
+    if ($event.srcElement.parentElement.className !== 'accordion-toggle') {
+      if (!$event.ctrlKey) {
+        this.connectorEndpointVisible = !this.connectorEndpointVisible;
+      }
       this.zone.runOutsideAngular(() => {
         document.getElementById(this.title).addEventListener('mousemove', this.bindMouseMove);
       });
@@ -97,10 +100,8 @@ export class NodeComponent implements OnInit, AfterViewInit {
 
   trackTimeOfMouseUp($event): void {
     document.getElementById(this.title).removeEventListener('mousemove', this.bindMouseMove);
-    if (!$event.ctrlKey) {
-      this.endTime = new Date().getTime();
-      this.testTimeDifference($event);
-    }
+    this.endTime = new Date().getTime();
+    this.testTimeDifference($event);
   }
 
   private testTimeDifference($event): void {
@@ -121,18 +122,11 @@ export class NodeComponent implements OnInit, AfterViewInit {
 
   showConnectorEndpoint($event): void {
     $event.stopPropagation();
-    const srcElement = $event.srcElement.className;
-    if (srcElement !== 'connectorLabel' && srcElement !== 'connectorBox' &&
-      srcElement !== 'connectorEndpoint' && srcElement !== 'endpointContainer') {
-      if ($event.ctrlKey) {
-        this.addNodeToDragSelection.emit(this.title);
-        this.makeSelectionVisible = !this.makeSelectionVisible;
-      } else {
-        if (!this.longpress) {
-          // this.connectorEndpointVisible = !this.connectorEndpointVisible;
-          if (this.connectorEndpointVisible === true) {
-            this.closedEndpoint.emit('set no more drag sources');
-          }
+    if ($event.ctrlKey) {
+    } else {
+      if (!this.longpress) {
+        if (this.connectorEndpointVisible === true) {
+          this.closedEndpoint.emit('set no more drag sources');
         }
       }
     }
