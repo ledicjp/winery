@@ -35,7 +35,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   allNodeTemplates: Array<TNodeTemplate> = [];
   allRelationshipTemplates: Array<TRelationshipTemplate> = [];
   navbarButtonsState: ButtonsStateModel;
-  selectedNodes: string[] = [];
+  selectedNodes: Array<TNodeTemplate> = [];
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
@@ -47,8 +47,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   initialH: number;
   selectionWidth: number;
   selectionHeight: number;
-  offsetY = 0;
-  offsetX = 102;
   startTime: number;
   endTime: number;
   longPress: boolean;
@@ -58,7 +56,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   dragSourceInfos: any;
   allNodesIds: Array<string> = [];
   nodeTemplatesSubscription;
-  gridSubscription;
   relationshipTemplatesSubscription;
   navBarButtonsStateSubscription;
   marginTop: number;
@@ -80,13 +77,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
       .subscribe(currentNodes => this.addNewNode(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
       .subscribe(currentRelationships => this.addNewRelationships(currentRelationships));
-    this.gridSubscription = this.ngRedux.select(state => state.wineryState.currentPaletteOpenedState)
-      .subscribe(currentPaletteOpened => this.updateGridState(currentPaletteOpened));
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void{
+  addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
       const newNode = currentNodes[currentNodes.length - 1];
       this.allNodeTemplates.push(newNode);
@@ -105,32 +100,30 @@ export class CanvasComponent implements OnInit, OnDestroy {
       }
   }
 
-  updateGridState(currentPaletteOpenedState: boolean) {
-    if (currentPaletteOpenedState !== true) {
-      this.marginLeft = 0;
-      this.offsetX = 0;
-    } else {
-      this.offsetX = -200;
-      this.marginLeft = 200;
-    }
-  }
-
   setButtonsState(currentButtonsState: ButtonsStateModel): void {
-      this.navbarButtonsState = currentButtonsState;
-      setTimeout(() => this.newJsPlumbInstance.repaintEverything(), 1);
-      const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
-      const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
-      const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
-      if (alignmentButtonLayout) {
-        this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
-      } else if (alignmentButtonAlignH){
+    this.navbarButtonsState = currentButtonsState;
+    setTimeout(() => this.repaintJsPlumb(), 1);
+    const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
+    const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
+    const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
+    if (alignmentButtonLayout) {
+      this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
+      this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
+    } else if (alignmentButtonAlignH) {
+      if (this.selectedNodes.length >= 1) {
+        this._layoutDirective.alignHorizontal(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
         this._layoutDirective.alignHorizontal(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
-      } else if (alignmentButtonAlignV) {
-        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
       }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
+    } else if (alignmentButtonAlignV) {
+      if (this.selectedNodes.length >= 1) {
+        this._layoutDirective.alignVertical(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
+        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
+      }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
+    }
   }
 
   displayRelationships(sourceId: string, targetId: string): void {
@@ -190,24 +183,24 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   clearSelectedNodes(): void {
     for (const node of this.nodeChildrenArray) {
-      if (this.selectedNodes.find(nodeId => nodeId === node.title)) {
+      if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
         node.makeSelectionVisible = false;
       }
     }
-    this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
+    this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes.map(node => node.id));
     this.selectedNodes.length = 0;
   }
 
   showSelectionRange($event) {
     console.log('mousedown');
-    if (($event.pageY - this.offsetY) > 0) {
+    if (($event.pageY) > 0) {
       this.clearSelectedNodes();
       for (const node of this.nodeChildrenArray) {
         node.makeSelectionVisible = false;
       }
       this.selectionActive = true;
-      this.pageX = $event.pageX + this.offsetX;
-      this.pageY = $event.pageY - this.offsetY;
+      this.pageX = $event.pageX;
+      this.pageY = $event.pageY;
       this.initialW = $event.pageX;
       this.initialH = $event.pageY;
       this.zone.runOutsideAngular(() => {
@@ -223,12 +216,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.selectionWidth = Math.abs(this.initialW - $event.pageX);
       this.selectionHeight = Math.abs(this.initialH - $event.pageY);
       if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
-        this.pageX = $event.pageX + this.offsetX;
+        this.pageX = $event.pageX;
       } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
-        this.pageY = $event.pageY - this.offsetY;
+        this.pageY = $event.pageY;
       } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
-        this.pageX = $event.pageX + this.offsetX;
-        this.pageY = $event.pageY - this.offsetY;
+        this.pageX = $event.pageX;
+        this.pageY = $event.pageY;
       }
   }
 
@@ -256,12 +249,20 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.selectionActive = false;
     this.selectionWidth = 0;
     this.selectionHeight = 0;
+    // This is just a hack for firefox, the same code is in the click listener
+    if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
+      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes.map(node => node.id));
+      this.clearSelectedNodes();
+      if ($event.clientX > 200) {
+        this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+      }
+    }
   }
 
   @HostListener('window:scroll', ['event'])
   adjustGrid($event) {
-    this.gridWidth = document.documentElement.scrollWidth;
-    this.gridHeight = document.documentElement.scrollHeight + 10;
+    this.gridWidth = window.innerWidth;
+    this.gridHeight = window.innerHeight;
   }
 
   private getOffset(el) {
@@ -294,7 +295,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
         this.enhanceDragSelection($event.id);
         for (const node of this.nodeChildrenArray) {
-          const nodeIndex = this.selectedNodes.indexOf(node.title);
+          const nodeIndex = this.selectedNodes.map(node => node.id).indexOf(node.title);
           if (this.selectedNodes[nodeIndex] === undefined) {
             node.makeSelectionVisible = false;
           }
@@ -303,7 +304,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
         this.newJsPlumbInstance.removeFromAllPosses($event.id);
         const nodeIndex = this.nodeChildrenArray.map(node => node.title).indexOf($event.id);
         this.nodeChildrenArray[nodeIndex].makeSelectionVisible = false;
-        const selectedNodeIndex = this.selectedNodes.indexOf($event.id);
+        const selectedNodeIndex = this.selectedNodes.map(node => node.id).indexOf($event.id);
         this.selectedNodes.splice(selectedNodeIndex, 1);
       }
     } else {
@@ -320,10 +321,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  arrayContainsNode(arrayOfNodes: any[], id: string): boolean {
-    if (arrayOfNodes !== null && arrayOfNodes.length > 0) {
-      for (let i = 0; i < arrayOfNodes.length; i++) {
-        if (arrayOfNodes[i] === id) {
+  private arrayContainsNode(Nodes: any[], id: string): boolean {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
           return true;
         }
       }
@@ -332,14 +333,22 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   private enhanceDragSelection(id: string) {
-    this.nodeArrayEmpty = false;
     this.newJsPlumbInstance.addToPosse(id, 'dragSelection');
-    this.nodeArrayEmpty = this.arrayContainsNode(this.selectedNodes, id);
-    if (!this.nodeArrayEmpty) {
-      this.selectedNodes.push(id);
+    if (!this.arrayContainsNode(this.selectedNodes, id)) {
+      this.selectedNodes.push(this.getNodeByID(this.allNodeTemplates, id));
       for (const node of this.nodeChildrenArray) {
-        if (this.selectedNodes.find(nodeId => nodeId === node.title)) {
+        if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
           node.makeSelectionVisible = true;
+        }
+      }
+  }
+  }
+
+  private getNodeByID(Nodes: Array<TNodeTemplate>, id: string) {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
+          return node;
         }
       }
     }
@@ -376,7 +385,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     });
   }
 
-  repaintJsPlumb($event) {
+  repaintJsPlumb() {
     this.newJsPlumbInstance.repaintEverything();
   }
 
@@ -412,7 +421,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.nodeTemplatesSubscription.unsubscribe();
-    this.gridSubscription.unsubscribe();
     this.relationshipTemplatesSubscription.unsubscribe();
     this.navBarButtonsStateSubscription.unsubscribe();
   }

@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { PaletteService } from '../palette.service';
-import {WineryActions} from '../redux/actions/winery.actions';
-import {NgRedux} from '@angular-redux/store';
-import {IWIneryState} from '../redux/store/winery.store';
-import {TNodeTemplate} from '../ttopology-template';
+import { WineryActions } from '../redux/actions/winery.actions';
+import { NgRedux } from '@angular-redux/store';
+import { IWIneryState } from '../redux/store/winery.store';
+import { TNodeTemplate } from '../ttopology-template';
 
 @Component({
   selector: 'winery-palette-component',
@@ -19,7 +19,8 @@ import {TNodeTemplate} from '../ttopology-template';
       })),
       state('extended', style({
         height: '40px',
-        width: '100%',
+        width: 'auto',
+        minWidth: '200px'
       })),
       transition('shrunk => extended', animate('200ms ease-out')),
       transition('extended => shrunk', animate('200ms ease-out'))
@@ -74,9 +75,9 @@ export class PaletteComponent implements OnInit, OnDestroy {
     this.paletteItems = paletteService.getPaletteData();
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void{
+  addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1])
+      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1]);
     }
   }
 
@@ -110,9 +111,9 @@ export class PaletteComponent implements OnInit, OnDestroy {
     const top = ($event.pageY - 30).toString();
     const name = $event.target.innerHTML;
     const otherAttributes = {
-        location: 'undefined',
-        x: left,
-        y: top
+      location: 'undefined',
+      x: left,
+      y: top
     };
     const newId = this.generateId(name);
     const paletteItem: TNodeTemplate = new TNodeTemplate(
@@ -128,7 +129,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
       undefined,
       otherAttributes
     );
-   this.ngRedux.dispatch(this.actions.saveNodeTemplate(paletteItem));
+    this.ngRedux.dispatch(this.actions.saveNodeTemplate(paletteItem));
   }
 
   generateId(name: string): string {
@@ -146,7 +147,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
           }
         }
       }
-        return name;
+      return name;
     } else {
       return name;
     }

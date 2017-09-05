@@ -1,17 +1,24 @@
 import { AfterViewInit, Directive } from '@angular/core';
 import ELK from 'elkjs/lib/elk.bundled.js';
+import { TNodeTemplate, TRelationshipTemplate } from './ttopology-template';
+import { WineryAlertService } from './winery-alert/winery-alert.service';
 
 @Directive({
-  selector: '[appLayout]',
+  selector: '[wineryLayout]'
 })
 export class LayoutDirective implements AfterViewInit {
+  constructor(private alert: WineryAlertService) {
 
-  public layoutNodes(nodeTemplates: any[], relationshipTemplates: any[], jsPlumbInstance: any): void {
+  }
 
+  public layoutNodes(nodeTemplates: Array<TNodeTemplate>,
+                     relationshipTemplates: Array<TRelationshipTemplate>,
+                     jsPlumbInstance: any): void {
+    // These are the input arrays for eclipse layout kernel (ELK).
     const children: any[] = [];
     const edges: any[] = [];
 
-    // get with and height of nodes
+    // get width and height of nodes
     nodeTemplates.forEach((node) => {
       const width = document.getElementById(node.id).offsetWidth;
       const height = document.getElementById(node.id).offsetHeight;
@@ -51,7 +58,9 @@ export class LayoutDirective implements AfterViewInit {
     });
   }
 
-  private applyPositions(data: any, nodeTemplates: any[], jsPlumbInstance: any): void {
+  private applyPositions(data: any,
+                         nodeTemplates: Array<TNodeTemplate>,
+                         jsPlumbInstance: any): void {
     nodeTemplates.forEach((node, index) => {
       // apply the new positions to the nodes
       node.otherAttributes['x'] = data.children[index].x;
@@ -61,77 +70,52 @@ export class LayoutDirective implements AfterViewInit {
     this.repaintEverything(jsPlumbInstance);
   }
 
-  public alignHorizontal(selectedNodes: any[], jsPlumbInstance: any): void {
-    let smallestVal = 0;
-    let biggestVal = 0;
+  public alignHorizontal(selectedNodes: Array<TNodeTemplate>,
+                         jsPlumbInstance: any): void {
     let result;
     // if there is only 1 node selected, do nothing
     if (!( selectedNodes.length === 1)) {
-      selectedNodes.forEach((node, index) => {
-        // if its the first iteration, inititalize
-        if (index === 0) {
-          smallestVal = document.getElementById(node.id).offsetTop;
-          biggestVal = document.getElementById(node.id).offsetTop;
-        } else {
-          // if the biggestValue is smaller than the current value, save it
-          if (biggestVal < document.getElementById(node.id).offsetTop) {
-            biggestVal = document.getElementById(node.id).offsetTop;
-          }
-          // if the smallest val is bigger than the current value, save it.
-          if (smallestVal > document.getElementById(node.id).offsetTop) {
-            smallestVal = document.getElementById(node.id).offsetTop;
-          }
-        }
+      const topPositions = selectedNodes.map((node) => {
+        return document.getElementById(node.id).offsetTop;
       });
-
-      result = biggestVal - smallestVal;
-      result = (result / 2);
-      result = smallestVal + result;
+      // add biggest value to smallest and divide by 2, to get the exact middle of both
+      result = ((Math.max.apply(null, topPositions) + Math.min.apply(null, topPositions)) / 2);
       // iterate over the nodes again, and apply positions
       selectedNodes.forEach((node) => {
         node.otherAttributes['y'] = result;
       });
       this.repaintEverything(jsPlumbInstance);
+    } else {
+      this.showWarningAlert('You have only one node selected.');
     }
   }
 
-  public alignVertical(selectedNodes: any[], jsPlumbInstance: any): void {
-    let smallestVal = 0;
-    let biggestVal = 0;
+  public alignVertical(selectedNodes: Array<TNodeTemplate>,
+                       jsPlumbInstance: any): void {
     let result;
     // if there is only 1 node selected, do nothing
     if (!( selectedNodes.length === 1)) {
-      selectedNodes.forEach((node, index) => {
-        // if its the first iteration, inititalize
-        console.log(node, index);
-        if (index === 0) {
-          smallestVal = document.getElementById(node.id).offsetLeft;
-          biggestVal = document.getElementById(node.id).offsetLeft;
-        } else {
-          // if the biggestValue is smaller than the current value, save it
-          if (biggestVal < document.getElementById(node.id).offsetLeft) {
-            biggestVal = document.getElementById(node.id).offsetLeft;
-          }
-          // if the smallest val is bigger than the current value, save it.
-          if (smallestVal > document.getElementById(node.id).offsetLeft) {
-            smallestVal = document.getElementById(node.id).offsetLeft;
-          }
-        }
+      const topPositions = selectedNodes.map((node) => {
+        return document.getElementById(node.id).offsetLeft;
       });
-
-      result = biggestVal - smallestVal;
-      result = (result / 2);
-      result = smallestVal + result;
+      // add biggest value to smallest and divide by 2, to get the exact middle of both
+      result = ((Math.max.apply(null, topPositions) + Math.min.apply(null, topPositions)) / 2);
       // iterate over the nodes again, and apply positions
       selectedNodes.forEach((node) => {
         node.otherAttributes['x'] = result;
       });
       this.repaintEverything(jsPlumbInstance);
+    } else {
+      this.showWarningAlert('You have only one node selected.');
     }
   }
 
-  public repaintEverything(jsPlumbInstance: any): void {
+  private repaintEverything(jsPlumbInstance: any): void {
     setTimeout(() => jsPlumbInstance.repaintEverything(), 1);
+  }
+
+  private showWarningAlert(message: string): void {
+    this.alert.info(message);
   }
 
   ngAfterViewInit() {

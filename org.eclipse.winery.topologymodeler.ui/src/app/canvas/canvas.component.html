@@ -4,9 +4,8 @@
        (mousedown)="trackTimeOfMouseDown($event)"
        (mouseup)="trackTimeOfMouseUp($event)"
        [class.crosshair]="this.crosshair"
-       [style.marginLeft.px]="marginLeft"
-       [style.width.%]="gridWidth"
-       [style.height.%]="gridHeight">
+       [style.width.vw]="gridWidth"
+       [style.height.vh]="gridWidth">
     <div class="selection" id="selection"
          [class.selection-active]="selectionActive"
          [style.left.px]="pageX"
@@ -16,6 +15,7 @@
       <span></span>
     </div>
   </div>
+
   <winery-node *ngFor="let node of allNodeTemplates"
                [title]="node.id"
                [nodeColor]="node.color"

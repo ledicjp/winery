@@ -7,3 +7,10 @@
   background-color: #f7f7f9;
   border-radius: 0.25rem;
 }
+
+.bootstrap-vertical-nav {
+  position:fixed;
+  margin-top:4%;
+  float: left;
+  z-index: 500;
+}

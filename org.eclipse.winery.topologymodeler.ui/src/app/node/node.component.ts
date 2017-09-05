@@ -21,6 +21,7 @@ import {
   Output,
 } from '@angular/core';
 import {ButtonsStateModel} from '../models/buttonsState.model';
+import { TNodeTemplate } from '../ttopology-template';
 
 @Component({
   selector: 'winery-node',
