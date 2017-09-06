@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { PaletteService } from '../palette.service';
-import {WineryActions} from '../redux/actions/winery.actions';
-import {NgRedux} from '@angular-redux/store';
-import {IWIneryState} from '../redux/store/winery.store';
-import {TNodeTemplate} from '../ttopology-template';
+import { WineryActions } from '../redux/actions/winery.actions';
+import { NgRedux } from '@angular-redux/store';
+import { IWineryState } from '../redux/store/winery.store';
+import { TNodeTemplate } from '../ttopology-template';
 
 @Component({
   selector: 'winery-palette-component',
@@ -19,7 +19,8 @@ import {TNodeTemplate} from '../ttopology-template';
       })),
       state('extended', style({
         height: '40px',
-        width: '100%',
+        width: 'auto',
+        minWidth: '200px'
       })),
       transition('shrunk => extended', animate('200ms ease-out')),
       transition('extended => shrunk', animate('200ms ease-out'))
@@ -65,7 +66,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
   paletteOpenedSubscription;
 
   constructor(private paletteService: PaletteService,
-              private ngRedux: NgRedux<IWIneryState>,
+              private ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions) {
     this.nodeTemplatesSubscription = ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
       .subscribe(currentNodes => this.addNewNode(currentNodes));
@@ -74,9 +75,9 @@ export class PaletteComponent implements OnInit, OnDestroy {
     this.paletteItems = paletteService.getPaletteData();
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void{
+  addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1])
+      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1]);
     }
   }
 
@@ -95,7 +96,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
 
   }
 
-  public toggleRootState(): void {
+  private toggleRootState(): void {
     if (this.paletteRootState === 'shrunk') {
       this.paletteRootState = 'extended';
       this.ngRedux.dispatch(this.actions.sendPaletteOpened(true));
@@ -110,9 +111,9 @@ export class PaletteComponent implements OnInit, OnDestroy {
     const top = ($event.pageY - 30).toString();
     const name = $event.target.innerHTML;
     const otherAttributes = {
-        location: 'undefined',
-        x: left,
-        y: top
+      location: 'undefined',
+      x: left,
+      y: top
     };
     const newId = this.generateId(name);
     const paletteItem: TNodeTemplate = new TNodeTemplate(
@@ -122,13 +123,13 @@ export class PaletteComponent implements OnInit, OnDestroy {
       name,
       1,
       1,
-      undefined,
+      'yellow',
       undefined,
       undefined,
       undefined,
       otherAttributes
     );
-   this.ngRedux.dispatch(this.actions.saveNodeTemplate(paletteItem));
+    this.ngRedux.dispatch(this.actions.saveNodeTemplate(paletteItem));
   }
 
   generateId(name: string): string {
@@ -146,7 +147,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
           }
         }
       }
-        return name;
+      return name;
     } else {
       return name;
     }

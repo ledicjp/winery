@@ -26,8 +26,12 @@ import { JsonService } from '../jsonService/json.service';
 import { JsPlumbService } from '../jsPlumbService';
 import { WineryCustomOption } from '../winery-alert/winery-alert-options';
 import { TopologyRendererComponent } from './topology-renderer.component';
-import {NgReduxModule} from '@angular-redux/store';
-import {TopologyRendererActions} from "../redux/actions/topologyRenderer.actions";
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { PropertiesComponent } from '../node/properties/properties.component';
+import { RequirementsCapabilitiesComponent } from '../node/requirements-capabilities/requirements-capabilities.component';
+import { TargetLocationsComponent } from '../node/target-locations/target-locations.component';
+import { PoliciesComponent } from '../node/policies/policies.component';
+import { DeploymentArtifactsComponent } from '../node/deployment-artifacts/deployment-artifacts.component';
 
 @NgModule({
   imports: [
@@ -47,6 +51,11 @@ import {TopologyRendererActions} from "../redux/actions/topologyRenderer.actions
     CanvasComponent,
     LayoutDirective,
     TopologyRendererComponent,
+    PropertiesComponent,
+    RequirementsCapabilitiesComponent,
+    TargetLocationsComponent,
+    PoliciesComponent,
+    DeploymentArtifactsComponent
   ],
   exports: [
     TopologyRendererComponent
@@ -66,5 +75,4 @@ export class TopologyRendererModule {
   }
   constructor() {
   }
-
-  }
+}

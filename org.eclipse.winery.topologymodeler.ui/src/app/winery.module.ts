@@ -14,14 +14,14 @@ import { PaletteComponent } from './palette/palette.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {JsonService} from './jsonService/json.service';
 import { TopologyRendererModule } from './topology-renderer/topology-renderer.module';
-import { PropertiesComponent } from './properties/properties.component';
-import { DeploymentArtifactsComponent } from './deployment-artifacts/deployment-artifacts.component';
-import { RequirementsCapabilitiesComponent } from './requirements-capabilities/requirements-capabilities.component';
-import { PoliciesComponent } from './policies/policies.component';
+import { PropertiesComponent } from './node/properties/properties.component';
+import { DeploymentArtifactsComponent } from './node/deployment-artifacts/deployment-artifacts.component';
+import { RequirementsCapabilitiesComponent } from './node/requirements-capabilities/requirements-capabilities.component';
+import { PoliciesComponent } from './node/policies/policies.component';
 import { PrintViewComponent } from './print-view/print-view.component';
-import { TargetLocationsComponent } from './target-locations/target-locations.component';
+import { TargetLocationsComponent } from './node/target-locations/target-locations.component';
 import {NgReduxModule, NgRedux, DevToolsExtension} from '@angular-redux/store';
-import {IWIneryState, INITIAL_IWINERY_STATE, rootReducer} from './redux/store/winery.store';
+import {IWineryState, INITIAL_IWINERY_STATE, rootReducer} from './redux/store/winery.store';
 import {WineryActions} from './redux/actions/winery.actions';
 import {TopologyRendererActions} from './redux/actions/topologyRenderer.actions';
 
@@ -30,12 +30,7 @@ import {TopologyRendererActions} from './redux/actions/topologyRenderer.actions'
     WineryComponent,
     PaletteComponent,
     SidebarComponent,
-    PropertiesComponent,
-    DeploymentArtifactsComponent,
-    RequirementsCapabilitiesComponent,
-    PoliciesComponent,
     PrintViewComponent,
-    TargetLocationsComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +55,7 @@ import {TopologyRendererActions} from './redux/actions/topologyRenderer.actions'
   bootstrap: [WineryComponent]
 })
 export class WineryModule {
-  constructor(ngRedux: NgRedux<IWIneryState>,
+  constructor(ngRedux: NgRedux<IWineryState>,
               devTools: DevToolsExtension) {
     const storeEnhancers = devTools.isEnabled() ?
       [ devTools.enhancer() ] :

@@ -12,7 +12,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'winery-policies',
+  selector: 'app-policies',
   templateUrl: './policies.component.html',
   styleUrls: ['./policies.component.css']
 })

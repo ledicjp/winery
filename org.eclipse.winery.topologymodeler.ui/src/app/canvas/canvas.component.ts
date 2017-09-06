@@ -9,16 +9,20 @@
  * Contributors:
  *     Thommy Zelenik - initial API and implementation
  */
-import {Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit,} from '@angular/core';
+import {
+  Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit, NgZone,
+  QueryList, ViewChildren,
+} from '@angular/core';
 import {JsPlumbService} from '../jsPlumbService';
 import {JsonService} from '../jsonService/json.service';
 import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
 import {LayoutDirective} from '../layout.directive';
 import {WineryActions} from '../redux/actions/winery.actions';
 import {NgRedux} from '@angular-redux/store';
-import {IWIneryState} from '../redux/store/winery.store';
+import {IWineryState} from '../redux/store/winery.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
+import {NodeComponent} from "../node/node.component";
 
 @Component({
   selector: 'winery-canvas',
@@ -27,10 +31,11 @@ import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions
   styleUrls: ['./canvas.component.css']
 })
 export class CanvasComponent implements OnInit, OnDestroy {
+  @ViewChildren(NodeComponent) nodeComponentChildren: QueryList<NodeComponent>;
   allNodeTemplates: Array<TNodeTemplate> = [];
   allRelationshipTemplates: Array<TRelationshipTemplate> = [];
   navbarButtonsState: ButtonsStateModel;
-  selectedNodes: string[] = [];
+  selectedNodes: Array<TNodeTemplate> = [];
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
@@ -42,84 +47,93 @@ export class CanvasComponent implements OnInit, OnDestroy {
   initialH: number;
   selectionWidth: number;
   selectionHeight: number;
-  callOpenSelector: boolean;
-  callSelectItems: boolean;
-  offsetY = 0;
-  offsetX = 102;
   startTime: number;
   endTime: number;
   longPress: boolean;
   crosshair = false;
   differPressedNavBarButton: any;
-  enhanceGrid: number;
+  marginLeft: number;
+  dragSourceInfos: any;
+  allNodesIds: Array<string> = [];
   nodeTemplatesSubscription;
-  gridSubscription;
   relationshipTemplatesSubscription;
   navBarButtonsStateSubscription;
+  marginTop: number;
+  dragSourceActive = false;
+  endpointContainer: string;
+  gridWidth = 100;
+  gridHeight = 100;
+  nodeChildrenIdArray: Array<string>;
+  nodeChildrenArray: Array<NodeComponent>;
 
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
               differsPressedNavBarButton: KeyValueDiffers,
-              private ngRedux: NgRedux<IWIneryState>,
+              private ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions,
-              private topologyRendererActions: TopologyRendererActions) {
+              private topologyRendererActions: TopologyRendererActions,
+              private zone: NgZone) {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
-      .subscribe(currentNodes => this.addNewNode(currentNodes));
+      .subscribe(currentNodes => this.updateNodes(currentNodes));
     this.relationshipTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.relationshipTemplates)
-      .subscribe(currentRelationships => this.addNewRelationship(currentRelationships));
-    this.gridSubscription = this.ngRedux.select(state => state.wineryState.currentPaletteOpenedState)
-      .subscribe(currentPaletteOpened => this.updateGridState(currentPaletteOpened));
+      .subscribe(currentRelationships => this.updateRelationships(currentRelationships));
     this.navBarButtonsStateSubscription = ngRedux.select(state => state.topologyRendererState)
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));
   }
 
-  addNewNode(currentNodes: Array<TNodeTemplate>): void{
-    if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1])
-    }
-  }
-  addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
-    const newRelationship = currentRelationships[currentRelationships.length - 1];
-    if (currentRelationships.length > 0) {
-      this.allRelationshipTemplates.push(newRelationship);
-      setTimeout(() => this.displayRelationships(newRelationship), 1);
-    }
+  updateNodes(currentNodes: Array<TNodeTemplate>): void {
+    this.allNodeTemplates = currentNodes;
+    this.allNodesIds = this.allNodeTemplates.map(node => node.id);
   }
 
-  updateGridState(currentPaletteOpenedState: boolean) {
-    if (currentPaletteOpenedState !== true) {
-      this.enhanceGrid = 0;
-      this.offsetX = 0;
-    } else {
-      this.offsetX = -200;
-      this.enhanceGrid = 200;
+  updateRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
+    if (currentRelationships.length > 0) {
+      if (currentRelationships.length > this.allRelationshipTemplates.length) {
+        const newRelationship = currentRelationships[currentRelationships.length - 1];
+        this.allRelationshipTemplates.push(newRelationship);
+        setTimeout(() => this.displayRelationships(newRelationship), 1);
+      } else if (currentRelationships.length <= this.allRelationshipTemplates.length) {
+        this.allRelationshipTemplates = currentRelationships;
+        if (this.allRelationshipTemplates.length === 1) {
+          const newRelationship = currentRelationships[currentRelationships.length - 1];
+          if (newRelationship) {
+            setTimeout(() => this.displayRelationships(newRelationship), 1);
+          }
+        }
+      }
     }
   }
 
   setButtonsState(currentButtonsState: ButtonsStateModel): void {
-      this.navbarButtonsState = currentButtonsState;
-      setTimeout(() => this.repaintJsPlumb(), 1);
-      const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
-      const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
-      const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
-      if (alignmentButtonLayout) {
-        this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
-      } else if (alignmentButtonAlignH){
+    this.navbarButtonsState = currentButtonsState;
+    setTimeout(() => this.repaintJsPlumb(), 1);
+    const alignmentButtonLayout = this.navbarButtonsState.buttonsState.layoutButton;
+    const alignmentButtonAlignH = this.navbarButtonsState.buttonsState.alignHButton;
+    const alignmentButtonAlignV = this.navbarButtonsState.buttonsState.alignVButton;
+    if (alignmentButtonLayout) {
+      this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
+      this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
+    } else if (alignmentButtonAlignH) {
+      if (this.selectedNodes.length >= 1) {
+        this._layoutDirective.alignHorizontal(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
         this._layoutDirective.alignHorizontal(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
-      } else if (alignmentButtonAlignV) {
-        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
-        this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
       }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
+    } else if (alignmentButtonAlignV) {
+      if (this.selectedNodes.length >= 1) {
+        this._layoutDirective.alignVertical(this.selectedNodes, this.newJsPlumbInstance);
+      } else {
+        this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
+      }
+      this.ngRedux.dispatch(this.topologyRendererActions.executeAlignV());
+    }
   }
 
   displayRelationships(newRelationship: TRelationshipTemplate): void {
-    const sourceElement = newRelationship.sourceElement;
-    const targetElement = newRelationship.targetElement;
     this.newJsPlumbInstance.connect({
-      source: sourceElement,
-      target: targetElement,
+      source: newRelationship.sourceElement,
+      target: newRelationship.targetElement,
       overlays: [['Arrow', {width: 15, length: 15, location: 1, id: 'arrow', direction: 1}],
         ['Label', {
           label: '(Hosted On)',
@@ -128,71 +142,142 @@ export class CanvasComponent implements OnInit, OnDestroy {
         }]
       ],
     });
+    this.resetDragSource('reset drag source');
   }
 
-  @HostListener('click', ['$event'])
-  onClick($event) {
+  resetDragSource($event): void {
+    if (this.dragSourceInfos) {
+      if (this.dragSourceInfos.nodeId !== $event) {
+        if (this.newJsPlumbInstance.isSource(this.dragSourceInfos.dragSource)) {
+          this.newJsPlumbInstance.unmakeSource(this.dragSourceInfos.dragSource);
+        }
+        this.newJsPlumbInstance.removeAllEndpoints(this.dragSourceInfos.dragSource);
+        const indexOfNode = this.nodeChildrenIdArray.indexOf(this.dragSourceInfos.nodeId);
+        if (this.nodeChildrenArray[indexOfNode]) {
+          this.nodeChildrenArray[indexOfNode].connectorEndpointVisible = false;
+        }
+      }
+    }
+    this.dragSourceActive = false;
+  }
+
+  closedEndpoint($event): void {
+    this.dragSourceActive = false;
+    this.resetDragSource($event);
+    for (const node of this.nodeChildrenArray) {
+      if (node.title !== $event) {
+        node.connectorEndpointVisible = false;
+      }
+    }
+  }
+
+  setDragSource($event): void {
+    if (!this.dragSourceActive) {
+      this.newJsPlumbInstance.makeSource($event.dragSource, {
+        connectorOverlays: [
+          ['Arrow', {location: 1}],
+        ],
+      });
+      this.dragSourceInfos = $event;
+      this.newJsPlumbInstance.makeTarget(this.allNodesIds);
+      this.dragSourceActive = true;
+    }
+  }
+
+  @HostListener('document:keydown.delete', ['$event'])
+  handleDeleteKeyEvent(event: KeyboardEvent) {
+    for (const node of this.nodeChildrenArray) {
+      if (node.makeSelectionVisible === true) {
+        this.newJsPlumbInstance.removeAllEndpoints(node.title);
+        if (this.newJsPlumbInstance.isSource(node.dragSource)) {
+          this.newJsPlumbInstance.unmakeSource(node.dragSource);
+        }
+        this.ngRedux.dispatch(this.actions.deleteNodeTemplate(node.title));
+      }
+    }
+  }
+
+  clearSelectedNodes(): void {
+    for (const node of this.nodeChildrenArray) {
+      if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
+        node.makeSelectionVisible = false;
+      }
+    }
+    this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes.map(node => node.id));
+    this.selectedNodes.length = 0;
+  }
+
+  showSelectionRange($event) {
+    console.log('mousedown');
+    this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+    this.clearSelectedNodes();
+    for (const node of this.nodeChildrenArray) {
+      node.makeSelectionVisible = false;
+    }
+    this.selectionActive = true;
+    this.pageX = $event.pageX;
+    this.pageY = $event.pageY;
+    this.initialW = $event.pageX;
+    this.initialH = $event.pageY;
+    this.zone.runOutsideAngular(() => {
+      document.getElementById('container').addEventListener('mousemove', this.bindOpenSelector);
+      document.getElementById('container').addEventListener('mouseup', this.bindSelectElements);
+    });
+    this.crosshair = true;
+  }
+
+  openSelector($event) {
+    console.log('mouseMove');
+      this.selectionWidth = Math.abs(this.initialW - $event.pageX);
+      this.selectionHeight = Math.abs(this.initialH - $event.pageY);
+      if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
+        this.pageX = $event.pageX;
+      } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
+        this.pageY = $event.pageY;
+      } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
+        this.pageX = $event.pageX;
+        this.pageY = $event.pageY;
+      }
+  }
+
+  bindOpenSelector = (ev) => {
+    this.openSelector(ev);
+  }
+
+  bindSelectElements = (ev) => {
+    this.selectElements(ev);
+  }
+
+  selectElements($event) {
+    console.log('mouseUp');
+    for (const node of this.allNodeTemplates) {
+      const aElem = document.getElementById('selection');
+      const bElem = document.getElementById(node.id);
+      const result = this.doObjectsCollide(aElem, bElem);
+      if (result === true) {
+        this.enhanceDragSelection(node.id);
+      }
+    }
+    document.getElementById('container').removeEventListener('mousemove', this.bindOpenSelector);
+    document.getElementById('container').removeEventListener('mouseup', this.bindSelectElements);
+    this.crosshair = false;
+    this.selectionActive = false;
+    this.selectionWidth = 0;
+    this.selectionHeight = 0;
+    // This is just a hack for firefox, the same code is in the click listener
     if (this._eref.nativeElement.contains($event.target) && this.longPress === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
-      this.clearArray(this.selectedNodes);
+      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes.map(node => node.id));
+      this.clearSelectedNodes();
       if ($event.clientX > 200) {
         this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
       }
     }
   }
 
-  clearArray(array: any[]): void {
-    array.length = 0;
-  }
-
-  @HostListener('mousedown', ['$event'])
-  showSelectionRange($event) {
-    if (($event.pageY - this.offsetY) > 0) {
-      this.selectionActive = true;
-      this.pageX = $event.pageX + this.offsetX;
-      this.pageY = $event.pageY - this.offsetY;
-      this.initialW = $event.pageX;
-      this.initialH = $event.pageY;
-      this.callOpenSelector = true;
-      this.callSelectItems = true;
-    }
-    this.crosshair = true;
-  }
-
-  @HostListener('mousemove', ['$event'])
-  openSelector($event) {
-    if (this.callOpenSelector) {
-      this.selectionWidth = Math.abs(this.initialW - $event.pageX);
-      this.selectionHeight = Math.abs(this.initialH - $event.pageY);
-      if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
-        this.pageX = $event.pageX + this.offsetX;
-      } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
-        this.pageY = $event.pageY - this.offsetY;
-      } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
-        this.pageX = $event.pageX + this.offsetX;
-        this.pageY = $event.pageY - this.offsetY;
-      }
-    }
-  }
-
-  @HostListener('mouseup', ['$event'])
-  selectElements($event) {
-    if (this.callSelectItems) {
-      this.callOpenSelector = false;
-      this.callSelectItems = false;
-      for (const node of this.allNodeTemplates) {
-        const aElem = document.getElementById('selection');
-        const bElem = document.getElementById(node.id);
-        const result = this.doObjectsCollide(aElem, bElem);
-        if (result === true) {
-          this.enhanceDragSelection(node.id);
-        }
-      }
-      this.crosshair = false;
-      this.selectionActive = false;
-      this.selectionWidth = 0;
-      this.selectionHeight = 0;
-    }
+  @HostListener('window:scroll', ['event'])
+  adjustGrid($event) {
+    this.gridWidth = window.innerWidth;
+    this.gridHeight = window.innerHeight;
   }
 
   private getOffset(el) {
@@ -220,15 +305,78 @@ export class CanvasComponent implements OnInit, OnDestroy {
     );
   }
 
-  repaintJsPlumb() {
-    this.newJsPlumbInstance.repaintEverything();
+  hideSidebar() {
+    this.ngRedux.dispatch(this.actions.openSidebar({
+      sidebarContents: {
+        sidebarVisible: false,
+        nodeId: '',
+        nameTextFieldValue: ''
+      }
+    }));
   }
 
-  ngOnInit() {
-    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
-    this.newJsPlumbInstance.setContainer('container');
-    this.visuals = this.jsonService.getVisuals();
-    this.assignVisuals();
+  checkFocusNode($event): void {
+    if ($event.ctrlKey) {
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.enhanceDragSelection($event.id);
+        for (const node of this.nodeChildrenArray) {
+          const nodeIndex = this.selectedNodes.map(node => node.id).indexOf(node.title);
+          if (this.selectedNodes[nodeIndex] === undefined) {
+            node.makeSelectionVisible = false;
+          }
+        }
+      } else {
+        this.newJsPlumbInstance.removeFromAllPosses($event.id);
+        const nodeIndex = this.nodeChildrenArray.map(node => node.title).indexOf($event.id);
+        this.nodeChildrenArray[nodeIndex].makeSelectionVisible = false;
+        const selectedNodeIndex = this.selectedNodes.map(node => node.id).indexOf($event.id);
+        this.selectedNodes.splice(selectedNodeIndex, 1);
+      }
+    } else {
+      for (const node of this.nodeChildrenArray) {
+        if (node.title === $event.id) {
+          node.makeSelectionVisible = true;
+        } else if (!this.arrayContainsNode(this.selectedNodes, node.title)) {
+          node.makeSelectionVisible = false;
+        }
+      }
+      if (!this.arrayContainsNode(this.selectedNodes, $event.id)) {
+        this.clearSelectedNodes();
+      }
+    }
+  }
+
+  private arrayContainsNode(Nodes: any[], id: string): boolean {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private enhanceDragSelection(id: string) {
+    this.newJsPlumbInstance.addToPosse(id, 'dragSelection');
+    if (!this.arrayContainsNode(this.selectedNodes, id)) {
+      this.selectedNodes.push(this.getNodeByID(this.allNodeTemplates, id));
+      for (const node of this.nodeChildrenArray) {
+        if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
+          node.makeSelectionVisible = true;
+        }
+      }
+  }
+  }
+
+  private getNodeByID(Nodes: Array<TNodeTemplate>, id: string) {
+    if (Nodes !== null && Nodes.length > 0) {
+      for (const node of Nodes) {
+        if (node.id === id) {
+          return node;
+        }
+      }
+    }
   }
 
   assignVisuals() {
@@ -246,56 +394,41 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnInit() {
+    this.visuals = this.jsonService.getVisuals();
+    this.assignVisuals();
+    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
+    this.newJsPlumbInstance.setContainer('container');
+    this.newJsPlumbInstance.bind('connection', info => {
+      const sourceElement = info.source.offsetParent.offsetParent.id;
+      const targetElement = info.targetId;
+      const newRelationship = new TRelationshipTemplate(
+        sourceElement,
+        targetElement
+      );
+      this.ngRedux.dispatch(this.actions.saveRelationship(newRelationship));
+    });
+  }
+
+  repaintJsPlumb() {
+    this.newJsPlumbInstance.repaintEverything();
+  }
+
   makeDraggable($event): void {
     this.newJsPlumbInstance.draggable($event);
   }
 
-  private checkingNodeSelectionForDuplicateIDs(id: string) {
-    this.nodeSelected = false;
-    for (const node of this.selectedNodes) {
-      if (node === id) {
-        this.nodeSelected = true;
+  trackTimeOfMouseDown($event): void {
+    for (const node of this.nodeChildrenArray) {
+      if (this.newJsPlumbInstance.isSource(node.dragSource)) {
+        this.newJsPlumbInstance.unmakeSource(node.dragSource);
       }
+      node.connectorEndpointVisible = false;
     }
-    if (this.nodeSelected === false) {
-      this.newJsPlumbInstance.removeFromAllPosses(this.selectedNodes);
-      this.clearArray(this.selectedNodes);
-    }
-  }
-
-  checkIfNodeInSelection($event): void {
-    this.checkingNodeSelectionForDuplicateIDs($event);
-  }
-
-  arrayContainsNode(arrayOfNodes: any[], id: string): boolean {
-    if (arrayOfNodes !== null && arrayOfNodes.length > 0) {
-      for (let i = 0; i < arrayOfNodes.length; i++) {
-        if (arrayOfNodes[i] === id) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private enhanceDragSelection(id: string) {
-    this.nodeArrayEmpty = false;
-    this.newJsPlumbInstance.addToPosse(id, 'dragSelection');
-    this.nodeArrayEmpty = this.arrayContainsNode(this.selectedNodes, id);
-    if (!this.nodeArrayEmpty) {
-      this.selectedNodes.push(id);
-    }
-  }
-
-  addNodeToDragSelection($event): void {
-    this.enhanceDragSelection($event);
-  }
-
-  trackTimeOfMouseDown(e: Event): void {
     this.startTime = new Date().getTime();
   }
 
-  trackTimeOfMouseUp(e: Event): void {
+  trackTimeOfMouseUp($event): void {
     this.endTime = new Date().getTime();
     this.testTimeDifference();
   }
@@ -308,9 +441,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit() {
+    this.nodeChildrenArray = this.nodeComponentChildren.toArray();
+    this.nodeChildrenIdArray = this.nodeChildrenArray.map(node => node.title);
+    this.nodeComponentChildren.changes.subscribe(children => {
+      this.nodeChildrenArray = children.toArray();
+      this.nodeChildrenIdArray = this.nodeChildrenArray.map(node => node.title);
+    });
+  }
+
   ngOnDestroy() {
     this.nodeTemplatesSubscription.unsubscribe();
-    this.gridSubscription.unsubscribe();
     this.relationshipTemplatesSubscription.unsubscribe();
     this.navBarButtonsStateSubscription.unsubscribe();
   }

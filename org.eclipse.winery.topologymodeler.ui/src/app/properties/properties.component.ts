@@ -12,7 +12,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'winery-properties',
+  selector: 'app-properties',
   templateUrl: './properties.component.html',
   styleUrls: ['./properties.component.css']
 })

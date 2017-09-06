@@ -11,10 +11,25 @@
  */
 import { Action, ActionCreator } from 'redux';
 import { Injectable } from '@angular/core';
-import {TNodeTemplate, TRelationshipTemplate} from '../../ttopology-template';
+import { TNodeTemplate, TRelationshipTemplate } from '../../ttopology-template';
 
 export interface SendPaletteOpenedAction extends Action {
   paletteOpened: boolean;
+}
+
+export interface SidebarStateAction extends Action {
+  sidebarContents: {
+    sidebarVisible: boolean,
+    nodeId: string,
+    nameTextFieldValue: string
+  };
+}
+
+export interface SidebarNodeNamechange extends Action {
+  nodeNames: {
+    newNodeName: string,
+    oldNodeName: string
+  };
 }
 
 export interface SaveNodeTemplateAction extends Action {
@@ -25,16 +40,33 @@ export interface SaveRelationshipAction extends Action {
   relationshipTemplate: TRelationshipTemplate;
 }
 
+export interface DeleteNodeAction extends Action {
+  nodeTemplateId: string;
+}
+
 @Injectable()
 export class WineryActions {
     static SEND_PALETTE_OPENED = 'SEND_PALETTE_OPENED';
     static SAVE_NODE_TEMPLATE = 'SAVE_NODE_TEMPLATE';
     static SAVE_RELATIONSHIP = 'SAVE_RELATIONSHIP';
+    static DELETE_NODE_TEMPLATE = 'DELETE_NODE_TEMPLATE';
+    static CHANGE_NODE_NAME = 'CHANGE_NODE_NAME';
+    static OPEN_SIDEBAR = 'OPEN_SIDEBAR';
 
     sendPaletteOpened: ActionCreator<SendPaletteOpenedAction> =
       ((paletteOpened) => ({
         type: WineryActions.SEND_PALETTE_OPENED,
         paletteOpened: paletteOpened
+      }));
+    openSidebar: ActionCreator<SidebarStateAction> =
+      ((newSidebarData) => ({
+        type: WineryActions.OPEN_SIDEBAR,
+        sidebarContents: newSidebarData.sidebarContents
+      }));
+    changeNodeName: ActionCreator<SidebarNodeNamechange> =
+      ((nodeNames) => ({
+        type: WineryActions.CHANGE_NODE_NAME,
+        nodeNames: nodeNames.nodeNames
       }));
     saveNodeTemplate: ActionCreator<SaveNodeTemplateAction> =
       ((newNode) => ({
@@ -45,5 +77,10 @@ export class WineryActions {
       ((newRelationship) => ({
         type: WineryActions.SAVE_RELATIONSHIP,
         relationshipTemplate: newRelationship
+      }));
+    deleteNodeTemplate: ActionCreator<DeleteNodeAction> =
+      ((deletedNodeId) => ({
+        type: WineryActions.DELETE_NODE_TEMPLATE,
+        nodeTemplateId: deletedNodeId
       }));
 }

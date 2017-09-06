@@ -1,9 +1,11 @@
-<div id="container" style="height: auto;">
+<div id="container" style="height: auto;"
+     (mousedown)="showSelectionRange($event)">
   <div id="grid"
        (mousedown)="trackTimeOfMouseDown($event)"
        (mouseup)="trackTimeOfMouseUp($event)"
        [class.crosshair]="this.crosshair"
-       [style.marginLeft.px]="enhanceGrid">
+       [style.width.vw]="gridWidth"
+       [style.height.vh]="gridWidth">
     <div class="selection" id="selection"
          [class.selection-active]="selectionActive"
          [style.left.px]="pageX"
@@ -13,16 +15,21 @@
       <span></span>
     </div>
   </div>
+
   <winery-node *ngFor="let node of allNodeTemplates"
                [title]="node.id"
+               [name]="node.name"
+               [needsToBeFlashed]="needsToBeFlashed"
                [nodeColor]="node.color"
                (sendId)="makeDraggable($event)"
                [left]="node.otherAttributes.x + 'px'"
                [top]="node.otherAttributes.y + 'px'"
                [nodeImageUrl]="node.imageUrl"
                [navbarButtonsState]="navbarButtonsState"
-               (addNodeToDragSelection)="addNodeToDragSelection($event)"
-               (checkIfNodeInSelection)="checkIfNodeInSelection($event)"
-               [selectedNodes]="selectedNodes">
+               (askForRepaint)="repaintJsPlumb($event)"
+               (setDragSource)="setDragSource($event)"
+               (closedEndpoint)="closedEndpoint($event)"
+               [dragSource]="node.id + 'Endpoint'"
+               (checkFocusNode)="checkFocusNode($event)">
   </winery-node>
 </div>
