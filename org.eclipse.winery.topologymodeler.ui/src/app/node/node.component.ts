@@ -11,10 +11,6 @@
  *     Thommy Zelenik - implementation, Refactoring
  */
 import {
-<<<<<<< HEAD
-  AfterViewInit, Component, DoCheck, EventEmitter, HostBinding, Input, IterableDiffers, OnChanges, OnInit,
-  Output
-=======
   AfterViewInit,
   Component,
   DoCheck,
@@ -25,9 +21,7 @@ import {
   OnInit,
   HostBinding,
   OnChanges,
-  Output,
->>>>>>> topologymodeler
-} from '@angular/core';
+  Output } from '@angular/core';
 import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
 import { NgRedux } from '@angular-redux/store';
@@ -39,11 +33,7 @@ import { WineryActions } from '../redux/actions/winery.actions';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.css'],
 })
-<<<<<<< HEAD
-export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
-=======
 export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
->>>>>>> topologymodeler
   public items: string[] = ['Item 1', 'Item 2', 'Item 3'];
   public accordionGroupPanel = 'accordionGroupPanel';
   public customClass = 'customClass';
@@ -71,11 +61,7 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-<<<<<<< HEAD
-  constructor(differsSelectedNodes: IterableDiffers,
-=======
   constructor(private zone: NgZone,
->>>>>>> topologymodeler
               private $ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions) {
     this.sendId = new EventEmitter();
@@ -132,15 +118,7 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     return true;
   }
 
-<<<<<<< HEAD
-  ngOnChanges() {
-    return true;
-  }
-
-  private testTimeDifference(): void {
-=======
   private testTimeDifference($event): void {
->>>>>>> topologymodeler
     if ((this.endTime - this.startTime) < 250) {
       this.longpress = false;
     } else if (this.endTime - this.startTime >= 300) {
@@ -165,29 +143,6 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
           this.closedEndpoint.emit('set no more drag sources');
         }
       }
-    }
-  }
-
-  // Only display the sidebar if the click is no longpress
-  openSidebar($event): void {
-    $event.stopPropagation();
-    // close sidebar when longpressing a node template
-    if (this.longpress) {
-      this.$ngRedux.dispatch(this.actions.openSidebar({
-        sidebarContents: {
-          sidebarVisible: false,
-          nodeId: '',
-          nameTextFieldValue: ''
-        }
-      }));
-    } else {
-      this.$ngRedux.dispatch(this.actions.openSidebar({
-        sidebarContents: {
-          sidebarVisible: true,
-          nodeId: this.title,
-          nameTextFieldValue: this.name
-        }
-      }));
     }
   }
 

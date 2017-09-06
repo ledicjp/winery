@@ -1,15 +1,10 @@
 <div class="container rounded"
      style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
-<<<<<<< HEAD
-     (mousedown)="trackTimeOfMouseDown()"
-     (mouseup)="trackTimeOfMouseUp()"
-     (click)="showConnectorEndpoint($event);">
-=======
      (mousedown)="trackTimeOfMouseDown($event)"
      (mouseup)="trackTimeOfMouseUp($event)"
      (click)="showConnectorEndpoint($event)">
->>>>>>> topologymodeler
+
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
        [class.unselected]="!makeSelectionVisible"
@@ -48,8 +43,6 @@
   <!-- Repaint jsPlumb on every accordion click -->
 
   <accordion #accordion (click)="repaint($event)">
-
-
     <!-- PROPERTIES -->
     <accordion-group
       #propertiesgroup

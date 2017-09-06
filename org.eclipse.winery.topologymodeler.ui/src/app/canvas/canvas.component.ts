@@ -18,7 +18,8 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  AfterViewInit
 } from '@angular/core';
 import { JsPlumbService } from '../jsPlumbService';
 import { JsonService } from '../jsonService/json.service';
@@ -37,7 +38,7 @@ import { NodeComponent } from '../node/node.component';
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css']
 })
-export class CanvasComponent implements OnInit, OnDestroy {
+export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(NodeComponent) nodeComponentChildren: QueryList<NodeComponent>;
   allNodeTemplates: Array<TNodeTemplate> = [];
   allRelationshipTemplates: Array<TRelationshipTemplate> = [];
