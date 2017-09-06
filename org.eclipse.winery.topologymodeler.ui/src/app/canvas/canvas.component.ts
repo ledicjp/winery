@@ -65,7 +65,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   gridHeight = 100;
   nodeChildrenIdArray: Array<string>;
   nodeChildrenArray: Array<NodeComponent>;
-  newRelationshipArray: Array<TRelationshipTemplate> = [];
 
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
@@ -176,7 +175,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
       if (node.makeSelectionVisible === true) {
         this.newJsPlumbInstance.removeAllEndpoints(node.title);
         if (this.newJsPlumbInstance.isSource(node.dragSource)) {
-          this.newJsPlumbInstance.unmakeSource(node.dragSource)
+          this.newJsPlumbInstance.unmakeSource(node.dragSource);
+          console.log(node.dragSource);
         }
         this.ngRedux.dispatch(this.actions.deleteNodeTemplate(node.title));
       }

@@ -123,7 +123,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
       name,
       1,
       1,
-      undefined,
+      'yellow',
       undefined,
       undefined,
       undefined,
