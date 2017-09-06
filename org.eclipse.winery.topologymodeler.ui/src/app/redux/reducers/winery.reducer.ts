@@ -11,12 +11,13 @@
  */
 import { Action } from 'redux';
 import {
+  WineryActions,
   SaveNodeTemplateAction,
   SaveRelationshipAction,
   SendPaletteOpenedAction,
+  DeleteNodeAction,
   SidebarNodeNamechange,
   SidebarStateAction,
-  WineryActions
 } from '../actions/winery.actions';
 import { TNodeTemplate, TRelationshipTemplate, TTopologyTemplate } from 'app/ttopology-template';
 
@@ -115,8 +116,8 @@ export const WineryReducer =
         return {
           ...lastState,
           currentJsonTopology: {
-            nodeTemplates: [...lastState.currentJsonTopology.nodeTemplates, newNode],
-            relationshipTemplates: lastState.currentJsonTopology.relationshipTemplates
+            ...lastState.currentJsonTopology,
+            nodeTemplates: [...lastState.currentJsonTopology.nodeTemplates, newNode]
           }
         };
       case
@@ -126,8 +127,19 @@ export const WineryReducer =
         return {
           ...lastState,
           currentJsonTopology: {
-            nodeTemplates: lastState.currentJsonTopology.nodeTemplates,
+            ...lastState.currentJsonTopology,
             relationshipTemplates: [...lastState.currentJsonTopology.relationshipTemplates, newRelationship]
+          }
+        };
+      case WineryActions.DELETE_NODE_TEMPLATE:
+        const deletedNodeId: string = (<DeleteNodeAction>action).nodeTemplateId;
+        return {
+          ...lastState,
+          currentJsonTopology: {
+            nodeTemplates: lastState.currentJsonTopology.nodeTemplates.filter(nodeTemplate => nodeTemplate.id !== deletedNodeId),
+            relationshipTemplates: lastState.currentJsonTopology.relationshipTemplates.filter(
+              relationshipTemplate => relationshipTemplate.sourceElement !== deletedNodeId &&
+                        relationshipTemplate.targetElement !== deletedNodeId)
           }
         };
       default:
