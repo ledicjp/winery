@@ -10,19 +10,26 @@
  *     Thommy Zelenik - initial API and implementation
  */
 import {
-  Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit, NgZone,
-  QueryList, ViewChildren,
+  Component,
+  ElementRef,
+  HostListener,
+  KeyValueDiffers,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
-import {JsPlumbService} from '../jsPlumbService';
-import {JsonService} from '../jsonService/json.service';
-import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
-import {LayoutDirective} from '../layout.directive';
-import {WineryActions} from '../redux/actions/winery.actions';
-import {NgRedux} from '@angular-redux/store';
-import {IWineryState} from '../redux/store/winery.store';
-import {ButtonsStateModel} from '../models/buttonsState.model';
-import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
-import {NodeComponent} from "../node/node.component";
+import { JsPlumbService } from '../jsPlumbService';
+import { JsonService } from '../jsonService/json.service';
+import { TNodeTemplate, TRelationshipTemplate } from '../ttopology-template';
+import { LayoutDirective } from '../layout.directive';
+import { WineryActions } from '../redux/actions/winery.actions';
+import { NgRedux } from '@angular-redux/store';
+import { IWineryState } from '../redux/store/winery.store';
+import { ButtonsStateModel } from '../models/buttonsState.model';
+import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
+import { NodeComponent } from '../node/node.component';
 
 @Component({
   selector: 'winery-canvas',
@@ -157,7 +164,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   setDragSource($event): void {
-   if (!this.dragSourceActive) {
+    if (!this.dragSourceActive) {
       this.newJsPlumbInstance.makeSource($event.dragSource, {
         connectorOverlays: [
           ['Arrow', {location: 1}],
@@ -214,16 +221,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   openSelector($event) {
     console.log('mouseMove');
-      this.selectionWidth = Math.abs(this.initialW - $event.pageX);
-      this.selectionHeight = Math.abs(this.initialH - $event.pageY);
-      if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
-        this.pageX = $event.pageX;
-      } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
-        this.pageY = $event.pageY;
-      } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
-        this.pageX = $event.pageX;
-        this.pageY = $event.pageY;
-      }
+    this.selectionWidth = Math.abs(this.initialW - $event.pageX);
+    this.selectionHeight = Math.abs(this.initialH - $event.pageY);
+    if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
+      this.pageX = $event.pageX;
+    } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
+      this.pageY = $event.pageY;
+    } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
+      this.pageX = $event.pageX;
+      this.pageY = $event.pageY;
+    }
   }
 
   bindOpenSelector = (ev) => {
@@ -352,7 +359,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           node.makeSelectionVisible = true;
         }
       }
-  }
+    }
   }
 
   private getNodeByID(Nodes: Array<TNodeTemplate>, id: string) {
