@@ -7,7 +7,7 @@
  * and http://www.apache.org/licenses/LICENSE-2.0
  *
  * Contributors:
- *     Oliver Kopp - initial API and implementation
+ *     Oliver Kopp - initial API and implementation, adaptions to IGenericRepository
  *     Tino Stadelmaier, Philipp Meyer - rename id and/or namespace
  *     Lukas Harzentter - get namespaces for specific component
  *     Nicole Keppler - forceDelete for Namespaces
@@ -35,7 +35,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -46,36 +45,27 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.ws.rs.core.MediaType;
-
 import org.eclipse.winery.common.RepositoryFileReference;
 import org.eclipse.winery.common.Util;
 import org.eclipse.winery.common.ids.GenericId;
 import org.eclipse.winery.common.ids.Namespace;
 import org.eclipse.winery.common.ids.XMLId;
-import org.eclipse.winery.common.ids.definitions.ArtifactTemplateId;
-import org.eclipse.winery.common.ids.definitions.ArtifactTypeId;
-import org.eclipse.winery.common.ids.definitions.CapabilityTypeId;
-import org.eclipse.winery.common.ids.definitions.NodeTypeId;
-import org.eclipse.winery.common.ids.definitions.NodeTypeImplementationId;
-import org.eclipse.winery.common.ids.definitions.PolicyTemplateId;
-import org.eclipse.winery.common.ids.definitions.PolicyTypeId;
-import org.eclipse.winery.common.ids.definitions.RelationshipTypeId;
-import org.eclipse.winery.common.ids.definitions.RelationshipTypeImplementationId;
-import org.eclipse.winery.common.ids.definitions.RequirementTypeId;
-import org.eclipse.winery.common.ids.definitions.ServiceTemplateId;
+import org.eclipse.winery.common.ids.admin.NamespacesId;
 import org.eclipse.winery.common.ids.definitions.TOSCAComponentId;
 import org.eclipse.winery.common.ids.elements.TOSCAElementId;
 import org.eclipse.winery.model.tosca.Definitions;
+import org.eclipse.winery.model.tosca.HasIdInIdOrNameField;
 import org.eclipse.winery.repository.Constants;
 import org.eclipse.winery.repository.backend.AbstractRepository;
 import org.eclipse.winery.repository.backend.BackendUtils;
 import org.eclipse.winery.repository.backend.IRepositoryAdministration;
-import org.eclipse.winery.repository.backend.Repository;
+import org.eclipse.winery.repository.backend.NamespaceManager;
+import org.eclipse.winery.repository.backend.RepositoryFactory;
 import org.eclipse.winery.repository.backend.constants.MediaTypes;
+import org.eclipse.winery.repository.backend.xsd.RepositoryBasedXsdImportManager;
+import org.eclipse.winery.repository.backend.xsd.XsdImportManager;
+import org.eclipse.winery.repository.configuration.FileBasedRepositoryConfiguration;
 import org.eclipse.winery.repository.exceptions.WineryRepositoryException;
-import org.eclipse.winery.repository.resources.AbstractComponentInstanceResource;
-import org.eclipse.winery.repository.resources.AbstractComponentsResource;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -86,6 +76,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.tika.mime.MediaType;
 import org.eclipse.jgit.dircache.InvalidPathException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,10 +97,16 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 	private final FileSystemProvider provider;
 
 	/**
-	 * @param repositoryLocation a string pointing to a location on the file system. May be null.
+	 * @param fileBasedRepositoryConfiguration configuration of the filebased repository. The contained repositoryPath
+	 *                                         may be null
 	 */
-	public FilebasedRepository(String repositoryLocation) {
-		this.repositoryRoot = this.determineRepositoryPath(repositoryLocation);
+	public FilebasedRepository(FileBasedRepositoryConfiguration fileBasedRepositoryConfiguration) {
+		Objects.requireNonNull(fileBasedRepositoryConfiguration);
+		if (fileBasedRepositoryConfiguration.getRepositoryPath().isPresent()) {
+			this.repositoryRoot = this.makeAbsoluteAndCreateRepositoryPath(fileBasedRepositoryConfiguration.getRepositoryPath().get());
+		} else {
+			this.repositoryRoot = this.determineAndCreateRepositoryPath();
+		}
 		this.fileSystem = this.repositoryRoot.getFileSystem();
 		this.provider = this.fileSystem.provider();
 		LOGGER.debug("Repository root: {}", this.repositoryRoot);
@@ -117,6 +114,13 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 
 	private Path makeAbsolute(Path relativePath) {
 		return this.repositoryRoot.resolve(relativePath);
+	}
+
+	/**
+	 * @return the currently configured repository root
+	 */
+	public Path getRepositoryRoot() {
+		return repositoryRoot;
 	}
 
 	@Override
@@ -132,7 +136,7 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 	}
 
 	private Path id2AbsolutePath(GenericId id) {
-		Path relativePath = this.fileSystem.getPath(BackendUtils.getPathInsideRepo(id));
+		Path relativePath = this.fileSystem.getPath(Util.getPathInsideRepo(id));
 		return this.makeAbsolute(relativePath);
 	}
 
@@ -143,33 +147,27 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		return this.id2AbsolutePath(ref.getParent()).resolve(ref.getFileName());
 	}
 
-	protected Path determineRepositoryPath(String repositoryLocation) {
+	protected Path determineAndCreateRepositoryPath() {
 		Path repositoryPath;
-		if (repositoryLocation == null) {
-			if (SystemUtils.IS_OS_WINDOWS) {
-				if (new File(Constants.GLOBAL_REPO_PATH_WINDOWS).exists()) {
-					repositoryLocation = Constants.GLOBAL_REPO_PATH_WINDOWS;
-					File repo = new File(repositoryLocation);
-					try {
-						org.apache.commons.io.FileUtils.forceMkdir(repo);
-					} catch (IOException e) {
-						FilebasedRepository.LOGGER.error("Could not create repository directory", e);
-					}
-					repositoryPath = repo.toPath();
-				} else {
-					repositoryPath = this.createDefaultRepositoryPath();
-				}
+		if (SystemUtils.IS_OS_WINDOWS) {
+			if (Files.exists(Constants.GLOBAL_REPO_PATH_WINDOWS)) {
+				repositoryPath = Constants.GLOBAL_REPO_PATH_WINDOWS;
 			} else {
 				repositoryPath = this.createDefaultRepositoryPath();
 			}
 		} else {
-			File repo = new File(repositoryLocation);
-			try {
-				org.apache.commons.io.FileUtils.forceMkdir(repo);
-			} catch (IOException e) {
-				FilebasedRepository.LOGGER.error("Could not create repository directory", e);
-			}
-			repositoryPath = repo.toPath();
+			repositoryPath = this.createDefaultRepositoryPath();
+		}
+		return repositoryPath;
+	}
+
+	protected Path makeAbsoluteAndCreateRepositoryPath(final Path configuredRepositoryPath) {
+		Objects.requireNonNull(configuredRepositoryPath);
+		Path repositoryPath = configuredRepositoryPath.toAbsolutePath().normalize();
+		try {
+			org.apache.commons.io.FileUtils.forceMkdir(repositoryPath.toFile());
+		} catch (IOException e) {
+			FilebasedRepository.LOGGER.error("Could not create repository directory", e);
 		}
 		return repositoryPath;
 	}
@@ -245,8 +243,7 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 			return;
 		}
 
-		AbstractComponentInstanceResource componentInstanceResource = AbstractComponentsResource.getComponentInstaceResource(oldId);
-		//AbstractComponentInstanceResource newComponentInstanceResource = AbstractComponentsResource.getComponentInstaceResource(newId);
+		Definitions definitions = this.getDefinitions(oldId);
 
 		RepositoryFileReference oldRef = BackendUtils.getRefOfDefinitions(oldId);
 		RepositoryFileReference newRef = BackendUtils.getRefOfDefinitions(newId);
@@ -260,18 +257,18 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		org.apache.commons.io.FileUtils.moveDirectory(oldDir, newDir);
 
 		// Update definitions and store it
-		Definitions definitions = componentInstanceResource.getDefinitions();
 
 		// This also updates the definitions of componentInstanceResource
 		BackendUtils.updateWrapperDefinitions(newId, definitions);
 
 		// This works, because the definitions object here is the same as the definitions object treated at copyIdToFields
 		// newId has to be passed, because the id is final at AbstractComponentInstanceResource
-		componentInstanceResource.copyIdToFields(newId);
+		BackendUtils.copyIdToFields((HasIdInIdOrNameField) definitions.getElement(), newId);
 
 		try {
 			BackendUtils.persist(definitions, newRef, MediaTypes.MEDIATYPE_TOSCA_DEFINITIONS);
 		} catch (InvalidPathException e) {
+			LOGGER.debug("Invalid path during write", e);
 			// QUICK FIX
 			// Somewhere, the first letter is deleted --> /odetypes/http%3A%2F%2Fwww.example.org%2F05/
 			// We just ignore it for now
@@ -297,9 +294,6 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		return Files.exists(absolutePath);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void putContentToFile(RepositoryFileReference ref, String content, MediaType mediaType) throws IOException {
 		if (mediaType == null) {
@@ -314,9 +308,6 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		Files.write(path, content.getBytes());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void putContentToFile(RepositoryFileReference ref, InputStream inputStream, MediaType mediaType) throws IOException {
 		if (mediaType == null) {
@@ -383,9 +374,9 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 						try {
 							id = constructor.newInstance(ns, xmlId);
 						} catch (InstantiationException
-								| IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException e) {
+							| IllegalAccessException
+							| IllegalArgumentException
+							| InvocationTargetException e) {
 							FilebasedRepository.LOGGER.debug("Internal error at invocation of id constructor", e);
 							// abort everything, return invalid result
 							return res;
@@ -492,7 +483,7 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 				try {
 					id = constructor.newInstance(ref, xmlId);
 				} catch (InstantiationException | IllegalAccessException
-						| IllegalArgumentException | InvocationTargetException e) {
+					| IllegalArgumentException | InvocationTargetException e) {
 					FilebasedRepository.LOGGER.debug("Internal error at invocation of id constructor", e);
 					// abort everything, return invalid result
 					return res;
@@ -506,28 +497,8 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 	}
 
 	@Override
-	// below, toscaComponents is an array, which is used in an iterator
-	// As Java does not allow generic arrays, we have to suppress the warning when fetching an element out of the list
-	@SuppressWarnings("unchecked")
 	public Collection<Namespace> getUsedNamespaces() {
-		// @formatter:off
-		@SuppressWarnings("rawtypes")
-		Collection<Class<? extends TOSCAComponentId>> toscaComponentIds = Arrays.asList(
-				ArtifactTemplateId.class,
-				ArtifactTypeId.class,
-				CapabilityTypeId.class,
-				NodeTypeId.class,
-				NodeTypeImplementationId.class,
-				PolicyTemplateId.class,
-				PolicyTypeId.class,
-				RelationshipTypeId.class,
-				RelationshipTypeImplementationId.class,
-				RequirementTypeId.class,
-				ServiceTemplateId.class
-		);
-		// @formatter:on
-
-		return getNamespaces(toscaComponentIds);
+		return getNamespaces(TOSCAComponentId.ALL_TOSCA_COMPONENT_ID_CLASSES);
 	}
 
 	@Override
@@ -535,6 +506,16 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		Collection<Class<? extends TOSCAComponentId>> list = new ArrayList<>();
 		list.add(clazz);
 		return getNamespaces(list);
+	}
+
+	@Override
+	public NamespaceManager getNamespaceManager() {
+		return new ConfigurationBasedNamespaceManager(this.getConfiguration(new NamespacesId()));
+	}
+
+	@Override
+	public XsdImportManager getXsdImportManager() {
+		return new RepositoryBasedXsdImportManager();
 	}
 
 	private Collection<Namespace> getNamespaces(Collection<Class<? extends TOSCAComponentId>> toscaComponentIds) {
@@ -635,26 +616,17 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public long getSize(RepositoryFileReference ref) throws IOException {
 		return Files.size(this.ref2AbsolutePath(ref));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public FileTime getLastModifiedTime(RepositoryFileReference ref) throws IOException {
 		Path path = this.ref2AbsolutePath(ref);
 		return Files.getLastModifiedTime(path);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public InputStream newInputStream(RepositoryFileReference ref) throws IOException {
 		Path path = this.ref2AbsolutePath(ref);
@@ -671,7 +643,7 @@ public class FilebasedRepository extends AbstractRepository implements IReposito
 		try (final ArchiveOutputStream zos = new ArchiveStreamFactory().createArchiveOutputStream("zip", out)) {
 			for (RepositoryFileReference ref : containedFiles) {
 				zos.putArchiveEntry(new ZipArchiveEntry(ref.getFileName()));
-				try (InputStream is = Repository.INSTANCE.newInputStream(ref)) {
+				try (InputStream is = RepositoryFactory.getRepository().newInputStream(ref)) {
 					IOUtils.copy(is, zos);
 				}
 				zos.closeArchiveEntry();

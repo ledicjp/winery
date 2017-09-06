@@ -19,6 +19,7 @@ import { ImplementationAPIData } from './implementationAPIData';
 import { ImplementationService } from './implementations.service';
 import { ImplementationWithTypeAPIData } from './implementationWithTypeAPIData';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Utils } from '../../../wineryUtils/utils';
 
 @Component({
     selector: 'winery-instance-implementations',
@@ -27,6 +28,7 @@ import { ModalDirective } from 'ngx-bootstrap';
         WineryNotificationService],
 })
 export class ImplementationsComponent implements OnInit {
+
     implementationData: ImplementationAPIData[];
     loading = true;
     selectedCell: any;
@@ -66,8 +68,8 @@ export class ImplementationsComponent implements OnInit {
 
     addNewImplementation(localname: string) {
         this.loading = true;
-        const typeNamespace = this.sharedData.selectedNamespace;
-        const typeName = this.sharedData.selectedComponentId;
+        const typeNamespace = this.sharedData.toscaComponent.namespace;
+        const typeName = this.sharedData.toscaComponent.localName;
         const type = '{' + typeNamespace + '}' + typeName;
         const resource = new ImplementationWithTypeAPIData(this.selectedNamespace,
             localname,
@@ -111,6 +113,13 @@ export class ImplementationsComponent implements OnInit {
 
     private handleData(impl: ImplementationAPIData[]) {
         this.implementationData = impl;
+        this.implementationData = this.implementationData.map(item => {
+            const url = '#/' + Utils.getToscaOfTypeOrImplementation(this.sharedData.toscaComponent.toscaType)
+                + '/' + encodeURIComponent(encodeURIComponent(item.namespace))
+                + '/' + item.localname;
+            item.localname = '<a href="' + url + '">' + item.localname + '</a>';
+            return item;
+        });
         this.loading = false;
     }
 
@@ -123,9 +132,9 @@ export class ImplementationsComponent implements OnInit {
         this.loading = false;
         if (data.ok) {
             this.getImplementationData();
-            this.notificationService.success('Created new NODETYPE Implementation');
+            this.notificationService.success('Created new Implementation');
         } else {
-            this.notificationService.error('Failed to create NODETYPE Implementation');
+            this.notificationService.error('Failed to create Implementation');
         }
     }
 
@@ -133,9 +142,9 @@ export class ImplementationsComponent implements OnInit {
         this.loading = false;
         if (data.ok) {
             this.getImplementationData();
-            this.notificationService.success('Deletion of NODETYPE Implementation Successful');
+            this.notificationService.success('Deletion of Implementation Successful');
         } else {
-            this.notificationService.error('Failed to delete NODETYPE Implementation failed');
+            this.notificationService.error('Failed to delete Implementation failed');
         }
     }
 
