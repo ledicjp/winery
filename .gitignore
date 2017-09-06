@@ -5,7 +5,6 @@
 bin/
 build/
 release.properties
-**/*.bak
 **/*.iml
 **/hs_err_pid*.log
 **/pom.xml.*

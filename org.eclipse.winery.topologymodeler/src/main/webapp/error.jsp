@@ -18,8 +18,6 @@
 <%@ page import="org.slf4j.LoggerFactory" %>
 
 <%! static Logger logger = LoggerFactory.getLogger("error.jsp"); %>
-
-<% if (exception != null) { %>
 <% logger.error("An error occurred: {}", exception.getMessage(), exception); %>
 
 <!DOCTYPE html>
@@ -29,8 +27,7 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 </head>
 <body>
-<h3>Error: <%= exception.getMessage() %></h3>
+<h3>Error: <%=exception.getMessage() %></h3>
+<code><%=exception.printStackTrace() %></code>
 </body>
 </html>
-
-<% } %>

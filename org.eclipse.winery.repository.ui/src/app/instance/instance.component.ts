@@ -9,7 +9,7 @@
  * Contributors:
  *     Lukas Harzenetter, Niko Stadelmaier - initial API and implementation
  */
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { InstanceService } from './instance.service';
@@ -19,8 +19,6 @@ import { RemoveWhiteSpacesPipe } from '../wineryPipes/removeWhiteSpaces.pipe';
 import { ExistService } from '../wineryUtils/existService';
 import { isNullOrUndefined } from 'util';
 import { WineryInstance } from '../wineryInterfaces/wineryComponent';
-import { ToscaTypes } from '../wineryInterfaces/enums';
-import { ToscaComponent } from '../wineryInterfaces/toscaComponent';
 
 @Component({
     templateUrl: 'instance.component.html',
@@ -29,10 +27,12 @@ import { ToscaComponent } from '../wineryInterfaces/toscaComponent';
         RemoveWhiteSpacesPipe,
     ]
 })
-export class InstanceComponent implements OnDestroy {
+export class InstanceComponent implements OnInit, OnDestroy {
 
     availableTabs: string[];
-    toscaComponent: ToscaComponent;
+    selectedResource: string;
+    selectedComponentId: string;
+    selectedNamespace: string;
     typeUrl: string;
     typeId: string;
     typeOf: string;
@@ -44,22 +44,27 @@ export class InstanceComponent implements OnDestroy {
                 private router: Router,
                 private service: InstanceService,
                 private notify: WineryNotificationService, private existService: ExistService) {
+    }
+
+    ngOnInit(): void {
         this.routeSub = this.route
             .data
             .subscribe(data => {
-                    this.toscaComponent = data['resolveData'] ? data['resolveData'] : new ToscaComponent(ToscaTypes.Admin, '', '');
+                    this.selectedResource = data['resolveData'].section;
+                    this.selectedNamespace = data['resolveData'].namespace;
+                    this.selectedComponentId = data['resolveData'].instanceId;
 
-                    this.service.setSharedData(this.toscaComponent);
+                    this.service.setSharedData(this.selectedResource, this.selectedNamespace, this.selectedComponentId);
+                    if (this.selectedResource === 'nodeType') {
+                        const img = backendBaseURL + this.service.path + '/visualappearance/50x50';
+                        this.existService.check(img)
+                            .subscribe(
+                                () => this.imageUrl = img,
+                                () => this.imageUrl = null,
+                            );
+                    }
 
-                    if (!isNullOrUndefined(this.toscaComponent)) {
-                        if (this.toscaComponent.toscaType === ToscaTypes.NodeType) {
-                            const img = backendBaseURL + this.service.path + '/visualappearance/50x50';
-                            this.existService.check(img)
-                                .subscribe(
-                                    () => this.imageUrl = img,
-                                    () => this.imageUrl = null,
-                                );
-                        }
+                    if (!this.router.url.includes('/admin')) {
                         this.service.getComponentData()
                             .subscribe(
                                 compData => this.handleComponentData(compData)
@@ -77,22 +82,22 @@ export class InstanceComponent implements OnDestroy {
             );
     }
 
-    deleteComponent() {
+    delete() {
         this.service.deleteComponent().subscribe(data => this.handleDelete(), error => this.handleError(error));
     }
 
     private handleComponentData(data: WineryInstance) {
-        switch (this.toscaComponent.toscaType) {
-            case ToscaTypes.NodeTypeImplementation:
+        switch (this.selectedResource) {
+            case 'nodeTypeImplementation':
                 this.typeUrl = '/nodetypes';
                 break;
-            case ToscaTypes.RelationshipTypeImplementation:
+            case 'relationshipTypeImplementation':
                 this.typeUrl = '/relationshiptypes';
                 break;
-            case ToscaTypes.PolicyTemplate:
+            case 'policyTemplate':
                 this.typeUrl = '/policytypes';
                 break;
-            case ToscaTypes.ArtifactTemplate:
+            case 'artifactTemplate':
                 this.typeUrl = '/artifacttypes';
                 break;
             default:
@@ -124,8 +129,8 @@ export class InstanceComponent implements OnDestroy {
     }
 
     private handleDelete() {
-        this.notify.success('Successfully deleted ' + this.toscaComponent.localName);
-        this.router.navigate(['/' + this.toscaComponent.toscaType]);
+        this.notify.success('Successfully deleted ' + this.selectedComponentId);
+        this.router.navigate(['/' + this.selectedResource.toLowerCase() + 's']);
     }
 
     private handleError(error: any) {

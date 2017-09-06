@@ -662,7 +662,7 @@ div.entityContainer.relationshipTypeImplementation > div.center {
     background: url('../assets/img/entityBox/admin/center.jpg');
 }
 
-div.entityContainer.relationshipTypeImplementation > div.right {
+div.entityContainer.relationshiptypetmplementation > div.right {
     background: url('../assets/img/entityBox/admin/right.jpg');
 }
 
@@ -811,20 +811,18 @@ input.qnameinput {
 #gcprightcolumn {
     background: url('../assets/img/overviewShadowMiddle.jpg');
     width: 35px;
-    position: absolute;
-    top: 356px;
-    bottom: 384px;
+    position: relative;
     padding: 0;
 }
 
 #overviewtopshadow {
-    top: 20px;
+    top: 0;
     background-image: url("../assets/img/overviewShadowTop.jpg");
     height: 269px;
 }
 
 #overviewbottomshadow {
-    bottom: 115px;
+    bottom: 0;
     background-image: url("../assets/img/overviewShadowBottom.jpg");
     height: 269px;
     position: absolute;

@@ -9,17 +9,8 @@
  * Contributors:
  *     Thommy Zelenik - initial API and implementation
  */
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  KeyValueDiffers,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChildren
-} from '@angular/core';
+<<<<<<< HEAD
+import { Component, ElementRef, HostListener, KeyValueDiffers, OnDestroy, OnInit } from '@angular/core';
 import { JsPlumbService } from '../jsPlumbService';
 import { JsonService } from '../jsonService/json.service';
 import { TNodeTemplate, TRelationshipTemplate } from '../ttopology-template';
@@ -29,7 +20,22 @@ import { NgRedux } from '@angular-redux/store';
 import { IWineryState } from '../redux/store/winery.store';
 import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
-import { NodeComponent } from '../node/node.component';
+=======
+import {
+  Component, ElementRef, HostListener, Inject, KeyValueDiffers, OnDestroy, OnInit, NgZone,
+  QueryList, ViewChildren,
+} from '@angular/core';
+import {JsPlumbService} from '../jsPlumbService';
+import {JsonService} from '../jsonService/json.service';
+import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
+import {LayoutDirective} from '../layout.directive';
+import {WineryActions} from '../redux/actions/winery.actions';
+import {NgRedux} from '@angular-redux/store';
+import {IWineryState} from '../redux/store/winery.store';
+import {ButtonsStateModel} from '../models/buttonsState.model';
+import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
+import {NodeComponent} from "../node/node.component";
+>>>>>>> topologymodeler
 
 @Component({
   selector: 'winery-canvas',
@@ -46,7 +52,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
+<<<<<<< HEAD
+=======
   nodeArrayEmpty = false;
+>>>>>>> topologymodeler
   pageX: Number;
   pageY: Number;
   selectionActive: boolean;
@@ -88,6 +97,31 @@ export class CanvasComponent implements OnInit, OnDestroy {
       .subscribe(currentButtonsState => this.setButtonsState(currentButtonsState));
   }
 
+<<<<<<< HEAD
+  addNewNode(currentNodes: Array<TNodeTemplate>): void {
+    if (currentNodes.length > 0) {
+      this.allNodeTemplates = currentNodes;
+    }
+  }
+
+  addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
+    // const newRelationship = currentRelationships[currentRelationships.length - 1];
+    if (currentRelationships.length > 0) {
+      this.allRelationshipTemplates = currentRelationships;
+      this.allRelationshipTemplates.map(relationship => {
+        setTimeout(() => this.displayRelationships(relationship), 1);
+      });
+    }
+  }
+
+  updateGridState(currentPaletteOpenedState: boolean) {
+    if (currentPaletteOpenedState !== true) {
+      this.enhanceGrid = 0;
+      this.offsetX = 0;
+    } else {
+      this.offsetX = -200;
+      this.enhanceGrid = 200;
+=======
   updateNodes(currentNodes: Array<TNodeTemplate>): void {
     this.allNodeTemplates = currentNodes;
     this.allNodesIds = this.allNodeTemplates.map(node => node.id);
@@ -106,6 +140,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           setTimeout(() => this.displayRelationships(newRelationship), 1);
         }
       }
+>>>>>>> topologymodeler
     }
   }
 
@@ -164,7 +199,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   setDragSource($event): void {
-    if (!this.dragSourceActive) {
+   if (!this.dragSourceActive) {
       this.newJsPlumbInstance.makeSource($event.dragSource, {
         connectorOverlays: [
           ['Arrow', {location: 1}],
@@ -221,16 +256,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   openSelector($event) {
     console.log('mouseMove');
-    this.selectionWidth = Math.abs(this.initialW - $event.pageX);
-    this.selectionHeight = Math.abs(this.initialH - $event.pageY);
-    if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
-      this.pageX = $event.pageX;
-    } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
-      this.pageY = $event.pageY;
-    } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
-      this.pageX = $event.pageX;
-      this.pageY = $event.pageY;
-    }
+      this.selectionWidth = Math.abs(this.initialW - $event.pageX);
+      this.selectionHeight = Math.abs(this.initialH - $event.pageY);
+      if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
+        this.pageX = $event.pageX;
+      } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
+        this.pageY = $event.pageY;
+      } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
+        this.pageX = $event.pageX;
+        this.pageY = $event.pageY;
+      }
   }
 
   bindOpenSelector = (ev) => {
@@ -298,6 +333,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
     );
   }
 
+<<<<<<< HEAD
+  repaintJsPlumb() {
+    this.newJsPlumbInstance.repaintEverything();
+  }
+
+=======
+>>>>>>> topologymodeler
   hideSidebar() {
     this.ngRedux.dispatch(this.actions.openSidebar({
       sidebarContents: {
@@ -306,6 +348,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
         nameTextFieldValue: ''
       }
     }));
+<<<<<<< HEAD
+  }
+
+  ngOnInit() {
+    this.newJsPlumbInstance = this.jsPlumbService.getJsPlumbInstance();
+    this.newJsPlumbInstance.setContainer('container');
+    this.visuals = this.jsonService.getVisuals();
+    this.assignVisuals();
+=======
+>>>>>>> topologymodeler
   }
 
   checkFocusNode($event): void {
@@ -359,7 +411,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           node.makeSelectionVisible = true;
         }
       }
-    }
+  }
   }
 
   private getNodeByID(Nodes: Array<TNodeTemplate>, id: string) {

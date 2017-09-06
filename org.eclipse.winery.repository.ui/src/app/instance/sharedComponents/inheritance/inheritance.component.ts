@@ -16,7 +16,6 @@ import { InstanceService } from '../../instance.service';
 import { InheritanceService } from './inheritance.service';
 import { InheritanceApiData } from './inheritanceApiData';
 import { NameAndQNameApiDataList } from '../../../wineryQNameSelector/wineryNameAndQNameApiData';
-import { ToscaTypes } from '../../../wineryInterfaces/enums';
 
 
 @Component({
@@ -28,7 +27,7 @@ export class InheritanceComponent implements OnInit {
 
     inheritanceApiData: InheritanceApiData;
     availableSuperClasses: NameAndQNameApiDataList;
-    toscaType: ToscaTypes;
+    selectedResource: string;
     loading = true;
 
     constructor(private sharedData: InstanceService,
@@ -47,7 +46,7 @@ export class InheritanceComponent implements OnInit {
                 data => this.handleSuperClassData(data),
                 error => this.handleError(error)
             );
-        this.toscaType = this.sharedData.toscaComponent.toscaType;
+        this.selectedResource = this.sharedData.selectedResource.toLowerCase() + 's';
     }
 
     onSelectedValueChanged(value: string) {

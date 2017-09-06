@@ -10,11 +10,22 @@
  *     Lukas Harzenetter - initial API and implementation
  */
 
-// when running in development mode on port 4200, use default port 8080
+export const sections = {
+    nodetypes : 'nodeType',
+    servicetemplates : 'serviceTemplate',
+    relationshiptypes : 'relationshipType',
+    artifacttypes: 'artifactType',
+    artifacttemplates: 'artifactTemplate',
+    requirementtypes: 'requirementType',
+    capabilitytypes: 'capabilityType',
+    nodetypeimplementations : 'nodeTypeImplementation',
+    relationshiptypeimplementations : 'relationshipTypeImplementation',
+    policytypes: 'policyType',
+    policytemplates: 'policyTemplate',
+    imports: 'xSDImport',
+};
+
+// when running in development mode on port 3000, use default port 8080
 // otherwise, assume that backend runs on the some port
-export const hostURL = location.protocol + '//' + location.hostname + ':' + (location.port === '4200' ? '8080' : location.port);
+export const hostURL = location.protocol + '//' + location.hostname + ':' + (location.port === '3000' ? '8080' : location.port);
 export const backendBaseURL = hostURL + '/winery';
-// when running in development mode, use the workflow modelers development port
-// it also is not running on /winery-workflowmodeler in dev-mode.
-export const workflowModelerURL = location.protocol + '//' + location.hostname + ':' + (location.port === '4200' ? '9527' : location.port
-    + '/winery-workflowmodeler');

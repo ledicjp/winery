@@ -10,16 +10,20 @@
  *     Lukas Harzenetter - initial API and implementation
  */
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import { WineryNotificationService } from '../../wineryNotificationModule/wineryNotification.service';
 
 @Injectable()
-export class EntityContainerService {
+export class EntityContainterService {
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private notify: WineryNotificationService) {
     }
 
-    deleteComponent(url: string, id: string): Observable<Response> {
-        return this.http.delete(url + '/');
+    deleteComponent(url: string, id: string) {
+        this.http.delete(url)
+            .subscribe(
+                data => this.notify.success('Successfully deleted ' + id),
+                error => this.notify.error('Error deleting ' + id)
+            );
     }
 }

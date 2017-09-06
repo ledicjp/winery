@@ -10,10 +10,10 @@
  *     Lukas Harzenetter - initial API and implementation
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { sections } from '../configuration';
+import { isNullOrUndefined } from 'util';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ToscaTypes } from '../wineryInterfaces/enums';
-import { Utils } from '../wineryUtils/utils';
 
 @Component({
     selector: 'winery-header',
@@ -40,14 +40,19 @@ export class HeaderComponent implements OnInit {
                 others = others.split('/')[0];
             }
 
-            if (!(others.includes(ToscaTypes.ServiceTemplate) ||
-                    others.includes(ToscaTypes.NodeType) ||
-                    others.includes(ToscaTypes.RelationshipType) ||
+            if (!isNullOrUndefined(sections[others]) && !(
+                    others.includes('servicetemplates') ||
+                    others.includes('nodetypes') ||
+                    others.includes('relationshiptypes') ||
                     others.includes('other') ||
                     others.includes('admin')
                 )
             ) {
-                this.selectedOtherComponent = ': ' + Utils.getToscaTypeNameFromToscaType(Utils.getToscaTypeFromString(others)) + 's';
+                this.selectedOtherComponent = ': '
+                    + sections[others]
+                        .replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, (str: string) => str.toUpperCase())
+                    + 's';
             } else {
                 this.selectedOtherComponent = '';
             }

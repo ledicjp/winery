@@ -11,8 +11,9 @@
  */
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { isNullOrUndefined } from 'util';
+import { sections } from '../configuration';
 import { SectionResolverData } from '../wineryInterfaces/resolverData';
-import { Utils } from '../wineryUtils/utils';
 
 @Injectable()
 export class SectionResolver implements Resolve<SectionResolverData> {
@@ -20,9 +21,14 @@ export class SectionResolver implements Resolve<SectionResolverData> {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): SectionResolverData {
-        const section = Utils.getToscaTypeFromString(route.url[0].path);
+        const section = sections[route.params['section']];
         const namespace = decodeURIComponent(decodeURIComponent(route.params['namespace']));
 
-        return { section: section, namespace: namespace, path: route.url[0].path };
+        if (!isNullOrUndefined(section)) {
+            return {section: section, namespace: namespace, path: route.params['section']};
+        } else { // id not found
+            this.router.navigate(['/notfound']);
+            return null;
+        }
     }
 }

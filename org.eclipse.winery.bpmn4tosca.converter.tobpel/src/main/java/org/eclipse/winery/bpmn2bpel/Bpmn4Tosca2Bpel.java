@@ -21,11 +21,12 @@ import java.util.List;
 import org.eclipse.winery.bpmn2bpel.model.ManagementFlow;
 import org.eclipse.winery.bpmn2bpel.parser.Bpmn4JsonParser;
 import org.eclipse.winery.bpmn2bpel.parser.ParseException;
-import org.eclipse.winery.bpmn2bpel.planwriter.BpelPlanArtefactWriter;
 import org.eclipse.winery.bpmn2bpel.planwriter.PlanWriterException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.eclipse.winery.bpmn2bpel.planwriter.BpelPlanArtefactWriter;
 
 public class Bpmn4Tosca2Bpel {
 
@@ -41,7 +42,8 @@ public class Bpmn4Tosca2Bpel {
 
 	public static final String DIR_NAME_TEMP_BPMN4TOSCA = "bpmn4tosca";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Bpmn4Tosca2Bpel.class);
+
+	private static Logger log = LoggerFactory.getLogger(Bpmn4Tosca2Bpel.class);
 
 	/**
 	 * Transforms the given BPMN4Tosca Json management into a BPEL management plan that can be enacted with the OpenTosca runtime.
@@ -63,7 +65,7 @@ public class Bpmn4Tosca2Bpel {
 	 * @throws PlanWriterException
 	 */
 	public void transform(URI srcBpmn4ToscaJsonFile, URI targetBPELArchive) throws ParseException, PlanWriterException {
-		//LOGGER.debug("Transforming ");
+		//log.debug("Transforming ");
 
 		Bpmn4JsonParser parser = new Bpmn4JsonParser();//TODO To singleton
 		/* Create object representation of Json */
@@ -72,6 +74,7 @@ public class Bpmn4Tosca2Bpel {
 		List<Path> planArtefactPaths = new ArrayList<Path>();
 		try {
 			Path tempPath = FileUtil.createTempDir(DIR_NAME_TEMP_BPMN4TOSCA);
+
 
 			BpelPlanArtefactWriter writer = new BpelPlanArtefactWriter(managementFlow);
 
@@ -90,20 +93,24 @@ public class Bpmn4Tosca2Bpel {
 			String deploymentDesc = writer.completeDeploymentDescriptorTemplate();
 			planArtefactPaths.add(FileUtil.writeStringToFile(deploymentDesc, Paths.get(tempPath.toString(), FILE_NAME_DEPLOYMENT_DESC)));
 
-			LOGGER.debug("Creating BPEL Archive...");
+			log.debug("Creating BPEL Archive...");
 			Path zipFilePath = FileUtil.createApacheOdeProcessArchive(Paths.get(targetBPELArchive), planArtefactPaths);
-			LOGGER.debug("Management plan zip file saved to " + zipFilePath.toString());
+			log.debug("Management plan zip file saved to " + zipFilePath.toString());
 		} catch (Exception e) {
 			throw new PlanWriterException(e);
 		} finally {
 			/* Delete created plan artifact files from temp directory */
 			try {
-				LOGGER.debug("Deleting temporary plan artefact files...");
+				log.debug("Deleting temporary plan artefact files...");
 				FileUtil.deleteFiles(planArtefactPaths);
 			} catch (IOException e) {
 				throw new PlanWriterException(e);
 			}
 		}
+
+
 	}
+
+
 
 }

@@ -15,7 +15,6 @@ import { backendBaseURL } from '../../configuration';
 import { RemoveWhiteSpacesPipe } from '../../wineryPipes/removeWhiteSpaces.pipe';
 import { InstanceService } from '../instance.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ToscaComponent } from '../../wineryInterfaces/toscaComponent';
 
 @Component({
     selector: 'winery-instance-header',
@@ -30,7 +29,9 @@ import { ToscaComponent } from '../../wineryInterfaces/toscaComponent';
 
 export class InstanceHeaderComponent implements OnInit {
 
-    @Input() toscaComponent: ToscaComponent;
+    @Input() selectedNamespace: string;
+    @Input() selectedComponentId: string;
+    @Input() selectedResource: string;
     @Input() typeUrl: string;
     @Input() typeId: string;
     @Input() typeOf: string;
@@ -42,14 +43,16 @@ export class InstanceHeaderComponent implements OnInit {
 
     needTwoLines = false;
     selectedTab: string;
+    backendLink: string;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private sharedData: InstanceService) {
     }
 
     ngOnInit(): void {
         if (this.subMenu.length > 7) {
             this.needTwoLines = true;
         }
+        this.backendLink = backendBaseURL + this.sharedData.path;
     }
 
     removeConfirmed() {
