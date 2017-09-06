@@ -19,7 +19,8 @@ import { TNodeTemplate } from '../ttopology-template';
       })),
       state('extended', style({
         height: '40px',
-        width: '100%',
+        width: 'auto',
+        minWidth: '200px'
       })),
       transition('shrunk => extended', animate('200ms ease-out')),
       transition('extended => shrunk', animate('200ms ease-out'))

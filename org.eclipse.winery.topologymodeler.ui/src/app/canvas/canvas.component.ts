@@ -82,10 +82,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
-    const newRelationship = currentRelationships[currentRelationships.length - 1];
+    // const newRelationship = currentRelationships[currentRelationships.length - 1];
     if (currentRelationships.length > 0) {
-      this.allRelationshipTemplates.push(newRelationship);
-      setTimeout(() => this.displayRelationships(newRelationship), 1);
+      this.allRelationshipTemplates = currentRelationships;
+      this.allRelationshipTemplates.map(relationship => {
+        setTimeout(() => this.displayRelationships(relationship), 1);
+      });
     }
   }
 
@@ -109,14 +111,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this._layoutDirective.layoutNodes(this.allNodeTemplates, this.allRelationshipTemplates, this.newJsPlumbInstance);
       this.ngRedux.dispatch(this.topologyRendererActions.executeLayout());
     } else if (alignmentButtonAlignH) {
-      if (this.selectedNodes.length > 1) {
+      if (this.selectedNodes.length >= 1) {
         this._layoutDirective.alignHorizontal(this.selectedNodes, this.newJsPlumbInstance);
       } else {
         this._layoutDirective.alignHorizontal(this.allNodeTemplates, this.newJsPlumbInstance);
       }
       this.ngRedux.dispatch(this.topologyRendererActions.executeAlignH());
     } else if (alignmentButtonAlignV) {
-      if (this.selectedNodes.length > 1) {
+      if (this.selectedNodes.length >= 1) {
         this._layoutDirective.alignVertical(this.selectedNodes, this.newJsPlumbInstance);
       } else {
         this._layoutDirective.alignVertical(this.allNodeTemplates, this.newJsPlumbInstance);
