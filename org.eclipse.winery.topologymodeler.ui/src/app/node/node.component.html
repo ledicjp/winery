@@ -1,31 +1,32 @@
-<div class="container rounded" style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
+<div class="container rounded"
+     style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
      (mousedown)="trackTimeOfMouseDown($event)"
      (mouseup)="trackTimeOfMouseUp($event)"
      (click)="showConnectorEndpoint($event)">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
-       [class.unselected]="!makeSelectionVisible">
+       [class.unselected]="!makeSelectionVisible"
+       (click)="testTimeDifference(); openSidebar($event);">
     <div class="col-sm-3">
-      <img *ngIf="!nodeImageUrl" src="https://api.adorable.io/avatars/50/{{title}}" style="border-radius: 10%; margin-top: 1px">
+      <img *ngIf="!nodeImageUrl" src="https://api.adorable.io/avatars/50/{{title}}"
+           style="border-radius: 10%; margin-top: 1px">
       <img *ngIf="nodeImageUrl" src="{{nodeImageUrl}}">
     </div>
     <div id="specifierDiv" class="col-sm-9">
       <table class="table table-active table-border--grey table-sm header-table">
-
-        <tr>
+        <tr [class.flashit]="ngOnChanges()">
           <td class="td-key">name:</td>
-          <td class="td-value">{{title}}</td>
+          <td class="td-value">{{name}}</td>
         </tr>
         <tr *ngIf="navbarButtonsState.buttonsState.idsButton">
           <td class="td-key">id:</td>
           <td class="td-value" style="color: crimson">{{title}}</td>
         </tr>
         <tr *ngIf="navbarButtonsState.buttonsState.typesButton">
-          <td class="td-key">link:</td>
+          <td class="td-key">type:</td>
           <td class="btn-link td-value">{{title}}</td>
         </tr>
-
       </table>
     </div>
   </div>
@@ -40,7 +41,7 @@
 
   <!-- Repaint jsPlumb on every accordion click -->
 
-  <accordion (click)="repaint($event)">
+  <accordion #accordion (click)="repaint($event)">
 
 
     <!-- PROPERTIES -->
@@ -52,7 +53,7 @@
         Properties
         <i class="pull-sm-0 float-sm-right fa icon-styling padding-top--2px"
            [ngClass]="{'fa-chevron-down': propertiesgroup?.isOpen, 'fa-chevron-right': !propertiesgroup?.isOpen}"
-           ></i>
+        ></i>
       </div>
       <winery-properties></winery-properties>
     </accordion-group>
@@ -78,7 +79,7 @@
       panelClass="accordionGroupPanel"
       *ngIf="navbarButtonsState.buttonsState.requirementsCapabilitiesButton">
       <div accordion-heading>
-        Requirements - Capabilities
+        Requirements & Capabilities
         <i class="pull-sm-0 float-sm-right fa icon-styling padding-top--2px"
            [ngClass]="{'fa-chevron-down': requirementscapabilitiesgroup?.isOpen,
            'fa-chevron-right': !requirementscapabilitiesgroup?.isOpen}"

@@ -18,6 +18,8 @@
 
   <winery-node *ngFor="let node of allNodeTemplates"
                [title]="node.id"
+               [name]="node.name"
+               [needsToBeFlashed]="needsToBeFlashed"
                [nodeColor]="node.color"
                (sendId)="makeDraggable($event)"
                [left]="node.otherAttributes.x + 'px'"

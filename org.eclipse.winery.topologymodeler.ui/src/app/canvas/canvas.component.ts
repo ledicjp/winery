@@ -19,7 +19,7 @@ import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
 import {LayoutDirective} from '../layout.directive';
 import {WineryActions} from '../redux/actions/winery.actions';
 import {NgRedux} from '@angular-redux/store';
-import {IWIneryState} from '../redux/store/winery.store';
+import {IWineryState} from '../redux/store/winery.store';
 import {ButtonsStateModel} from '../models/buttonsState.model';
 import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
 import {NodeComponent} from "../node/node.component";
@@ -69,7 +69,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
               differsPressedNavBarButton: KeyValueDiffers,
-              private ngRedux: NgRedux<IWIneryState>,
+              private ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions,
               private topologyRendererActions: TopologyRendererActions,
               private zone: NgZone) {
@@ -289,6 +289,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
       ((aLeft + a.getBoundingClientRect().width) < bLeft) ||
       (aLeft > (bLeft + b.getBoundingClientRect().width))
     );
+  }
+
+  hideSidebar() {
+    this.ngRedux.dispatch(this.actions.openSidebar({
+      sidebarContents: {
+        sidebarVisible: false,
+        nodeId: '',
+        nameTextFieldValue: ''
+      }
+    }));
   }
 
   checkFocusNode($event): void {
