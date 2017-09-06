@@ -8,12 +8,9 @@
  *
  * Contributors:
  *    Oliver Kopp - initial code generation using vhudson-jaxb-ri-2.1-2
- *    Christoph Kleine - hashcode, equals, builder pattern, Nullable and NonNull annotations
  *******************************************************************************/
 
 package org.eclipse.winery.model.tosca;
-
-import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,17 +19,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.Element;
 
 
 /**
  * <p>Java class for tConstraint complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="tConstraint">
  *   &lt;complexContent>
@@ -45,13 +39,15 @@ import org.w3c.dom.Element;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tConstraint", propOrder = {
-        "any"
+    "any"
 })
 @XmlSeeAlso({
-        TPropertyConstraint.class
+    TPropertyConstraint.class
 })
 public class TConstraint {
 
@@ -61,34 +57,27 @@ public class TConstraint {
     @XmlSchemaType(name = "anyURI")
     protected String constraintType;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TConstraint)) return false;
-        TConstraint that = (TConstraint) o;
-        return Objects.equals(any, that.any) &&
-                Objects.equals(constraintType, that.constraintType);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(any, constraintType);
-    }
-
     /**
      * Gets the value of the any property.
-     *
-     * @return possible object is {@link Element } {@link Object }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Element }
+     *     {@link Object }
+     *     
      */
-    @Nullable
     public Object getAny() {
         return any;
     }
 
     /**
      * Sets the value of the any property.
-     *
-     * @param value allowed object is {@link Element } {@link Object }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Element }
+     *     {@link Object }
+     *     
      */
     public void setAny(Object value) {
         this.any = value;
@@ -96,20 +85,26 @@ public class TConstraint {
 
     /**
      * Gets the value of the constraintType property.
-     *
-     * @return possible object is {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    @NonNull
     public String getConstraintType() {
         return constraintType;
     }
 
     /**
      * Sets the value of the constraintType property.
-     *
-     * @param value allowed object is {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setConstraintType(String value) {
         this.constraintType = value;
     }
+
 }

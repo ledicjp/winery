@@ -14,7 +14,6 @@ import { ExistService } from '../wineryUtils/existService';
 import { isNullOrUndefined } from 'util';
 import { ModalDirective } from 'ngx-bootstrap';
 import { backendBaseURL } from '../configuration';
-import { ToscaTypes } from '../wineryInterfaces/enums';
 
 /**
  * This component is for checking whether a given component already exists in the repository and displays it
@@ -39,8 +38,6 @@ export class WineryComponentExistsComponent implements OnInit {
     @Input() generateData: GenerateData;
     @Input() modalRef: ModalDirective;
 
-    tosca: ToscaTypes;
-
     constructor(private existService: ExistService) {
     }
 
@@ -51,10 +48,11 @@ export class WineryComponentExistsComponent implements OnInit {
     }
 
     checkImplementationExists(): void {
-        if (!isNullOrUndefined(this.generateData) && !isNullOrUndefined(this.generateData.toscaType)
+        if (!isNullOrUndefined(this.generateData) && !isNullOrUndefined(this.generateData.selectedResource)
             && !isNullOrUndefined(this.generateData.name) && this.generateData.name.length > 0) {
             this.generateData.url = backendBaseURL + '/'
-                + this.generateData.toscaType + '/'
+                + this.generateData.selectedResource.replace(' ', '').toLowerCase()
+                + this.generateData.selectedResourceType.toLowerCase() + 's/'
                 + encodeURIComponent(encodeURIComponent(this.generateData.namespace)) + '/'
                 + this.generateData.name + '/';
         }
@@ -71,9 +69,10 @@ export class WineryComponentExistsComponent implements OnInit {
 }
 
 export class GenerateData {
-    toscaType: ToscaTypes;
     createComponent: boolean;
     namespace: string;
     name: string;
+    selectedResource: string;
+    selectedResourceType: string;
     url: string;
 }

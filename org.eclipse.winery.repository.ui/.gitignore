@@ -5,10 +5,8 @@
 /target
 /typings
 /dist
+/src/**/*.js
+/src/**/*.js.map
 npm-debug.log
 
 !/src/static/**/*
-/build/
-/doc/
-/dist/
-/src/typings.d.ts

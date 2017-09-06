@@ -18,10 +18,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.winery.bpmn2bpel.model.Gateway;
-import org.eclipse.winery.bpmn2bpel.model.Link;
 import org.eclipse.winery.bpmn2bpel.model.ManagementFlow;
-import org.eclipse.winery.bpmn2bpel.model.ManagementTask;
 import org.eclipse.winery.bpmn2bpel.model.Node;
 
 import org.apache.velocity.Template;
@@ -31,22 +28,26 @@ import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.GraphIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.eclipse.winery.bpmn2bpel.model.Gateway;
+import org.eclipse.winery.bpmn2bpel.model.Link;
+import org.eclipse.winery.bpmn2bpel.model.ManagementTask;
 
 public class BpelPlanArtefactWriter {
 
+	private ManagementFlow mangagementFlow;
+
 	public static String TEMPLATE_PATH = "./src/main/resources/templates/";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BpelPlanArtefactWriter.class);
-
-	private ManagementFlow mangagementFlow;
+	private static Logger log = LoggerFactory.getLogger(BpelPlanArtefactWriter.class);
 
 	public BpelPlanArtefactWriter(ManagementFlow mangagementFlow) {
 		this.mangagementFlow = mangagementFlow;
 		Velocity.init();
 	}
 
+
 	public String completePlanTemplate() {
-		LOGGER.debug("Completing BPEL process template...");
+		log.debug("Completing BPEL process template...");
 
 		/* Traverse  the management flow and add the nodes in the order of their execution to a list */
 		List<Node> managementTaskSeq = new ArrayList<Node>();
@@ -63,6 +64,7 @@ public class BpelPlanArtefactWriter {
 			}
 		}
 
+
 		VelocityContext context = new VelocityContext();
 		/* In the Velocity template for each management task an own scope is created containing the variables and
 		 * activities required to perform the management task based on the properties of the respective task  */
@@ -73,14 +75,14 @@ public class BpelPlanArtefactWriter {
 
 		String bpelProcessContent = planWriter.toString();
 
-		LOGGER.debug("Completed BPEL process template" + bpelProcessContent);
+		log.debug("Completed BPEL process template" + bpelProcessContent);
 
 		return bpelProcessContent;
 
 	}
 
 	public String completePlanWsdlTemplate() {
-		LOGGER.debug("Completing BPEL WSDL template");
+		log.debug("Completing BPEL WSDL template");
 
 		VelocityContext context = new VelocityContext();
 		Template wsdlTemplate = Velocity.getTemplate(TEMPLATE_PATH + "management_plan_wsdl_template.xml");
@@ -90,13 +92,13 @@ public class BpelPlanArtefactWriter {
 
 		String bpelProcessWSDL = wsdlWriter.toString();
 
-		LOGGER.debug("Completed BPEL WSDL template" + bpelProcessWSDL);
+		log.debug("Completed BPEL WSDL template" + bpelProcessWSDL);
 
 		return bpelProcessWSDL;
 	}
 
 	public String completeInvokerWsdlTemplate() {
-		LOGGER.debug("Retrieving service invoker WSDL");
+		log.debug("Retrieving service invoker WSDL");
 
 		VelocityContext context = new VelocityContext();
 		Template invokerWsdlTemplate = Velocity.getTemplate(TEMPLATE_PATH + "invoker.wsdl");
@@ -108,7 +110,7 @@ public class BpelPlanArtefactWriter {
 	}
 
 	public String completeInvokerXsdTemplate() {
-		LOGGER.debug("Retrieving service invoker XSD");
+		log.debug("Retrieving service invoker XSD");
 
 		VelocityContext context = new VelocityContext();
 		Template invokerXsdTemplate = Velocity.getTemplate(TEMPLATE_PATH + "invoker.xsd");
@@ -120,7 +122,7 @@ public class BpelPlanArtefactWriter {
 	}
 
 	public String completeDeploymentDescriptorTemplate() {
-		LOGGER.debug("Retrieving Apache ODE deployment descriptor");
+		log.debug("Retrieving Apache ODE deployment descriptor");
 
 		VelocityContext context = new VelocityContext();
 		Template invokerXsdTemplate = Velocity.getTemplate(TEMPLATE_PATH + "deploy.xml");
@@ -130,5 +132,7 @@ public class BpelPlanArtefactWriter {
 
 		return xsdWriter.toString();
 	}
+
+
 
 }

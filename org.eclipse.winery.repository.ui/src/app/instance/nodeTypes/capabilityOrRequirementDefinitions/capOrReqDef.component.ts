@@ -158,7 +158,7 @@ export class CapOrReqDefComponent implements OnInit {
             type.substring(type.lastIndexOf('{') + 1, type.lastIndexOf('}'))
         ));
         const absoluteURL = '/' + this.types + '/' + namespaceEncoded + '/' + name;
-        return '<a' + ' [routerLink]="[\'' + absoluteURL + '\']">' + name + '</a>';
+        return '<a target="_blank"' + ' href="' + absoluteURL + '">' + name + '</a>';
     }
 
     private getTypeURI(type: string): string {
@@ -259,7 +259,7 @@ export class CapOrReqDefComponent implements OnInit {
      * If no constraint is selected a new constraint is created
      * @param constraint to be edited
      */
-    openEditConstraintModal(constraint?: Constraint) {
+    openEditConstraintModal(constraint: Constraint) {
         const re = /\#\#/;
         const xmlDef = /<\?xml.*>\n/;
 

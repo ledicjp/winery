@@ -20,15 +20,6 @@
 
 <div id="pre-bootstrap-container">
 
-  <!--
-          In this approach, rather than putting the pre-bootstrap content inside
-          the <my-app> component content, we're leaving it external to the Angular 2
-          application entirely. This way, the content is not automatically removed when
-          the root component template is rendered. Instead, we'll leave this overlay in
-          place until the "appready" event bubbles up to the document, at which point,
-          we can gracefully fade it out of view.
-      -->
-
   <script type="text/javascript">
     // Listen for the "appready" event, which will be emitted by the application
     // and bubble up (as far as we know) to the document root.

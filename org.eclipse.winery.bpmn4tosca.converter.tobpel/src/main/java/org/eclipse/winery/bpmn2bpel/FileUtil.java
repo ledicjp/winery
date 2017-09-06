@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
+	private static Logger log = LoggerFactory.getLogger(FileUtil.class);
 
 	public static Path createTempDir(String subdirectory) throws IOException {
 
@@ -51,7 +51,7 @@ public class FileUtil {
 	}
 
 	public static Path createApacheOdeProcessArchive(Path zipFilePath, List<Path> filePaths) throws IOException {
-		LOGGER.debug("Creating BPEL process archive for Apache ODE");
+		log.debug("Creating BPEL process archive for Apache ODE");
 
 		URI uri = URI.create("jar:file:" + zipFilePath.toUri().getPath());
 
@@ -63,7 +63,7 @@ public class FileUtil {
 			/* Iterate over files and add them to the zip */
 			for (Path src : filePaths) {
 				if (!Files.isDirectory(src)) {
-					LOGGER.debug("Adding file " + src.getFileName() + " to process archive");
+					log.debug("Adding file " + src.getFileName() + " to process archive");
 					Path dest = zipFileSystem.getPath(src.getFileName().toString());
 					Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
 				}
@@ -75,7 +75,7 @@ public class FileUtil {
 	public static void deleteFiles(List<Path> filePaths) throws IOException {
 		for (Path src : filePaths) {
 			if (!Files.isDirectory(src)) {
-				LOGGER.debug("Deleting file " + src.toAbsolutePath());
+				log.debug("Deleting file " + src.toAbsolutePath());
 				Files.delete(src);
 			}
 		}

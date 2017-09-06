@@ -29,6 +29,10 @@
 		<name>Eclipse.org - Winery Project</name>
 		<url>http://www.eclipse.org/winery</url>
 	</organization>
+	<issueManagement>
+		<system>bugzilla</system>
+		<url>https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Winery</url>
+	</issueManagement>
 	<inceptionYear>2012</inceptionYear>
 	<mailingLists>
 		<mailingList>
@@ -54,11 +58,14 @@
 		<developerConnection>scm:git:https://github.com/eclipse/winery.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+    <prerequisites>
+        <maven>3.0.3</maven>
+    </prerequisites>
 	<distributionManagement>
 		<repository>
 			<id>internal.repo</id>
 			<name>Temporary Staging Repository</name>
-			<url>file://${basedir}/target/mvn-repo</url>
+			<url>file://${session.executionRootDirectory}/target/mvn-repo</url>
 		</repository>
 	</distributionManagement>
 	<properties>
@@ -67,7 +74,6 @@
 	<modules>
 		<module>org.eclipse.winery.bpmn4tosca.converter.tobpel</module>
 		<module>org.eclipse.winery.common</module>
-		<module>org.eclipse.winery.cli</module>
 		<module>org.eclipse.winery.generators.ia</module>
 		<module>org.eclipse.winery.highlevelrestapi</module>
 		<module>org.eclipse.winery.model.bpmn4tosca</module>
@@ -77,7 +83,6 @@
 		<module>org.eclipse.winery.repository</module>
 		<module>org.eclipse.winery.repository.client</module>
 		<module>org.eclipse.winery.repository.configuration</module>
-		<module>org.eclipse.winery.repository.rest</module>
 		<module>org.eclipse.winery.repository.ui</module>
 		<module>org.eclipse.winery.topologymodeler</module>
 		<module>org.eclipse.winery.workflowmodeler</module>
@@ -131,7 +136,7 @@
 					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
 					<force>true</force>
 					<merge>true</merge>
-					<outputDirectory>${basedir}/target/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+					<outputDirectory>${session.executionRootDirectory}/target/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
 					<branch>refs/heads/master</branch>           <!-- remote branch name -->
 					<includes><include>**/*</include></includes>
 					<repositoryOwner>opentosca</repositoryOwner> <!-- github username  -->

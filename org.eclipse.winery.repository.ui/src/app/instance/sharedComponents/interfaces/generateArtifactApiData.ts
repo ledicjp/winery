@@ -8,7 +8,6 @@
  *
  * Contributors:
  *     Lukas Harzenetter - initial API and implementation
- *     Oliver Kopp - fix IA generation
  */
 export class GenerateArtifactApiData {
     // implementationName = artifactTemplateName; MUST be set
@@ -17,7 +16,6 @@ export class GenerateArtifactApiData {
     artifactTemplateName: string;
     artifactTemplateNamespace: string;
     autoCreateArtifactTemplate: string;
-    autoGenerateIA: string;
     // MUST be set
     artifactType = '{http://opentosca.org/artifacttypes}WAR';
     artifactSpecificContent: string;

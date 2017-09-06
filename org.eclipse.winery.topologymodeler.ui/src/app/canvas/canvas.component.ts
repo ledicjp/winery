@@ -165,7 +165,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setDragSource($event): void {
-    if (!this.dragSourceActive) {
+   if (!this.dragSourceActive) {
       this.newJsPlumbInstance.makeSource($event.dragSource, {
         connectorOverlays: [
           ['Arrow', {location: 1}],
@@ -222,16 +222,16 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openSelector($event) {
     console.log('mouseMove');
-    this.selectionWidth = Math.abs(this.initialW - $event.pageX);
-    this.selectionHeight = Math.abs(this.initialH - $event.pageY);
-    if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
-      this.pageX = $event.pageX;
-    } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
-      this.pageY = $event.pageY;
-    } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
-      this.pageX = $event.pageX;
-      this.pageY = $event.pageY;
-    }
+      this.selectionWidth = Math.abs(this.initialW - $event.pageX);
+      this.selectionHeight = Math.abs(this.initialH - $event.pageY);
+      if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
+        this.pageX = $event.pageX;
+      } else if ($event.pageY <= this.initialH && $event.pageX >= this.initialW) {
+        this.pageY = $event.pageY;
+      } else if ($event.pageY < this.initialH && $event.pageX < this.initialW) {
+        this.pageX = $event.pageX;
+        this.pageY = $event.pageY;
+      }
   }
 
   bindOpenSelector = (ev) => {

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.virgo.util.parser.manifest.ManifestContents;
 
@@ -134,7 +133,9 @@ public class TOSCAMetaFile implements Serializable {
 	 *         type was found
 	 */
 	public String getMimeType(String name) {
-		Objects.requireNonNull(name);
+		if (name == null) {
+			throw new IllegalArgumentException("name must not be null");
+		}
 		for (Map<String, String> map : this.getFileBlocks()) {
 			String storedName = map.get("Name");
 			if (name.equals(storedName)) {

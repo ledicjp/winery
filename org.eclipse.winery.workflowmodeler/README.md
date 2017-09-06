@@ -21,10 +21,12 @@ Open <http://localhost:9527/> with correct HTTP GET params:
 - `id` - e.g., PlanDemonstration
 - `plan` - e.g., Test
 
-Resulting URL would be: <http://localhost:9527/winery-workflowmodeler/?repositoryURL=http:%2F%2Fdev.winery.opentosca.org%2Fwinery%2F&namespace=http:%2F%2Fwww.example.org%2Fservicetemplates&id=PlanDemonstration&plan=Test>
+You can also directly embed it into Winery.
+Ensure that `winery.properties` contains following line.
 
-You can also directly embed it into Winery. Note the [assumptions made by the winery](../org.eclipse.winery.repository.ui/README.md).
-
+```
+bpmn4toscamodelerBaseURI=http://localhost:9527/
+```
 
 ## License
 

@@ -15,12 +15,11 @@ package org.eclipse.winery.repository.backend.filebased;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.Objects;
+
+import javax.ws.rs.core.MediaType;
 
 import org.eclipse.winery.common.RepositoryFileReference;
-import org.eclipse.winery.repository.configuration.GitBasedRepositoryConfiguration;
 
-import org.apache.tika.mime.MediaType;
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CleanCommand;
 import org.eclipse.jgit.api.CommitCommand;
@@ -48,13 +47,13 @@ public class GitBasedRepository extends FilebasedRepository {
 	private final Git git;
 
 	/**
-	 * @param gitBasedRepositoryConfiguration the configuration of the repository
+	 * @param repositoryLocation the location of the repository
 	 * @throws IOException thrown if repository does not exist
 	 * @throws GitAPIException thrown if there was an error while checking the status of the repository
 	 * @throws NoWorkTreeException thrown if the directory is not a git work tree
 	 */
-	public GitBasedRepository(GitBasedRepositoryConfiguration gitBasedRepositoryConfiguration) throws IOException, NoWorkTreeException, GitAPIException {
-		super(Objects.requireNonNull(gitBasedRepositoryConfiguration));
+	public GitBasedRepository(String repositoryLocation) throws IOException, NoWorkTreeException, GitAPIException {
+		super(repositoryLocation);
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		Repository gitRepo = builder.setWorkTree(this.repositoryRoot.toFile()).setMustExist(false).build();
 		if (!Files.exists(this.repositoryRoot.resolve(".git"))) {

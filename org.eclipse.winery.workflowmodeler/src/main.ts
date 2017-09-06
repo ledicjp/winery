@@ -8,16 +8,17 @@
  *
  * Contributors:
  *     ZTE - initial API and implementation and/or initial documentation
- *     Lukas Harzenetter - fix usage of angular-cli
  */
+
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
-import { environment } from '../environments/environment';
 
-if (environment.production) {
+if (process.env.ENV === 'production') {
     enableProdMode();
 }
 // noinspection TypeScriptValidateTypes
 platformBrowserDynamic().bootstrapModule(AppModule);
 
+// global styles
+import './index.css';

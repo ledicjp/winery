@@ -16,13 +16,13 @@ import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { backendBaseURL } from '../configuration';
 import { WineryInstance, WineryTopologyTemplate } from '../wineryInterfaces/wineryComponent';
-import { ToscaComponent } from '../wineryInterfaces/toscaComponent';
-import { ToscaTypes } from '../wineryInterfaces/enums';
 
 @Injectable()
 export class InstanceService {
 
-    toscaComponent: ToscaComponent;
+    selectedResource: string;
+    selectedComponentId: string;
+    selectedNamespace: string;
     topologyTemplate: WineryTopologyTemplate = null;
     path: string;
 
@@ -35,53 +35,63 @@ export class InstanceService {
      * @param type specifies the resource type for this particular instance.
      * @returns string[] containing all menus for each resource type.
      */
-    public getSubMenuByResource(): string[] {
+    public getSubMenuByResource(type?: string): string[] {
+        if (isNullOrUndefined(type)) {
+            type = this.selectedResource;
+        }
+
         let subMenu: string[];
 
-        switch (this.toscaComponent.toscaType) {
-            case ToscaTypes.NodeType:
+        switch (type.toLowerCase()) {
+            case 'nodetype':
                 subMenu = ['Visual Appearance', 'Instance States', 'Interfaces', 'Implementations',
                     'Requirement Definitions', 'Capability Definitions', 'Properties Definition',
                     'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.ServiceTemplate:
+            case 'servicetemplate':
                 subMenu = ['Topology Template', 'Plans', 'Selfservice Portal',
                     'Boundary Definitions', 'Tags', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.RelationshipType:
+            case 'relationshiptype':
                 subMenu = ['Visual Appearance', 'Instance States', 'Source Interfaces', 'Target Interfaces',
                     'Valid Sources and Targets', 'Implementations', 'Properties Definition',
                     'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.ArtifactType:
+            case 'artifacttype':
                 subMenu = ['Properties Definition', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.ArtifactTemplate:
+            case 'artifacttemplate':
                 subMenu = ['Files', 'Properties', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.RequirementType:
+            case 'requirementtype':
                 subMenu = ['Required Capability Type', 'Properties Definition', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.CapabilityType:
+            case 'capabilitytype':
                 subMenu = ['Properties Definition', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.NodeTypeImplementation:
+            case 'nodetypeimplementation':
                 subMenu = ['Implementation Artifacts', 'Deployment Artifacts', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.RelationshipTypeImplementation:
+            case 'relationshiptypeimplementation':
                 subMenu = ['Implementation Artifacts', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.PolicyType:
+            case 'policytype':
                 subMenu = ['Language', 'Applies To', 'Properties Definition', 'Inheritance', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.PolicyTemplate:
+            case 'policytemplate':
                 subMenu = ['Properties', 'Documentation', 'XML'];
                 break;
-            case ToscaTypes.Imports:
+            case 'xsdimport':
                 subMenu = [''];
                 break;
-            default: // assume Admin
+            case 'wsdlimport':
+                subMenu = [''];
+                break;
+            case 'admin':
                 subMenu = ['Namespaces', 'Repository', 'Plan Languages', 'Plan Types', 'Constraint Types', 'Log'];
+                break;
+            default:
+                subMenu = [''];
         }
 
         return subMenu;
@@ -89,16 +99,22 @@ export class InstanceService {
 
     /**
      * Set the shared data for the children. The path to the actual component is also generated.
+     *
+     * @param selectedResource
+     * @param selectedNamespace
+     * @param selectedComponentId
      */
-    public setSharedData(toscaComponent: ToscaComponent): void {
-        this.toscaComponent = toscaComponent;
+    public setSharedData(selectedResource: string, selectedNamespace: string, selectedComponentId: string): void {
+        this.selectedNamespace = selectedNamespace;
+        this.selectedComponentId = selectedComponentId;
+        this.selectedResource = selectedResource;
         // In order to have always the base path of this instance, create the path here
         // instead of getting it from the router, because there might be some child routes included.
-        this.path = '/' + this.toscaComponent.toscaType + '/'
-            + encodeURIComponent(encodeURIComponent(this.toscaComponent.namespace)) + '/'
-            + this.toscaComponent.localName;
+        this.path = '/' + this.selectedResource.toLowerCase() + 's/'
+            + encodeURIComponent(encodeURIComponent(this.selectedNamespace)) + '/'
+            + this.selectedComponentId;
 
-        if (this.toscaComponent.toscaType === ToscaTypes.ServiceTemplate) {
+        if (this.selectedResource === 'serviceTemplate') {
             this.getTopologyTemplate()
                 .subscribe(
                     data => this.topologyTemplate = data,

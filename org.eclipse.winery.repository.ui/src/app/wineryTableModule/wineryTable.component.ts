@@ -247,7 +247,7 @@ export class WineryTableComponent implements OnInit, DoCheck {
         return filteredData;
     }
 
-    onCellClick(data: WineryRowData) {
+    onCellClick(data: any) {
         this.cellSelected.emit(data);
         this.currentSelected = data.row;
     }
@@ -354,12 +354,4 @@ export interface ColumnFilter {
      * the property name in raw data
      */
     columnName: string;
-}
-
-/**
- * Interface for data emitted by <code>cellSelected</code>
- */
-export interface WineryRowData {
-    row: any;
-    column: string;
 }
