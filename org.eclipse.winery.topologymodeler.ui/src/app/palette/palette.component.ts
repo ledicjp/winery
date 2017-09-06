@@ -96,7 +96,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
 
   }
 
-  public toggleRootState(): void {
+  private toggleRootState(): void {
     if (this.paletteRootState === 'shrunk') {
       this.paletteRootState = 'extended';
       this.ngRedux.dispatch(this.actions.sendPaletteOpened(true));
@@ -123,7 +123,7 @@ export class PaletteComponent implements OnInit, OnDestroy {
       name,
       1,
       1,
-      undefined,
+      'yellow',
       undefined,
       undefined,
       undefined,
