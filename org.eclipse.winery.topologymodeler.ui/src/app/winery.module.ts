@@ -21,7 +21,7 @@ import { PoliciesComponent } from './node/policies/policies.component';
 import { PrintViewComponent } from './print-view/print-view.component';
 import { TargetLocationsComponent } from './node/target-locations/target-locations.component';
 import {NgReduxModule, NgRedux, DevToolsExtension} from '@angular-redux/store';
-import {IWIneryState, INITIAL_IWINERY_STATE, rootReducer} from './redux/store/winery.store';
+import {IWineryState, INITIAL_IWINERY_STATE, rootReducer} from './redux/store/winery.store';
 import {WineryActions} from './redux/actions/winery.actions';
 import {TopologyRendererActions} from './redux/actions/topologyRenderer.actions';
 
@@ -55,7 +55,7 @@ import {TopologyRendererActions} from './redux/actions/topologyRenderer.actions'
   bootstrap: [WineryComponent]
 })
 export class WineryModule {
-  constructor(ngRedux: NgRedux<IWIneryState>,
+  constructor(ngRedux: NgRedux<IWineryState>,
               devTools: DevToolsExtension) {
     const storeEnhancers = devTools.isEnabled() ?
       [ devTools.enhancer() ] :

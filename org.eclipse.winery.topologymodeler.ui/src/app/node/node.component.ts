@@ -11,33 +11,32 @@
  *     Thommy Zelenik - implementation, Refactoring
  */
 import {
-  AfterViewInit,
-  Component,
-  DoCheck,
-  EventEmitter,
-  Input,
-  IterableDiffers,
-  OnInit,
+  AfterViewInit, Component, DoCheck, EventEmitter, HostBinding, Input, IterableDiffers, OnChanges, OnInit,
   Output
 } from '@angular/core';
-import {ButtonsStateModel} from '../models/buttonsState.model';
+import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
+import { NgRedux } from '@angular-redux/store';
+import { IWineryState } from '../redux/store/winery.store';
+import { WineryActions } from '../redux/actions/winery.actions';
 
 @Component({
   selector: 'winery-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.css'],
 })
-export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
+export class NodeComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   public items: string[] = ['Item 1', 'Item 2', 'Item 3'];
   public accordionGroupPanel = 'accordionGroupPanel';
   public customClass = 'customClass';
   connectorEndpointVisible = false;
   startTime;
   endTime;
+  @Input() needsToBeFlashed: boolean;
   longpress = false;
   makeSelectionVisible = false;
   @Input() title: string;
+  @Input() name: string;
   @Input() left: number;
   @Input() top: number;
   @Output() sendId: EventEmitter<string>;
@@ -54,7 +53,9 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.items.push(`Items ${this.items.length + 1}`);
   }
 
-  constructor(differsSelectedNodes: IterableDiffers) {
+  constructor(differsSelectedNodes: IterableDiffers,
+              private $ngRedux: NgRedux<IWineryState>,
+              private actions: WineryActions) {
     this.sendId = new EventEmitter();
     this.askForRepaint = new EventEmitter();
     this.addNodeToDragSelection = new EventEmitter();
@@ -100,6 +101,10 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     this.testTimeDifference();
   }
 
+  ngOnChanges() {
+    return true;
+  }
+
   private testTimeDifference(): void {
     if ((this.endTime - this.startTime) < 250) {
       this.longpress = false;
@@ -116,6 +121,29 @@ export class NodeComponent implements OnInit, AfterViewInit, DoCheck {
     } else {
       (this.longpress) ? $event.preventDefault() : this.connectorEndpointVisible = !this.connectorEndpointVisible;
       this.checkIfNodeInSelection.emit(this.title);
+    }
+  }
+
+  // Only display the sidebar if the click is no longpress
+  openSidebar($event): void {
+    $event.stopPropagation();
+    // close sidebar when longpressing a node template
+    if (this.longpress) {
+      this.$ngRedux.dispatch(this.actions.openSidebar({
+        sidebarContents: {
+          sidebarVisible: false,
+          nodeId: '',
+          nameTextFieldValue: ''
+        }
+      }));
+    } else {
+      this.$ngRedux.dispatch(this.actions.openSidebar({
+        sidebarContents: {
+          sidebarVisible: true,
+          nodeId: this.title,
+          nameTextFieldValue: this.name
+        }
+      }));
     }
   }
 }

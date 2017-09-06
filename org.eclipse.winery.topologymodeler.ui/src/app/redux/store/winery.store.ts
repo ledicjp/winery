@@ -20,17 +20,17 @@ import {
   TopologyRendererState
 } from '../reducers/topologyRenderer.reducer';
 
-export interface IWIneryState {
+export interface IWineryState {
   topologyRendererState: TopologyRendererState;
   wineryState: WineryState;
 }
 
-export const INITIAL_IWINERY_STATE: IWIneryState = {
+export const INITIAL_IWINERY_STATE: IWineryState = {
   topologyRendererState: INITIAL_TOPOLOGY_RENDERER_STATE,
   wineryState: INITIAL_WINERY_STATE
 };
 
-export const rootReducer: Reducer<IWIneryState> = combineReducers<IWIneryState>({
+export const rootReducer: Reducer<IWineryState> = combineReducers<IWineryState>({
   topologyRendererState: TopologyRendererReducer,
   wineryState: WineryReducer
 });

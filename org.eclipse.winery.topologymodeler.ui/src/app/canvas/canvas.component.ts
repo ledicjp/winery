@@ -16,7 +16,7 @@ import { TNodeTemplate, TRelationshipTemplate } from '../ttopology-template';
 import { LayoutDirective } from '../layout.directive';
 import { WineryActions } from '../redux/actions/winery.actions';
 import { NgRedux } from '@angular-redux/store';
-import { IWIneryState } from '../redux/store/winery.store';
+import { IWineryState } from '../redux/store/winery.store';
 import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
 
@@ -37,7 +37,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   newJsPlumbInstance: any;
   visuals: any[];
   nodeSelected = false;
-
   pageX: Number;
   pageY: Number;
   selectionActive: boolean;
@@ -63,7 +62,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   constructor(private jsPlumbService: JsPlumbService, private jsonService: JsonService, private _eref: ElementRef,
               private _layoutDirective: LayoutDirective,
               differsPressedNavBarButton: KeyValueDiffers,
-              private ngRedux: NgRedux<IWIneryState>,
+              private ngRedux: NgRedux<IWineryState>,
               private actions: WineryActions,
               private topologyRendererActions: TopologyRendererActions) {
     this.nodeTemplatesSubscription = this.ngRedux.select(state => state.wineryState.currentJsonTopology.nodeTemplates)
@@ -78,15 +77,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   addNewNode(currentNodes: Array<TNodeTemplate>): void {
     if (currentNodes.length > 0) {
-      this.allNodeTemplates.push(currentNodes[currentNodes.length - 1]);
+      this.allNodeTemplates = currentNodes;
     }
   }
 
   addNewRelationship(currentRelationships: Array<TRelationshipTemplate>): void {
-    const newRelationship = currentRelationships[currentRelationships.length - 1];
+    // const newRelationship = currentRelationships[currentRelationships.length - 1];
     if (currentRelationships.length > 0) {
-      this.allRelationshipTemplates.push(newRelationship);
-      setTimeout(() => this.displayRelationships(newRelationship), 1);
+      this.allRelationshipTemplates = currentRelationships;
+      this.allRelationshipTemplates.map(relationship => {
+        setTimeout(() => this.displayRelationships(relationship), 1);
+      });
     }
   }
 
@@ -251,6 +252,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   repaintJsPlumb() {
     this.newJsPlumbInstance.repaintEverything();
+  }
+
+  hideSidebar() {
+    this.ngRedux.dispatch(this.actions.openSidebar({
+      sidebarContents: {
+        sidebarVisible: false,
+        nodeId: '',
+        nameTextFieldValue: ''
+      }
+    }));
   }
 
   ngOnInit() {
