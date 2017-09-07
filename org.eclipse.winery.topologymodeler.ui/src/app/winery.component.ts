@@ -280,6 +280,7 @@ export class WineryComponent implements OnInit {
     }
     for (let i = 0; i < this.relationshipTemplates.length; i++) {
       this.ngRedux.dispatch(this.actions.saveRelationship(this.relationshipTemplates[i]));
+      console.log(this.relationshipTemplates[i]);
     }
   }
 }

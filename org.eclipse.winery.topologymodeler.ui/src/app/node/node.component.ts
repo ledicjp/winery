@@ -21,7 +21,8 @@ import {
   OnInit,
   HostBinding,
   OnChanges,
-  Output } from '@angular/core';
+  Output,
+} from '@angular/core';
 import { ButtonsStateModel } from '../models/buttonsState.model';
 import { TNodeTemplate } from '../ttopology-template';
 import { NgRedux } from '@angular-redux/store';
@@ -87,7 +88,7 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.mouseMove(ev);
   }
 
-  trackTimeOfMouseDown($event): void {
+  mouseDownHandler($event): void {
     this.startTime = new Date().getTime();
     const focusNodeData = {
       id: this.title,
@@ -95,9 +96,6 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     };
     this.checkFocusNode.emit(focusNodeData);
     if ($event.srcElement.parentElement.className !== 'accordion-toggle') {
-      if (!$event.ctrlKey) {
-        this.connectorEndpointVisible = !this.connectorEndpointVisible;
-      }
       this.zone.runOutsideAngular(() => {
         document.getElementById(this.title).addEventListener('mousemove', this.bindMouseMove);
       });
@@ -108,7 +106,7 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.connectorEndpointVisible = false;
   }
 
-  trackTimeOfMouseUp($event): void {
+  mouseUpHandler($event): void {
     document.getElementById(this.title).removeEventListener('mousemove', this.bindMouseMove);
     this.endTime = new Date().getTime();
     this.testTimeDifference($event);
@@ -120,6 +118,12 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
 
   private testTimeDifference($event): void {
     if ((this.endTime - this.startTime) < 250) {
+      if (!$event.ctrlKey) {
+        this.connectorEndpointVisible = !this.connectorEndpointVisible;
+        if (this.connectorEndpointVisible === true) {
+          this.closedEndpoint.emit(this.title);
+        }
+      }
       this.longpress = false;
     } else if (this.endTime - this.startTime >= 300) {
       this.longpress = true;
@@ -134,9 +138,12 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.setDragSource.emit(dragSourceInfo);
   }
 
+  /*
   showConnectorEndpoint($event): void {
+    console.log('trigger');
     $event.stopPropagation();
-    if ($event.ctrlKey) {
+    console.log('trigger');
+    if (!$event.ctrlKey) {
     } else {
       if (!this.longpress) {
         if (this.connectorEndpointVisible === true) {
@@ -145,6 +152,7 @@ export class NodeComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
+*/
 
   // Only display the sidebar if the click is no longpress
   openSidebar($event): void {
