@@ -10,19 +10,26 @@
  *     Thommy Zelenik - initial API and implementation
  */
 import {
-  Component, ElementRef, HostListener, OnDestroy, OnInit, NgZone,
-  QueryList, ViewChildren, AfterViewInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
-import {JsPlumbService} from '../jsPlumbService';
-import {JsonService} from '../jsonService/json.service';
-import {TNodeTemplate, TRelationshipTemplate} from '../ttopology-template';
-import {LayoutDirective} from '../layout.directive';
-import {WineryActions} from '../redux/actions/winery.actions';
-import {NgRedux} from '@angular-redux/store';
-import {IWineryState} from '../redux/store/winery.store';
-import {ButtonsStateModel} from '../models/buttonsState.model';
-import {TopologyRendererActions} from '../redux/actions/topologyRenderer.actions';
-import {NodeComponent} from '../node/node.component';
+import { JsPlumbService } from '../jsPlumbService';
+import { JsonService } from '../jsonService/json.service';
+import { TNodeTemplate, TRelationshipTemplate } from '../ttopology-template';
+import { LayoutDirective } from '../layout.directive';
+import { WineryActions } from '../redux/actions/winery.actions';
+import { NgRedux } from '@angular-redux/store';
+import { IWineryState } from '../redux/store/winery.store';
+import { ButtonsStateModel } from '../models/buttonsState.model';
+import { TopologyRendererActions } from '../redux/actions/topologyRenderer.actions';
+import { NodeComponent } from '../node/node.component';
 
 @Component({
   selector: 'winery-canvas',
@@ -200,7 +207,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  
   clearSelectedNodes(): void {
     for (const node of this.nodeChildrenArray) {
       if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
@@ -231,7 +237,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openSelector($event) {
-    console.log('mouseMove');
     this.selectionWidth = Math.abs(this.initialW - $event.pageX);
     this.selectionHeight = Math.abs(this.initialH - $event.pageY);
     if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
@@ -253,11 +258,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectElements($event) {
-    console.log('mouseUp');
+    const aElem = document.getElementById('selection');
     for (const node of this.allNodeTemplates) {
-      const aElem = document.getElementById('selection');
       const bElem = document.getElementById(node.id);
-      const result = this.doObjectsCollide(aElem, bElem);
+      const result = this.isObjectInSelection(aElem, bElem);
       if (result === true) {
         this.enhanceDragSelection(node.id);
       }
@@ -295,17 +299,14 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return {top: _y, left: _x};
   }
 
-  doObjectsCollide(a, b): boolean {
-    const aTop = this.getOffset(a).top;
-    const aLeft = this.getOffset(a).left;
-    const bTop = this.getOffset(b).top;
-    const bLeft = this.getOffset(b).left;
-
-    return !(
-      ((aTop + a.getBoundingClientRect().height) < (bTop)) ||
-      (aTop > (bTop + b.getBoundingClientRect().height)) ||
-      ((aLeft + a.getBoundingClientRect().width) < bLeft) ||
-      (aLeft > (bLeft + b.getBoundingClientRect().width))
+  private isObjectInSelection(selectionArea, object): boolean {
+    const selectionRect = selectionArea.getBoundingClientRect();
+    const objectRect = object.getBoundingClientRect();
+    return (
+      ((selectionRect.top + selectionRect.height) > (objectRect.top + objectRect.height)) &&
+      (selectionRect.top < (objectRect.top)) &&
+      ((selectionRect.left + selectionArea.getBoundingClientRect().width) > (objectRect.left + objectRect.width)) &&
+      (selectionRect.left < (objectRect.left))
     );
   }
 
