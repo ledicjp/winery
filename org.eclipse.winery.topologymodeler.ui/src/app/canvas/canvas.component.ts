@@ -200,6 +200,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  
   clearSelectedNodes(): void {
     for (const node of this.nodeChildrenArray) {
       if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
@@ -211,7 +212,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showSelectionRange($event) {
-    console.log('mousedown');
+    console.log($event);
     this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
     this.clearSelectedNodes();
     for (const node of this.nodeChildrenArray) {

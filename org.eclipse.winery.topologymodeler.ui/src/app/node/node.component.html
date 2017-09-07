@@ -1,8 +1,8 @@
 <div class="container rounded"
      style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
-     (mousedown)="mouseDownHandler($event)"
-     (mouseup)="mouseUpHandler($event)">
+     (mousedown)="trackTimeOfMouseDown($event)"
+     (mouseup)="trackTimeOfMouseUp($event)">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
        [class.unselected]="!makeSelectionVisible"
