@@ -22,14 +22,14 @@
                [needsToBeFlashed]="needsToBeFlashed"
                [nodeColor]="node.color"
                (sendId)="makeDraggable($event)"
-               [left]="node.otherAttributes.x + 'px'"
-               [top]="node.otherAttributes.y + 'px'"
+               [otherAttributes]="node.otherAttributes"
                [nodeImageUrl]="node.imageUrl"
                [navbarButtonsState]="navbarButtonsState"
                (askForRepaint)="repaintJsPlumb($event)"
                (setDragSource)="setDragSource($event)"
                (closedEndpoint)="closedEndpoint($event)"
                [dragSource]="node.id + 'Endpoint'"
-               (checkFocusNode)="checkFocusNode($event)">
+               (checkFocusNode)="checkFocusNode($event)"
+               (updateAllNodes)="updateAllNodes($event)">
   </winery-node>
 </div>

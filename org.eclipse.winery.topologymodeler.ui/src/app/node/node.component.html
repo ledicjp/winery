@@ -1,8 +1,9 @@
 <div class="container rounded"
-     style="padding: 3px; position: absolute; user-select: none" [style.top]="top" [style.left]="left"
+     style="padding: 3px; position: absolute; user-select: none" [style.top]="otherAttributes.y + 'px'"
+     [style.left]="otherAttributes.x + 'px'"
      id={{title}} [style.borderColor]="nodeColor" [style.backgroundColor]="nodeColor"
-     (mousedown)="trackTimeOfMouseDown($event)"
-     (mouseup)="trackTimeOfMouseUp($event)">
+     (mousedown)="mouseDownHandler($event)"
+     (mouseup)="mouseUpHandler($event)">
   <div class="row rounded"
        [class.selected]="makeSelectionVisible"
        [class.unselected]="!makeSelectionVisible"
@@ -14,7 +15,7 @@
     </div>
     <div id="specifierDiv" class="col-sm-9">
       <table class="table table-active table-border--grey table-sm header-table">
-        <tr [class.flashit]="ngOnChanges()">
+        <tr [class.flashit]="setFlash">
           <td class="td-key">name:</td>
           <td class="td-value">{{name}}</td>
         </tr>

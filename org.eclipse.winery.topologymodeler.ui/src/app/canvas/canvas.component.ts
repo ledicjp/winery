@@ -75,35 +75,25 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   updateNodes(currentNodes: Array<TNodeTemplate>): void {
-    this.allNodeTemplates = currentNodes;
-    this.allNodesIds = this.allNodeTemplates.map(node => node.id);
+    if (currentNodes.length !== this.allNodeTemplates.length) {
+      this.allNodeTemplates = currentNodes;
+      this.allNodesIds = this.allNodeTemplates.map(node => node.id);
+    } else {
+      for (let i = 0; i < this.allNodeTemplates.length; i++) {
+        const node = currentNodes.find(el => el.id === this.allNodeTemplates[i].id);
+        if (this.allNodeTemplates[i].name !== node.name) {
+          const nodeId = this.nodeChildrenIdArray.indexOf(this.allNodeTemplates[i].id);
+          this.nodeChildrenArray[nodeId].name = node.name;
+          this.nodeChildrenArray[nodeId].flash();
+        }
+      }
+    }
   }
 
   updateRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
-    const difference = currentRelationships.length - this.allRelationshipTemplates.length;
-    if (currentRelationships.length > 0) {
-      if (!(difference > 1)) {
-        if (currentRelationships.length > this.allRelationshipTemplates.length) {
-          const newRelationship = currentRelationships[currentRelationships.length - 1];
-          console.log(newRelationship);
-          this.allRelationshipTemplates.push(newRelationship);
-          setTimeout(() => this.displayRelationships(newRelationship), 1);
-        } else if (currentRelationships.length <= this.allRelationshipTemplates.length) {
-          this.allRelationshipTemplates = currentRelationships;
-          if (this.allRelationshipTemplates.length === 1) {
-            const newRelationship = currentRelationships[currentRelationships.length - 1];
-            if (newRelationship) {
-              setTimeout(() => this.displayRelationships(newRelationship), 1);
-            }
-          }
-        }
-      } else {
-        this.allRelationshipTemplates = currentRelationships;
-        for (const relationship of this.allRelationshipTemplates) {
-          setTimeout(() => this.displayRelationships(relationship), 1);
-          console.log(relationship);
-        }
-      }
+    this.allRelationshipTemplates = currentRelationships;
+    for (const relationship of this.allRelationshipTemplates) {
+      setTimeout(() => this.displayRelationships(relationship), 1);
     }
   }
 
@@ -165,11 +155,15 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   closedEndpoint($event): void {
-    this.dragSourceActive = false;
-    this.resetDragSource($event);
-    for (const node of this.nodeChildrenArray) {
-      if (node.title !== $event) {
-        node.connectorEndpointVisible = false;
+    const node = this.nodeChildrenArray.find((nodeTemplate => nodeTemplate.title === $event));
+    node.connectorEndpointVisible = !node.connectorEndpointVisible;
+    if (node.connectorEndpointVisible === true) {
+      this.dragSourceActive = false;
+      this.resetDragSource($event);
+      for (const currentNode of this.nodeChildrenArray) {
+        if (currentNode.title !== $event) {
+          currentNode.connectorEndpointVisible = false;
+        }
       }
     }
   }
@@ -198,9 +192,11 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ngRedux.dispatch(this.actions.deleteNodeTemplate(node.title));
       }
     }
+    if (this.allRelationshipTemplates.length === 0) {
+      this.hideSidebar();
+    }
   }
 
-  
   clearSelectedNodes(): void {
     for (const node of this.nodeChildrenArray) {
       if (this.selectedNodes.find(selectedNode => selectedNode.id === node.title)) {
@@ -212,8 +208,9 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showSelectionRange($event) {
-    console.log($event);
+    console.log('mousedown');
     this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
+    this.hideSidebar();
     this.clearSelectedNodes();
     for (const node of this.nodeChildrenArray) {
       node.makeSelectionVisible = false;
@@ -231,7 +228,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openSelector($event) {
-    console.log('mouseMove');
     this.selectionWidth = Math.abs(this.initialW - $event.pageX);
     this.selectionHeight = Math.abs(this.initialH - $event.pageY);
     if ($event.pageX <= this.initialW && $event.pageY >= this.initialH) {
@@ -350,6 +346,40 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  updateAllNodes($event): void {
+    const draggedNode = this.allNodeTemplates.find(node => node.id === $event);
+    if (this.selectedNodes.length > 0) {
+      for (const selectedNode of this.selectedNodes) {
+        const draggedSelectedNodeId = document.getElementById(selectedNode.id).id;
+        const draggedSelectedNodeLeft = document.getElementById(selectedNode.id).offsetLeft;
+        const draggedSelectedNodeTop = document.getElementById(selectedNode.id).offsetTop;
+        const draggedSelectedNode = this.allNodeTemplates.find(node => node.id === draggedSelectedNodeId);
+        const nodeCoordinates = {
+          id: draggedSelectedNodeId,
+          x: draggedSelectedNodeLeft,
+          y: draggedSelectedNodeTop
+        };
+        draggedSelectedNode.otherAttributes.x = draggedSelectedNodeLeft;
+        draggedSelectedNode.otherAttributes.y = draggedSelectedNodeTop;
+        this.ngRedux.dispatch(this.actions.updateNodeCoordinates(nodeCoordinates));
+      }
+    } else {
+      const draggedSelectedNodeId = document.getElementById($event).id;
+      const draggedSelectedNodeLeft = document.getElementById($event).offsetLeft;
+      const draggedSelectedNodeTop = document.getElementById($event).offsetTop;
+      const draggedSelectedNode = this.allNodeTemplates.find(node => node.id === draggedSelectedNodeId);
+      const nodeCoordinates = {
+        id: draggedSelectedNodeId,
+        x: draggedSelectedNodeLeft,
+        y: draggedSelectedNodeTop
+      };
+      draggedSelectedNode.otherAttributes.x = draggedSelectedNodeLeft;
+      draggedSelectedNode.otherAttributes.y = draggedSelectedNodeTop;
+      this.ngRedux.dispatch(this.actions.updateNodeCoordinates(nodeCoordinates));
+    }
+  }
+
+
   private arrayContainsNode(Nodes: any[], id: string): boolean {
     if (Nodes !== null && Nodes.length > 0) {
       for (const node of Nodes) {
@@ -424,13 +454,16 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   trackTimeOfMouseDown($event): void {
     for (const node of this.nodeChildrenArray) {
-      if (this.newJsPlumbInstance.isSource(node.dragSource)) {
-        this.newJsPlumbInstance.unmakeSource(node.dragSource);
+      if (node.dragSource) {
+        if (this.newJsPlumbInstance.isSource(node.dragSource)) {
+          this.newJsPlumbInstance.unmakeSource(node.dragSource);
+        }
+        node.connectorEndpointVisible = false;
       }
-      node.connectorEndpointVisible = false;
     }
     this.startTime = new Date().getTime();
   }
+
 
   trackTimeOfMouseUp($event): void {
     this.endTime = new Date().getTime();
