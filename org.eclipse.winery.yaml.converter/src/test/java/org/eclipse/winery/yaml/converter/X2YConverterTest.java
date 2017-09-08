@@ -13,6 +13,11 @@ package org.eclipse.winery.yaml.converter;
 
 import org.eclipse.winery.repository.rest.resources.AbstractResourceTest;
 
-public class X2YConverterTest extends AbstractResourceTest {
+import org.junit.Test;
 
+public class X2YConverterTest extends AbstractResourceTest {
+	@Test
+	public void placeholder() {
+
+	}
 }
