@@ -118,7 +118,7 @@ export class NodeComponent implements OnInit, AfterViewInit {
 
 
   mouseUpHandler($event): void {
-    console.log('mouseup');
+    // mouseup
     document.getElementById(this.title).removeEventListener('mousemove', this.bindMouseMove);
     this.endTime = new Date().getTime();
     this.testTimeDifference($event);
@@ -132,6 +132,7 @@ export class NodeComponent implements OnInit, AfterViewInit {
 
   flash(): void {
     this.setFlash = true;
+    setTimeout(() => this.setFlash = false, 1000);
   }
 
   private testTimeDifference($event): void {

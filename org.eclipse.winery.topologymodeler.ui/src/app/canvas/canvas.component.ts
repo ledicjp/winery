@@ -10,8 +10,15 @@
  *     Thommy Zelenik - initial API and implementation
  */
 import {
-  Component, ElementRef, HostListener, OnDestroy, OnInit, NgZone,
-  QueryList, ViewChildren, AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  NgZone,
+  QueryList,
+  ViewChildren,
+  AfterViewInit
 } from '@angular/core';
 import {JsPlumbService} from '../jsPlumbService';
 import {JsonService} from '../jsonService/json.service';
@@ -85,10 +92,12 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
           const nodeId = this.nodeChildrenIdArray.indexOf(this.allNodeTemplates[i].id);
           this.nodeChildrenArray[nodeId].name = node.name;
           this.nodeChildrenArray[nodeId].flash();
+          this.allNodeTemplates[i].name = node.name;
         }
       }
     }
   }
+
 
   updateRelationships(currentRelationships: Array<TRelationshipTemplate>): void {
     this.allRelationshipTemplates = currentRelationships;
@@ -208,7 +217,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showSelectionRange($event) {
-    console.log('mousedown');
+    // mousedown
     this.ngRedux.dispatch(this.actions.sendPaletteOpened(false));
     this.hideSidebar();
     this.clearSelectedNodes();
@@ -249,7 +258,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectElements($event) {
-    console.log('mouseUp');
+    // mouseUp
     for (const node of this.allNodeTemplates) {
       const aElem = document.getElementById('selection');
       const bElem = document.getElementById(node.id);
@@ -347,7 +356,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   updateAllNodes($event): void {
-    const draggedNode = this.allNodeTemplates.find(node => node.id === $event);
     if (this.selectedNodes.length > 0) {
       for (const selectedNode of this.selectedNodes) {
         const draggedSelectedNodeId = document.getElementById(selectedNode.id).id;
