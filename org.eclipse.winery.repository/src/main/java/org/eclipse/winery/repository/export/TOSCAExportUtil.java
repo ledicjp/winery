@@ -194,7 +194,7 @@ public class TOSCAExportUtil {
 	private Collection<TOSCAComponentId> writeDefinitionsElement(TOSCAComponentId tcId, OutputStream out) throws JAXBException, RepositoryCorruptException, IOException {
 		final IRepository repository = RepositoryFactory.getRepository();
 		if (!repository.exists(tcId)) {
-			String error = "Component instance " + tcId.toString() + " does not exist.";
+			String error = "Component instance " + tcId.toReadableString() + " does not exist.";
 			TOSCAExportUtil.LOGGER.error(error);
 			throw new RepositoryCorruptException(error);
 		}
@@ -635,7 +635,7 @@ public class TOSCAExportUtil {
 		// "Export" type
 		QName type = artifactTemplate.getType();
 		if (type == null) {
-			throw new RepositoryCorruptException("Type is null for " + id.toString());
+			throw new RepositoryCorruptException("Type is null for " + id.toReadableString());
 		}
 		ids.add(new ArtifactTypeId(type));
 

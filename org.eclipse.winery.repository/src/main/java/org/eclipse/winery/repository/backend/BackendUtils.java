@@ -70,6 +70,7 @@ import org.eclipse.winery.common.ids.definitions.RelationshipTypeImplementationI
 import org.eclipse.winery.common.ids.definitions.RequirementTypeId;
 import org.eclipse.winery.common.ids.definitions.ServiceTemplateId;
 import org.eclipse.winery.common.ids.definitions.TOSCAComponentId;
+import org.eclipse.winery.common.ids.definitions.imports.XSDImportId;
 import org.eclipse.winery.common.ids.elements.PlanId;
 import org.eclipse.winery.common.ids.elements.PlansId;
 import org.eclipse.winery.common.ids.elements.TOSCAElementId;
@@ -89,6 +90,7 @@ import org.eclipse.winery.model.tosca.TEntityType.PropertiesDefinition;
 import org.eclipse.winery.model.tosca.TExtensibleElements;
 import org.eclipse.winery.model.tosca.TImplementationArtifacts;
 import org.eclipse.winery.model.tosca.TImplementationArtifacts.ImplementationArtifact;
+import org.eclipse.winery.model.tosca.TImport;
 import org.eclipse.winery.model.tosca.TNodeTemplate;
 import org.eclipse.winery.model.tosca.TNodeType;
 import org.eclipse.winery.model.tosca.TNodeTypeImplementation;
@@ -141,6 +143,9 @@ import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.ls.LSInput;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Contains generic utility functions for the Backend
@@ -179,7 +184,7 @@ public class BackendUtils {
 
 		assert (Locale.getDefault() == Locale.ENGLISH);
 		try {
-			modifiedDate = DateUtils.parseDate(modified, org.apache.http.impl.cookie.DateUtils.DEFAULT_PATTERNS);
+			modifiedDate = DateUtils.parseDate(modified, org.eclipse.winery.repository.DateUtils.DEFAULT_PATTERNS);
 		} catch (ParseException e) {
 			BackendUtils.LOGGER.error(e.getMessage(), e);
 		}
@@ -556,6 +561,11 @@ public class BackendUtils {
 			element = new TServiceTemplate();
 		} else if (id instanceof ArtifactTemplateId) {
 			element = new TArtifactTemplate();
+		} else if (id instanceof XSDImportId) {
+			// TImport has no id; thus directly generating it without setting an id
+			TImport tImport = new TImport();
+			definitions.setElement(tImport);
+			return definitions;
 		} else {
 			throw new IllegalStateException("Unhandled id branch. Could happen for XSDImportId");
 		}
@@ -1160,4 +1170,29 @@ public class BackendUtils {
 		}
 		return w.toString();
 	}
+
+	public static ErrorHandler getErrorHandler(StringBuilder sb) {
+		return new ErrorHandler() {
+
+			@Override
+			public void warning(SAXParseException exception) throws SAXException {
+				// we don't care
+			}
+
+			@Override
+			public void fatalError(SAXParseException exception) throws SAXException {
+				sb.append("Fatal Error: ");
+				sb.append(exception.getMessage());
+				sb.append("\n");
+			}
+
+			@Override
+			public void error(SAXParseException exception) throws SAXException {
+				sb.append("Fatal Error: ");
+				sb.append(exception.getMessage());
+				sb.append("\n");
+			}
+		};
+	}
+
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 University of Stuttgart.
+ * Copyright (c) 2013-2017 University of Stuttgart.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * and the Apache License 2.0 which both accompany this distribution,
@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.winery.common.ids.definitions;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.xml.namespace.QName;
 
+import org.eclipse.winery.common.Util;
 import org.eclipse.winery.common.ids.GenericId;
 import org.eclipse.winery.common.ids.Namespace;
 import org.eclipse.winery.common.ids.XMLId;
@@ -35,6 +39,20 @@ import org.eclipse.winery.common.ids.XMLId;
  */
 public abstract class TOSCAComponentId extends GenericId {
 
+	public static final List<Class<? extends TOSCAComponentId>> ALL_TOSCA_COMPONENT_ID_CLASSES = Arrays.asList(
+		ArtifactTemplateId.class,
+		ArtifactTypeId.class,
+		CapabilityTypeId.class,
+		NodeTypeId.class,
+		NodeTypeImplementationId.class,
+		PolicyTemplateId.class,
+		PolicyTypeId.class,
+		RelationshipTypeId.class,
+		RelationshipTypeImplementationId.class,
+		RequirementTypeId.class,
+		ServiceTemplateId.class
+	);
+
 	private final Namespace namespace;
 
 
@@ -44,13 +62,11 @@ public abstract class TOSCAComponentId extends GenericId {
 	}
 
 	/**
-	 * Creates a new id based on strings. This constructor is required for
-	 * {@link org.eclipse.winery.repository.resources.AbstractComponentsResource}
+	 * Creates a new id based on strings. This constructor is required for {@link org.eclipse.winery.repository.resources.AbstractComponentsResource}
 	 *
-	 * @param ns the namespace to be used
-	 * @param id the id to be used
-	 * @param URLencoded true: both Strings are URLencoded, false: both Strings
-	 *            are not URLencoded
+	 * @param ns         the namespace to be used
+	 * @param id         the id to be used
+	 * @param URLencoded true: both Strings are URLencoded, false: both Strings are not URLencoded
 	 */
 	public TOSCAComponentId(String ns, String id, boolean URLencoded) {
 		this(new Namespace(ns, URLencoded), new XMLId(id, URLencoded));
@@ -69,27 +85,39 @@ public abstract class TOSCAComponentId extends GenericId {
 	}
 
 	@Override
-	public int hashCode() {
-		return this.namespace.hashCode() ^ this.getXmlId().hashCode();
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TOSCAComponentId)) return false;
+
+		// only the same component instances might be equal
+		if (!o.getClass().equals(this.getClass())) {
+			return false;
+		}
+
+		if (!super.equals(o)) return false;
+
+		TOSCAComponentId that = (TOSCAComponentId) o;
+
+		return namespace.equals(that.namespace);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof TOSCAComponentId)) {
-			return false;
-		} else {
-			TOSCAComponentId other = (TOSCAComponentId) obj;
-			return this.getXmlId().equals(other.getXmlId()) && this.namespace.equals(other.namespace);
-		}
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + namespace.hashCode();
+		return result;
 	}
 
 	@Override
 	public String toString() {
 		QName qn = this.getQName();
 		return this.getClass().toString() + " / " + qn.toString();
+	}
+
+	public String toReadableString() {
+		QName qn = this.getQName();
+		String name = Util.getEverythingBetweenTheLastDotAndBeforeId(this.getClass());
+		return String.format("%1$s %3$s in namespace %2$s", name, qn.getNamespaceURI(), qn.getLocalPart());
 	}
 
 	@Override
@@ -100,10 +128,13 @@ public abstract class TOSCAComponentId extends GenericId {
 	@Override
 	public int compareTo(GenericId o1) {
 		if (o1 instanceof TOSCAComponentId) {
-			TOSCAComponentId o = (TOSCAComponentId) o1;
-			int res = this.getXmlId().compareTo(o.getXmlId());
+			int res = this.getClass().getName().compareTo(o1.getClass().toString());
 			if (res == 0) {
-				res = this.getNamespace().compareTo(o.getNamespace());
+				TOSCAComponentId o = (TOSCAComponentId) o1;
+				res = this.getXmlId().compareTo(o.getXmlId());
+				if (res == 0) {
+					res = this.getNamespace().compareTo(o.getNamespace());
+				}
 			}
 			return res;
 		} else {
