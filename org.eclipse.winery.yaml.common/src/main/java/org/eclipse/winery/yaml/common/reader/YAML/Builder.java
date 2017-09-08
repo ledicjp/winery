@@ -9,7 +9,7 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.yaml.common.reader;
+package org.eclipse.winery.yaml.common.reader.YAML;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +77,7 @@ import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Exception.UnrecognizedFieldException;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
+import org.eclipse.winery.yaml.common.validator.FieldValidator;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -105,10 +106,10 @@ public class Builder {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 if (!(entry.getValue() instanceof String)) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> _import = (Map<String, Object>) entry.getValue();
-                    if (_import != null) {
-                        String namespace_prefix = (String) _import.get("namespace_prefix");
-                        String namespace_uri = (String) _import.get("namespace_uri");
+                    Map<String, Object> importDefinition = (Map<String, Object>) entry.getValue();
+                    if (importDefinition != null) {
+                        String namespace_prefix = (String) importDefinition.get("namespace_prefix");
+                        String namespace_uri = (String) importDefinition.get("namespace_uri");
                         if (namespace_prefix != null && namespace_uri != null) {
                             this.prefix2Namespace.put(namespace_prefix, namespace_uri);
                         }
@@ -202,12 +203,14 @@ public class Builder {
         Map<String, Object> tmp = (Map<String, Object>) object;
 
         Metadata metadata = new Metadata();
-        tmp.forEach((key, value) -> {
-            metadata.put(key, value.toString());
-            if (value instanceof Date) {
-                metadata.put(key, new SimpleDateFormat("yyyy-MM-dd").format(value));
-            }
-        });
+        tmp.entrySet().stream()
+            .filter(entry -> Objects.nonNull(entry.getValue()))
+            .forEach(entry -> {
+                metadata.put(entry.getKey(), entry.getValue().toString());
+                if (entry.getValue() instanceof Date) {
+                    metadata.put(entry.getKey(), new SimpleDateFormat("yyyy-MM-dd").format(entry.getValue()));
+                }
+            });
 
         return metadata;
     }

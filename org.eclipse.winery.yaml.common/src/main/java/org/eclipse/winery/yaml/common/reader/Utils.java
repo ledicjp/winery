@@ -13,29 +13,13 @@ package org.eclipse.winery.yaml.common.reader;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBException;
-
-import org.eclipse.winery.model.tosca.Definitions;
-import org.eclipse.winery.yaml.common.reader.XML.Reader;
-
-import org.junit.Test;
-
-public class XmlReaderTest {
-    public final static String PATH = "src/test/resources/reader/";
-    public final Reader reader;
-
-    public XmlReaderTest() throws JAXBException {
-        reader = new Reader();
+public class Utils {
+    // TODO get file (relative, absolute, ...)
+    public static String getFile(String path, String name) {
+        return path + File.separator + name;
     }
 
-    @Test
-    public void TestReader() throws Exception {
-        String file = "ArtifactType_WAR.xml";
-        Definitions definitions = reader.parse(getFile(file));
-        System.out.println(definitions);
-    }
-
-    private File getFile(String file) {
-        return new File(PATH + file);
+    public static String getFileName(String file) {
+        return file.substring(file.lastIndexOf(File.separator) + 1);
     }
 }

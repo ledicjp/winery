@@ -13,6 +13,7 @@ package org.eclipse.winery.yaml.common.reader;
 
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.yaml.common.Exception.MissingImportFile;
+import org.eclipse.winery.yaml.common.reader.YAML.Reader;
 
 import org.junit.Ignore;
 import org.junit.Test;

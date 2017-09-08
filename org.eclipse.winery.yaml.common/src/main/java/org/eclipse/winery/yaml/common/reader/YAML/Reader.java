@@ -9,7 +9,7 @@
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
-package org.eclipse.winery.yaml.common.reader;
+package org.eclipse.winery.yaml.common.reader.YAML;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,7 +85,7 @@ public class Reader {
             inputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             MissingFile ex = new MissingFile("The file \"" + fileName + "\" could not be found!");
-            ex.setFile_context(fileName);
+            ex.setFileContext(fileName);
             throw ex;
         }
         return this.yaml.load(inputStream);
@@ -116,7 +116,7 @@ public class Reader {
         try {
             result = buildServiceTemplate(readObject(uri), namespace);
         } catch (YAMLParserException e) {
-            e.setFile_context(uri);
+            e.setFileContext(uri);
             throw e;
         }
 
@@ -125,7 +125,7 @@ public class Reader {
         try {
             validator.validate(result, namespace);
         } catch (YAMLParserException e) {
-            e.setFile_context(uri);
+            e.setFileContext(uri);
             throw e;
         }
 

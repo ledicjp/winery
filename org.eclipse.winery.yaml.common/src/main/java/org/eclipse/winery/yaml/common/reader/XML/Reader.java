@@ -19,10 +19,10 @@ import javax.xml.bind.Unmarshaller;
 
 import org.eclipse.winery.model.tosca.Definitions;
 
-public class XmlReader {
+public class Reader {
     private Unmarshaller unmarshaller;
 
-    public XmlReader() {
+    public Reader() {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Definitions.class);
             unmarshaller = jaxbContext.createUnmarshaller();

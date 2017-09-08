@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.winery.yaml.converter;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +39,14 @@ import org.eclipse.winery.model.tosca.yaml.TRelationshipType;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.Defaults;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
-import org.eclipse.winery.yaml.common.reader.XML.XmlReader;
+import org.eclipse.winery.yaml.common.reader.Utils;
+import org.eclipse.winery.yaml.common.reader.XML.Reader;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 public class X2YConverter {
 	private String PATH;
-	private XmlReader reader;
+	private Reader reader;
 
 	private Map<String, String> metadata;
 	private Map<String, TServiceTemplate> service_templates;
@@ -68,7 +68,7 @@ public class X2YConverter {
 	private Map<String, TArtifactDefinition> artifactDefinitions;
 
 	private void init() {
-		this.reader = new XmlReader();
+		this.reader = new Reader();
 	}
 
 	/**
@@ -116,15 +116,13 @@ public class X2YConverter {
 	public void convert(TImport node) {
 		// TODO rewrite file parser (not only relative file position)
 		try {
-			Definitions impt = this.reader.parse(this.PATH + "/" + node.getLocation());
+			Definitions impt = this.reader.parse(Utils.getFile(this.PATH, node.getLocation()));
 			X2YConverter converter = new X2YConverter();
 
 			Map<String, TServiceTemplate> imports = converter.convert(impt, this.PATH);
-			TImportDefinition.Builder builder = new TImportDefinition.Builder(getOutputFileFromImport(node.getNamespace(), node.getLocation()));
-
 			imports.forEach((key, value) -> {
 				//Writer
-				TImportDefinition.Builder iBuilder = new TImportDefinition.Builder("");
+				TImportDefinition.Builder Builder = new TImportDefinition.Builder(getOutputFileFromImport(node.getNamespace(), node.getLocation()));
 			});
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -140,7 +138,7 @@ public class X2YConverter {
 	}
 
 	private String getOutputFileFromImport(String namespace, String location) {
-		String name = location.substring(location.lastIndexOf(File.separator) + 1);
-		return Util.URLencode(namespace) + File.separator + name;
+		String name = Utils.getFileName(location);
+		return Utils.getFile(Util.URLencode(namespace), name);
 	}
 }

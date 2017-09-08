@@ -19,7 +19,7 @@ import org.eclipse.winery.common.Util;
 import org.eclipse.winery.model.tosca.Definitions;
 import org.eclipse.winery.model.tosca.TDefinitions;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
-import org.eclipse.winery.yaml.common.reader.XML.XmlReader;
+import org.eclipse.winery.yaml.common.reader.XML.Reader;
 import org.eclipse.winery.yaml.common.writer.XML.Writer;
 
 public abstract class AbstractTestX2Y {
@@ -32,7 +32,7 @@ public abstract class AbstractTestX2Y {
 	}
 
 	public Definitions readDefinitions(String name) throws JAXBException {
-		XmlReader reader = new XmlReader();
+		Reader reader = new Reader();
 		return reader.parse(PATH + name + FILE_EXTENSION);
 	}
 

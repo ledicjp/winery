@@ -2,9 +2,9 @@ tosca_definitions_version: tosca_simple_yaml_1_1
 
 imports:
   - data_types:
-        file: /data_types.yml
-        namespace_uri: http://www.example.com/DataTypesTest
-        namespace_prefix: imp1
+      file: /data_types.yml
+      namespace_uri: http://www.example.com/DataTypesTest
+      namespace_prefix: imp1
 
 node_types:
   example.NodeType:

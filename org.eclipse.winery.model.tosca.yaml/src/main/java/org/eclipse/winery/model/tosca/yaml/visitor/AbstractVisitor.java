@@ -13,6 +13,8 @@ package org.eclipse.winery.model.tosca.yaml.visitor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.winery.model.tosca.yaml.TArtifactDefinition;
 import org.eclipse.winery.model.tosca.yaml.TArtifactType;
@@ -55,7 +57,6 @@ import org.eclipse.winery.model.tosca.yaml.TSubstitutionMappings;
 import org.eclipse.winery.model.tosca.yaml.TTopologyTemplateDefinition;
 import org.eclipse.winery.model.tosca.yaml.TVersion;
 import org.eclipse.winery.model.tosca.yaml.support.Metadata;
-import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.model.tosca.yaml.support.TMapPropertyFilterDefinition;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementAssignment;
 import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
@@ -63,6 +64,14 @@ import org.eclipse.winery.model.tosca.yaml.support.TMapRequirementDefinition;
 import org.eclipse.jdt.annotation.NonNull;
 
 public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends AbstractParameter<P>> implements IVisitor<R, P> {
+    public R concatAndReduce(Stream<R>... streams) {
+        return Stream.of(streams)
+            .reduce(Stream.empty(), Stream::concat)
+            .filter(Objects::nonNull)
+            .reduce(this::addR)
+            .orElse(null);
+    }
+
     @Override
     public R visit(TArtifactDefinition node, P parameter) {
         return null;
@@ -80,11 +89,12 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
     @Override
     public R visit(TAttributeDefinition node, P parameter) {
-        R result = null;
-        if (node.getEntrySchema() != null) {
-            result = node.getEntrySchema().accept(this, parameter.copy().addContext("entry_schema"));
-        }
-        return result;
+        return Stream.of(node.getEntrySchema())
+            .filter(Objects::nonNull)
+            .map(entry -> entry.accept(this, parameter.copy().addContext("entry_schema")))
+            .filter(Objects::nonNull)
+            .reduce(this::addR)
+            .orElse(null);
     }
 
     @Override
@@ -111,22 +121,25 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
     @Override
     public R visit(TDataType node, P parameter) {
-        R result = null;
-        for (TConstraintClause entry : node.getConstraints()) {
-            result = addR(result, entry.accept(this, parameter.copy().addContext("constraints")));
-        }
-        return result;
+        return node.getConstraints().stream()
+            .filter(Objects::nonNull)
+            .map(entry -> entry.accept(this, parameter.copy().addContext("constraints")))
+            .filter(Objects::nonNull)
+            .reduce(this::addR)
+            .orElse(null);
     }
 
     @Override
     public R visit(TEntityType node, P parameter) {
-        R result = null;
-        if (node.getVersion() != null) {
-            result = node.getVersion().accept(this, parameter.copy().addContext("version"));
-        }
-        result = addR(result, visitPropertyDefinition(node.getProperties(), parameter));
-        result = addR(result, visitAttributeDefinition(node.getAttributes(), parameter));
-        return addR(result, node.getMetadata().accept(this, parameter.copy().addContext("metadata")));
+        return concatAndReduce(
+            Stream.of(node.getVersion())
+                .filter(Objects::nonNull)
+                .map(entry -> entry.accept(this, parameter.copy().addContext("version"))),
+            Stream.of(visitPropertyDefinition(node.getProperties(), parameter)),
+            Stream.of(visitAttributeDefinition(node.getAttributes(), parameter)),
+            Stream.of(node.getMetadata())
+                .map(entry -> entry.accept(this, parameter.copy().addContext("metadata")))
+        );
     }
 
     @Override
@@ -343,63 +356,42 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
     @Override
     public R visit(TServiceTemplate node, P parameter) {
-        R result = node.getMetadata().accept(this, parameter.copy().addContext("metadata"));
-        for (Map.Entry<String, TRepositoryDefinition> entry : node.getRepositories().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("repositories", entry.getKey())));
-            }
-        }
-        for (TMapImportDefinition map : node.getImports()) {
-            for (Map.Entry<String, TImportDefinition> entry : map.entrySet()) {
-                if (entry.getValue() != null) {
-                    result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("imports", entry.getKey())));
-                }
-            }
-        }
-        for (Map.Entry<String, TArtifactType> entry : node.getArtifactTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("artifact_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TDataType> entry : node.getDataTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("data_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TCapabilityType> entry : node.getCapabilityTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("capability_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TInterfaceType> entry : node.getInterfaceTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("interface_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TRelationshipType> entry : node.getRelationshipTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("relationship_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TNodeType> entry : node.getNodeTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("node_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TGroupType> entry : node.getGroupTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("group_types", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TPolicyType> entry : node.getPolicyTypes().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("policy_types", entry.getKey())));
-            }
-        }
-        if (node.getTopologyTemplate() != null) {
-            result = addR(result, node.getTopologyTemplate().accept(this, parameter.copy().addContext("topology_template")));
-        }
-        return result;
+        return concatAndReduce(
+            Stream.of(node.getMetadata().accept(this, parameter.copy().addContext("metadata"))),
+            node.getRepositories().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("repositories", entry.getKey()))),
+            node.getImports().stream().flatMap(entry -> entry.getMap().entrySet().stream())
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("imports", entry.getKey()))),
+            node.getArtifactTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("artifact_types", entry.getKey()))),
+            node.getDataTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("data_types", entry.getKey()))),
+            node.getCapabilityTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("capability_types", entry.getKey()))),
+            node.getInterfaceTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("interface_types", entry.getKey()))),
+            node.getRelationshipTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("relationship_types", entry.getKey()))),
+            node.getNodeTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("node_types", entry.getKey()))),
+            node.getGroupTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("group_types", entry.getKey()))),
+            node.getPolicyTypes().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("policy_types", entry.getKey()))),
+            Stream.of(node.getTopologyTemplate())
+                .filter(Objects::nonNull)
+                .map(entry -> entry.accept(this, parameter.copy().addContext("topology_template")))
+        );
     }
 
     @Override
@@ -409,41 +401,29 @@ public abstract class AbstractVisitor<R extends AbstractResult<R>, P extends Abs
 
     @Override
     public R visit(TTopologyTemplateDefinition node, P parameter) {
-        R result = null;
-        for (Map.Entry<String, TParameterDefinition> entry : node.getInputs().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("inputs", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TNodeTemplate> entry : node.getNodeTemplates().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("node_templates", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TRelationshipTemplate> entry : node.getRelationshipTemplates().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("relationship_templates", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TGroupDefinition> entry : node.getGroups().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("groups", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TPolicyDefinition> entry : node.getPolicies().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("policies", entry.getKey())));
-            }
-        }
-        for (Map.Entry<String, TParameterDefinition> entry : node.getOutputs().entrySet()) {
-            if (entry.getValue() != null) {
-                result = addR(result, entry.getValue().accept(this, parameter.copy().addContext("outputs", entry.getKey())));
-            }
-        }
-        if (node.getSubstitutionMappings() != null) {
-            result = addR(result, node.getSubstitutionMappings().accept(this, parameter.copy().addContext("substitution_mappings")));
-        }
-        return result;
+        return concatAndReduce(
+            node.getInputs().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("inputs", entry.getKey()))),
+            node.getNodeTemplates().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("node_templates", entry.getKey()))),
+            node.getRelationshipTemplates().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("relationship_templates", entry.getKey()))),
+            node.getGroups().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("groups", entry.getKey()))),
+            node.getPolicies().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("policies", entry.getKey()))),
+            node.getOutputs().entrySet().stream()
+                .filter(entry -> Objects.nonNull(entry.getValue()))
+                .map(entry -> entry.getValue().accept(this, parameter.copy().addContext("outputs", entry.getKey()))),
+            Stream.of(node.getSubstitutionMappings())
+                .filter(Objects::nonNull)
+                .map(entry -> entry.accept(this, parameter.copy().addContext("substitution_mappings")))
+        );
     }
 
     @Override

@@ -18,7 +18,7 @@ import org.eclipse.winery.model.tosca.Definitions;
 import org.eclipse.winery.model.tosca.TDefinitions;
 import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
-import org.eclipse.winery.yaml.common.reader.Reader;
+import org.eclipse.winery.yaml.common.reader.YAML.Reader;
 import org.eclipse.winery.yaml.common.writer.XML.Writer;
 
 public abstract class AbstractTest {
@@ -47,6 +47,6 @@ public abstract class AbstractTest {
 
 	public void writeXml(TDefinitions definitions, String name, String namespace) throws JAXBException {
 		Writer writer = new Writer();
-		writer.writeXML(definitions, PATH + Util.URLencode(namespace) + "/" + name + ".xsd");
+		writer.writeXML(definitions, PATH + Util.URLencode(namespace) + "/" + name + ".tosca");
 	}
 }

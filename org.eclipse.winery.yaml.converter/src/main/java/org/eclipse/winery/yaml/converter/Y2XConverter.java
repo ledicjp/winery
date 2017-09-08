@@ -73,7 +73,8 @@ import org.eclipse.winery.model.tosca.yaml.support.Metadata;
 import org.eclipse.winery.yaml.common.Defaults;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
-import org.eclipse.winery.yaml.common.reader.Reader;
+import org.eclipse.winery.yaml.common.reader.YAML.Reader;
+import org.eclipse.winery.yaml.common.writer.XML.Utils;
 import org.eclipse.winery.yaml.common.writer.XML.Writer;
 import org.eclipse.winery.yaml.converter.Visitors.ReferenceVisitor;
 import org.eclipse.winery.yaml.converter.Visitors.SchemaVisitor;
@@ -168,7 +169,10 @@ public class Y2XConverter {
 
 		convert(node.getImports());
 		builder.addImports(this.imports);
-		return builder.build();
+
+		Definitions definitions = builder.build();
+		Utils.setDefinitions(definitions, true);
+		return definitions;
 	}
 
 	/**
@@ -821,7 +825,7 @@ public class Y2XConverter {
 			Converter converter = new Converter();
 			TDefinitions definitions = converter.convertY2X(serviceTemplate, getFileNameFromFile(node.getFile()), namespace, path);
 			Writer writer = new Writer();
-			String location = path + "/" + Util.URLencode(namespace) + "/" + name + ".xsd";
+			String location = path + "/" + Util.URLencode(namespace) + "/" + name + ".tosca";
 			try {
 				writer.writeXML(definitions, location);
 			} catch (JAXBException e) {
@@ -940,9 +944,9 @@ public class Y2XConverter {
 		// TODO
 		TImport.Builder builder = new TImport.Builder(Namespaces.XML_NS);
 		builder.setLocation(Util.URLencode(this.namespace) + ".xsd");
-		TImport _import = builder.build();
-		if (!this.imports.contains(_import)) {
-			this.imports.add(_import);
+		TImport importDefinition = builder.build();
+		if (!this.imports.contains(importDefinition)) {
+			this.imports.add(importDefinition);
 		}
 		return null;
 	}

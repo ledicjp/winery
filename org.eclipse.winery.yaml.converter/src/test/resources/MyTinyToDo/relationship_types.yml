@@ -4,5 +4,5 @@ relationship_types:
   HostedOn:
     version: 1.0.0alpha-0
     metadata:
-      color: #f7b0a6
+      color: "#f7b0a6"
     

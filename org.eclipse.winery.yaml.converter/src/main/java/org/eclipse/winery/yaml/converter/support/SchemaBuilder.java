@@ -1,4 +1,4 @@
-package org.eclipse.winery.yaml.converter.support; /*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2017 University of Stuttgart.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,12 +9,18 @@ package org.eclipse.winery.yaml.converter.support; /****************************
  * Contributors:
  *     Christoph Kleine - initial API and implementation
  *******************************************************************************/
+package org.eclipse.winery.yaml.converter.support;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +35,20 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.winery.common.RepositoryFileReference;
+import org.eclipse.winery.common.Util;
+import org.eclipse.winery.common.ids.definitions.imports.GenericImportId;
+import org.eclipse.winery.common.ids.definitions.imports.XSDImportId;
+import org.eclipse.winery.model.tosca.TDefinitions;
+import org.eclipse.winery.model.tosca.TImport;
 import org.eclipse.winery.model.tosca.yaml.TPropertyDefinition;
+import org.eclipse.winery.repository.backend.BackendUtils;
+import org.eclipse.winery.repository.backend.RepositoryFactory;
+import org.eclipse.winery.repository.backend.constants.MediaTypes;
+import org.eclipse.winery.repository.importing.CSARImporter;
 import org.eclipse.winery.yaml.common.Namespaces;
 
+import org.apache.tika.mime.MediaType;
 import org.eclipse.jdt.annotation.NonNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -164,11 +181,11 @@ public class SchemaBuilder {
 	}
 
 	public SchemaBuilder addImports(String namespace, String location) {
-		Element _import = document.createElement("import");
-		_import.setAttribute("namespace", namespace);
-		_import.setAttribute("schemaLocation", location);
+		Element importDefinition = document.createElement("import");
+		importDefinition.setAttribute("namespace", namespace);
+		importDefinition.setAttribute("schemaLocation", location);
 
-		return addImports(_import);
+		return addImports(importDefinition);
 	}
 
 	public SchemaBuilder buildComplexType(String name, Boolean wrapped) {
@@ -229,11 +246,15 @@ public class SchemaBuilder {
 		return "";
 	}
 
-	public void buildFile(String filename) {
+	public void buildFile(String path, String namespace, String name) {
+		this.buildFile(path, namespace, name, false);
+	}
+
+	public void buildFile(String path, String namespace, String name, boolean writeToRepository) {
 		build();
 		DOMSource source = new DOMSource(document);
 		try {
-			File file = new File(filename);
+			File file = new File(getFileName(path, namespace, name));
 			file.getParentFile().mkdirs();
 			FileWriter writer = new FileWriter(file);
 			StreamResult result = new StreamResult(writer);
@@ -243,9 +264,51 @@ public class SchemaBuilder {
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
+			writer.flush();
+			writer.close();
+			if (writeToRepository) {
+				saveTypesToRepository(Paths.get(getFileName(path, namespace, name)), namespace, name);
+			}
 		} catch (TransformerException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	//TODO move to different position 
+	// Problem: 2 Entity Types (SchemaVisitor) will overwrite the `definitions`
+	private void saveTypesToRepository(Path path, String namespace, String id) {
+		Element element = null;
+		try {
+			MediaType mediaType = MediaTypes.MEDIATYPE_XSD;
+
+			TImport.Builder builder = new TImport.Builder(Namespaces.XML_NS);
+			builder.setNamespace(this.namespace);
+			builder.setLocation(id + ".xsd");
+
+			GenericImportId rid = new XSDImportId(namespace, id, false);
+			TDefinitions definitions = BackendUtils.createWrapperDefinitions(rid);
+			definitions.getImport().add(builder.build());
+			CSARImporter.storeDefinitions(rid, definitions);
+
+			RepositoryFileReference ref = BackendUtils.getRefOfDefinitions(rid);
+			File folder = path.getParent().toFile();
+
+			ArrayList<File> files = new ArrayList<>(Arrays.asList(folder.listFiles()));
+			for (File file : files) {
+				BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file));
+				RepositoryFileReference fileRef = new RepositoryFileReference(ref.getParent(), file.getName());
+				RepositoryFactory.getRepository().putContentToFile(fileRef, stream, mediaType);
+			}
+		} catch (IllegalArgumentException | IOException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public String getFileName(String path, String namespace, String name) {
+		return path + File.separator
+			+ Util.URLencode(namespace) + File.separator
+			+ "types" + File.separator
+			+ Util.URLencode(name) + ".xsd";
 	}
 }
 

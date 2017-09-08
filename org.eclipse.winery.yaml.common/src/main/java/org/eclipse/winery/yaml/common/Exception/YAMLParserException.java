@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class YAMLParserException extends Exception {
-    private String file_context;
+    private String fileContext;
     private List<YAMLParserException> exceptions;
 
     public YAMLParserException(List<YAMLParserException> exceptionList) {
@@ -33,15 +33,15 @@ public class YAMLParserException extends Exception {
         super(msg);
     }
 
-    public void setFile_context(String msg) {
-        this.file_context = "Context::FILE = " + msg;
+    public void setFileContext(String msg) {
+        this.fileContext = "Context::FILE = " + msg;
     }
 
     public String getMessage() {
         if (Objects.nonNull(this.exceptions)) {
             return this.exceptions.stream().map(YAMLParserException::getMessage).collect(Collectors.joining("\n\n"));
         } else {
-            return super.getMessage() + "\n" + this.file_context + "\n";
+            return super.getMessage() + "\n" + this.fileContext + "\n";
         }
     }
 

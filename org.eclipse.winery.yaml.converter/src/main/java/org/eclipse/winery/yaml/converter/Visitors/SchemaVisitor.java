@@ -36,7 +36,7 @@ import org.eclipse.winery.model.tosca.yaml.TServiceTemplate;
 import org.eclipse.winery.model.tosca.yaml.support.TMapImportDefinition;
 import org.eclipse.winery.yaml.common.Exception.YAMLParserException;
 import org.eclipse.winery.yaml.common.Namespaces;
-import org.eclipse.winery.yaml.common.reader.Reader;
+import org.eclipse.winery.yaml.common.reader.YAML.Reader;
 import org.eclipse.winery.yaml.common.validator.support.ExceptionVisitor;
 import org.eclipse.winery.yaml.converter.Visitors.support.Parameter;
 import org.eclipse.winery.yaml.converter.Visitors.support.Result;
@@ -137,17 +137,12 @@ public class SchemaVisitor extends ExceptionVisitor<Result, Parameter> {
 
 		if (parameter.getBuildSchema()) {
 			for (Map.Entry<String, SchemaBuilder> entry : schemaBuilders.entrySet()) {
-				String filename = getFileName(parameter.getPath(), parameter.getNamespace(), entry.getValue().getNamespace());
-				entry.getValue().buildFile(filename);
+				entry.getValue().buildFile(parameter.getPath(), parameter.getNamespace(), entry.getValue().getNamespace());
 			}
 		}
 
 		this.data_types = tmpDataTypes;
 		return null;
-	}
-
-	public String getFileName(String PATH, String globalNamespace, String name) {
-		return PATH + "/" + Util.URLencode(globalNamespace) + "/types/" + Util.URLencode(name) + ".xsd";
 	}
 
 	public String getRelativeFileName(String namespace) {
@@ -237,7 +232,7 @@ public class SchemaVisitor extends ExceptionVisitor<Result, Parameter> {
 		}
 		imports.forEach((key, value) -> builder.addImports(key, getRelativeFileName(key)));
 		builder.buildComplexType(name, true);
-		builder.buildFile(getFileName(parameter.getPath(), parameter.getNamespace(), name));
+		builder.buildFile(parameter.getPath(), parameter.getNamespace(), name, true);
 		this.propertyDefinition.put(new QName(parameter.getNamespace(), name), plan);
 		return null;
 	}
