@@ -27,9 +27,9 @@ public class YamlWriterTest {
     }
 
     @Test
-    public void tosca_definitions_version() throws Exception {
+    public void toscaDefinitionsVersion() throws Exception {
         String name = "3_9_3_1-tosca_definitions_version-1_1";
-        writer.write(builderTests.tosca_definitions_version(), getName(name));
+        writer.write(builderTests.toscaDefinitionsVersion(), getName(name));
     }
 
     @Test
@@ -45,9 +45,9 @@ public class YamlWriterTest {
     }
 
     @Test
-    public void dsl_definitions() throws Exception {
+    public void dslDefinitions() throws Exception {
         String name = "3_9_3_7-dsl_definitions-1_1";
-        writer.write(builderTests.dsl_definitions(), getName(name));
+        writer.write(builderTests.dslDefinitions(), getName(name));
     }
 
     @Test
@@ -57,56 +57,56 @@ public class YamlWriterTest {
     }
 
     @Test
-    public void artifact_types() throws Exception {
+    public void artifactTypes() throws Exception {
         String name = "3_9_3_10-artifact_types-1_1";
-        writer.write(builderTests.artifact_types(), getName(name));
+        writer.write(builderTests.artifactTypes(), getName(name));
     }
 
     @Test
-    public void data_types() throws Exception {
+    public void dataTypes() throws Exception {
         String name = "3_9_3_11-data_types-1_1";
-        writer.write(builderTests.data_types(), getName(name));
+        writer.write(builderTests.dataTypes(), getName(name));
     }
 
     @Test
-    public void capability_types() throws Exception {
+    public void capabilityTypes() throws Exception {
         String name = "3_9_3_12-capability_types-1_1";
-        writer.write(builderTests.capability_types(), getName(name));
+        writer.write(builderTests.capabilityTypes(), getName(name));
     }
 
     @Test
-    public void interface_types() throws Exception {
+    public void interfaceTypes() throws Exception {
         String name = "3_9_3_13-interface_types-1_1";
-        writer.write(builderTests.interface_types(), getName(name));
+        writer.write(builderTests.interfaceTypes(), getName(name));
     }
 
     @Test
-    public void relationship_types() throws Exception {
+    public void relationshipTypes() throws Exception {
         String name = "3_9_3_14-relationship_types-1_1";
-        writer.write(builderTests.relationship_types(), getName(name));
+        writer.write(builderTests.relationshipTypes(), getName(name));
     }
 
     @Test
-    public void node_types() throws Exception {
+    public void nodeTypes() throws Exception {
         String name = "3_9_3_15-node_types-1_1";
-        writer.write(builderTests.node_types(), getName(name));
+        writer.write(builderTests.nodeTypes(), getName(name));
     }
 
     @Test
-    public void group_types() throws Exception {
+    public void groupTypes() throws Exception {
         String name = "3_9_3_16-group_types-1_1";
-        writer.write(builderTests.group_types(), getName(name));
+        writer.write(builderTests.groupTypes(), getName(name));
     }
 
     @Test
-    public void policy_types() throws Exception {
+    public void policyTypes() throws Exception {
         String name = "3_9_3_17-policy_types-1_1";
-        writer.write(builderTests.policy_types(), getName(name));
+        writer.write(builderTests.policyTypes(), getName(name));
     }
 
     @Test
-    public void example_16() throws Exception {
+    public void example16() throws Exception {
         String name = "example_16-topology_templates-1_1";
-        writer.write(builderTests.example_16(), getName(name));
+        writer.write(builderTests.example16(), getName(name));
     }
 }

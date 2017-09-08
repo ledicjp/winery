@@ -30,23 +30,23 @@ public class BuilderTests {
 
     @Test
     public void builderTests() throws Exception {
-        tosca_definitions_version();
+        toscaDefinitionsVersion();
         metadata();
         description();
-        dsl_definitions();
+        dslDefinitions();
         repositories();
-        artifact_types();
-        data_types();
-        capability_types();
-        interface_types();
-        relationship_types();
-        node_types();
-        group_types();
-        policy_types();
-        example_16();
+        artifactTypes();
+        dataTypes();
+        capabilityTypes();
+        interfaceTypes();
+        relationshipTypes();
+        nodeTypes();
+        groupTypes();
+        policyTypes();
+        example16();
     }
 
-    public TServiceTemplate tosca_definitions_version() throws Exception {
+    public TServiceTemplate toscaDefinitionsVersion() throws Exception {
         String name = "3_9_3_1-tosca_definitions_version-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         String tosca_definitions_version = serviceTemplate.getToscaDefinitionsVersion();
@@ -75,7 +75,7 @@ public class BuilderTests {
     }
 
 
-    public TServiceTemplate dsl_definitions() throws Exception {
+    public TServiceTemplate dslDefinitions() throws Exception {
         String name = "3_9_3_7-dsl_definitions-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
@@ -96,63 +96,63 @@ public class BuilderTests {
     }
 
 
-    public TServiceTemplate artifact_types() throws Exception {
+    public TServiceTemplate artifactTypes() throws Exception {
         String name = "3_9_3_10-artifact_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate data_types() throws Exception {
+    public TServiceTemplate dataTypes() throws Exception {
         String name = "3_9_3_11-data_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate capability_types() throws Exception {
+    public TServiceTemplate capabilityTypes() throws Exception {
         String name = "3_9_3_12-capability_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate interface_types() throws Exception {
+    public TServiceTemplate interfaceTypes() throws Exception {
         String name = "3_9_3_13-interface_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate relationship_types() throws Exception {
+    public TServiceTemplate relationshipTypes() throws Exception {
         String name = "3_9_3_14-relationship_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate node_types() throws Exception {
+    public TServiceTemplate nodeTypes() throws Exception {
         String name = "3_9_3_15-node_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate group_types() throws Exception {
+    public TServiceTemplate groupTypes() throws Exception {
         String name = "3_9_3_16-group_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate policy_types() throws Exception {
+    public TServiceTemplate policyTypes() throws Exception {
         String name = "3_9_3_17-policy_types-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;
     }
 
 
-    public TServiceTemplate example_16() throws Exception {
+    public TServiceTemplate example16() throws Exception {
         String name = "example_16-topology_templates-1_1";
         TServiceTemplate serviceTemplate = reader.parse(getName(name));
         return serviceTemplate;

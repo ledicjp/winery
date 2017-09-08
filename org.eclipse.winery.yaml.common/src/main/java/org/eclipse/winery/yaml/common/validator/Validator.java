@@ -96,23 +96,23 @@ public class Validator extends ExceptionVisitor<Result, Parameter> {
             return null;
         }
 
-        String context_prefix = "Repository definition \"";
-        String context_postfix = "\"";
+        String contextPrefix = "Repository definition \"";
+        String contextPostfix = "\"";
 
         if (node.getUrl() == null || node.getUrl().isEmpty()) {
             String keyname = "url";
-            setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
+            setException(new MissingRequiredKeyname(keyname, contextPrefix + parameter.getKey() + contextPostfix));
         }
 
         if (node.getCredential() != null) {
             Credential credential = node.getCredential();
             if (credential.getToken() == null || credential.getToken().isEmpty()) {
                 String keyname = "credential.token";
-                setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
+                setException(new MissingRequiredKeyname(keyname, contextPrefix + parameter.getKey() + contextPostfix));
             }
             if (credential.getTokenType() == null || credential.getTokenType().isEmpty()) {
                 String keyname = "credential.token_type";
-                setException(new MissingRequiredKeyname(keyname, context_prefix + parameter.getKey() + context_postfix));
+                setException(new MissingRequiredKeyname(keyname, contextPrefix + parameter.getKey() + contextPostfix));
             }
         }
         return super.visit(node, parameter);
@@ -125,10 +125,10 @@ public class Validator extends ExceptionVisitor<Result, Parameter> {
         }
 
         if (node.containsKey("template_version")) {
-            String template_version = node.get("template_version");
-            String template_version_match = "\\d+\\.\\d+(\\.\\d+(\\.\\w+(-\\d+)?)?)?";
+            String templateVersion = node.get("template_version");
+            String templateVersionMatch = "\\d+\\.\\d+(\\.\\d+(\\.\\w+(-\\d+)?)?)?";
 
-            if (!template_version.matches(template_version_match)) {
+            if (!templateVersion.matches(templateVersionMatch)) {
                 String msg = "The value of the metadata field template_version is invalid";
                 setException(new ValueTypeMismatch(msg));
             }

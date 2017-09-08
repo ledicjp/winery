@@ -108,10 +108,10 @@ public class Builder {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> importDefinition = (Map<String, Object>) entry.getValue();
                     if (importDefinition != null) {
-                        String namespace_prefix = (String) importDefinition.get("namespace_prefix");
-                        String namespace_uri = (String) importDefinition.get("namespace_uri");
-                        if (namespace_prefix != null && namespace_uri != null) {
-                            this.prefix2Namespace.put(namespace_prefix, namespace_uri);
+                        String namespacePrefix = (String) importDefinition.get("namespace_prefix");
+                        String namespaceUri = (String) importDefinition.get("namespace_uri");
+                        if (namespacePrefix != null && namespaceUri != null) {
+                            this.prefix2Namespace.put(namespacePrefix, namespaceUri);
                         }
                     }
                 }
@@ -146,24 +146,24 @@ public class Builder {
         // build map between prefix and namespaces
         initPrefix2Namespace(map.get("imports"));
 
-        String tosca_definitions_version = (String) map.get("tosca_definitions_version");
+        String toscaDefinitionsVersion = (String) map.get("tosca_definitions_version");
 
-        TServiceTemplate.Builder builder = new TServiceTemplate.Builder(tosca_definitions_version);
+        TServiceTemplate.Builder builder = new TServiceTemplate.Builder(toscaDefinitionsVersion);
 
         builder.setMetadata(buildMetadata(map.get("metadata")));
         builder.setDescription(buildDescription(map.get("description")));
-        builder.setDslDefinitions(buildDsl_definitions(map.get("dsl_definitions")));
+        builder.setDslDefinitions(buildDslDefinitions(map.get("dsl_definitions")));
         builder.setRepositories(buildRepositories(map.get("repositories")));
         builder.setImports(buildImports(map.get("imports")));
-        builder.setArtifactTypes(buildArtifact_types(map.get("artifact_types")));
-        builder.setDataTypes(buildData_types(map.get("data_types")));
-        builder.setCapabilityTypes(buildCapability_types(map.get("capability_types")));
-        builder.setInterfaceTypes(buildInterface_types(map.get("interface_types")));
-        builder.setRelationshipTypes(buildRelationship_types(map.get("relationship_types")));
-        builder.setNodeTypes(buildNode_types(map.get("node_types")));
-        builder.setGroupTypes(buildGroup_types(map.get("group_types")));
-        builder.setPolicyTypes(buildPolicy_types(map.get("policy_types")));
-        builder.setTopologyTemplate(buildTopology_template(map.get("topology_template")));
+        builder.setArtifactTypes(buildArtifactTypes(map.get("artifact_types")));
+        builder.setDataTypes(buildDataTypes(map.get("data_types")));
+        builder.setCapabilityTypes(buildCapabilityTypes(map.get("capability_types")));
+        builder.setInterfaceTypes(buildInterfaceTypes(map.get("interface_types")));
+        builder.setRelationshipTypes(buildRelationshipTypes(map.get("relationship_types")));
+        builder.setNodeTypes(buildNodeTypes(map.get("node_types")));
+        builder.setGroupTypes(buildGroupTypes(map.get("group_types")));
+        builder.setPolicyTypes(buildPolicyTypes(map.get("policy_types")));
+        builder.setTopologyTemplate(buildTopologyTemplate(map.get("topology_template")));
 
         if (!this.exceptionMessages.isEmpty()) {
             throw new UnrecognizedFieldException(this.exceptionMessages);
@@ -172,7 +172,7 @@ public class Builder {
     }
 
     @Nullable
-    public TTopologyTemplateDefinition buildTopology_template(Object object) {
+    public TTopologyTemplateDefinition buildTopologyTemplate(Object object) {
         if (!Objects.nonNull(object) || !validate(TTopologyTemplateDefinition.class, object)) {
             return null;
         }
@@ -183,8 +183,8 @@ public class Builder {
         TTopologyTemplateDefinition.Builder builder = new TTopologyTemplateDefinition.Builder();
         builder.setDescription(buildDescription(map.get("description")));
         builder.setInputs(buildMapParameterDefinition(map.get("inputs")));
-        builder.setNodeTemplates((buildNode_templates(map.get("node_templates"))));
-        builder.setRelationshipTemplates(buildRelationship_templates(map.get("relationship_templates")));
+        builder.setNodeTemplates((buildNodeTemplates(map.get("node_templates"))));
+        builder.setRelationshipTemplates(buildRelationshipTemplates(map.get("relationship_templates")));
         builder.setGroups(buildGroupDefinitions(map.get("groups")));
         builder.setPolicies(buildMapPolicyDefinition(map.get("policies")));
         builder.setOutputs(buildMapParameterDefinition(map.get("outputs")));
@@ -225,7 +225,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, Object> buildDsl_definitions(Object object) {
+    public Map<String, Object> buildDslDefinitions(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -233,12 +233,12 @@ public class Builder {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        Map<String, Object> dsl_definitions = new LinkedHashMap<>();
+        Map<String, Object> dslDefinitions = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            dsl_definitions.put(entry.getKey(), entry.getValue());
+            dslDefinitions.put(entry.getKey(), entry.getValue());
         }
 
-        return dsl_definitions;
+        return dslDefinitions;
     }
 
     @Nullable
@@ -381,7 +381,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TArtifactType> buildArtifact_types(Object object) {
+    public Map<String, TArtifactType> buildArtifactTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -389,12 +389,12 @@ public class Builder {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        Map<String, TArtifactType> artifact_types = new LinkedHashMap<>();
+        Map<String, TArtifactType> artifactTypes = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            artifact_types.put(entry.getKey(), buildArtifactType(entry.getValue()));
+            artifactTypes.put(entry.getKey(), buildArtifactType(entry.getValue()));
         }
 
-        return artifact_types;
+        return artifactTypes;
     }
 
     @Nullable
@@ -667,7 +667,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TDataType> buildData_types(Object object) {
+    public Map<String, TDataType> buildDataTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -675,12 +675,12 @@ public class Builder {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        Map<String, TDataType> data_types = new LinkedHashMap<>();
+        Map<String, TDataType> dataTypes = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            data_types.put(entry.getKey(), buildDataType(entry.getValue()));
+            dataTypes.put(entry.getKey(), buildDataType(entry.getValue()));
         }
 
-        return data_types;
+        return dataTypes;
     }
 
     @Nullable
@@ -699,7 +699,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TCapabilityType> buildCapability_types(Object object) {
+    public Map<String, TCapabilityType> buildCapabilityTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -707,12 +707,12 @@ public class Builder {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        Map<String, TCapabilityType> capability_types = new LinkedHashMap<>();
+        Map<String, TCapabilityType> capabilityTypes = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            capability_types.put(entry.getKey(), buildCapabilityType(entry.getValue()));
+            capabilityTypes.put(entry.getKey(), buildCapabilityType(entry.getValue()));
         }
 
-        return capability_types;
+        return capabilityTypes;
     }
 
     @Nullable
@@ -741,7 +741,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TInterfaceType> buildInterface_types(Object object) {
+    public Map<String, TInterfaceType> buildInterfaceTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -749,12 +749,12 @@ public class Builder {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) object;
 
-        Map<String, TInterfaceType> interface_types = new LinkedHashMap<>();
+        Map<String, TInterfaceType> interfaceTypes = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            interface_types.put(entry.getKey(), buildInterfaceType(entry.getValue()));
+            interfaceTypes.put(entry.getKey(), buildInterfaceType(entry.getValue()));
         }
 
-        return interface_types;
+        return interfaceTypes;
     }
 
     @Nullable
@@ -881,7 +881,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TRelationshipType> buildRelationship_types(Object object) {
+    public Map<String, TRelationshipType> buildRelationshipTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -960,7 +960,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TNodeType> buildNode_types(Object object) {
+    public Map<String, TNodeType> buildNodeTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -1184,7 +1184,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TGroupType> buildGroup_types(Object object) {
+    public Map<String, TGroupType> buildGroupTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -1219,7 +1219,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TPolicyType> buildPolicy_types(Object object) {
+    public Map<String, TPolicyType> buildPolicyTypes(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -1284,7 +1284,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TNodeTemplate> buildNode_templates(Object object) {
+    public Map<String, TNodeTemplate> buildNodeTemplates(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }
@@ -1614,7 +1614,7 @@ public class Builder {
     }
 
     @Nullable
-    public Map<String, TRelationshipTemplate> buildRelationship_templates(Object object) {
+    public Map<String, TRelationshipTemplate> buildRelationshipTemplates(Object object) {
         if (!Objects.nonNull(object)) {
             return null;
         }

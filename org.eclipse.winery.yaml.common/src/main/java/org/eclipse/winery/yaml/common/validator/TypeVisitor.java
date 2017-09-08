@@ -119,20 +119,20 @@ public class TypeVisitor extends ImportVisitor {
 
     public void setNormativeTypes(String name, Metadata metadata, Map<String, List<String>> map) {
         if (namespace.equals(Namespaces.TOSCA_NS) && metadata != null) {
-            String shorthand_name = metadata.get("shorthand_name");
-            String type_uri = metadata.get("type_uri");
+            String shorthandName = metadata.get("shorthand_name");
+            String typeUri = metadata.get("type_uri");
 
-            if (shorthand_name != null && !shorthand_name.equals(name)) {
+            if (shorthandName != null && !shorthandName.equals(name)) {
                 if (map.containsKey(namespace)) {
-                    map.get(namespace).add(shorthand_name);
+                    map.get(namespace).add(shorthandName);
                 } else {
-                    map.put(namespace, new ArrayList<>(Arrays.asList(shorthand_name)));
+                    map.put(namespace, new ArrayList<>(Arrays.asList(shorthandName)));
                 }
-            } else if (type_uri != null && !type_uri.equals(name)) {
+            } else if (typeUri != null && !typeUri.equals(name)) {
                 if (map.containsKey(namespace)) {
-                    map.get(namespace).add(type_uri);
+                    map.get(namespace).add(typeUri);
                 } else {
-                    map.put(namespace, new ArrayList<>(Arrays.asList(type_uri)));
+                    map.put(namespace, new ArrayList<>(Arrays.asList(typeUri)));
                 }
             }
         }
